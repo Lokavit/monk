@@ -1,0 +1,48 @@
+body {
+  font-family: var(--font-main);
+  line-height: var(--line-height);
+  margin: 0;
+  padding: 2em;
+  background-color: var(--background);
+  color: var(--accent);
+  min-height: 100vh;
+}
+
+h1 {
+  color: var(--accent);
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+p {
+  color: var(--accent);
+  font-size: 1.1em;
+  margin-bottom: 1.5em;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: 1px solid var(--foreground);
+  background: transparent;
+  color: var(--foreground);
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: var(--accent);
+  color: var(--background);
+}
+
+.header_site_name {
+  font-size: 24px;
+  color: var(--accent);
+  font-weight: 900;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+.header_site_tip {
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}

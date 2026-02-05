@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reflections - Anicca</title>
+    <script>
+      // 防止閃爍：立即從緩存讀取主題
+      (function () {
+        const saved = localStorage.getItem("theme-name") || "Matrix";
+        document.documentElement.setAttribute("data-theme", saved);
+        if (saved === "Matrix")
+          document.documentElement.style.background = "#000";
+      })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css" />
+    <link rel="stylesheet" href="../assets/main.css" />
+    <link rel="stylesheet" href="../assets/typography.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400&display=swap"
+      rel="stylesheet" />
+
+    <style>
+      .list-container {
+        max-width: 800px;
+        margin: 1em auto;
+        padding: 0 20px;
+      }
+      .page-title {
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: 3em;
+        color: var(--accent);
+        margin-bottom: 1em;
+        border-bottom: 1px solid var(--accent);
+        padding-bottom: 0.5em;
+      }
+      .post-item {
+        margin-bottom: 1.5em;
+        transition: transform 0.3s ease;
+        list-style: none;
+        border-bottom: 1px dashed var(--accent);
+        padding-bottom: 1.5em;
+      }
+      .post-link {
+        text-decoration: none;
+        display: block;
+      }
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .post-title {
+        font-size: 1.5em;
+        color: var(--accent);
+        margin: 0;
+      }
+      .post-date {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.9em;
+        opacity: 0.6;
+        color: var(--accent);
+      }
+      .post-desc {
+        margin-top: 0.5em;
+        font-size: 1em;
+        opacity: 0.6;
+        line-height: 1.6;
+        color: var(--accent);
+      }
+      .post-tags {
+        margin-top: 0.5em;
+        display: flex;
+        gap: 10px;
+      }
+      .tag {
+        font-size: 0.7em;
+        padding: 2px 8px;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        color: var(--accent);
+      }
+      .post-item:hover {
+        transform: translateX(10px);
+      }
+      .post-word-count {
+        font-size: 0.7em;
+        opacity: 0.4;
+        margin-top: 5px;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="header_site_name">
+        <a href="../index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+
+    <div class="list-container">
+      <h1 class="page-title">Reflections</h1>
+      <ul id="toc-list">
+        <div class="loading">Loading records from data.json...</div>
+      </ul>
+    </div>
+
+    <script type="module" src="../src/app.js"></script>
+    <script type="module">
+      async function loadReflections() {
+        const listElement = document.getElementById("toc-list");
+        try {
+          // 讀取 build 腳本生成的數據
+          const response = await fetch("./data.json");
+          const data = await response.json();
+
+          listElement.innerHTML = ""; // 清除 loading
+
+          data.forEach((post) => {
+            const li = document.createElement("li");
+            li.className = "post-item";
+
+            const tagsHtml = post.tags
+              .map((tag) => `<span class="tag">${tag}</span>`)
+              .join("");
+
+            li.innerHTML = `
+                        <a href="./${post.link}" class="post-link">
+                            <div class="post-header">
+                                <h2 class="post-title">${post.title}</h2>
+                                <span class="post-date">${post.buddhistDate}</span>
+                            </div>
+                            <div class="post-desc">${post.description}</div>
+                            <div class="post-tags">${tagsHtml}</div>
+                            <div class="post-word-count">
+                                字數: ${post.wordCount}
+                            </div>
+                        </a>
+                    `;
+            listElement.appendChild(li);
+          });
+        } catch (error) {
+          console.error("Error loading data.json:", error);
+          listElement.innerHTML =
+            '<div class="error">Failed to load records.</div>';
+        }
+      }
+
+      loadReflections();
+    </script>
+  </body>
+</html>

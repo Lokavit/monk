@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lokavit's Personal Site</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/variables.css" />
+    <link rel="stylesheet" href="./assets/typography.css" />
+    <link rel="stylesheet" href="./assets/main.css" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        max-width: 800px;
+        text-align: center;
+        background: var(--background);
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--foreground);
+      }
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .tile-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3欄佈局 */
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .tile {
+        border: 1px solid var(--accent);
+        padding: 20px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+      }
+
+      .tile:hover {
+        background: var(--accent);
+        box-shadow: 0 0 15px var(--accent);
+      }
+
+      .tile-title {
+        color: var(--accent);
+        font-size: 1.2rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .tile-desc {
+        color: var(--foreground);
+        font-size: 0.75rem;
+        opacity: 0.9;
+        margin-top: 12px;
+        font-family: "Courier New", Courier, monospace;
+        text-transform: uppercase;
+      }
+      .tile-desc-zh {
+        color: var(--foreground);
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 100;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        margin-top: 6px;
+        -webkit-font-smoothing: antialiased;
+        opacity: 0.4;
+        transform: translateY(5px);
+        transition: all 0.3s ease;
+      }
+      /* 懸停時文字變色，確保可讀性 */
+      .tile:hover .tile-title,
+      .tile:hover .tile-desc {
+        color: #000;
+        opacity: 1;
+      }
+      .tile:hover .tile-desc-zh {
+        opacity: 0.9;
+        color: #000;
+        font-weight: 300;
+        transform: translateY(0);
+      }
+
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 20px;
+      }
+
+      .buddhist-date {
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 400;
+        font-size: 1.35rem;
+        color: var(--accent);
+        letter-spacing: 2px;
+        opacity: 0.8;
+        text-shadow: 0 0 5px var(--accent);
+        padding-left: 15px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header-top">
+        <div id="buttons" class="btn-group"></div>
+
+        <div id="buddhist-date" class="buddhist-date"></div>
+      </div>
+
+      <h1>Welcome to Lokavit's Personal Site</h1>
+      <p>
+        Explore my written archives, game projects, and other digital creations.
+      </p>
+      <div class="tile-grid">
+        <a href="./about/index.html" class="tile">
+          <span class="tile-title">ABOUT</span>
+          <span class="tile-desc">Resume & Experience</span>
+          <span class="tile-desc-zh">個人簡歷與經歷介紹</span>
+        </a>
+
+        <a href="./projects/index.html" class="tile">
+          <span class="tile-title">PROJECTS</span>
+          <span class="tile-desc">Open Source & Web</span>
+          <span class="tile-desc-zh">開源作品與網頁實作</span>
+        </a>
+
+        <a href="./edu/index.html" class="tile">
+          <span class="tile-title">EDU</span>
+          <span class="tile-desc">Learning Systems & Tech</span>
+          <span class="tile-desc-zh">教育類產品與系統專案</span>
+        </a>
+
+        <a href="./dev/index.html" class="tile">
+          <span class="tile-title">DEVELOPMENT</span>
+          <span class="tile-desc">Coding & Architecture</span>
+          <span class="tile-desc-zh">程式開發與架構筆記</span>
+        </a>
+
+        <a href="./games/index.html" class="tile">
+          <span class="tile-title">GAMES</span>
+          <span class="tile-desc">Independent Creations</span>
+          <span class="tile-desc-zh">獨立遊戲開發與作品</span>
+        </a>
+
+        <a href="./linux/index.html" class="tile">
+          <span class="tile-title">LINUX</span>
+          <span class="tile-desc">System & Kernel & Shell</span>
+          <span class="tile-desc-zh">系統配置、內核探索與腳本開發</span>
+        </a>
+
+        <a href="./tools/index.html" class="tile">
+          <span class="tile-title">TOOLS</span>
+          <span class="tile-desc">Plugins & Utilities</span>
+          <span class="tile-desc-zh">實用插件與自製工具</span>
+        </a>
+
+        <a href="./novels/index.html" class="tile">
+          <span class="tile-title">NOVELS</span>
+          <span class="tile-desc">Fiction & Non-fiction</span>
+          <span class="tile-desc-zh">虛構與非虛構創作</span>
+        </a>
+
+        <a href="./reflections/index.html" class="tile">
+          <span class="tile-title">REFLECTIONS</span>
+          <span class="tile-desc">Media, Books & Soulful Sparks</span>
+          <span class="tile-desc-zh">影視書評與靈感隨筆</span>
+        </a>
+
+        <a href="./life/index.html" class="tile">
+          <span class="tile-title">LIFE</span>
+          <span class="tile-desc">Logs & Reflections</span>
+          <span class="tile-desc-zh">生活隨筆與日常感悟</span>
+        </a>
+      </div>
+    </div>
+    <script type="module">
+      import { ThemeManager } from "./src/theme.js";
+      const theme = new ThemeManager({
+        defaultTheme: "Matrix",
+        customThemes: {},
+      });
+
+      theme.subscribe((vars) => {
+        Object.keys(vars).forEach((k) =>
+          document.documentElement.style.setProperty(`--${k}`, vars[k])
+        );
+      });
+
+      // --- 生成按鈕 ---
+      const renderBtns = (list, container, action) => {
+        list.forEach((name) => {
+          const btn = document.createElement("button");
+          btn.innerText = name.toUpperCase();
+          btn.onclick = () => action(name);
+          container.appendChild(btn);
+        });
+      };
+      renderBtns(
+        theme.getThemeList(),
+        document.getElementById("buttons"),
+        theme.setTheme.bind(theme)
+      );
+
+      function getBuddhistDate(lang) {
+        const now = new Date();
+        // 英文格式：5 Feb 2569 B.E.
+        // th-TH-u-ca-buddhist 會自動處理 543 年的偏移
+        return new Intl.DateTimeFormat("en-GB-u-ca-buddhist", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }).format(now);
+      }
+
+      // 頁面加載後顯示
+      document.addEventListener("DOMContentLoaded", () => {
+        const dateEl = document.getElementById("buddhist-date");
+        if (dateEl) dateEl.innerText = getBuddhistDate();
+      });
+    </script>
+  </body>
+</html>

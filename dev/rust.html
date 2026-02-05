@@ -1,0 +1,1477 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Rust - Dev</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css">
+    <link rel="stylesheet" href="../assets/typography.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Rust</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2563 BE</span> | 
+                <span>Words: 6792</span>
+            </div>
+        </header>
+        <section class="body-text"><h2>常用命令</h2>
+<pre><code class="language-bash">rustc --version # rustc 1.51.0
+rustup update # 更新
+rustup self uninstall # 解除安裝。
+rustup install nightly # 安裝當前 rust 版本的其他 toolchain
+rustup update nightly # 更新當前 rust 版本的 toolchain
+rustup doc # 開啟本地文件
+
+# Cargo：Rust 的構建與套件管理工具
+cargo --version # cargo 1.51.0
+cargo install &lt;libname&gt; # 裝載庫 (name 庫名）
+cargo build # 透過 Cargo.toml 中的環境設定裝載所需庫
+cargo run # 構建程式
+cargo doc # 檢視文件。如下示例
+cargo doc --open # pull 並在瀏覽器開啟文件，可進行相關函式查閱。
+cargo new &lt;name&gt; # 建立專案
+</code></pre>
+<h2>環境及配置</h2>
+<ul>
+<li><a href="https://www.rust-lang.org/">rust-init.exe</a></li>
+<li><a href="https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/">Microsoft C++ 生成工具</a></li>
+</ul>
+<blockquote>
+<p>開啟裝載程式，會檢測系統環境，若提示缺少 vs c++ 元件，則必須先裝載元件。從 vs2019 的裝載工具中，選在以下單元件<code>MSVC v142 -VS 2019 C++ x64/x86 生成工具 （最新版）</code>、<code>Windows 10 SDK （最新版）</code> <strong>沒有這項會在<code>cargo build</code>時報<code>link.exe</code>錯誤</strong></p>
+</blockquote>
+<ul>
+<li>啟動<code>rust-init.exe</code>，環境檢測中可見<code>x86_64-pc-windows-msvc</code></li>
+</ul>
+<pre><code class="language-bash"># 程式預設裝載於 users 資料夾下，可根據提示新增對應環境變數，改變裝載路徑於 dev 下
+RUSTUP_HOME: dev/rustup # 儲存工具鏈和配置檔案
+CARGO_HOME: dev/cargo # 儲存 cargo 的快取
+
+# 在 dev/cargo/ 修改或建立 config 檔案，輸入以下程式碼 （內網映象源）
+[source.crates-io]
+registry = &quot;https://github.com/rust-lang/crates.io-index&quot;
+replace-with = 'ustc'
+[source.ustc]
+registry = &quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;
+</code></pre>
+<hr>
+<h1>Basic Programming Language</h1>
+<h1>錯誤處理</h1>
+<ul>
+<li><code>panic!</code>，列印錯誤資訊，展開並清理資料，而後退出。</li>
+<li><code>RUST_BACKTRACE=1</code>,backtrace 是一個執行到目前位置所有被呼叫的函式的列表。</li>
+</ul>
+<pre><code class="language-toml"># 另一種 painc! 展開切換為終止
+[profile.release]
+panic = 'abort'
+</code></pre>
+<pre><code class="language-bash">RUST_BACKTRACE=1 cargo run
+</code></pre>
+<pre><code class="language-rust">/*=========== 傳播錯誤及使用？運算子簡寫 ==========*/
+use std::io;
+use std::io::Read;
+use std::fs::File;
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+let mut s = String::new();
+let mut f = File::open(&quot;hello.txt&quot;)?;
+f.read_to_string(&amp;mut s)?;
+// 以上兩行可以鏈式為一行程式碼
+File::open(&quot;hello.txt&quot;)?.read_to_string(&amp;mut s)?;
+
+Ok(s)
+}
+
+/*=========== 失敗時 panic 的簡寫：unwrap 和 expect ==========*/
+use std::fs::File;
+
+fn main() {
+// 返回 Result 中 Ok 的值，或 Err 下呼叫 panic!
+let f = File::open(&quot;hello.txt&quot;).unwrap();
+// 允許選擇 panic！的錯誤資訊，更易於追蹤 panic 的根源。
+let f = File::open(&quot;hello.txt&quot;).expect(&quot;Failed to open hello.txt&quot;);
+}
+
+/*=========== Result panic! 更優寫法 ==========*/
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+let f = File::open(&quot;hello.txt&quot;).unwrap_or_else(|error| {
+if error.kind() == ErrorKind::NotFound {
+File::create(&quot;hello.txt&quot;).unwrap_or_else(|error| {
+panic!(&quot;Problem creating the file: {:?}&quot;, error);
+})
+} else {
+panic!(&quot;Problem opening the file: {:?}&quot;, error);
+}
+});
+}
+/*=========== Result panic! ==========*/
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+let f = File::open(&quot;hello.txt&quot;);
+
+let f = match f {
+Ok(file) =&gt; file,
+Err(error) =&gt; match error.kind() {
+// 嘗試開啟的檔案不存在，則建立該檔案
+ErrorKind::NotFound =&gt; match File::create(&quot;hello.txt&quot;) {
+Ok(fc) =&gt; fc,
+Err(e) =&gt; panic!(&quot;Problem creating the file: {:?}&quot;, e),
+},
+other_error =&gt; panic!(&quot;Problem opening the file: {:?}&quot;, other_error),
+},
+};
+}
+</code></pre>
+<h1>常見集合</h1>
+<ul>
+<li>儲存在堆中。常用集合 (vector、字串、雜湊 map)</li>
+<li>
+<ul>
+<li>vector：相同型別的值。相鄰排列。（文字行或購物車中商品價格）</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>HashMap：鍵值型別需相同。可以使用元組</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>
+<ul>
+<li>字串值插入 HashMap，其所有權亦轉到 HashMap。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-rust">/*=========== 雜湊 map 儲存鍵值對 ==========*/
+use std::collections::HashMap;
+
+fn main() {
+// 新建
+let mut scores = HashMap::new();
+
+// 插入資料
+scores.insert(String::from(&quot;a&quot;), 10);
+scores.insert(String::from(&quot;b&quot;), 30);
+
+// 使用元素
+let teams = vec![String::from('a'), String::from('b')];
+let init_scores = vec![10, 30];
+
+/*
+使用 HashMap 型別註解，
+zip()：建立一個元組的 vector。
+collect() 將元組轉換為 HashMap。
+*/
+let scores: HashMap&lt;_, _&gt; = teams.iter().zip(init_scores.iter()).collect();
+println!(&quot;{:?}&quot;, scores);
+
+// 訪問值 返回 Option&lt;V&gt;。有值裝入 Some，無值返回 None。
+let team_name = &quot;a&quot;.to_string();
+let score = scores.get(&amp;team_name);
+
+// 遍歷的方式訪問
+for (key, value) in &amp;scores {
+println!(&quot;{}: {}&quot;, key, value);
+}
+
+// 更新 直接覆蓋
+let mut scores = HashMap::new();
+scores.insert(String::from(&quot;b&quot;), 11);
+
+// 只在鍵沒有對應值時插入
+let mut scores = HashMap::new();
+scores.insert(String::from(&quot;Blue&quot;), 10);
+/*
+entry() 返回列舉。無值則插入值，
+or_insert()：有值則使用返回值的可變引用，
+無值則將引數作為心智插入並返回新值的可變引用
+*/
+scores.entry(String::from(&quot;Yellow&quot;)).or_insert(50);
+scores.entry(String::from(&quot;Blue&quot;)).or_insert(50);
+println!(&quot;{:?}&quot;, scores);
+
+// 根據舊值更新一個值
+let text = &quot;hello world wonderful world&quot;;
+let mut map = HashMap::new();
+for word in text.split_whitespace() {
+let count = map.entry(word).or_insert(0);
+*count += 1;
+}
+println!(&quot;{:?}&quot;, map);
+}
+
+/*=========== String 及常用處理 ==========*/
+fn main() {
+// 建立空字串
+let mut s = String::new();
+// 建立並初始化字串
+let data = &quot;hello&quot;.to_string();
+// 與上行程式碼等效
+let data = String::from(&quot;hello&quot;);
+// 增加字串
+let mut temp = &quot;hello&quot;.to_string();
+temp.push_str(&quot; world&quot;);
+// 使用 + 連線字串
+let temp1 = &quot;hello&quot;.to_string();
+let temp3 = &quot; world&quot;.to_string();
+// 返回結果所有權 = 獲取 temp1 的所有權 + temp3 引用的內容 (temp1 無法繼續使用）
+let temp5 = temp + &amp;temp3;
+// 使用宏命令進行 複雜的字串拼接
+let s = format!(&quot;{}{}{}&quot;, temp1, temp3, temp5);
+// 遍歷字串
+for c in &quot;नमस्ते&quot;.chars() {
+println!(&quot;{}&quot;, c);
+}
+
+// 需要被替換的字串
+let temp_comment = &quot;&lt;!--  --&gt;&quot;.to_string();
+// 文字內容
+let temp = &quot;替換註釋&quot;.to_string();
+// 模板
+let templ = &quot;&lt;pre&gt;&lt;code&gt;&lt;!--  --&gt;&lt;/code&gt;&lt;/pre&gt;&quot;;
+// 最終輸出 &lt;pre&gt;&lt;code&gt;替換註釋&lt;/code&gt;&lt;/pre&gt;
+println!(&quot;{:?}&quot;, &amp;templ.replace(&amp;temp_comment, &amp;temp));
+
+// 型別轉換
+let s1 = String::from(&quot;test&quot;);
+let s3 = s1.as_str();
+
+let s1 = &quot;漢字-Test&quot;;
+// 是否包含指定字串
+assert_eq!(true, s1.contains(&quot;漢字&quot;));
+// 是否以指定字串開頭
+assert_eq!(true, s1.starts_with(&quot;漢字&quot;));
+// 是否以指定字串結尾
+assert_eq!(true, s1.ends_with(&quot;Test&quot;));
+// 字母全轉大寫
+println!(&quot;{:?}&quot;, s1.to_uppercase());
+// 請注意與  to_uppercase() 的不同
+let mut s3 = String::from(&quot;漢字-Test&quot;);
+s3.make_ascii_uppercase();
+// 字母全轉小寫
+println!(&quot;{:?}&quot;, s1.to_lowercase());
+// 請注意與  to_lowercase() 的不同
+let mut s3 = String::from(&quot;漢字-Test&quot;);
+s3.make_ascii_lowercase();
+// 字串切割
+let mut s = String::from(&quot;漢字-Test&quot;);
+let result: Vec&lt;&amp;str&gt; = s.split(&quot;-&quot;).collect();
+println!(&quot;{:?}&quot;, result); // -&gt; [&quot;漢字&quot;, &quot;Test&quot;]
+}
+
+/*=========== vector 用來儲存一系列的值 ==========*/
+fn main() {
+// 新建 vector 用於儲存 i32 型別的值
+let v: Vec&lt;i32&gt; = Vec::new();
+// 新建時包含初始值。使用宏。根據提供值建立一個新的 vec
+let v = vec![1, 2, 3];
+
+// 更新 vector。 可變變數。不可變則不能增加元素
+let mut v = Vec::new();
+v.push(3); // 增加值
+v.push(5); // 同類型值
+v.push(7); // 所以無需使用&lt;i32&gt;註解
+
+// 丟棄 vector 時，其所有元素亦會丟棄
+{
+let v = vec![1, 2, 3, 4];
+} // &lt;- 這裡 v 離開作用域並被丟棄
+
+// 讀取 vector 元素。
+let v = vec![1, 2, 3, 4, 5];
+// 以索引語法獲取 vector 中的值。索引超出範圍會引發錯誤
+let third: &amp;i32 = &amp;v[2];
+println!(&quot;The third element is {}&quot;, third);
+// 以 get 方法獲取 vector 中的值。超出範圍返回 None。
+match v.get(2) {
+Some(third) =&gt; println!(&quot;The third element is {}&quot;, third),
+None =&gt; println!(&quot;There is no third element.&quot;),
+}
+
+// 遍歷 vector 中的元素
+let v = vec![33, 66, 99];
+for i in &amp;v {
+println!(&quot;{}&quot;, i)
+}
+
+// 遍歷可變 vector 中每個元素的可變引用
+let mut v = vec![11, 55, 77];
+for i in &amp;mut v {
+*i += 50; // 解引用 i += 50;
+println!(&quot;{}&quot;, i)
+}
+
+// 使用列舉來儲存多種型別
+enum SpreadsheetCell {
+Int(i32),
+Float(f64),
+Text(String),
+}
+let row = vec![
+SpreadsheetCell::Int(3),
+SpreadsheetCell::Text(String::from(&quot;blue&quot;)),
+SpreadsheetCell::Float(10.12),
+];
+}
+</code></pre>
+<h1>使用包、Crate 和模組</h1>
+<ul>
+<li>模組樹都植根於名為 crate 的隱式模組下</li>
+<li>模組可巢狀，模組中支援結構體、列舉、常量、特性、函式</li>
+<li>路徑後跟一個或多個由雙冒號（::）分割的識別符號</li>
+<li>
+<ul>
+<li>絕對路徑（absolute path）從 crate 根開始，以 crate 名或者字面值 crate 開頭。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>相對路徑（relative path）從當前模組開始，以 self、super 或當前模組的識別符號開頭。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>super 起始的相對路徑，移動模組時，變更很少程式碼。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>use：使用該關鍵字將名稱引入作用域</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>as：使用該關鍵字提供新的名稱。用於 use 至相同名稱的情況</li>
+</ul>
+</li>
+<li>Rust 中預設所有項（函式、方法、結構體、列舉、模組和常量）都是私有的</li>
+<li>
+<ul>
+<li>父模組中的項不能使用子模組中的私有項，子模組中的項可以使用他們父模組中的項</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-bash">cargo new --lib rust-lib # 建庫專案
+</code></pre>
+<pre><code class="language-rust">/*=========== 使用 as 關鍵字提供新的名稱 ==========*/
+use std::fmt::Result;
+use std::io::Result as IoResult;
+fn function1() -&gt; Result {}
+fn function2() -&gt; IoResult&lt;()&gt; {}
+
+/*=========== 使用 use  ==========*/
+// 透過 glob 運算子將所有的公有定義引入作用域。慎用。
+use std::collections::*;
+// 一個是另外一個子路徑，同時引入作用域
+use std::io::{self, Write};
+// 巢狀引入
+use std::{cmp::Ordering, io};
+// 標準庫引入，無需修改 Cargo.toml
+use std::collections::HashMap;
+// 外部引入。需在 Cargo.toml 中新增庫
+use rand::Rng;
+
+/*=========== 模組分割入不同檔案 示例及註釋 ==========*/
+/* src/front_of_house/hosting.rs */
+pub fn add_to_waitlist() {} // 模組中函式 使用 pub 關鍵字變為公有
+
+/* src/front_of_house.rs */
+pub mod hosting;// 子模組 使用 pub 關鍵字暴露路徑
+
+/* src/lib.rs */
+mod front_of_house; // 載入同名模組檔案的內容
+
+/*=========== 模組的相關要點 示例及註釋 ==========*/
+mod front_of_house { // 這部分已拆分為單獨的檔案
+// 子模組 使用 pub 關鍵字暴露路徑
+pub mod hosting {
+// 模組中函式 使用 pub 關鍵字變為公有
+pub fn add_to_waitlist() {}
+}
+}
+
+// 使用 use 和相對路徑將項引入作用域
+use front_of_house::hosting;
+// 使用 pub use 重匯出名稱
+// pub use crate::front_of_house::hosting;
+
+/** 公有函式 */
+pub fn eat_at_restaurant() {
+// 絕對路徑
+crate::front_of_house::hosting::add_to_waitlist();
+// 相對路徑
+front_of_house::hosting::add_to_waitlist();
+// use 與相對路徑結合
+hosting::add_to_waitlist();
+
+// 公有結構體例項
+let mut meal = back_of_house::Breakfast::summer(&quot;Rye&quot;);
+meal.toast = String::from(&quot;Wheat&quot;);
+println!(&quot;{}&quot;, meal.toast);
+
+// 公有列舉成員使用
+let order1 = back_of_house::Appetizer::Soup;
+let order2 = back_of_house::Appetizer::Salad;
+}
+
+fn server_order() {}
+mod back_of_house {
+/** 公有列舉 所有成員皆為公有 */
+pub enum Appetizer {
+Soup,
+Salad,
+}
+/** 公有結構體 所有成員預設私有，公有 pub 需指定 */
+pub struct Breakfast {
+pub toast: String,      // 公有欄位
+seasonal_fruit: String, // 預設私有欄位
+}
+// 結構體方法
+impl Breakfast {
+//
+//
+/**
+* 公有函式 傳入字串，返回結構體
+* 具有私有欄位的結構體，需要提供該公共關聯函式來構造結構體例項
+* 若無該函式則無法在 eat_at_restaurant 中建立該結構體的例項
+*/
+pub fn summer(toast: &amp;str) -&gt; Breakfast {
+// 結構體例項化
+Breakfast {
+toast: String::from(toast),
+seasonal_fruit: String::from(&quot;peaches&quot;),
+}
+}
+}
+
+fn cook_order() {}
+fn fix_incorrect_order() {
+cook_order();
+// 使用 super 起始的相對路徑
+super::server_order();
+}
+}
+</code></pre>
+<h1>列舉和模式匹配</h1>
+<ul>
+<li>match：先匹配模式，匹配到則執行關聯程式碼</li>
+<li>if let：處理只匹配一個模式的值而忽略其他模式的情況。</li>
+</ul>
+<pre><code class="language-rust">/*=========== if let 簡單控制流 ==========*/
+fn main() {
+#[derive(Debug)]
+enum UsState {
+Alabama,
+Alaska,
+}
+enum Coin {
+Penny,
+Nickel,
+Dime,
+Quarter(UsState),
+}
+let coin = Coin::Penny;
+let mut count = 0;
+if let Coin::Quarter(state) = coin {
+println!(&quot;State quarter from {:?}!&quot;, state);
+} else {
+count += 1; // 對非 state 的進行計數
+}
+}
+
+/*=========== 匹配 Option&lt;T&gt; ==========*/
+fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+match x {
+None =&gt; None, // 要有，否則造成 BUG
+Some(i) =&gt; Some(i + 1),
+}
+}
+
+fn main() {
+let five = Some(5);
+let six = plus_one(five); // 6
+let none = plus_one(None);
+println!(&quot;{:?},{:?}&quot;, six, none);
+
+/* _ 萬用字元 */
+let some_u8_value = 0u8;
+match some_u8_value {
+1 =&gt; println!(&quot;one&quot;),
+3 =&gt; println!(&quot;three&quot;),
+5 =&gt; println!(&quot;five&quot;),
+7 =&gt; println!(&quot;seven&quot;),
+_ =&gt; (), // 匹配所有之前沒有指定的可能的值
+}
+}
+
+/*=========== match 控制流運算子 及繫結值的模式 ==========*/
+#[derive(Debug)]
+
+/** 用於傳遞給 Coin 列舉中的 Quarter 項 */
+enum UsState { Alabama, Alaska, }
+enum Coin { Penny, Nickel, Dime, Quarter(UsState), }
+
+/** 返回值可以是任何型別 */
+fn value_in_cents(coin: Coin) -&gt; u8 {
+match coin {
+// 對應列舉中每項，此處亦可用 {}
+Coin::Penny =&gt; {
+println!(&quot;Penny!&quot;);
+1
+}
+Coin::Nickel =&gt; 5,
+Coin::Dime =&gt; 10,
+Coin::Quarter(state) =&gt; {
+println!(&quot;state:{:?}&quot;, state);
+25
+}
+}
+}
+
+fn main() {
+let temp = value_in_cents(Coin::Quarter(UsState::Alaska));
+println!(&quot;temp:{:?}&quot;, temp);
+}
+
+
+/*=========== Option&lt;T&gt; 編碼存在或不存在 ==========*/
+use std::option::Option; // 引入庫
+
+fn main() {
+let some_num = Some(5);
+let some_str = Some(&quot;a string&quot;);
+let absent_num: Option&lt;i32&gt; = None;
+}
+
+
+/*=========== 列舉使用示例 ==========*/
+/* 定義列舉 */
+enum IpAddr {
+V4(u8, u8, u8, u8), // 可以單獨定義資料型別
+V6(String),
+}
+
+enum Message {
+Quit,                       // 沒有關聯任何資料
+Move { x: i32, y: i32 },    // 包含一個匿名體結構
+Write(String),              // 包含一個單獨 String
+ChangeColor(i32, i32, i32), // 包含三個 i32 型別資料
+}
+
+impl Message {
+fn call(&amp;self) {
+println!(&quot;方法體&quot;)
+}
+}
+
+fn main() {
+// 例項化列舉：：列舉項，併為其賦值
+let home = IpAddr::V4(127, 0, 0, 1);
+let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
+
+let m = Message::Write(String::from(&quot;Hello!&quot;));
+m.call(); // 呼叫列舉的方法
+}
+</code></pre>
+<h1>struct 結構體</h1>
+<ul>
+<li>自定義資料型別。允許命名和包裝多個相關的值，形成有意義的組合。</li>
+<li>建立結構體例項。key 為欄位名：value 為資料值。順序無需一致。</li>
+<li>元組結構體：即使型別相同，在函式中結構體型別的引數不能互通。</li>
+</ul>
+<pre><code class="language-rust">/*=========== 結構體使用示例 ==========*/
+#[derive(Debug)] // 宣告 debug 可以列印結構體。
+/** 建立結構體 */
+struct Rectangle {
+width: u32,
+height: u32,
+}
+// 將某個型別例項能做的事情都放入 impl 塊中
+impl Rectangle {
+// self 指呼叫該方法的結構體例項
+// 使用&amp;因只需讀取結構體的資料，不需要寫入 （獲取所有權）
+fn area(&amp;self) -&gt; u32 {
+self.width * self.height
+}
+// 關聯函式。不以 self 作為引數的函式。不作用於結構體的例項。
+// 經常被用作返回一個結構體新例項的建構函式。
+// 接收一個維度引數
+fn square(size: u32) -&gt; Rectangle {
+Rectangle {
+width: size,
+height: size,
+}
+}
+}
+/**
+* 每個結構體允許有多個 impl 塊，但每個方法有其自己的 impl 塊。
+* 此處只為有效示例，非最優寫法。
+*/
+impl Rectangle {
+/**
+* 比較兩個結構體例項的屬性值。返回 bool 結果。
+* 引數一：&amp;self，即已知的 rect1 也就是結構體例項化的變數
+* 引數二：結構體型別例項。即 rect2 或 rect3
+*/
+fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+self.width &gt; other.width &amp;&amp; self.height &gt; other.height
+}
+}
+
+fn main() {
+let rect1 = Rectangle {
+width: 30,
+height: 50,
+};
+let rect2 = Rectangle {
+width: 10,
+height: 40,
+};
+let rect3 = Rectangle {
+width: 60,
+height: 45,
+};
+// 列印結構體 （結構形式輸出）
+println!(&quot;{:#?}&quot;, rect1);
+// 方法語法。在結構體例項上呼叫其方法
+println!(&quot;{}&quot;, rect1.area());
+println!(&quot;Can rect1 hold rect2? {}&quot;, rect1.can_hold(&amp;rect2));
+println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
+// 使用結構體的關聯函式，輸入可見結果。wh 皆為 3
+println!(&quot;square:{:#?}&quot;, Rectangle::square(3));
+}
+
+/*=========== 元組結構體（tuple structs） ==========*/
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+let back = Color(0,0,0); // 黑色
+let origin =Point(0,0,0); // 原點
+// 以元組方式使用 欄位。索引
+println!(&quot;{}&quot;, back.1);
+println!(&quot;{}&quot;, origin.1);
+
+/*=========== 結構體基本使用 ==========*/
+// 宣告 debug 可以列印結構體。只有結構、列舉型別可用
+#[derive(Debug)]
+/** 定義結構體 */
+struct User {
+name: String,
+age: u64,
+active: bool,
+}
+
+fn main() {
+// 呼叫構建結構體函式，並傳值
+let temp = build_user(String::from(&quot;dd&quot;));
+// 列印結構體 （單行形式輸出）
+println!(&quot;{:?}&quot;, temp);
+// 列印結構體 （結構形式輸出）
+println!(&quot;{:#?}&quot;, temp);
+// 例項化結構體
+let user1 = User {
+name: String::from(&quot;aa&quot;),
+age: 16,
+active: true,
+};
+// 例項化結構體
+let user3 = User {
+active: false,
+..user1 // 結構體剩餘值使用 user1 中的值
+};
+println!(&quot;{:?}&quot;, user3);
+}
+/** 構建結構體函式 傳入引數，返回例項化的結構體 */
+fn build_user(name: String) -&gt; User {
+User {
+name,
+age: 15,
+active: true,
+}
+}
+</code></pre>
+<h1>ownership 所有權</h1>
+<ul>
+<li>透過所有權系統管理記憶體</li>
+<li>clone()：字串克隆。</li>
+<li>Copy：整型、浮點、布林、字元、元組 （元素同類型）</li>
+<li>&amp;：引用。允許使用值但不獲取其所有權。預設禁止修改引用的值。</li>
+<li>借用：獲取引用作為函式引數。</li>
+<li>可變引用：在特定作用域中的特定資料只能有一個可變引用。</li>
+</ul>
+<pre><code class="language-rust">/*=========== 字串 slice .. range（範圍） 語法 ==========*/
+let s = String::from(&quot;hello&quot;);
+let slice = &amp;s[0..2];
+let slice = &amp;s[..2];
+// 或者是如下寫法
+let s = String::from(&quot;hello&quot;);
+let len = s.len();
+let slice = &amp;s[3..len];
+// 如果 slice 包含 String 的最後一個位元組，可以捨棄尾部的數字
+let slice = &amp;s[3..];
+// 也可以同時捨棄這兩個值來獲取整個字串的 slice
+let slice = &amp;s[..];
+
+/*=========== 可變引用 作用域 ==========*/
+let mut s = String::from(&quot;hello&quot;);
+// 不可變 = 不可變引用
+let r1 = &amp;s; // 沒問題
+let r2 = &amp;s; // 沒問題
+println!(&quot;{} and {}&quot;, r1, r2); // r1r2 是不可變引用
+// 此位置之後 r1 和 r2 不再使用。因為最後一次使用不可變引用在宣告可變引用之前
+let r3 = &amp;mut s; // 沒問題。
+println!(&quot;{}&quot;, r3);
+
+/*=========== 可變引用 ==========*/
+fn main() {
+let mut s = String::from(&quot;hello&quot;);
+// &amp;mut s 在作用域內只能用一次。
+change(&amp;mut s);
+}
+fn change(some_string: &amp;mut String) {
+some_string.push_str(&quot;, world&quot;);
+}
+
+/*=========== 引用與借用 ==========*/
+fn main() {
+let s1 = String::from(&quot;hello&quot;);
+// 建立指標，指向 s1 的引用
+let len = calculate_length(&amp;s1);
+println!(&quot;The length of '{}' is {}.&quot;, s1, len);
+}
+// s 是對 String 的引用，因無引用值所有權，s 離開作用域，不會報錯。
+fn calculate_length(s: &amp;String) -&gt; usize { s.len() }
+
+/*=========== 返回值與作用域 ==========*/
+fn main() {
+let s1 = gives_ownership();         // gives_ownership 將返回值
+// 移給 s1
+let s2 = String::from(&quot;hello&quot;);     // s2 進入作用域
+let s3 = takes_and_gives_back(s2);  // s2 被移動到
+// takes_and_gives_back 中，
+// 它也將返回值移給 s3
+} // 這裡， s3 移出作用域並被丟棄。s2 也移出作用域，但已被移走，
+// 所以什麼也不會發生。s1 移出作用域並被丟棄
+fn gives_ownership() -&gt; String {             // gives_ownership 將返回值移動給
+// 呼叫它的函式
+let some_string = String::from(&quot;hello&quot;); // some_string 進入作用域。
+some_string                              // 返回 some_string 並移出給呼叫的函式
+}
+// takes_and_gives_back 將傳入字串並返回該值
+fn takes_and_gives_back(a_string: String) -&gt; String { // a_string 進入作用域
+a_string  // 返回 a_string 並移出給呼叫的函式
+}
+
+/*=========== 所有權與函式 ==========*/
+fn main(){
+let s = String::from(&quot;hello&quot;);  // s 進入作用域
+takes_ownership(s);             // s 的值移動到函數里 ...
+// 在此處使用 s，會有編譯錯誤      // ... 所以到這裡不再有效
+let x = 5;                      // x 進入作用域
+makes_copy(x);                  // x 應該移動函數里，
+// 但 i32 是 Copy 的，所以在後面可繼續使用 x
+}// 這裡， x 先移出了作用域，然後是 s。但因為 s 的值已被移走，
+// 所以不會有特殊操作
+
+fn takes_ownership(some_string: String) { // some_string 進入作用域
+println!(&quot;{}&quot;, some_string);
+} // 這裡，some_string 移出作用域並呼叫 `drop` 方法。佔用的記憶體被釋放
+
+fn makes_copy(some_integer: i32) { // some_integer 進入作用域
+println!(&quot;{}&quot;, some_integer);
+} // 這裡，some_integer 移出作用域。不會有特殊操作
+
+/*=========== 移動與克隆 ==========*/
+let s1 = String::from(&quot;hello&quot;);
+let s2 = s1; // 此處 s1 被移動，s1 不再有效。
+let s2 = s1.clone(); // 克隆。s1,s2 皆有效。
+println!(&quot;s1 = {}, s2 = {}&quot;, s1, s2);
+</code></pre>
+<h1>控制流</h1>
+<ul>
+<li>if：多個<code>if else if</code>最好使用<code>match</code></li>
+<li>loop：重複執行。<code>break</code>停止迴圈</li>
+<li>while 條件迴圈。慢！因編譯器增加執行時程式碼對每次迴圈的每個元素進行條件檢查。</li>
+<li>for 遍歷集合。最常用。</li>
+</ul>
+<pre><code class="language-rust">/*=========== 控制流 使用 for 遍歷集合 ==========*/
+let a = [10, 20, 30, 40, 50];
+for element in a.iter() { println!(&quot;the value is: {}&quot;, element); }
+
+// 倒計時
+for number in (1..4).rev() { println!(&quot;{}!&quot;, number); }
+println!(&quot;LIFTOFF!!!&quot;);
+
+/*========= 控制流 while 條件迴圈 =============*/
+let a = [10, 20, 30, 40, 50];
+let mut index = 0;
+while index &lt; 5 {
+println!(&quot;the value is: {}&quot;, a[index]);
+// 每次執行，index 值增 1
+index = index + 1;
+}
+
+/*============ 控制流 loop 重複執行 ==========*/
+let mut counter = 0;
+// 最終值為 20
+let result = loop {
+counter += 1; // 每次 +1
+// 若加到 10，返回時將 10*2
+if counter == 10 { break counter * 2; }
+};
+
+/*============ 控制流 if 表示式 ===============*/
+let num = 7;
+if num&lt;5 {
+println!(&quot;The value: {}&quot;,num);
+}else {
+println!(&quot;value of x is: {}&quot;,num);
+}
+
+// let 語句中使用 if
+let condition = true;
+// true 為 5，false 為 6 資料型別必須相同
+let number = if condition {5}else{6};
+</code></pre>
+<h1>函式</h1>
+<ul>
+<li>函式名<code>fn test_demo(){}</code></li>
+<li>函式引數需指定型別<code>fn test_demo(x:i32,y:i32){}</code></li>
+</ul>
+<pre><code class="language-rust">// 具有返回值的函式
+fn five() -&gt; i32 {5}
+// 具有引數與返回值的函式
+fn plus_one(x: i32) -&gt; i32 { x + 1 }
+fn main(){
+// 表示式 y=4
+let y = {
+let x = 3;
+x + 1 // 注意，表示式結尾沒有分號
+};
+let x = five(); // 5
+let z = plus_one(5); // 6
+println!(&quot;The value of x is: {},{},{}&quot;,y, x,z);
+}
+</code></pre>
+<h1>資料型別</h1>
+<ul>
+<li>標量型別</li>
+<li>
+<ul>
+<li>整數：i/u(±/+)bit(8/16/32/64/128) 通常用 i32</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>浮點：f32/f64（單精度浮點 / 倍精度浮點）。預設 f64</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>布林、字元：('char')</li>
+</ul>
+</li>
+<li>複合型別</li>
+<li>
+<ul>
+<li>tuples：元組。元素型別可不同，可單獨指定。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>arrays：陣列。每個元素型別必須相同。長度固定不可增減。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-rust">// let 預設不可變。加 mut 修飾符後，可變。
+let test =5; // 不可變
+let mut testt =5; // 可變
+// 常量
+const MAX_POINTS: u32 =100_000;
+
+// 隱藏。用 let 關鍵字重複生命相同變數名，隱藏變數值。
+let x =5;
+let x =x+1;
+let x = x*2;
+println!(&quot;x 的數值為：{}&quot;,x); // 12。即 (5+1)*2
+
+let spaces =&quot;   &quot;; // 此處不可加 mut 修飾 （型別不同）。
+let spaces = spaces.len();
+println!(&quot;{}&quot;,spaces); // 3。
+
+// 布林
+let t = true;
+let f: bool = false; // 型別詮釋的方式
+
+// 元組。為每個元素指定型別
+let tup: (i32, f64, u8) = (500, 6.4, 1);
+// 解構寫法
+let tup = (500, 6.4, 1);
+let (x, y, z) = tup;
+println!(&quot;The value of y is: {}&quot;, y);
+// 索引訪問形式
+let x: (i32, f64, u8) = (500, 6.4, 1);
+let five_hundred = x.0;
+let six_point_four = x.1;
+let one = x.2;
+
+// 陣列
+let a = [1, 2, 3, 4, 5];
+// 另一種寫法
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+// let a = [3; 5]; 等價於 let a = [3, 3, 3, 3, 3];
+// 訪問陣列元素
+let a = [1, 2, 3, 4, 5];
+let first = a[0];
+let second = a[1];
+</code></pre>
+<h1>demo game</h1>
+<ul>
+<li>隨機 1-100 之間的數字，根據使用者輸入，反饋兩者之間的比較結果</li>
+</ul>
+<pre><code class="language-rust">use std::io; // i/o 庫
+use rand::Rng; // 隨機數庫
+use std::cmp::Ordering; // 實現數字比較所需
+
+fn main(){
+// 字串顯示在螢幕
+println!(&quot;請猜測一個數字&quot;);
+// 通常是最方便的隨機性來源
+let rand_number = rand::thread_rng().gen_range(1,101);
+println!(&quot;隨機數：{}&quot;,rand_number);
+// 程式循壞執行
+loop {
+println!(&quot;請輸入一個數字&quot;);
+// 可變變數 = String 型別 靜態方法 。即新的空 String 例項賦值給 guess 變數
+let mut  guess = String::new();
+// io 模組 呼叫 stdin 函式
+io::stdin()
+// 呼叫函式，獲取使用者輸入。放置到 guess 中
+.read_line(&amp;mut guess)
+.expect(&quot;讀取改行失敗&quot;);
+// 將輸入內容轉為數字。此寫法會在輸入非數字是，終止程式。
+// let guess: u32 = guess.trim().parse().expect(&quot;請輸入一個數字！&quot;);
+// 將輸入內容轉為數字。 注意 match
+let guess: u32 = match guess.trim().parse() {
+Ok(num)=&gt;num, // 轉換成功
+Err(_)=&gt;continue, // 轉換失敗
+};
+println!(&quot;猜測的數字：{}&quot;,guess);
+
+// 比較隨機數即輸入數
+match guess.cmp(&amp;rand_number){
+Ordering::Less =&gt; println!(&quot;{}&lt;{}&quot;,guess,rand_number),
+Ordering::Greater =&gt; println!(&quot;{}&gt;{}&quot;,guess,rand_number),
+Ordering::Equal =&gt;{
+println!(&quot;{}={}&quot;,guess,rand_number);
+break; // 如果兩個數值相等，則停止迴圈。
+}
+}
+}
+}
+</code></pre>
+<hr>
+<h1>Dir&amp;File</h1>
+<ul>
+<li>寫入檔案到指定目錄</li>
+</ul>
+<pre><code class="language-rust">
+</code></pre>
+<ul>
+<li>讀取指定路徑下的目錄或檔案</li>
+</ul>
+<pre><code class="language-rust">/**
+* 深層目錄需遞迴。因遞迴傳入值型別問題。
+* 此處避免轉換所以使用 PathBuf 型別。
+*/
+pub fn read_dir_or_file(path: &amp;PathBuf) -&gt; Result&lt;()&gt; {
+for entry in fs::read_dir(&amp;path)? {
+let dir = entry?;
+let metadata = dir.metadata()?;
+// 如果是資料夾，就繼續執行
+if metadata.is_dir() {
+println!(&quot;路徑：{:?}&quot;, dir.path());
+// 此處應遞迴 傳入路徑
+read_dir_or_file(&amp;dir.path());
+} else {
+// 程式碼不變……
+}
+}
+Ok(())
+}
+</code></pre>
+<pre><code class="language-rust">
+use std::fs;
+use std::io::*;
+extern crate chrono; // 外鏈庫
+use chrono::prelude::*; // 引入庫
+use std::path::PathBuf;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
+
+/* 拆分並返回檔名 */
+pub fn split_str(s: &amp;String) -&gt; &amp;str {
+let bytes = s.as_bytes();
+for (i, &amp;item) in bytes.iter().enumerate() {
+if item == b'.' {
+return &amp;s[0..i];
+}
+}
+&amp;s[..]
+}
+
+
+/**
+* 讀取指定 path 下的目錄或檔案
+* 此處避免轉換所以使用 PathBuf 型別。
+*/
+pub fn read_dir_or_file(path: &amp;PathBuf) -&gt; Result&lt;()&gt; {
+for entry in fs::read_dir(&amp;path)? {
+let dir = entry?;
+let metadata = dir.metadata()?;
+// 如果是資料夾，就繼續執行
+if metadata.is_dir() {
+println!(&quot;目錄：{:?}&quot;, dir);
+println!(&quot;路徑：{:?}&quot;, dir.path());
+println!(&quot;目錄名稱：{:?}&quot;, dir.file_name()); // 目錄或檔案的名稱
+println!(&quot;目錄型別： {:?}&quot;, dir.file_type()); // 目錄或檔案的型別
+println!(&quot;目錄元資料：{:?}&quot;, dir.metadata()); // 目錄或檔案的元資料
+println!(&quot;目錄： {:?}&quot;, metadata.is_dir()); // 是否為目錄
+let time = metadata.modified()?;
+println!(&quot;最後修改時間 格式化：{:?}&quot;, format_datetime(time));
+// 此處應遞迴 傳入路徑
+read_dir_or_file(&amp;dir.path());
+} else {
+println!(&quot;===== 檔案 start =====&quot;);
+println!(&quot;目錄：{:?}&quot;, dir);
+println!(&quot;路徑：{:?}&quot;, dir.path());
+println!(&quot;檔名稱：{:?}&quot;, dir.file_name()); // 目錄或檔案的名稱
+println!(&quot;檔案型別： {:?}&quot;, dir.file_type()); // 目錄或檔案的型別
+println!(&quot;檔案元資料：{:?}&quot;, dir.metadata()); // 目錄或檔案的元資料
+println!(&quot;目錄： {:?}&quot;, metadata.is_dir()); // 是否為目錄
+// 最後修改時間
+let time = metadata.modified()?;
+println!(&quot;最後修改時間 格式化：{:?}&quot;, format_datetime(time));
+println!(&quot;===== 檔案 end =====&quot;);
+// 如果是檔案，整理為 Vec
+}
+}
+Ok(())
+}
+/**
+* 讀取指定 path 下的目錄或檔案
+* use example:
+* read_dir_or_file(&amp;String::from(&quot;../../notes/docs/rust/&quot;));
+* desc: 需 use 或者使用 std::io::Result&lt;()&gt;{
+*/
+use std::io::*;
+fn read_dir_or_file(path: &amp;String) -&gt; Result&lt;()&gt; {
+for entry in fs::read_dir(&amp;path)? {
+let dir = entry?;
+let metadata = dir.metadata()?;
+// 如果是資料夾，就繼續執行
+if metadata.is_dir() {
+println!(&quot;目錄：{:?}&quot;, dir);
+println!(&quot;路徑：{:?}&quot;, dir.path());
+println!(&quot;目錄名稱：{:?}&quot;, dir.file_name()); // 目錄或檔案的名稱
+println!(&quot;目錄型別： {:?}&quot;, dir.file_type()); // 目錄或檔案的型別
+println!(&quot;目錄元資料：{:?}&quot;, dir.metadata()); // 目錄或檔案的元資料
+println!(&quot;目錄： {:?}&quot;, metadata.is_dir()); // 是否為目錄
+let time = metadata.modified()?;
+println!(&quot;最後修改時間 格式化：{:?}&quot;, format_datetime(time));
+} else {
+println!(&quot;檔名稱：{:?}&quot;, dir.file_name()); // 目錄或檔案的名稱
+println!(&quot;檔案型別： {:?}&quot;, dir.file_type()); // 目錄或檔案的型別
+println!(&quot;檔案元資料：{:?}&quot;, dir.metadata()); // 目錄或檔案的元資料
+println!(&quot;目錄： {:?}&quot;, metadata.is_dir()); // 是否為目錄
+// 最後修改時間
+let time = metadata.modified()?;
+println!(&quot;最後修改時間 格式化：{:?}&quot;, format_datetime(time));
+}
+}
+Ok(())
+}
+
+</code></pre>
+<hr>
+<h1>DateTime</h1>
+<ul>
+<li>日期時間處理相關</li>
+</ul>
+<h3>時間戳格式化為日期時間 （暫未實現）</h3>
+<pre><code class="language-rust">/**
+* 嘗試自己寫個時間戳轉人類易讀
+* use example:
+* format_data_time(SystemTime::now());
+*/
+fn format_data_time(time: SystemTime) {
+println!(&quot;測試傳入值 {:?}&quot;, time);
+// 已知的 Rust 1.0 釋出日期時間的毫秒值 2015-05-15T00:00:00 / 2015-05-15 08:00:00
+const DEFAULT_MILLIS_SINCE_EPOCH: u128 = 1431648000000;
+
+let difference = get_epoch_ms(time) - DEFAULT_MILLIS_SINCE_EPOCH;
+println!(&quot;測試 時間戳差值： {:?}&quot;, difference);
+
+// 186394645574  求出總秒 186394645.574
+let temp = difference as f64 / 1000 as f64;
+println!(&quot;測試 求出總秒： {:?}&quot;, temp);
+println!(&quot;測試 求出總分： {:?}&quot;, temp / 60.00);
+println!(&quot;測試 求出總小時： {:?}&quot;, temp / 60.00 / 60.00);
+println!(&quot;測試 求出總日： {:?}&quot;, temp / 86400.00);
+// println!(&quot;測試 求出總月： {:?}&quot;, temp);
+// println!(&quot;測試 求出總年： {:?}&quot;, temp);
+//    &quot;這裡是輸出&quot;
+}
+</code></pre>
+<h1>use chrono</h1>
+<ul>
+<li>使用主流日期時間格式化庫</li>
+<li><code>Cargo.toml</code>檔案加入庫，執行<code>Cargo build</code>命令</li>
+</ul>
+<pre><code class="language-toml">[dependencies]
+chrono = &quot;0.4&quot; # 時間格式化
+</code></pre>
+<pre><code class="language-rust">/**
+* 格式化傳入的 SystemTime 型別的日期時間
+* 返回格式化後的字串
+* use example:
+* format_datetime(time); time 為 SystemTime 型別資料
+*/
+extern crate chrono; // 外鏈庫
+use chrono::prelude::*; // 引入庫
+fn format_datetime(time: SystemTime) -&gt; String {
+// 使用 as 型別強轉
+let dt: DateTime&lt;Local&gt; = Local.timestamp_millis(get_epoch_ms(time) as i64);
+// 格式化時間為人類易讀格式： 2021-04-09 23:54:50
+dt.format(&quot;%Y-%m-%d %H:%M:%S&quot;).to_string()
+}
+</code></pre>
+<h1>SystemTime To UNIX Timestamp</h1>
+<pre><code class="language-rust">/**
+* 將傳入的值轉為 13 位時間戳
+* SystemTime：引數型別
+* u128：返回值型別
+* use example:
+* get_epoch_ms(time)
+*/
+fn get_epoch_ms(time: SystemTime) -&gt; u128 {
+// SystemTime::now() 系統當前時間
+time.duration_since(UNIX_EPOCH).unwrap().as_millis()
+}
+
+/**
+* 格式化傳入的 SystemTime 型別的日期時間
+* 返回格式化後的字串
+* use example:
+* format_datetime(time); time 為 SystemTime 型別資料
+*/
+
+fn format_datetime(time: SystemTime) -&gt; String {
+// 使用 as 型別強轉
+let dt: DateTime&lt;Local&gt; = Local.timestamp_millis(get_epoch_ms(time) as i64);
+// 格式化時間為人類易讀格式： 2021-04-09 23:54:50
+dt.format(&quot;%Y-%m-%d %H:%M:%S&quot;).to_string()
+}
+</code></pre>
+<h1>Rust 1.8 SystemTime 處理</h1>
+<pre><code class="language-rust">// 19 位時間戳 轉 10 位時間戳
+let temp = time.duration_since(UNIX_EPOCH).expect(&quot;時間倒退&quot;);
+// 10 位時間戳 轉 13 位時間戳
+let in_ms = temp.as_secs() * 1000 + temp.subsec_nanos() as u64 / 1_000_000;
+</code></pre>
+<hr>
+<h1>String Operating</h1>
+<ul>
+<li>透過內容位元組組以指定字元進行分割並輸出</li>
+</ul>
+<pre><code class="language-rust">/**
+* 根據文字內容中第一個&gt;，
+* is_info:true 擷取其之前所有內容為當前文字的資訊。
+* is_info:false 擷取其之後所有內容為當前文字的正文。
+* use example:
+* info_or_content(&amp;temp, false);
+*/
+fn info_or_content(s: &amp;String, is_info: bool) -&gt; &amp;str {
+let bytes = s.as_bytes();
+for (i, &amp;item) in bytes.iter().enumerate() {
+if item == b'&gt;' {
+if is_info {
+// 擷取文章資訊
+return &amp;s[0..i + 1];
+}
+// 擷取正文
+return &amp;s[i + 1..];
+}
+}
+&amp;s[..]
+}
+let str = include_str!(&quot;test.md&quot;);
+let temp = String::from(&amp;str.to_string());
+
+/**
+* 根據文字內容中第一個：切分並返回文章資訊的每項屬性值
+* use example:
+* info_item(&amp;String::from(&quot;dir:rust&quot;));
+*/
+fn info_item(s: &amp;String) -&gt; &amp;str {
+let bytes = s.as_bytes();
+for (i, &amp;item) in bytes.iter().enumerate() {
+if item == b':' {
+return &amp;s[i + 1..];
+}
+}
+&amp;s[..]
+}
+</code></pre>
+<hr>
+<h1>MySQL Operating</h1>
+<h1>diesel</h1>
+<ul>
+<li><a href="https://diesel.rs/">主流操作資料庫</a></li>
+<li><code>cargo.toml</code>中新增<code>mysql = &quot;*&quot;</code></li>
+</ul>
+<pre><code class="language-rust">use mysql::*;
+use mysql::prelude::Queryable;
+use crate::chrono::NaiveDate;
+
+// user 結構體
+struct User {
+id:u64,
+firstname:String,
+lastname:String,
+phone:String,
+reg_date:NaiveDate,
+}
+
+// 獲取 mysql 連線
+fn main(){
+let url = &quot;mysql://root:****@localhost:3306/demo&quot;;
+let pool = Pool::new(url).unwrap(); // 獲取連線池
+let mut conn = pool.get_conn().unwrap();// 獲取連結
+let res = &amp;mut conn.query_map(
+&quot;select * from user&quot;,
+|(id,firstname,lastname,phone,reg_date)|User{
+id:id,
+firstname:firstname,
+lastname:lastname,
+phone:phone,
+reg_date:reg_date
+},
+).expect(&quot;Query failed.&quot;);
+
+for i in res {
+println!(
+&quot;{},{},{},{},{:?}&quot;,
+i.id,i.firstname,i.lastname,i.phone,i.reg_date
+)
+}
+}
+</code></pre>
+<hr>
+<h1>WebAssembly</h1>
+<h1>WebAssembly &amp; Deno</h1>
+<ul>
+<li><code>rust</code>程式碼編譯為<code>wasm</code>在<code>deno</code>中使用</li>
+<li><code>deno</code>部分使用 TS/JS 皆可。</li>
+</ul>
+<pre><code class="language-bash"># 建立用於構建 wasm 庫的專案
+cargo new --lib &lt;project-name&gt;
+# 獲取用於生成 TS/JS 介面卡檔案的 CLI 工具
+cargo install wasm-bindgen-cli
+# wasm-pack 編譯 deno 不友好；ssvmup 無 win 系統版。
+</code></pre>
+<pre><code class="language-toml">[dependencies]
+wasm-bindgen = &quot;0.2.70&quot; # wasm 與 js 互動庫
+
+[lib]
+name = &quot;libname&quot; # 此處定義，命令時就無需再指定
+# 告知 rust 編譯器建立一個沒有啟動函式的 wasm 二進位制檔案。
+# 編譯器建立動態庫 (win.dll，linux.so，macos.dylib)
+# 由於部署單元為 wasm，因此編譯器建立。wasm 檔案 （如：wisesayings.wasm)
+crate-type =[&quot;cdylib&quot;, &quot;lib&quot;]
+</code></pre>
+<pre><code class="language-rust">/* src/lib.rs */
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen] // 指示編譯器該程式碼的目標是 wasm 檔案
+
+pub fn get_wise_saying() -&gt; String {
+// 使用宏命令。從磁碟中獲取檔案，並將資料載入到記憶體中
+let str = include_str!(&quot;1.md&quot;);
+return str.to_string(); // 返回字串
+}
+
+/* src/main.rs */
+use wisesayings::get_wise_saying;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+let str = get_wise_saying();
+println!(&quot;{}&quot;, str);
+Ok(())
+}
+
+/* 這是 MDN 教程的示例程式碼 src/lib.rs 只有這一個檔案 */
+extern crate wasm_bindgen;
+
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern {
+pub fn alert(s: &amp;str);
+}
+
+#[wasm_bindgen]
+pub fn greet(name: &amp;str) {
+alert(&amp;format!(&quot;Hello, {}!&quot;, name));
+}
+</code></pre>
+<pre><code class="language-bash"># 將原始碼編譯為 wasm
+# # --lib 指標對。/lib 目錄中的原始碼構建庫
+# # --target 指明使用編譯器，並將構建工件及 wasm 檔案儲存到該目錄下
+cargo build --lib --target wasm32-unknown-unknown
+# 此處如果報錯 error[E0463]: can't find crate for core|  = note: the &quot;wasm32-unknown-unknown&quot; target may not be ins。
+# 解決以上報錯問題。將 WASM 目標新增到 Rust 工具鏈
+rustup target add wasm32-unknown-unknown
+# 重新執行 原始碼編譯為 wasm
+
+# Rust 目標三重新命名約定：ARCH-VENDOR-SYS-ABI
+# # ARCH：預期目標體系結構。如用於 wasm 檔案的 wasm32，用於 intel 晶片的 i686
+# # VENDOR：釋出目標的供應商。如：Nvidai、Apple
+# # SYS：作業系統。如：Windows、Linux
+# # ABI：指明過程如何啟動。
+# # # wasm32-unknown-unknown 指明是一個作業系統及 ABI 未知的二進位制檔案
+</code></pre>
+<ul>
+<li>使用 Deno 部署二進位制檔案伺服器端</li>
+</ul>
+<pre><code class="language-bash"># wasm-bindgen 建立介面卡檔案和特殊 wasm 的命令
+# --target deno 編譯為 deno 版本
+# --out-dir ./server 編譯完成，檔案的存放位置
+# ./target/xxxx.wasm 表示原始 wasm 檔案的位置
+wasm-bindgen --target deno ./target/wasm32-unknown-unknown/debug/demo.wasm --out-dir ./server
+# server 中可見生成的檔案清單。`xxx_bg.wasm`為 bindgen 縮寫
+# # demo_bg.wasm
+# # demo_bg.wasm.d.ts
+# # demo.d.ts
+# # demo.js
+</code></pre>
+<pre><code class="language-ts">/* server/main.ts 也可以寫 js */
+import { serve } from &quot;https://deno.land/std/http/server.ts&quot;;
+import { get_wise_saying } from &quot;./wisesayings.js&quot;;
+
+const env = Deno.env.toObject();
+
+let port = 8080;
+if (env.WISESAYING_PORT) {
+port = Number(env.WISESAYING_PORT);
+}
+
+const server = serve({ hostname: &quot;0.0.0.0&quot;, port: 8080 });
+console.log(
+`HTTP webserver running at ${new Date()}.  Access it at:  http://localhost:${port}/`
+);
+
+for await (const request of server) {
+const saying = get_wise_saying();
+// 亂碼，但如果是給前端，則不會有亂碼問題。
+request.respond({ status: 200, body: JSON.stringify({ data: saying }) });
+}
+</code></pre>
+<pre><code class="language-js">/* MDN 教程示例程式碼的編譯後使用 main.js */
+import { serve } from &quot;https://deno.land/std@0.92.0/http/server.ts&quot;;
+import { greet } from &quot;./demo.js&quot;;
+
+const s = serve({ port: 8080 });
+console.log(&quot;http://localhost:8080/&quot;);
+// 注意：需有引數值。否則會報錯。
+console.warn(&quot;greet:&quot;, greet(&quot;Lokavit&quot;));
+
+for await (const req of s) {
+req.respond({ body: &quot;Hello World\n&quot; });
+}
+</code></pre>
+<pre><code class="language-bash"># cd 到 server 目錄下 執行以下命令
+deno run --allow-read --allow-net --allow-env main.ts
+# # --allow-read：允許讀取磁碟檔案
+# # --allow-net：允許訪問網路
+# # --allow-env：讀取環境變數
+</code></pre>
+<ul>
+<li>前端 fetch 請求並渲染到頁面</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot; /&gt;
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+&lt;title&gt;前端&lt;/title&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/marked/marked.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;article&gt;&lt;/article&gt;
+&lt;script&gt;
+// 測試連線 Deno 伺服器，並讀取返回的資料
+async function getContent() {
+const res = await fetch(`http://localhost:8080/`);
+const result = await res.json();
+console.warn(&quot;result:&quot;, result);
+document.querySelector(&quot;article&quot;).innerHTML = marked(result.data);
+}
+getContent();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>

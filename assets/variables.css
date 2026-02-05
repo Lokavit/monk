@@ -1,0 +1,36 @@
+/* css-core/variables.css */
+
+/* 基礎屬性，不隨主題改變 */
+:root {
+  --font-main: "PingFang TC", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --transition-speed: 0.4s;
+  --line-height: 1.9;
+}
+
+/* 主題變量 - 預設 (Teal) */
+:root[data-theme="Teal"] {
+  --background: "#1a170f";
+  --foreground: "#eceae5";
+  --accent: "#32858b";
+}
+
+/* 主題變量 - Viking */
+:root[data-theme="Viking"] {
+  --background: #0e1923;
+  --foreground: #d6e8ee;
+  --accent: #5accf0;
+}
+
+/* 主題變量 - Matrix */
+:root[data-theme="Matrix"] {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+}
+
+/* 主題變量 - Pistachio */
+:root[data-theme="Pistachio"] {
+  --background: #1d2021;
+  --foreground: #ebdbb2;
+  --accent: #8ec07c;
+}

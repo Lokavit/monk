@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Linux - Linux</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css">
+    <link rel="stylesheet" href="../assets/typography.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../src/app.js"></script>
+</head>
+<body  >
+   <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Linux</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2568 BE</span> | 
+                <span>Words: 1542</span>
+            </div>
+        </header>
+        <section class="body-text"><p><s><strong>Arch</strong></s>：有牆，沒做路由出境，裝不上。</p>
+<h2>arch</h2>
+<p>archinstall
+檢查連線
+選擇映象源，從 VPN 所在地選。
+安裝完重啟。安裝網路
+sudo pacman -S networkManager
+sudo systemctl --type=service # 檢查已啟用的服務
+systemctl start NetworkManager.service # 如果不存在，啟用 networkManager</p>
+<p>sudo pacman -S pacman-mirrorlist # 安裝映象源
+sudo pacman -Syyu # 強制更新映象 每次修改映象之後都應該使用該命令</p>
+<h2>直接從網站上獲取映象列表</h2>
+<p>sudo curl -o /etc/pacman.d/mirrorlist https://archlinux.org/mirrorlist/all/</p>
+<h2>sudo pacman -S pacman-contrib # 排序已存在的源</h2>
+<h2>sudo rankmirrors -n 6 /etc/pacman.d/mirrorlist # 找出最快的源</h2>
+<p>sudo pacman -R pacman-contrib # 移除包
+sudo pacman -S reflector # 獲取最新源，篩選最新映象並按速度排序，寫入 /etc/pacman.d/mirrorlist
+systemctl start reflector.service # 啟動服務</p>
+<h1>Garuda</h1>
+<ul>
+<li>✅ <strong>VirtualBox</strong>: 用於裝 Win10</li>
+<li>✅ <strong>程式設計</strong>： VSCodium。https://vscodium.com/</li>
+<li>✅ <strong>影音</strong>： mpv</li>
+<li>✅ <strong>遊戲</strong>： Steam</li>
+<li>✅ <strong>OBS</strong>：錄屏、直播</li>
+<li>✅ <strong>Fonts</strong>:adobe-source-code-pro-fonts</li>
+</ul>
+<h2>Steam</h2>
+<pre><code>sudo pacman -S steam # select 2 or
+# sudo pacman -S lib32-nvidia-utils
+sudo pacman -S wine winetricks wine-mono wine-gecko
+</code></pre>
+<h2>Fcitx5</h2>
+<pre><code class="language-bash"># 裝載
+sudo pacman -S fcitx5 fcitx5-gtk fcitx5-qt -fcitx5-rime
+
+# open ~/.bashrc
+[[ -f ~/.bashrc ]] &amp;&amp; . ~/.bashrc
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+
+# install
+sudo pacman -S fcitx5-configtool
+
+# 編輯主圖 .local/share/fcitx5/themes/Monk-Theme/
+# 配置 .config/fcitx5/conf/classicui.conf
+# 配置 .config/fcitx5/conf/pinyin.conf 即，輸入法配置項
+</code></pre>
+<ul>
+<li>工作列點選進入配置視窗，點選<code>Add Input Method</code>，選擇簡中分組下的<code>Pinyin</code>，點選<code>Add</code></li>
+<li>對輸入法配置，重啟輸入。</li>
+</ul>
+<h2>Change Color</h2>
+<ul>
+<li>變更系統配色 <code>/usr/share/color-schemes/</code></li>
+</ul>
+<pre><code class="language-bash"># Sweet.colors 色值：0,0,0,0
+</code></pre>
+<h2>掛載移動盤</h2>
+<pre><code class="language-bash"># show all Disk
+sudo fsblk
+# check disk type
+sudo fidsk -l /dev/sdb
+# if disk type == NTFS install ntfs-3g
+sudo pacman -S ntfs-3g
+# create mount point
+sudo mkdir -p /mnt/mydrive
+# use mount
+sudo mount -t ntfs /dev/sdb1 /mnt/mydrive
+# check NTFS systeam
+sudo ntfsfix /dev/sdb1
+</code></pre>
+<pre><code class="language-bash"># /dev/ 裝置名  掛載在 該資料夾下，手動重新整理資料夾
+sudo mount /dev/sdc1 /run/media/monk
+</code></pre>
+<ul>
+<li>
+<ul>
+<li><strong>非編</strong>： ？？？</li>
+</ul>
+</li>
+<li>
+<ul>
+<li><strong>*電子書</strong>:calibre</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>ffmpeg for linux</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>calibre for linux</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Internet Download Manager ??</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>資料庫管理軟體</li>
+</ul>
+</li>
+</ul>
+<h3>VM Win10</h3>
+<ul>
+<li>AE、PS、PR、ME,Adobe 系列</li>
+<li>百度網盤</li>
+<li>一些 win 系老遊戲</li>
+<li>微信 QQ</li>
+</ul>
+<h3>share</h3>
+<ul>
+<li>建立虛擬機器時，選擇共享資料夾</li>
+<li>啟動虛擬機器中系統後，在裝置中，安裝增強，即可開啟共享資料夾。</li>
+</ul>
+<h1>Win10 to Linux</h1>
+<ul>
+<li>羅列 Win10 下常用軟體，尋找 Linux 下平替</li>
+<li>瞭解並選擇適合的發行版</li>
+<li>在<code>VirtualBox</code>中練手</li>
+<li>從<code>archinstall</code> 開始</li>
+</ul>
+<h2>Linux 發行版</h2>
+<ul>
+<li>Arch：有牆，沒做路由出境，裝不上。</li>
+<li>Garuda：平替。當年官網還能開啟是下載映象，做雙系統。</li>
+<li>
+<ul>
+<li>映象 https://mirrors.bfsu.edu.cn/osdn/storage/g/g/ga/garuda-linux/</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>https://www.tisonkun.org/2023/02/11/garudalinux/</li>
+</ul>
+</li>
+</ul>
+<h2>Arch 裝載配置</h2>
+<pre><code class="language-bash">archinstall
+
+Mirrors
+Locales
+Disk configuratuin
+Boot loader
+Swap
+Hostname
+Root password
+User account
+Profile
+Audio
+Kernels
+Additional packages
+Network configuration
+Timezone
+Automatic time sync (NTP)
+optional repositories
+
+
+</code></pre>
+<h3>手動裝載</h3>
+<pre><code class="language-bash">setfont ter-128n # 設定字型，僅限當前有效
+timedatectl set-ntp true
+# 測試映象
+curl -o /etc/pacman.d/mirrorlist https://archliunx.org/mirrorlist/all/
+nano /etc/pacman.d/mirrorlist # 選映象，https 協議。如：hackingand  lty.me
+nano /etc/pacman.conf # 更改配置
+VerbosePkgLists # 取消註釋該行
+ParallelDownloads = 5 # 取消註釋該行 儲存，退出
+pacman -Syy # 同步配置
+
+# 格式化驅動器
+cfdisk # 選擇 dos
+
+
+
+
+
+
+
+# 測試網路
+ping -c 3 archlinux.org
+# 分割槽
+## 列出可用的分割槽和磁碟：
+lsblk
+
+#  進入 sda 選擇 gpt，編輯三個分割槽
+cfdisk /dev/sda
+### 結果 100G 為例
+lsblk
+#### sda
+##### sda1 1G UEFI 分割槽。它需要格式化為 FAT 檔案系統
+##### sda2 19G root
+##### sda3 剩餘 home
+## 格式化分割槽
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+## 掛在 root 分割槽
+mount /dev/sda2 /mnt
+### 建立一個資料夾來載入主分割槽並載入它
+mkdir /mnt/home
+mount /dev/sda3 /mnt/home
+## 檢查掛在狀態
+lsblk
+## 安裝最小化 Arch
+pacstrap -i /mnt base linux linux-firmware sudo nano
+## 生成 fstab 檔案
+genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab
+## 使用 BASH 環境 chroot（更改 root）到掛載到 /mnt 的系統：
+arch-chroot /mnt /bin/bash
+### 終端變為：root 身份訪問系統
+#### [root@archiso /]#
+## 設定本地化，必須使用 nano 編輯器進入
+nano /etc/locale.gen # ctrl+w 找到某關鍵字
+## 編輯狀態下，找 en_US
+Search #en_US  # 找到 en_US，解除 # 註釋，回車 ctrl+o 回車 ctrl+x
+## 生成本地語言
+locale-gen
+## 並建立包含相應語言設定的 locale.conf
+echo &quot;LANG=en_US.UTF-8&quot; &gt; /etc/locale.conf
+## 設定時區
+ln -sf /usr/share/zoneinfo/UTC /etc/localtime
+## 設定本地時間
+hwclock --systohc --utc
+## 檢查時間
+date
+## 設定主機名，即計算機名
+echo monkPC &gt; /etc/hostname
+## 新增 hosts 檔案 [ctrl+o 儲存] [ctrl+x 退出]
+nano /etc/hosts
+127.0.0.1        localhost
+::1              localhost
+127.0.1.1        monkPC
+## 啟用網路
+### 安裝網路管理器
+pacman -S networkmanager
+### 啟用網路管理器
+systemctl enable NetworkManager
+## 設定 root 密碼
+passwd # 輸入兩次密碼
+## 安裝 GRUB 引導載入器。它是最流行的引導載入程式，可配置性高，使用方便。 此處向下，有錯誤
+### 安裝 GRUB 引導載入器和 EFI 引導管理器軟體包
+pacman -S grub efibootmgr
+### 在系統中安裝 bootlader，並逐一執行這些命令生成其配置檔案
+mount /dev/sda1 /mnt/boot/efi
+
+mount --mkdir /dev/efi_system_partition /boot/efi
+lsblk # to check if everything is mounted correctly
+# 到此句，有錯誤。待重灌
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --removable
+</code></pre>
+<h2>OpenVPN on Arch</h2>
+<ul>
+<li>download xxx.ovpn</li>
+</ul>
+<pre><code class="language-bash">sudo pacman -Sy networkmanager networkmanager-openvpn network-manager-applet openvpn
+sudo systemctl enable NetworkManager.service # 啟服務
+sudo systemctl start NetworkManager.service
+sudo mkdir -p /etc/sysctl.d
+sudo nano /etc/sysctl.d/40-ipv6.conf
+# 停用 ipv6 開啟 nano 編輯
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1
+net.ipv6.conf.tun0.disable_ipv6=1
+net.ipv6.conf.wlp3s0.disable_ipv6=1
+# ctrl+x y enter
+# 重啟
+sudo systemctl restart systemd-sysctl.service
+sudo systemctl restart NetworkManager.service
+# 匯入 xxx.ovpn
+nmcli connection import type openvpn file xxx.ovpn
+# 重啟
+sudo systemctl restart systemd-sysctl.service
+sudo systemctl restart NetworkManager.service
+</code></pre>
+<hr>
+<h2>GAME</h2>
+<pre><code class="language-bash">sudo pacman -S nvidia-utils lib32-nvidia-utils
+sudo pacman -S git steam gamemode mangohud
+git clone https://aur.archlinux.org/yay.git /home/monk/yay
+cd /home/monk/yay
+makepkg -si --noconfirm
+yay -S --noconfirm goverlay
+# restart
+# 系統選單，開啟 Goverlay，點選 Save 關閉，再次開啟。
+</code></pre>
+<h2>proxmox</h2>
+<ul>
+<li>https://www.youtube.com/watch?v=_u8qTN3cCnQ</li>
+<li>使用一臺電腦，裝載 proxmox，而後客戶機 web 訪問，構建多個 os</li>
+</ul>
+<h2>BASH Scripting</h2>
+<pre><code class="language-bash"># create .sh file
+nano himonk.sh # open nano 使用 ctrl+x（是否放入緩衝區）Y，是否儲存？Enter
+ls -l  # 檢視檔案資訊
+chmod +x himonk.sh ## 新增檔案許可權
+./himonk.sh Monk # 指令碼中有變數，變數值
+whoami # output my name
+pwd # where is I current floder
+date # current date time
+echo $RANDOM # gen random number
+fb=&quot;monk&quot;
+# himonk.sh 中寫變數  ehco &quot;$fb&quot; 指令碼為子程序
+export fb # 使指令碼中變數變為可用
+ls -al # 顯示包含隱藏的檔案
+# .bashrc 每次登入就會執行，可在內容設定環境變數
+export fb=&quot;Monk&quot; # 則該 fb 變數，持久有效
+echo $(( 1 + 5 )) # 直接輸出計算結果
+</code></pre>
+<pre><code class="language-sh">#！/bin/bash
+
+echo &quot;Hi Monk&quot;
+
+sleep 3
+echo &quot;what&quot;
+sleep 3
+echo &quot;no&quot;
+
+read name # 讀取輸入的內容
+echo &quot;Hi $name&quot; # 輸出
+
+# 另一種寫法
+name=$1
+echo &quot;Hi $namee&quot;
+
+# 指令碼中結合命令 himonk.sh 中程式碼
+name=$1
+user=$(whoami)
+date=$(date)
+whereami=$(pwd)
+ehco &quot;Hi $name .You logged $user .today is $date .current dir $whereami&quot;
+temp_age=$((($RANDOM%15)+$age))
+echo &quot;$temp_age&quot;
+
+echo &quot;Do you like coffee?(y/n)&quot;
+read coffee
+if[[$coffee==&quot;y&quot;]];then
+echo &quot;You are awesome&quot;
+elif [[$USER==&quot;monk&quot;]];then
+echo &quot;...&quot;
+else
+echo &quot;Leave right now&quot;
+fi # 結束符，必須有
+
+echo &quot;Please select class:&quot;
+1 - Sam
+2 - pri
+3 - pro
+read class
+case $class in
+1)
+type=&quot;Sam&quot;
+hp=10
+;; # 可以寫多行程式碼 ，必須雙分號結尾
+2) ...
+esac # 結束符
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>

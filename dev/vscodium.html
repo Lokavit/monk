@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>VSCodium - Dev</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css">
+    <link rel="stylesheet" href="../assets/typography.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>VSCodium</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 29 Jan 2558 BE</span> | 
+                <span>Words: 1221</span>
+            </div>
+        </header>
+        <section class="body-text"><h2>VSCode Ext Note</h2>
+<pre><code class="language-bash"># 全域性安裝 用於生成 vscode 外掛開發的專案
+$ sudo npm install -g yo generator-code
+# 建立專案，在此步驟簡單配置
+$ yo code
+</code></pre>
+<h2>直接複製資料夾到外掛目錄下</h2>
+<h2>打包成 vsix 外掛</h2>
+<pre><code class="language-bash">npm i vsce -g
+vsce package
+
+# VSCodium -&gt;Extension -&gt;...-&gt;Install from vsix
+</code></pre>
+<h2>釋出到外掛市場</h2>
+<ul>
+<li>在<code>marketplace</code>申請建立者，被<code>google</code>驗證牆的死去活來。</li>
+</ul>
+<pre><code class="language-bash">$ npm install -g @vscode/vsce
+$ vsce package
+# 去註冊、建立釋出者 （牆！牆！！牆！！！)
+$ vsce login Lokavit
+# paste your token 。驗證成功
+The Personal Access Token verification succeeded for the publisher 'Your Name'.
+# 釋出命令
+$ vsce publish
+# 提示你建立倉庫，順便推送到遠端 github 託管
+$ git remote add origin https://……/ 倉庫名。git
+$ git branch -M main
+# 正常 status add . commit -m
+$ git push -u origin main
+# 釋出命令 注意將 package.json 中需要資訊填寫完整
+$ vsce publish # 此處依然需要開著飛機，否者無法驗證透過
+# 更新時，記得更改 package.json 中的 version。
+$ vsce publish 0.0.3 # 更新外掛
+</code></pre>
+<h2>Stupa</h2>
+<p><code>Activating extension 'Lokavit.stupa' failed: name is not defined.</code></p>
+<h3>Insert file info to file</h3>
+<pre><code class="language-html">&lt;!--
+FileName：檔名。
+ProjectName：專案名 （單本小說視為一個專案）
+FileBirthtime：檔案建立時間
+FileMtime: 2023/9/29 17:15:21
+Author：作者
+WordCount：字數統計
+--&gt;
+
+&lt;!-- 對於寫小說可能會需要的一些功能
+左側加一個書本的圖示或 emoji。
+自建以。book 為字尾的檔案，也支援多本小說共用一套設定檔案。
+如：mybook.timeline.book：時間線相關設定。
+mybook.role.book：小說。角色設定
+mybook.gis.book：小說對於地理相關的設定。
+該檔案中的一些關鍵詞，做處理，用於正文使用時能夠浮現提示。
+在寫正文的時候，輸入角色名，會彈出該角色在角色設定裡面的內容。
+考慮將這些資料與 drawio 的資料互通。
+
+--&gt;
+</code></pre>
+<pre><code class="language-js">/**
+* 以下程式碼段，適用於多個 tab 儲存，或是多個編輯操作進行。
+* 但是，在_updateWordCount（）{} 中會阻止快捷鍵儲存事件
+*/
+/**
+* 對文字多次操作使用
+*/
+let _textEdits = [];
+/**
+* 每個文件內容替換，都 push 一個替換方法 （範圍，替換內容）
+*/
+_textEdits.push(builder.replace(_range, `${_count} 字`));
+/**
+* 用於多次替換。用於同時對多個文件進行多次操作
+*/
+let _workspaceEdit = new vscode.WorkspaceEdit();
+/**
+* 使用 set 方法，傳入當前文件的 uri，以及替換操作的陣列
+*/
+_workspaceEdit.set(_doc.uri, _textEdits);
+vscode.workspace.applyEdit(_workspaceEdit);
+</code></pre>
+<p>任何程式語言，任何註釋模板</p>
+<ul>
+<li>自定義程式語言的註釋模板</li>
+<li>自定義正則表示式</li>
+</ul>
+<pre><code class="language-html">&lt;!--
+FileName:${name}
+Project:${project}
+
+--&gt;
+</code></pre>
+<pre><code class="language-js">/**
+* 透過傳入的語言 ID，尋找對應的註釋塊。
+* 用大陣列物件，似乎太重了。
+*/
+switch (lang) {
+case &quot;html&quot;:
+``;
+}
+// 使用者自己定義，自己佈局
+const _tempLangAndTpl = [
+{
+lang: &quot;javascript&quot;,
+tpl: [
+&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;,
+&quot;FileName: ${fileName}&quot;,
+&quot;FilePath: ${FilePath}&quot;,
+&quot;Project: ${Project}&quot;,
+&quot;Author: ${Author}&quot;,
+&quot;Birthtime: ${birthime}&quot;,
+&quot;-----&quot;,
+&quot;Mtime: 2023/9/29 17:15:21
+&quot;WordCount: ${WordCount} 字&quot;,
+&quot;-----&quot;,
+&quot;Copyright © 1911 - 2023 Lokavit&quot;,
+&quot;    卍 · 小僧過境　眾生甦醒 · 卍&quot;,
+&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;,
+],
+},
+];
+// _tempTPL 輸出為未解析的字串，需要加一些處理。
+/** Birthtime: ${birthime} */
+// let _tempTPL = _tempLangAndTpl[0].tpl[5];
+// console.info(&quot;獲取某行：&quot;, _tempTPL);
+// const getBirth = (birthime) =&gt; `${_tempTPL.split(&quot;:&quot;)[0]}:${birthime}`;
+// const getTest = (val) =&gt; `Test:${val}`;
+
+const tplArry = [
+{
+lang: &quot;html&quot;,
+comment: {
+begin: &quot;&lt;!--&quot;,
+prefix: &quot;&quot;,
+end: &quot;--&gt;&quot;,
+},
+},
+{
+lang: &quot;javascript&quot;,
+comment: {
+begin: &quot;/**&quot;,
+prefix: &quot;*&quot;,
+end: &quot;*/&quot;,
+},
+},
+{
+lang: &quot;CSharp&quot;,
+comment: {
+begin: &quot;#&quot;,
+prefix: &quot;#&quot;,
+end: &quot;#&quot;,
+},
+},
+];
+</code></pre>
+<pre><code class="language-json">// 標頭檔案
+&quot;psi-header.config&quot;: {
+&quot;forceToTop&quot;: true,
+&quot;blankLinesAfter&quot;: 6,
+&quot;license&quot;: &quot;Custom&quot;
+},
+&quot;psi-header.changes-tracking&quot;: {
+&quot;isActive&quot;: true,
+&quot;modAuthor&quot;: &quot;Modified By: &quot;,
+&quot;modDate&quot;: &quot;Last Modified: &quot;,
+&quot;modDateFormat&quot;: &quot;date&quot;,
+&quot;include&quot;: [],
+// &quot;exclude&quot;: [&quot;markdown&quot;, &quot;json&quot;, &quot;jsonc&quot;],
+&quot;exclude&quot;: [&quot;json&quot;, &quot;jsonc&quot;],
+// &quot;excludeGlob&quot;: [&quot;out/**&quot;, &quot;src/**/*.xyz&quot;],
+&quot;excludeGlob&quot;: [&quot;out/**&quot;],
+&quot;autoHeader&quot;: &quot;manualSave&quot;
+},
+&quot;psi-header.license-text&quot;: [&quot;    卍 · 小僧過境　眾生甦醒 · 卍&quot;],
+&quot;psi-header.variables&quot;: [
+[&quot;company&quot;, &quot;Lokavit&quot;],
+[&quot;author&quot;, &quot;Lokavit&quot;],
+[&quot;authoremail&quot;, &quot;*&quot;]
+],
+&quot;psi-header.lang-config&quot;: [
+{
+&quot;language&quot;: &quot;lua&quot;,
+&quot;begin&quot;: &quot;--[[&quot;,
+&quot;prefix&quot;: &quot;--&quot;,
+&quot;end&quot;: &quot;--]]&quot;,
+&quot;blankLinesAfter&quot;: 0
+},
+{
+&quot;language&quot;: &quot;python&quot;,
+&quot;begin&quot;: &quot;###&quot;,
+&quot;prefix&quot;: &quot;# &quot;,
+&quot;end&quot;: &quot;###&quot;,
+&quot;blankLinesAfter&quot;: 0,
+&quot;beforeHeader&quot;: [&quot;#!/usr/bin/env python3&quot;, &quot;# -*- coding:utf-8 -*-&quot;]
+},
+{
+&quot;language&quot;: &quot;javascript&quot;,
+&quot;begin&quot;: &quot;/**&quot;,
+&quot;prefix&quot;: &quot; * &quot;,
+&quot;end&quot;: &quot; */&quot;,
+&quot;blankLinesAfter&quot;: 2,
+&quot;forceToTop&quot;: false
+},
+{
+&quot;language&quot;: &quot;typescript&quot;,
+&quot;mapTo&quot;: &quot;javascript&quot;
+},
+{
+&quot;language&quot;: &quot;markdown&quot;,
+&quot;begin&quot;: &quot;&lt;!-- &quot;,
+&quot;prefix&quot;: &quot;  &quot;,
+&quot;end&quot;: &quot; --&gt;&quot;,
+&quot;blankLinesAfter&quot;: 2,
+&quot;forceToTop&quot;: false
+}
+],
+&quot;psi-header.templates&quot;: [
+
+{
+&quot;language&quot;: &quot;markdown&quot;,
+&quot;template&quot;: [
+//　版權宣告 起始
+&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;,
+// 檔案在專案中的路徑及檔名字尾名
+&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;,
+// 專案名
+&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;,
+// 作者
+&quot;Author: &lt;&lt;author&gt;&gt;&quot;,
+// 檔案建立時間
+&quot;Created Date: &lt;&lt;filecreated('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 檔案最後修改時間
+&quot;Last Modified: &lt;&lt;dateformat('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+// 檔案最後修改人
+// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 版權宣告
+&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;,
+&quot;&lt;&lt;licensetext&gt;&gt;&quot;,
+//　對當前檔案的描述，或許要註明的更改
+&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;
+]
+},
+{
+&quot;language&quot;: &quot;javascript&quot;,
+&quot;template&quot;: [
+//　版權宣告 起始
+&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;,
+// 檔案在專案中的路徑及檔名字尾名
+&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;,
+// 專案名
+&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;,
+// 作者
+&quot;Author: &lt;&lt;author&gt;&gt;&quot;,
+// 檔案建立時間
+&quot;Created Date: &lt;&lt;filecreated('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 檔案最後修改時間
+&quot;Last Modified: &lt;&lt;dateformat('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+// 檔案最後修改人
+// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 版權宣告
+&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;,
+&quot;&quot;,
+&quot;&lt;&lt;licensetext&gt;&gt;&quot;,
+&quot;&quot;,
+//　對當前檔案的描述，或許要註明的更改
+&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;
+]
+},
+{
+&quot;language&quot;: &quot;css&quot;,
+&quot;template&quot;: [
+//　版權宣告 起始
+&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;,
+// 檔案在專案中的路徑及檔名字尾名
+&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;,
+// 專案名
+&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;,
+// 作者
+&quot;Author: &lt;&lt;author&gt;&gt;&quot;,
+// 檔案建立時間
+&quot;Created Date: &lt;&lt;filecreated('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 檔案最後修改時間
+&quot;Last Modified: &lt;&lt;dateformat('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+// 檔案最後修改人
+// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 版權宣告
+&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;,
+&quot;&quot;,
+&quot;&lt;&lt;licensetext&gt;&gt;&quot;,
+&quot;&quot;,
+//　對當前檔案的描述，或許要註明的更改
+&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;
+]
+},
+{
+&quot;language&quot;: &quot;typescript&quot;,
+&quot;template&quot;: [
+//　版權宣告 起始
+&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;,
+// 檔案在專案中的路徑及檔名字尾名
+&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;,
+// 專案名
+&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;,
+// 作者
+&quot;Author: &lt;&lt;author&gt;&gt;&quot;,
+// 檔案建立時間
+&quot;Created Date: &lt;&lt;filecreated('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 檔案最後修改時間
+&quot;Last Modified: &lt;&lt;dateformat('YYYY-MM-DD h:mm:ss')&gt;&gt;&quot;,
+// 檔案最後修改人
+// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,
+&quot;-----&quot;,
+// 版權宣告
+&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;,
+&quot;&quot;,
+&quot;&lt;&lt;licensetext&gt;&gt;&quot;,
+&quot;&quot;,
+//　對當前檔案的描述，或許要註明的更改
+&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;,
+&quot;&quot;
+]
+}
+],
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>

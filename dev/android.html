@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Android - Dev</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css">
+    <link rel="stylesheet" href="../assets/typography.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Android</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2557 BE</span> | 
+                <span>Words: 247</span>
+            </div>
+        </header>
+        <section class="body-text"><h2>apktool</h2>
+<pre><code class="language-bash"># 安裝 OpenJDK （推薦使用最新的 LTS 版本，例如 Java 17)
+sudo apt install openjdk-17-jre
+# 驗證 Java 是否安裝成功：
+java -version
+#
+cd ~/development/apktool
+# 下在最新的 apktool.jar https://ibotpeaches.github.io/Apktool/
+# 建立沒有後綴的 apktool 文件
+nano apktool
+# apktool 文件的內容
+#!/bin/sh
+java -jar ~/development/apktool/apktool.jar &quot;$@&quot;
+# 賦予腳本執行權限：
+chmod +x apktool
+# 將腳本添加到您的 PATH 中 （使其能在任何地方運行）：
+sudo mv apktool /usr/local/bin/
+# 推薦安裝 OpenJDK 17 的完整 JDK 版本
+sudo apt install openjdk-17-jdk
+# 檢查 jarsigner 是否已正確安裝
+which jarsigner
+# 生成密鑰 （如果沒有）：
+keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+
+# 解包 / 反編譯 (Decompiling)
+apktool d [app.apk] -o [輸出文件夾名稱] # apktool d myApp.apk -o myApp_decompiled
+
+# 修改後打包 使用 b (build) 參數
+apktool b [解包的 apk 文件夾] -o new_app.apk
+# 優化 (Zipalign) - 必須在簽名前執行！
+/home/monk/Android/Sdk/build-tools/36.0.0/zipalign -v 4 new_app.apk new_app_aligned.apk
+# 簽名 (Apksigner) - 官方推薦 V2/V3 方案
+/home/monk/Android/Sdk/build-tools/36.0.0/apksigner sign \
+--ks my-release-key.keystore \
+--ks-key-alias my-key-alias \
+--out new_app_final_signed.apk \
+new_app_aligned.apk
+# Keystore password for signer #1: 輸入簽名密碼
+# 驗證簽名 (Verify)
+/home/monk/Android/Sdk/build-tools/36.0.0/apksigner verify new_app_final_signed.apk
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>

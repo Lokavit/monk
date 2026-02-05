@@ -1,0 +1,118 @@
+[
+  {
+    "title": "Rust",
+    "date": "2021-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2563 BE",
+    "tags": [
+      "Rust"
+    ],
+    "description": "\n 常用命令\n\nbash\nrustc --version  rustc 1.51.0\nrustup upda...",
+    "wordCount": 6792,
+    "author": "Monk",
+    "link": "rust.html"
+  },
+  {
+    "title": "Scratch",
+    "date": "2020-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2562 BE",
+    "tags": [
+      "Scratch",
+      "Kids"
+    ],
+    "description": "\n 緣\n\n> 己亥年的工作，接手之前未曾瞭解相關，特地調研數日，決定接下工作。其一，面向程式設計教育的程式設計工具，...",
+    "wordCount": 3202,
+    "author": "Monk",
+    "link": "scratch.html"
+  },
+  {
+    "title": "JavaScript",
+    "date": "2015-09-10T00:00:00.000Z",
+    "buddhistDate": "9 Sept 2558 BE",
+    "tags": [
+      "JavaScript",
+      "Functional"
+    ],
+    "description": "\njs\n/\n 佛曆計算的方法：將佛降生於公元前623年減去佛壽80歲，得543為佛涅盤年數（佛涅盤於公元前54...",
+    "wordCount": 18314,
+    "author": "Monk",
+    "link": "javascript.html"
+  },
+  {
+    "title": "Rime",
+    "date": "2015-01-31T00:00:00.000Z",
+    "buddhistDate": "30 Jan 2558 BE",
+    "tags": [
+      "Rime",
+      "config"
+    ],
+    "description": "\n 錯誤排查\n\n- 使用非管理員安裝\n- 無法輸入中文：啟動演算法服務\n\n RIME 配置\n\n- 軟體安裝完畢，...",
+    "wordCount": 241,
+    "author": "Monk",
+    "link": "rime.html"
+  },
+  {
+    "title": "VSCodium",
+    "date": "2015-01-30T00:00:00.000Z",
+    "buddhistDate": "29 Jan 2558 BE",
+    "tags": [
+      "VSCodium",
+      "Extension"
+    ],
+    "description": "\n VSCode Ext Note\n\nbash\n 全域性安裝 用於生成vscode外掛開發的專案\n$ sud...",
+    "wordCount": 1221,
+    "author": "Monk",
+    "link": "vscodium.html"
+  },
+  {
+    "title": "Git",
+    "date": "2015-01-19T00:00:00.000Z",
+    "buddhistDate": "18 Jan 2558 BE",
+    "tags": [
+      "Git",
+      "GitHub"
+    ],
+    "description": "\n GitHub TOKEN 到期\n\n- Account -settings - Developer Setting...",
+    "wordCount": 3603,
+    "author": "Monk",
+    "link": "git.html"
+  },
+  {
+    "title": "FFmpeg",
+    "date": "2015-01-17T00:00:00.000Z",
+    "buddhistDate": "16 Jan 2558 BE",
+    "tags": [
+      "FFmpeg",
+      "command"
+    ],
+    "description": "\nbash\n m4s -> mp4\nffmpeg -i \"./inputvideo.m4s\" -i \"./inp...",
+    "wordCount": 190,
+    "author": "Monk",
+    "link": "ffmpeg.html"
+  },
+  {
+    "title": "Algorithm",
+    "date": "2015-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2557 BE",
+    "tags": [
+      "Algorithm",
+      "JavaScript"
+    ],
+    "description": "\n Filter\n\njs\n/\n  過濾陣列中相同項 從陣列中，刪除重複項 [簡單的陣列項]\n /\nco...",
+    "wordCount": 1170,
+    "author": "Monk",
+    "link": "algorithm.html"
+  },
+  {
+    "title": "Android",
+    "date": "2015-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2557 BE",
+    "tags": [
+      "Android",
+      "apktool"
+    ],
+    "description": "\n apktool\n\nbash\n 安裝 OpenJDK (推薦使用最新的 LTS 版本，例如 Java 17...",
+    "wordCount": 247,
+    "author": "Monk",
+    "link": "android.html"
+  }
+]

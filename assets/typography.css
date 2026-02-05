@@ -1,0 +1,7 @@
+.body-text p {
+  text-indent: 2em; /* 縮進兩個字符單位 */
+  margin-top: 0;
+  margin-bottom: 1.2em; /* 段落間距 */
+  line-height: 1.8; /* 提升小說閱讀舒適度 */
+  text-align: justify; /* 兩端對齊，讓排版更美觀 */
+}

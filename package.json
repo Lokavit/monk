@@ -1,0 +1,23 @@
+{
+  "name": "monk",
+  "version": "1.0.0",
+  "description": " ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build:ref": "node scripts/build-reflections.js",
+    "build:life": "node scripts/build-life.js",
+    "build:dev": "node scripts/build-dev.js",
+    "build:linux": "node scripts/build-linux.js",
+    "build:novel": "node scripts/build-novels.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Monk",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.3.3",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0"
+  }
+}

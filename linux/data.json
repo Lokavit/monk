@@ -1,0 +1,15 @@
+[
+  {
+    "title": "Linux",
+    "date": "2026-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2568 BE",
+    "tags": [
+      "Linux",
+      "Arch"
+    ],
+    "description": "\n~~Arch~~：有牆，沒做路由出境，裝不上。\n\n arch\n\narchinstall\n檢查連線\n選擇映象...",
+    "wordCount": 1542,
+    "author": "Monk",
+    "link": "linux.html"
+  }
+]
