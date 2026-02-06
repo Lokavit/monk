@@ -6,7 +6,7 @@ CSS_CORE="../css-core"
 
 # 建立目標資料夾（如果不存在）
 mkdir -p ./src
-mkdir -p ./assets/css
+mkdir -p ./assets
 
 # 同步 JS 核心文件
 cp $JS_CORE/theme.js ./src/
