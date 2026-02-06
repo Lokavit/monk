@@ -1,0 +1,87 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>FFmpeg - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>FFmpeg</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 16 Jan 2558 BE</span> | 
+                <span>Words: 190</span>
+            </div>
+        </header>
+        <section  ><pre><code class="hljs"><span class="hljs-comment"># m4s -&gt; mp4</span>
+ffmpeg -i <span class="hljs-string">&quot;./inputvideo.m4s&quot;</span> -i <span class="hljs-string">&quot;./inputaudio.m4s&quot;</span> -c:v copy -c:a aac <span class="hljs-string">&quot;output.mp4&quot;</span>
+
+<span class="hljs-comment"># 按時間切割影片</span>
+ffmpeg -ss 00:00:00 -i <span class="hljs-string">&quot;E:\100GOPRO\8.MP4&quot;</span> -acodec copy -vcodec copy -t 00:01:40 <span class="hljs-string">&quot;E:\100GOPRO\8-1.MP4&quot;</span>
+<span class="hljs-comment"># 按時間切割影片 轉換為ts檔案</span>
+ffmpeg -ss 00:00:00 -i <span class="hljs-string">&quot;E:\100GOPRO\10.MP4&quot;</span> -acodec copy -vcodec copy -vbsf h264_mp4toannexb -t 00:04:00 <span class="hljs-string">&quot;E:\100GOPRO\10-1.ts&quot;</span>
+
+<span class="hljs-comment"># 按時間切割影片 ts檔案</span>
+ffmpeg -ss 00:06:00 -i <span class="hljs-string">&quot;E:\100GOPRO\9-1.ts&quot;</span> -acodec copy -vcodec copy -t 00:07:00 <span class="hljs-string">&quot;E:\100GOPRO\9-1-1.ts&quot;</span>
+
+<span class="hljs-comment"># 拼接ts並輸出</span>
+ffmpeg -i <span class="hljs-string">&quot;concat:E:\100GOPRO\7-1.ts|E:\100GOPRO\8-1.ts|E:\100GOPRO\9-1.ts|E:\100GOPRO\10-1.ts|E:\100GOPRO\11-1.ts|E:\100GOPRO\14-1.ts&quot;</span> -acodec copy -vcodec copy -absf aac_adtstoasc <span class="hljs-string">&quot;E:\100GOPRO\out.mp4&quot;</span>
+
+<span class="hljs-comment"># 分離音訊流</span>
+ffmpeg -i  <span class="hljs-string">&quot;E:\input.flv&quot;</span> -acodec copy -vn <span class="hljs-string">&quot;E:\out.aac&quot;</span>　　
+
+<span class="hljs-comment"># 壓縮 -b:v :指定影片的位元速率 -b:a : 指定音訊的位元速率 1M：位元速率的值 1M 表示 1Mb/s  -r 20：表示幀率設定為 20fps</span>
+ffmpeg  -i  <span class="hljs-string">&quot;C:\input.mp4&quot;</span>  -s 3840x2160  -b:v 10M  -r 60  <span class="hljs-string">&quot;C:\out.mp4&quot;</span>
+
+<span class="hljs-comment"># 轉換影片解析度：</span>
+ffmpeg -i <span class="hljs-string">&quot;E:\0.mkv&quot;</span> -vf scale=1920:1080 <span class="hljs-string">&quot;E:\0-scale.mkv&quot;</span>
+</code></pre>
+<p>ffmpeg -i &quot;E:\CODE\cs50 2023\video.m4s&quot; -i &quot;E:\CODE\cs50 2023\audio.m4s&quot; -c:v copy -c:a aac &quot;E:\CODE\cs50 2023\Lecture 1 - C.mp4&quot;</p>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

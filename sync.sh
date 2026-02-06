@@ -13,6 +13,7 @@ cp $JS_CORE/theme.js ./src/
 cp $JS_CORE/i18n.js ./src/
 cp $JS_CORE/storage.js ./src/
 cp $JS_CORE/typography.js ./src/
+cp $JS_CORE/format.js ./src/
 
 # 同步 CSS 核心文件
 cp $CSS_CORE/variables.css ./assets/

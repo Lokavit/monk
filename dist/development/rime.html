@@ -1,0 +1,110 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Rime - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Rime</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 30 Jan 2558 BE</span> | 
+                <span>Words: 241</span>
+            </div>
+        </header>
+        <section  ><h2>錯誤排查</h2>
+<ul>
+<li>使用非管理員安裝</li>
+<li>無法輸入中文：啟動演算法服務</li>
+</ul>
+<h2>RIME 配置</h2>
+<ul>
+<li>軟體安裝完畢，輸入法右鍵選擇<code>輸入法設定</code>，對其進行配置，得到檔案<code>weasel.custom.yaml</code></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># weasel.custom.yaml</span>
+<span class="hljs-attr">customization:</span>
+  <span class="hljs-attr">distribution_code_name:</span> <span class="hljs-string">Weasel</span>
+  <span class="hljs-attr">distribution_version:</span> <span class="hljs-number">0.14</span><span class="hljs-number">.3</span>
+  <span class="hljs-attr">generator:</span> <span class="hljs-string">&quot;Weasel::UIStyleSettings&quot;</span>
+  <span class="hljs-attr">modified_time:</span> <span class="hljs-string">&quot;Wed Apr  8 14:26:31 2020&quot;</span>
+  <span class="hljs-attr">rime_version:</span> <span class="hljs-number">1.5</span><span class="hljs-number">.3</span>
+<span class="hljs-attr">patch:</span>
+  <span class="hljs-attr">style/color_scheme:</span> <span class="hljs-string">satya</span> <span class="hljs-comment"># 主題</span>
+  <span class="hljs-attr">style/horizontal:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 是否橫向</span>
+  <span class="hljs-attr">style/font_face:</span> <span class="hljs-string">Microsoft</span> <span class="hljs-string">YaHei</span> <span class="hljs-comment"># 字型</span>
+  <span class="hljs-attr">style/font_point:</span> <span class="hljs-number">14</span>  <span class="hljs-comment"># 字號</span>
+
+<span class="hljs-comment"># 建立 default.custom.yaml</span>
+<span class="hljs-attr">patch:</span>
+    <span class="hljs-attr">&quot;menu/page_size&quot;:</span> <span class="hljs-number">9</span>
+
+<span class="hljs-comment"># 整理安裝資料夾下 Rime/weasel-0.14.3/data</span>
+<span class="hljs-comment"># preview中刪除不需要的主題預覽圖，對應[weasel.yaml]檔案中的主題刪除</span>
+<span class="hljs-comment"># weasel.yaml 更改，新增自定義主題</span>
+
+<span class="hljs-comment"># RGB轉BGR [67C8EB][0xEBC867],即R[67]與B[EB]交換位置，字首加0x，即[0xBBGGRR]</span>
+
+<span class="hljs-attr">preset_color_schemes:</span>
+  <span class="hljs-attr">satya:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Satya</span>
+    <span class="hljs-attr">author:</span> <span class="hljs-string">Satya</span>
+    <span class="hljs-attr">text_color:</span> <span class="hljs-number">0xEBC867</span> <span class="hljs-comment"># 內選區域 文字</span>
+    <span class="hljs-attr">back_color:</span> <span class="hljs-number">0x000000</span> <span class="hljs-comment"># 背景顏色</span>
+    <span class="hljs-attr">border_color:</span> <span class="hljs-number">0xFFFF00</span> <span class="hljs-comment"># 背景邊框顏色</span>
+    <span class="hljs-attr">hilited_text_color:</span> <span class="hljs-number">0xfecb96</span> <span class="hljs-comment"># 內選區域 編碼</span>
+    <span class="hljs-attr">hilited_back_color:</span> <span class="hljs-number">0x000000</span> <span class="hljs-comment"># 內選區域 背景</span>
+    <span class="hljs-attr">hilited_candidate_text_color:</span> <span class="hljs-number">0xFFFF00</span> <span class="hljs-comment"># 啟用候選項 文字</span>
+    <span class="hljs-attr">hilited_candidate_back_color:</span> <span class="hljs-number">0x000000</span> <span class="hljs-comment"># 啟用候選項 背景</span>
+    <span class="hljs-attr">candidate_text_color:</span> <span class="hljs-number">0xCCCC00</span> <span class="hljs-comment"># 其它候選項 文字</span>
+    <span class="hljs-attr">comment_text_color:</span> <span class="hljs-number">0xEBC867</span> <span class="hljs-comment"># 其它候選項 提示</span>
+
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

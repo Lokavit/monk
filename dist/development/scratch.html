@@ -1,0 +1,589 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Scratch - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Scratch</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2562 BE</span> | 
+                <span>Words: 3202</span>
+            </div>
+        </header>
+        <section  ><h2>緣</h2>
+<blockquote>
+<p>己亥年的工作，接手之前未曾瞭解相關，特地調研數日，決定接下工作。其一，面向程式設計教育的程式設計工具，造福人類；其二，自我挑戰。世事如棋，不盡人意。在年關前結束了一系列工作，很可惜，很無奈。想來不會再做相關開發，在此對這段時期的工作做個經驗總結。唉，沒記性的人全靠筆記。</p>
+</blockquote>
+<hr>
+<h2>起</h2>
+<h3>Google 出品 Blockly</h3>
+<ul>
+<li>一套 JS 版本的積木拖拽拼接工具。
+<blockquote>
+<p>要說把這玩意兒從 Github 中 clone 下來可真不容易，在經歷無數次嘗試才拉取成功，接下來的編譯過程，那就更是相當不容易。這套開原始碼，使用了 Google 自家的 js 元件庫，以及自家的程式碼編譯壓縮混淆庫。所以，即使它是一個 js 專案，也需要在電腦上先配置環境<code>Python</code>、<code>jdk</code></p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 根據專案根目錄的buld.py檔案提示，裝載對應版本的python</span>
+python2.7
+<span class="hljs-comment"># 在根據報錯提示，裝載對應版本的jdk</span>
+jdk1.8.0_251
+<span class="hljs-comment"># 以上裝載完成，若還有報錯，善用搜索，逐步排查。</span>
+</code></pre>
+<p>編譯起來，檢視專案 demos 資料夾中的示例，基本無憂使用。</p>
+<ul>
+<li>引入及匯出.js 的寫法</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 建立一個名稱空間 函式可確保其引數指示的 JavaScript 物件結構的存在。它檢查路徑表示式中的每個物件屬性是否存在，如果不存在，則將其初始化
+ * utils/test.js */</span>
+goog.<span class="hljs-title function_">provide</span>(<span class="hljs-string">&quot;Blockly.utils.test&quot;</span>);
+<span class="hljs-comment">// 該模組的具體內容</span>
+
+<span class="hljs-comment">/**
+ * 從給定的名稱空間中“匯入”程式碼，以便閉包編譯器可以找到它。
+ *  所需要的檔案.js */</span>
+goog.<span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;Blockly.utils.test&quot;</span>);
+<span class="hljs-comment">// 具體使用。</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">utils</span>.<span class="hljs-property">test</span>.<span class="hljs-title function_">testMethod</span>();
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">utils</span>.<span class="hljs-property">test</span>.<span class="hljs-property">isShow</span>;
+</code></pre>
+<ul>
+<li>
+<p>Closure Tools 實際上，似乎並未用到高階編譯壓縮功能。</p>
+</li>
+<li>
+<ul>
+<li>Closure Compiler:JS 編譯及壓縮 <code>高階壓縮,移除未用到的程式碼</code></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Closure Library:JS 類庫(函式及元件)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Closure Templates:JS 模板機制函式庫(*.soy)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Compiler 的 Advanced 壓縮模式:寫法需遵循一定規則</li>
+</ul>
+</li>
+</ul>
+<h3>KID-CODE</h3>
+<ul>
+<li>使用<code>Blockly</code>編譯完成的庫，實現程式設計工具中的圖形化到 Python 程式碼的過程。</li>
+<li>使用開源的線上程式碼編輯器做程式碼展示、高亮、格式化等；</li>
+<li>未做真實伺服器端 Python 編譯，而是以 JS 編譯結果輸出到頁面繪製的控制檯區域；</li>
+<li>對工具的 XML 檔案實現:新建、開啟、下載、雲端儲存。</li>
+</ul>
+<h3>Google 出品 BlocklyGames</h3>
+<blockquote>
+<p>該專案編譯成功需在 Linux 系統下，且連通國際網路。由於編譯後大部分程式碼依然不在本地，只好將該編譯後的該專案整個扔上伺服器，未作任何改動。</p>
+</blockquote>
+<h3>Microsoft 出品 pxt-blockly</h3>
+<blockquote>
+<p>微軟大廠，基於 Google 二開，修復大量 Edge 下的問題，並附帶一系列 pxt 擴充套件</p>
+</blockquote>
+<p>把 Github 中幾個類似的庫進行比較，發現其實微軟的更適合二開。然而，該提議被駁回。</p>
+<hr>
+<h3>KID 系列</h3>
+<blockquote>
+<p>在著手二開 LLK 那套少兒程式設計工具時，看到有關新聞，為規避，更名為<code>KID</code>。這套開原始碼，網路上無數復刻版。還有專門為這套原始碼二開做付費諮詢的，可謂商機無限。但是隨著新聞爆出，一道網路遮蔽，不少復刻版網站，一片 404。而手上的專案，因為已經開發部分功能，直連自家伺服器，成功避開此次危機。</p>
+</blockquote>
+<ul>
+<li>該專案由以下幾個專案組成</li>
+<li>
+<ul>
+<li>kid-blocks:基於 Blockly 二開的積木工具</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-vm:對應積木工具的虛擬引擎，積木指令的實現。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-storage:快取。主要用在資源部分。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-svg-renderer:svg 渲染。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-render:渲染器的一些處理</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-gui:頁面呈現。對以上庫的引用及使用。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-parser:對專案專屬檔案的解析。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>kid-...:另外還有一些不曾改動的原有庫，因具有依賴關係，不做改變。</li>
+</ul>
+</li>
+</ul>
+<h3>Blocks</h3>
+<blockquote>
+<p>基於 Google 出品的 Blockly 二次開發的積木工具。刪掉了原本的部分功能，比如積木工具的自動收縮、多種程式語言程式碼庫的生成等；改寫了部分功能，比如 svg 的資料構成形式等；也添加了各別功能，比如 checkbox 的積木。</p>
+</blockquote>
+<blockquote>
+<p>按照需求，在該版本之上，二開出來專案所需的少兒版與幼兒版。其中幼兒版改動及追加功能較多，涉及到對 SVG 資料的變更、音樂及繪畫擴充套件提取到初始工具庫、積木全部圖示化、去文字，隱藏部分高階積木、重寫部分初級積木，如移動與方向、速度結合；跳躍與速度、方向結合；外觀的一些簡單指令積木等。二開的邏輯基本如下：</p>
+<blockquote>
+<ul>
+<li>kid-blocks 中找到積木編輯的對應檔案，按照指定資料結構追加積木，注意命名;</li>
+<li>kid-vm 中找到積木實現的對應檔案，按照積木命名建立函式，實現積木執行邏輯;</li>
+<li>kid-gui 中找到 xml.js，新增新增的積木，注意 XML 結構及積木命名。</li>
+</ul>
+</blockquote>
+</blockquote>
+<h3>示例</h3>
+<ul>
+<li>新增繪畫分類積木塊 需在 vm 庫中，對該積木塊邏輯進行對應實現</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** msg\messages.js */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">PEN_CLEAR</span> = <span class="hljs-string">&quot;%1&quot;</span>;
+
+<span class="hljs-comment">/** msg\scratch_msgs.js */</span>
+<span class="hljs-attr">PEN_CLEAR</span>: <span class="hljs-string">&quot;%1&quot;</span>,
+
+<span class="hljs-comment">/** blocks_vertical\extensions.js
+ * 目前將新增的繪畫分類下的自定義積木塊，寫在該檔案內
+ * 後期需想辦法，另起一個pen.js檔案，寫在內
+ */</span>
+<span class="hljs-comment">/** 繪畫分類 之 清理 */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Blocks</span>[<span class="hljs-string">&quot;pen_clear&quot;</span>] = {
+  <span class="hljs-comment">/**
+   * 清理
+   * <span class="hljs-doctag">@this</span> Blockly.Block
+   */</span>
+  <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">jsonInit</span>({
+      <span class="hljs-comment">// 明文內容:對應msg/messages.js檔案中對應常量</span>
+      <span class="hljs-attr">message0</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">PEN_CLEAR</span>,
+      <span class="hljs-comment">// 該積木塊所需的引數對應設定</span>
+      <span class="hljs-attr">args0</span>: [
+        <span class="hljs-comment">// 第一個引數</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;field_image&quot;</span>, <span class="hljs-comment">// 欄位_圖片 型別</span>
+          <span class="hljs-comment">// 圖片的src,通常採用 media\xxxxx.svg下的svg檔案</span>
+          <span class="hljs-attr">src</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">mainWorkspace</span>.<span class="hljs-property">options</span>.<span class="hljs-property">pathToMedia</span> + <span class="hljs-string">&quot;pen.svg&quot;</span>,
+          <span class="hljs-attr">width</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的寬度</span>
+          <span class="hljs-attr">height</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的高度</span>
+        },
+      ],
+      <span class="hljs-comment">// 分類:分類.運動分類</span>
+      <span class="hljs-attr">category</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Categories</span>.<span class="hljs-property">pen</span>,
+      <span class="hljs-comment">// :[設定運動類相簿的顏色，設定本積木塊的形狀]</span>
+      <span class="hljs-attr">extensions</span>: [<span class="hljs-string">&quot;colours_pen&quot;</span>, <span class="hljs-string">&quot;shape_statement&quot;</span>],
+    });
+  },
+};
+
+<span class="hljs-comment">/** blocks_vertical\default_toolbox.js */</span>
+  <span class="hljs-string">&#x27;&lt;category name=&quot;%{BKY_CATEGORY_PEN}&quot; id=&quot;pen&quot; colour=&quot;#0FBD8C&quot; secondaryColour=&quot;#0DA57A&quot; iconURI=&quot;../media/pen.svg&quot;&gt;&#x27;</span> +
+  <span class="hljs-comment">// 新增加的積木塊</span>
+  <span class="hljs-string">&#x27;&lt;block type=&quot;pen_clear&quot;&gt;&lt;/block&gt;&#x27;</span> +
+  <span class="hljs-string">&quot;&lt;/category&gt;&quot;</span> +
+</code></pre>
+<ul>
+<li>新增分類並註冊該分類</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** core\colours.js */</span>
+<span class="hljs-comment">// 追加 音樂分類圖示三色設定</span>
+  <span class="hljs-attr">music</span>: {
+    <span class="hljs-attr">primary</span>: <span class="hljs-string">&quot;#0FBD8C&quot;</span>,
+    <span class="hljs-attr">secondary</span>: <span class="hljs-string">&quot;#0DA57A&quot;</span>,
+    <span class="hljs-attr">tertiary</span>: <span class="hljs-string">&quot;#DB6E00&quot;</span>,
+  },
+
+<span class="hljs-comment">/** msg\messages.js
+ *  再次檔案中，定義新增的分類
+ */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">CATEGORY_MUSIC</span> = <span class="hljs-string">&quot;Music&quot;</span>; <span class="hljs-comment">// 音樂</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">CATEGORY_PEN</span> = <span class="hljs-string">&quot;Pen&quot;</span>; <span class="hljs-comment">// 繪畫</span>
+
+<span class="hljs-comment">/** msg\scratch_msgs.js
+ * 在此檔案中，追加以定義的分類，明文國際化
+ */</span>
+  <span class="hljs-attr">CATEGORY_MUSIC</span>: <span class="hljs-string">&quot;音樂&quot;</span>,
+  <span class="hljs-attr">CATEGORY_PEN</span>: <span class="hljs-string">&quot;繪畫&quot;</span>,
+
+<span class="hljs-comment">/** blocks_vertical\vertical_extensions.js
+ *  該檔案主要註冊所有積木塊
+ */</span>
+ <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">ScratchBlocks</span>.<span class="hljs-property">VerticalExtensions</span>.<span class="hljs-property">registerAll</span>=<span class="hljs-function">()=&gt;</span>{
+   <span class="hljs-comment">// 在分類名字陣列中，新增以下[音樂、繪畫]分類名</span>
+    <span class="hljs-keyword">var</span> categoryNames = [ <span class="hljs-string">&quot;music&quot;</span>,<span class="hljs-string">&quot;pen&quot;</span> ];
+ }
+</code></pre>
+<ul>
+<li>積木塊多行，如:message1,args1;message2,args2</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ScratchBlocks</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;scratch-blocks&quot;</span>;
+<span class="hljs-title class_">ScratchBlocks</span>.<span class="hljs-property">Blocks</span>[<span class="hljs-string">&quot;control_if_else&quot;</span>] = {
+  <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">jsonInit</span>({
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;control_if_else&quot;</span>,
+      <span class="hljs-comment">// 積木如果要支援多語言，就需要用 ScratchBlocks.Msg 物件來設定 message</span>
+      <span class="hljs-attr">message0</span>: <span class="hljs-title class_">ScratchBlocks</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">CONTROL_IF</span>, <span class="hljs-comment">// zh: 如果 1% 那麼</span>
+      <span class="hljs-attr">message1</span>: <span class="hljs-string">&quot;%1&quot;</span>,
+      <span class="hljs-attr">message2</span>: <span class="hljs-title class_">ScratchBlocks</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">CONTROL_ELSE</span>, <span class="hljs-comment">// zh: 否則</span>
+      <span class="hljs-attr">message3</span>: <span class="hljs-string">&quot;%1&quot;</span>,
+      <span class="hljs-attr">args0</span>: [
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;input_value&quot;</span>,
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;CONDITION&quot;</span>,
+          <span class="hljs-attr">check</span>: <span class="hljs-string">&quot;Boolean&quot;</span>,
+        },
+      ],
+      <span class="hljs-attr">args1</span>: [
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;input_statement&quot;</span>,
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;SUBSTACK&quot;</span>,
+        },
+      ],
+      <span class="hljs-attr">args3</span>: [
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;input_statement&quot;</span>,
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;SUBSTACK2&quot;</span>,
+        },
+      ],
+      <span class="hljs-comment">// 分類也用 ScratchBlocks.Categories 物件來設定，避免不一致</span>
+      <span class="hljs-attr">category</span>: <span class="hljs-title class_">ScratchBlocks</span>.<span class="hljs-property">Categories</span>.<span class="hljs-property">control</span>,
+      <span class="hljs-attr">extensions</span>: [<span class="hljs-string">&quot;colours_control&quot;</span>, <span class="hljs-string">&quot;shape_statement&quot;</span>],
+    });
+  },
+};
+</code></pre>
+<ul>
+<li>將原有分類的圓形純色圖塊，改為自定義圖示，並附加 icon.svg</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** core\toolbox.js
+ * 給一個分類建立DOM(原來的藍色圓形)
+ * Create the DOM for a category in the toolbox.
+ */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Toolbox</span>.<span class="hljs-property">Category</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">createDom</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-comment">/**
+   * 該函式中的this指向每個分類圓形圖示，即(bubble)
+   * 透過是否有 iconURI，為該分類圖示設定不同class樣式
+   * 自定義時，在內部邏輯中實現
+   * 此內部函式也可以繼續建立元素，做出更復雜的分類圖示比如以下程式碼
+  */</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">iconURI_</span>) {
+    <span class="hljs-comment">// bubble 即</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">bubble_</span> = goog.<span class="hljs-property">dom</span>.<span class="hljs-title function_">createDom</span>(<span class="hljs-string">&quot;div&quot;</span>, {
+      <span class="hljs-attr">class</span>: <span class="hljs-string">&quot;scratchCategoryItemIcon&quot;</span>,
+    });
+    <span class="hljs-comment">// this.bubble_.style.backgroundImage = &quot;url(&quot; + this.iconURI_ + &quot;)&quot;;</span>
+    <span class="hljs-comment">// 追加程式碼：即使設定了.svg檔案，也依然保留背景色</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">bubble_</span>.<span class="hljs-property">style</span>.<span class="hljs-property">backgroundColor</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">colour_</span>;
+
+    <span class="hljs-comment">// 此處添加了一個div ，並將icon.svg作為該div的背景圖渲染出來</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">icon_svg</span> = goog.<span class="hljs-property">dom</span>.<span class="hljs-title function_">createDom</span>(<span class="hljs-string">&quot;div&quot;</span>, {
+      <span class="hljs-attr">class</span>: <span class="hljs-string">&quot;scratchCategoryItemIcon&quot;</span>,
+    });
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">icon_svg</span>.<span class="hljs-property">style</span>.<span class="hljs-property">backgroundImage</span> = <span class="hljs-string">&quot;url(&quot;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">iconURI_</span> + <span class="hljs-string">&quot;)&quot;</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">bubble_</span>.<span class="hljs-title function_">appendChild</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">icon_svg</span>);
+  }
+}
+
+<span class="hljs-comment">/** blocks_vertical\default_toolbox.js
+ * 該xml結構中，追加 iconURI屬性，並設定其icon.svg指向
+*/</span>
+  <span class="hljs-string">&#x27;&lt;xml id=&quot;toolbox-categories&quot; style=&quot;display: none&quot;&gt;&#x27;</span> +
+  <span class="hljs-comment">// 分類 分類名 id  該分類(圓圈)的顏色 第二色</span>
+  <span class="hljs-comment">// &#x27;&lt;category name=&quot;%{BKY_CATEGORY_MOTION}&quot; id=&quot;motion&quot; colour=&quot;#4C97FF&quot; secondaryColour=&quot;#3373CC&quot;&gt;&#x27; +</span>
+  <span class="hljs-string">&#x27;&lt;category name=&quot;%{BKY_CATEGORY_MOTION}&quot; id=&quot;motion&quot; colour=&quot;#4C97FF&quot; secondaryColour=&quot;#3373CC&quot; &#x27;</span> +
+  <span class="hljs-comment">// 此處指定iconURI,即可達到將原有圓形圖示替換為自定義.svg圖示</span>
+  <span class="hljs-string">&#x27;iconURI=&quot;../media/move-left.svg&quot; showStatusButton=&quot;true&quot;&gt;&#x27;</span> +
+
+<span class="hljs-comment">/** core\css.js
+ * 在該檔案中，更改每個分類div的樣式設定，以及其子元素樣式設定，如下：
+ */</span>
+
+<span class="hljs-comment">// 注：以上變更並編譯完成後，需在gui庫下lib\make-toolbox-xml.js</span>
+<span class="hljs-comment">//  注：iconURI的地址為 ./static/blocks-media/icon.svg</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`
+    &lt;category name=&quot;%{BKY_CATEGORY_MOTION}&quot; id=&quot;motion&quot; colour=&quot;#4C97FF&quot; secondaryColour=&quot;#3373CC&quot; iconURI=&quot;./static/blocks-media/move-left.svg&quot; &gt;………………`</span>;
+</code></pre>
+<ul>
+<li>檔案定義所有常量，並賦值明文及佔位符</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** msg/messages.js */</span>
+<span class="hljs-comment">// Motion blocks</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">MOTION_MOVESTEPS</span> = <span class="hljs-string">&quot;%1 %2&quot;</span>;
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">MOTION_TURNLEFT</span> = <span class="hljs-string">&quot;%1 %2&quot;</span>;
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">MOTION_TURNRIGHT</span> = <span class="hljs-string">&quot;%1 %2&quot;</span>;
+</code></pre>
+<ul>
+<li>檔案實現所有定義的常量，賦值預設值，及佔位符</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** msg/scratch_msgs.js */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">ScratchMsgs</span>.<span class="hljs-property">locales</span>[<span class="hljs-string">&quot;en&quot;</span>] = {
+  <span class="hljs-attr">MOTION_MOVESTEPS</span>: <span class="hljs-string">&quot;%1 %2&quot;</span>,
+  <span class="hljs-attr">MOTION_TURNLEFT</span>: <span class="hljs-string">&quot;%1 %2&quot;</span>,
+  <span class="hljs-attr">MOTION_TURNRIGHT</span>: <span class="hljs-string">&quot;%1 %2&quot;</span>,
+};
+</code></pre>
+<ul>
+<li>建立每個所需積木塊</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** blocks_vertical\motion.js */</span>
+<span class="hljs-comment">// 以移動為例</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Blocks</span>[<span class="hljs-string">&quot;motion_movesteps&quot;</span>] = {
+  <span class="hljs-comment">/**
+   * Block to move steps.
+   * <span class="hljs-doctag">@this</span> Blockly.Block
+   */</span>
+  <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">jsonInit</span>({
+      <span class="hljs-comment">// 明文內容:對應msg/messages.js檔案中對應常量</span>
+      <span class="hljs-attr">message0</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">MOTION_MOVESTEPS</span>,
+      <span class="hljs-comment">// 該積木塊所需的引數對應設定</span>
+      <span class="hljs-attr">args0</span>: [
+        <span class="hljs-comment">// 第一個引數</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;field_image&quot;</span>, <span class="hljs-comment">// 欄位_圖片 型別</span>
+          <span class="hljs-comment">// 圖片的src,通常採用 media\xxxxx.svg下的svg檔案</span>
+          <span class="hljs-attr">src</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">mainWorkspace</span>.<span class="hljs-property">options</span>.<span class="hljs-property">pathToMedia</span> + <span class="hljs-string">&quot;move-left.svg&quot;</span>, <span class="hljs-comment">// 目前該svg不存在</span>
+          <span class="hljs-attr">width</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的寬度</span>
+          <span class="hljs-attr">height</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的高度</span>
+        },
+        <span class="hljs-comment">// 第二個引數</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;input_value&quot;</span>, <span class="hljs-comment">// 輸入值型別</span>
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;STEPS&quot;</span>, <span class="hljs-comment">// 步，可以看作單位？</span>
+        },
+      ],
+      <span class="hljs-comment">// 分類:分類.運動分類</span>
+      <span class="hljs-attr">category</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Categories</span>.<span class="hljs-property">motion</span>,
+      <span class="hljs-comment">// :[設定運動類相簿的顏色，設定本積木塊的形狀]</span>
+      <span class="hljs-attr">extensions</span>: [<span class="hljs-string">&quot;colours_motion&quot;</span>, <span class="hljs-string">&quot;shape_statement&quot;</span>],
+    });
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+      <span class="hljs-string">&quot;blocks_vertical建立運動類下第一個積木塊:&quot;</span>,
+      <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">mainWorkspace</span>
+    );
+  },
+};
+
+<span class="hljs-comment">// 其中的pathToMedia在core\options.js中定義</span>
+
+<span class="hljs-keyword">var</span> pathToMedia = <span class="hljs-string">&quot;https://blockly-demo.appspot.com/static/media/&quot;</span>;
+<span class="hljs-keyword">if</span> (options[<span class="hljs-string">&quot;media&quot;</span>]) {
+  pathToMedia = options[<span class="hljs-string">&quot;media&quot;</span>];
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options[<span class="hljs-string">&quot;path&quot;</span>]) {
+  <span class="hljs-comment">// &#x27;path&#x27;為已棄用選項，由&#x27;media&#x27;代替</span>
+  pathToMedia = options[<span class="hljs-string">&quot;path&quot;</span>] + <span class="hljs-string">&quot;media/&quot;</span>;
+}
+</code></pre>
+<ul>
+<li>將建立的積木塊，新增到 xml 檔案</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/** blocks_vertical\default_toolbox.js */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Blocks</span>.<span class="hljs-property">defaultToolbox</span> = <span class="hljs-string">&quot;在這裡註釋掉不需要的預設積木塊xml結構&quot;</span>;
+</code></pre>
+<ul>
+<li>
+<p>示例: 新增重置功能的積木塊</p>
+</li>
+<li>
+<ul>
+<li>在 block_vertical/motion.js 中建立一個重置的積木塊</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 運動 之 重置 即舞臺角色迴歸至 0,0
+ */</span>
+<span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Blocks</span>[<span class="hljs-string">&quot;motion_reset&quot;</span>] = {
+  <span class="hljs-comment">/**
+   * Block to move steps. 向右移動
+   * <span class="hljs-doctag">@this</span> Blockly.Block
+   */</span>
+  <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">jsonInit</span>({
+      <span class="hljs-comment">// 明文內容:對應msg/messages.js檔案中對應常量</span>
+      <span class="hljs-attr">message0</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Msg</span>.<span class="hljs-property">MOTION_RESET</span>,
+      <span class="hljs-comment">// 該積木塊所需的引數對應設定</span>
+      <span class="hljs-attr">args0</span>: [
+        <span class="hljs-comment">// 第一個引數</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;field_image&quot;</span>, <span class="hljs-comment">// 欄位_圖片 型別</span>
+          <span class="hljs-comment">// 圖片的src,通常採用 media\xxxxx.svg下的svg檔案</span>
+          <span class="hljs-attr">src</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">mainWorkspace</span>.<span class="hljs-property">options</span>.<span class="hljs-property">pathToMedia</span> + <span class="hljs-string">&quot;reset.svg&quot;</span>,
+          <span class="hljs-attr">width</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的寬度</span>
+          <span class="hljs-attr">height</span>: <span class="hljs-number">24</span>, <span class="hljs-comment">// 圖示的高度</span>
+        },
+      ],
+      <span class="hljs-comment">// 分類:分類.運動分類</span>
+      <span class="hljs-attr">category</span>: <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">Categories</span>.<span class="hljs-property">motion</span>,
+      <span class="hljs-comment">// :[設定運動類相簿的顏色，設定本積木塊的形狀]</span>
+      <span class="hljs-attr">extensions</span>: [<span class="hljs-string">&quot;colours_motion&quot;</span>, <span class="hljs-string">&quot;shape_statement&quot;</span>],
+    });
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+      <span class="hljs-string">&quot;blocks_vertical建立運動類下第一個積木塊:&quot;</span>,
+      <span class="hljs-title class_">Blockly</span>.<span class="hljs-property">mainWorkspace</span>
+    );
+  },
+};
+</code></pre>
+<ul>
+<li>
+<ul>
+<li>在 block_vertical/default_toolbox.js 新增新增重置積木塊的結構，可見效果</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-string">&#x27;&lt;block type=&quot;motion_reset&quot; id=&quot;motion_reset&quot;&gt;&#x27;</span> +
+  <span class="hljs-string">&quot;&lt;/block&gt;&quot;</span> +
+</code></pre>
+<p>core\block_render_svg_vertical.js // 處理渲染 svg 成型的檔案</p>
+<pre><code class="hljs">$ npm run translate <span class="hljs-comment"># 更改msg\messages.js檔案後，執行該命令</span>
+</code></pre>
+<hr>
+<h3>常見錯誤及解決方案</h3>
+<ul>
+<li>'python'不是內部或外部命令……
+<blockquote>
+<p><strong>解決</strong>:裝 python2.7,配置環境變數(系統 PATH 指定 python27，以及指定 python/script)，重啟 vscode</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="hljs">C:\Python27
+C:\Python27\Scripts
+</code></pre>
+<ul>
+<li>python 檔案編譯錯誤</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 錯誤程式碼如下：</span>
+Traceback (most recent call last):
+  File <span class="hljs-string">&quot;build.py&quot;</span>, line 574, <span class="hljs-keyword">in</span> &lt;module&gt;
+    test_proc = subprocess.Popen(test_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+  File <span class="hljs-string">&quot;C:\Python27\lib\subprocess.py&quot;</span>, line 394, <span class="hljs-keyword">in</span> __init__
+    errread, errwrite)
+  File <span class="hljs-string">&quot;C:\Python27\lib\subprocess.py&quot;</span>, line 644, <span class="hljs-keyword">in</span> _execute_child
+    startupinfo)
+WindowsError: [Error 2]
+
+<span class="hljs-comment"># 解決方式 https://github.com/LLK/scratch-blocks/issues/1620</span>
+build.py檔案約 331行 程式碼替換
+      <span class="hljs-comment"># proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)</span>
+      outfile = open(<span class="hljs-string">&quot;dash_args.txt&quot;</span>,<span class="hljs-string">&quot;w+&quot;</span>)
+      outfile.write(<span class="hljs-string">&quot;\n&quot;</span>.<span class="hljs-built_in">join</span>(args[11:]))
+      outfile.close()
+      args =  args[:11]
+      args.extend([<span class="hljs-string">&#x27;--flagfile&#x27;</span>,<span class="hljs-string">&#x27;dash_args.txt&#x27;</span>])
+      proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell = True)
+
+build.py檔案約 579行 程式碼替換
+    <span class="hljs-comment"># test_proc = subprocess.Popen(test_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)</span>
+    test_proc = subprocess.Popen(test_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,shell=True)
+</code></pre>
+<ul>
+<li>缺少 jdk 環境錯誤</li>
+</ul>
+<pre><code class="hljs">Could not find <span class="hljs-string">&quot;java&quot;</span> <span class="hljs-keyword">in</span> your PATH.
+Using remote compiler: closure-compiler.appspot.com ...
+
+Error: Closure not found.  Read this:
+  developers.google.com/blockly/guides/modify/web/closure
+
+解決：裝jdk8
+環境變數 系統使用者新建
+變數名：JAVA_HOME
+變數值：C:\Program Files\Java\jdk1.8.0_251
+PATH追加：%JAVA_HOME%\bin，移動到頂部
+</code></pre>
+<ul>
+<li>解決 HTTPS 問題</li>
+</ul>
+<blockquote>
+<p>Chrome 等現代瀏覽器，呼叫攝像頭及錄音功能需要在 HTTPS 模式下，將該專案設定為 HTTPS 請求方式後，需將內中使用外鏈資源及 API 皆改為 HTTPS</p>
+</blockquote>
+<ul>
+<li>程式碼最佳化</li>
+<li>
+<ul>
+<li>壓縮使用 terser-webpack-plugin</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>程式碼分塊 optimization.splitChunks{}中設定</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>性</h2>
+<p>這段工作經歷，不但涉獵了程式設計+教育，而且對教育界有一些瞭解。從而悟出，工具放在那裡，使用者如何使用，非是他人能夠左右。許多人性化設計，不入使用者法眼，倒是那些懶人模式的操作，更得使用者喜歡。程式設計+教育，面對的群體特殊<code>老師</code>、<code>家長</code>、<code>學生</code>。三個群體之中，老師則透過程式設計工具及學生獲得自身利益，家長訴求簡單，透過孩子獲知相關資訊，看到孩子與眾不同；學生則是一個被動的角色，基本指哪兒打哪兒，參加比賽，拿到好成績。僅僅是程式設計工具，根本無法吸引學生，即便有了<code>BlocklyGames</code>，或者亥廠的<code>codecombat(漢化版)</code>。由於三方之中各有利益，就會達成某些無需說明的一致。老話說得好<code>上有政策下有對策</code>，開發方向從打造優秀的程式設計工具及平臺，服務學生，潛移默化地過渡到為了虛假繁榮。當察覺程式設計+教育的真實操作情況，會懷疑自己在助紂為虐。</p>
+<hr>
+<h2>空</h2>
+<p>帶新需謹慎，徒勞一場空。
+人生中又多幾名過客，既是過客，不提也罷。</p>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

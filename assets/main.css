@@ -46,3 +46,22 @@ button:hover {
   text-transform: uppercase;
   opacity: 0.7;
 }
+
+/* 確保代碼塊保留空格與換行 */
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1.5em;
+  /* 關鍵屬性：保留原始縮進 */
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  tab-size: 4;
+}
+
+/* 如果你的外層容器限制了寬度，防止代碼溢出 */
+pre {
+  margin: 1.5em 0;
+  border-radius: 8px;
+  background: #282c34; /* Atom One Dark 背景色 */
+}

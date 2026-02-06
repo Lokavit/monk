@@ -1,0 +1,104 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Android - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Android</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2557 BE</span> | 
+                <span>Words: 247</span>
+            </div>
+        </header>
+        <section  ><h2>apktool</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 安裝 OpenJDK (推薦使用最新的 LTS 版本，例如 Java 17)</span>
+<span class="hljs-built_in">sudo</span> apt install openjdk-17-jre
+<span class="hljs-comment"># 驗證 Java 是否安裝成功：</span>
+java -version
+<span class="hljs-comment">#</span>
+<span class="hljs-built_in">cd</span> ~/development/apktool
+<span class="hljs-comment"># 下在最新的apktool.jar https://ibotpeaches.github.io/Apktool/</span>
+<span class="hljs-comment"># 建立沒有後綴的apktool文件</span>
+nano apktool
+<span class="hljs-comment"># apktool文件的內容</span>
+<span class="hljs-comment">#!/bin/sh</span>
+java -jar ~/development/apktool/apktool.jar <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+<span class="hljs-comment"># 賦予腳本執行權限：</span>
+<span class="hljs-built_in">chmod</span> +x apktool
+<span class="hljs-comment"># 將腳本添加到您的 PATH 中 (使其能在任何地方運行)：</span>
+<span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mv</span> apktool /usr/local/bin/
+<span class="hljs-comment"># 推薦安裝 OpenJDK 17 的完整 JDK 版本</span>
+<span class="hljs-built_in">sudo</span> apt install openjdk-17-jdk
+<span class="hljs-comment"># 檢查 jarsigner 是否已正確安裝</span>
+<span class="hljs-built_in">which</span> jarsigner
+<span class="hljs-comment"># 生成密鑰 (如果沒有)：</span>
+keytool -genkey -v -keystore my-release-key.keystore -<span class="hljs-built_in">alias</span> my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+
+<span class="hljs-comment"># 解包/反編譯 (Decompiling)</span>
+apktool d [app.apk] -o [輸出文件夾名稱] <span class="hljs-comment"># apktool d myApp.apk -o myApp_decompiled</span>
+
+<span class="hljs-comment"># 修改後打包 使用 b (build) 參數</span>
+apktool b [解包的apk文件夾] -o new_app.apk
+<span class="hljs-comment"># 優化 (Zipalign) - 必須在簽名前執行！</span>
+/home/monk/Android/Sdk/build-tools/36.0.0/zipalign -v 4 new_app.apk new_app_aligned.apk
+<span class="hljs-comment"># 簽名 (Apksigner) - 官方推薦 V2/V3 方案</span>
+/home/monk/Android/Sdk/build-tools/36.0.0/apksigner sign \
+--ks my-release-key.keystore \
+--ks-key-alias my-key-alias \
+--out new_app_final_signed.apk \
+new_app_aligned.apk
+<span class="hljs-comment"># Keystore password for signer #1: 輸入簽名密碼</span>
+<span class="hljs-comment"># 驗證簽名 (Verify)</span>
+/home/monk/Android/Sdk/build-tools/36.0.0/apksigner verify new_app_final_signed.apk
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

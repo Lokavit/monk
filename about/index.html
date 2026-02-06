@@ -1,9 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ABOUT</title>
+    <title>Resume & Experience - Monk</title>
+    <script>
+      (function () {
+        const saved = localStorage.getItem("theme-name") || "Matrix";
+        document.documentElement.setAttribute("data-theme", saved);
+        if (saved === "Matrix")
+          document.documentElement.style.background = "#000";
+        else document.documentElement.style.background = "#fff";
+      })();
+    </script>
+    <link rel="stylesheet" href="../assets/variables.css" />
+    <link rel="stylesheet" href="../assets/typography.css" />
+    <link rel="stylesheet" href="../assets/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+    <style>
+      header {
+        border-bottom: dashed 1px var(--accent);
+        padding-bottom: 2em;
+        margin-bottom: 2em;
+      }
+      h1 {
+        color: var(--accent);
+      }
+      .post-meta {
+        font-size: 0.9em;
+        opacity: 0.8;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+    </style>
+    <script type="module" src="../src/app.js"></script>
   </head>
-  <body></body>
+  <body>
+    <header>
+      <h1 class="header_site_name">
+        <a href="../index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+  </body>
 </html>

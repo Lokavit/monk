@@ -1,0 +1,427 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Linux - Linux</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Linux</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2568 BE</span> | 
+                <span>Words: 1542</span>
+            </div>
+        </header>
+        <section  ><p><s><strong>Arch</strong></s>：有牆，沒做路由出境，裝不上。</p>
+<h2>arch</h2>
+<p>archinstall
+檢查連線
+選擇映象源，從 VPN 所在地選。
+安裝完重啟。安裝網路
+sudo pacman -S networkManager
+sudo systemctl --type=service # 檢查已啟用的服務
+systemctl start NetworkManager.service # 如果不存在，啟用 networkManager</p>
+<p>sudo pacman -S pacman-mirrorlist # 安裝映象源
+sudo pacman -Syyu # 強制更新映象 每次修改映象之後都應該使用該命令</p>
+<h2>直接從網站上獲取映象列表</h2>
+<p>sudo curl -o /etc/pacman.d/mirrorlist https://archlinux.org/mirrorlist/all/</p>
+<h2>sudo pacman -S pacman-contrib # 排序已存在的源</h2>
+<h2>sudo rankmirrors -n 6 /etc/pacman.d/mirrorlist # 找出最快的源</h2>
+<p>sudo pacman -R pacman-contrib # 移除包
+sudo pacman -S reflector # 獲取最新源，篩選最新映象並按速度排序，寫入/etc/pacman.d/mirrorlist
+systemctl start reflector.service # 啟動服務</p>
+<h1>Garuda</h1>
+<ul>
+<li>✅ <strong>VirtualBox</strong>: 用於裝 Win10</li>
+<li>✅ <strong>程式設計</strong>： VSCodium。https://vscodium.com/</li>
+<li>✅ <strong>影音</strong>： mpv</li>
+<li>✅ <strong>遊戲</strong>： Steam</li>
+<li>✅ <strong>OBS</strong>:錄屏、直播</li>
+<li>✅ <strong>Fonts</strong>:adobe-source-code-pro-fonts</li>
+</ul>
+<h2>Steam</h2>
+<pre><code class="hljs">sudo pacman -S steam # select 2 or
+# sudo pacman -S lib32-nvidia-utils
+sudo pacman -S wine winetricks wine-mono wine-gecko
+</code></pre>
+<h2>Fcitx5</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 裝載</span>
+<span class="hljs-built_in">sudo</span> pacman -S fcitx5 fcitx5-gtk fcitx5-qt -fcitx5-rime
+
+<span class="hljs-comment"># open ~/.bashrc</span>
+[[ -f ~/.bashrc ]] &amp;&amp; . ~/.bashrc
+
+<span class="hljs-built_in">export</span> GTK_IM_MODULE=fcitx
+<span class="hljs-built_in">export</span> QT_IM_MODULE=fcitx
+<span class="hljs-built_in">export</span> XMODIFIERS=@im=fcitx
+
+<span class="hljs-comment"># install</span>
+<span class="hljs-built_in">sudo</span> pacman -S fcitx5-configtool
+
+<span class="hljs-comment"># 編輯主圖 .local/share/fcitx5/themes/Monk-Theme/</span>
+<span class="hljs-comment"># 配置 .config/fcitx5/conf/classicui.conf</span>
+<span class="hljs-comment"># 配置 .config/fcitx5/conf/pinyin.conf 即，輸入法配置項</span>
+</code></pre>
+<ul>
+<li>工作列點選進入配置視窗，點選<code>Add Input Method</code>,選擇簡中分組下的<code>Pinyin</code>,點選<code>Add</code></li>
+<li>對輸入法配置，重啟輸入。</li>
+</ul>
+<h2>Change Color</h2>
+<ul>
+<li>變更系統配色 <code>/usr/share/color-schemes/</code></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># Sweet.colors 色值：0,0,0,0</span>
+</code></pre>
+<h2>掛載移動盤</h2>
+<pre><code class="hljs"><span class="hljs-comment"># show all Disk</span>
+<span class="hljs-built_in">sudo</span> fsblk
+<span class="hljs-comment"># check disk type</span>
+<span class="hljs-built_in">sudo</span> fidsk -l /dev/sdb
+<span class="hljs-comment"># if disk type == NTFS install ntfs-3g</span>
+<span class="hljs-built_in">sudo</span> pacman -S ntfs-3g
+<span class="hljs-comment"># create mount point</span>
+<span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /mnt/mydrive
+<span class="hljs-comment"># use mount</span>
+<span class="hljs-built_in">sudo</span> mount -t ntfs /dev/sdb1 /mnt/mydrive
+<span class="hljs-comment"># check NTFS systeam</span>
+<span class="hljs-built_in">sudo</span> ntfsfix /dev/sdb1
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment"># /dev/裝置名  掛載在 該資料夾下，手動重新整理資料夾</span>
+<span class="hljs-built_in">sudo</span> mount /dev/sdc1 /run/media/monk
+</code></pre>
+<ul>
+<li>
+<ul>
+<li><strong>非編</strong>： ？？？</li>
+</ul>
+</li>
+<li>
+<ul>
+<li><strong>*電子書</strong>:calibre</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>ffmpeg for linux</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>calibre for linux</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Internet Download Manager ??</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>資料庫管理軟體</li>
+</ul>
+</li>
+</ul>
+<h3>VM Win10</h3>
+<ul>
+<li>AE、PS、PR、ME,Adobe 系列</li>
+<li>百度網盤</li>
+<li>一些 win 系老遊戲</li>
+<li>微信 QQ</li>
+</ul>
+<h3>share</h3>
+<ul>
+<li>建立虛擬機器時，選擇共享資料夾</li>
+<li>啟動虛擬機器中系統後，在裝置中，安裝增強，即可開啟共享資料夾。</li>
+</ul>
+<h1>Win10 to Linux</h1>
+<ul>
+<li>羅列 Win10 下常用軟體，尋找 Linux 下平替</li>
+<li>瞭解並選擇適合的發行版</li>
+<li>在<code>VirtualBox</code>中練手</li>
+<li>從<code>archinstall</code> 開始</li>
+</ul>
+<h2>Linux 發行版</h2>
+<ul>
+<li>Arch：有牆，沒做路由出境，裝不上。</li>
+<li>Garuda：平替。當年官網還能開啟是下載映象，做雙系統。</li>
+<li>
+<ul>
+<li>映象 https://mirrors.bfsu.edu.cn/osdn/storage/g/g/ga/garuda-linux/</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>https://www.tisonkun.org/2023/02/11/garudalinux/</li>
+</ul>
+</li>
+</ul>
+<h2>Arch 裝載配置</h2>
+<pre><code class="hljs">archinstall
+
+Mirrors
+Locales
+Disk configuratuin
+Boot loader
+Swap
+Hostname
+Root password
+User account
+Profile
+Audio
+Kernels
+Additional packages
+Network configuration
+Timezone
+Automatic <span class="hljs-keyword">time</span> <span class="hljs-built_in">sync</span> (NTP)
+optional repositories
+
+
+</code></pre>
+<h3>手動裝載</h3>
+<pre><code class="hljs">setfont ter-128n <span class="hljs-comment"># 設定字型，僅限當前有效</span>
+timedatectl set-ntp <span class="hljs-literal">true</span>
+<span class="hljs-comment"># 測試映象</span>
+curl -o /etc/pacman.d/mirrorlist https://archliunx.org/mirrorlist/all/
+nano /etc/pacman.d/mirrorlist <span class="hljs-comment"># 選映象，https協議。如：hackingand  lty.me</span>
+nano /etc/pacman.conf <span class="hljs-comment"># 更改配置</span>
+VerbosePkgLists <span class="hljs-comment"># 取消註釋該行</span>
+ParallelDownloads = 5 <span class="hljs-comment"># 取消註釋該行 儲存，退出</span>
+pacman -Syy <span class="hljs-comment"># 同步配置</span>
+
+<span class="hljs-comment"># 格式化驅動器</span>
+cfdisk <span class="hljs-comment"># 選擇dos</span>
+
+
+
+
+
+
+
+<span class="hljs-comment"># 測試網路</span>
+ping -c 3 archlinux.org
+<span class="hljs-comment"># 分割槽</span>
+<span class="hljs-comment">## 列出可用的分割槽和磁碟：</span>
+lsblk
+
+<span class="hljs-comment">#  進入 sda 選擇gpt，編輯三個分割槽</span>
+cfdisk /dev/sda
+<span class="hljs-comment">### 結果 100G為例</span>
+lsblk
+<span class="hljs-comment">#### sda</span>
+<span class="hljs-comment">##### sda1 1G UEFI 分割槽。它需要格式化為 FAT 檔案系統</span>
+<span class="hljs-comment">##### sda2 19G root</span>
+<span class="hljs-comment">##### sda3 剩餘 home</span>
+<span class="hljs-comment">## 格式化分割槽</span>
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+<span class="hljs-comment">## 掛在root分割槽</span>
+mount /dev/sda2 /mnt
+<span class="hljs-comment">### 建立一個資料夾來載入主分割槽並載入它</span>
+<span class="hljs-built_in">mkdir</span> /mnt/home
+mount /dev/sda3 /mnt/home
+<span class="hljs-comment">## 檢查掛在狀態</span>
+lsblk
+<span class="hljs-comment">## 安裝最小化Arch</span>
+pacstrap -i /mnt base linux linux-firmware <span class="hljs-built_in">sudo</span> nano
+<span class="hljs-comment">## 生成 fstab檔案</span>
+genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab
+<span class="hljs-comment">## 使用 BASH 環境 chroot（更改 root）到掛載到 /mnt 的系統：</span>
+arch-chroot /mnt /bin/bash
+<span class="hljs-comment">### 終端變為：root身份訪問系統</span>
+<span class="hljs-comment">#### [root@archiso /]#</span>
+<span class="hljs-comment">## 設定本地化，必須使用nano編輯器進入</span>
+nano /etc/locale.gen <span class="hljs-comment"># ctrl+w 找到某關鍵字</span>
+<span class="hljs-comment">## 編輯狀態下，找en_US</span>
+Search <span class="hljs-comment">#en_US  #找到en_US,解除#註釋，回車 ctrl+o 回車 ctrl+x</span>
+<span class="hljs-comment">## 生成本地語言</span>
+locale-gen
+<span class="hljs-comment">## 並建立包含相應語言設定的 locale.conf</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;LANG=en_US.UTF-8&quot;</span> &gt; /etc/locale.conf
+<span class="hljs-comment">## 設定時區</span>
+<span class="hljs-built_in">ln</span> -sf /usr/share/zoneinfo/UTC /etc/localtime
+<span class="hljs-comment">## 設定本地時間</span>
+hwclock --systohc --utc
+<span class="hljs-comment">## 檢查時間</span>
+<span class="hljs-built_in">date</span>
+<span class="hljs-comment">## 設定主機名，即計算機名</span>
+<span class="hljs-built_in">echo</span> monkPC &gt; /etc/hostname
+<span class="hljs-comment">## 新增 hosts檔案 [ctrl+o 儲存] [ctrl+x 退出]</span>
+nano /etc/hosts
+127.0.0.1        localhost
+::1              localhost
+127.0.1.1        monkPC
+<span class="hljs-comment">## 啟用網路</span>
+<span class="hljs-comment">### 安裝網路管理器</span>
+pacman -S networkmanager
+<span class="hljs-comment">### 啟用網路管理器</span>
+systemctl <span class="hljs-built_in">enable</span> NetworkManager
+<span class="hljs-comment">## 設定root密碼</span>
+passwd <span class="hljs-comment"># 輸入兩次密碼</span>
+<span class="hljs-comment">## 安裝 GRUB 引導載入器。它是最流行的引導載入程式，可配置性高，使用方便。 此處向下，有錯誤</span>
+<span class="hljs-comment">### 安裝 GRUB 引導載入器和 EFI 引導管理器軟體包</span>
+pacman -S grub efibootmgr
+<span class="hljs-comment">### 在系統中安裝 bootlader，並逐一執行這些命令生成其配置檔案</span>
+mount /dev/sda1 /mnt/boot/efi
+
+mount --<span class="hljs-built_in">mkdir</span> /dev/efi_system_partition /boot/efi
+lsblk <span class="hljs-comment"># to check if everything is mounted correctly</span>
+<span class="hljs-comment"># 到此句，有錯誤。待重灌</span>
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --removable
+</code></pre>
+<h2>OpenVPN on Arch</h2>
+<ul>
+<li>download xxx.ovpn</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-built_in">sudo</span> pacman -Sy networkmanager networkmanager-openvpn network-manager-applet openvpn
+<span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> NetworkManager.service <span class="hljs-comment"># 啟服務</span>
+<span class="hljs-built_in">sudo</span> systemctl start NetworkManager.service
+<span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /etc/sysctl.d
+<span class="hljs-built_in">sudo</span> nano /etc/sysctl.d/40-ipv6.conf
+<span class="hljs-comment"># 停用 ipv6 開啟nano編輯</span>
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1
+net.ipv6.conf.tun0.disable_ipv6=1
+net.ipv6.conf.wlp3s0.disable_ipv6=1
+<span class="hljs-comment"># ctrl+x y enter</span>
+<span class="hljs-comment"># 重啟</span>
+<span class="hljs-built_in">sudo</span> systemctl restart systemd-sysctl.service
+<span class="hljs-built_in">sudo</span> systemctl restart NetworkManager.service
+<span class="hljs-comment"># 匯入 xxx.ovpn</span>
+nmcli connection import <span class="hljs-built_in">type</span> openvpn file xxx.ovpn
+<span class="hljs-comment"># 重啟</span>
+<span class="hljs-built_in">sudo</span> systemctl restart systemd-sysctl.service
+<span class="hljs-built_in">sudo</span> systemctl restart NetworkManager.service
+</code></pre>
+<hr>
+<h2>GAME</h2>
+<pre><code class="hljs"><span class="hljs-built_in">sudo</span> pacman -S nvidia-utils lib32-nvidia-utils
+<span class="hljs-built_in">sudo</span> pacman -S git steam gamemode mangohud
+git <span class="hljs-built_in">clone</span> https://aur.archlinux.org/yay.git /home/monk/yay
+<span class="hljs-built_in">cd</span> /home/monk/yay
+makepkg -si --noconfirm
+yay -S --noconfirm goverlay
+<span class="hljs-comment"># restart</span>
+<span class="hljs-comment"># 系統選單，開啟Goverlay，點選Save 關閉，再次開啟。</span>
+</code></pre>
+<h2>proxmox</h2>
+<ul>
+<li>https://www.youtube.com/watch?v=_u8qTN3cCnQ</li>
+<li>使用一臺電腦，裝載 proxmox，而後客戶機 web 訪問，構建多個 os</li>
+</ul>
+<h2>BASH Scripting</h2>
+<pre><code class="hljs"><span class="hljs-comment"># create .sh file</span>
+nano himonk.sh <span class="hljs-comment"># open nano 使用 ctrl+x（是否放入緩衝區）Y，是否儲存？Enter</span>
+<span class="hljs-built_in">ls</span> -l  <span class="hljs-comment"># 檢視檔案資訊</span>
+<span class="hljs-built_in">chmod</span> +x himonk.sh <span class="hljs-comment">## 新增檔案許可權</span>
+./himonk.sh Monk <span class="hljs-comment"># 指令碼中有變數，變數值</span>
+<span class="hljs-built_in">whoami</span> <span class="hljs-comment"># output my name</span>
+<span class="hljs-built_in">pwd</span> <span class="hljs-comment"># where is I current floder</span>
+<span class="hljs-built_in">date</span> <span class="hljs-comment"># current date time</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$RANDOM</span> <span class="hljs-comment"># gen random number</span>
+fb=<span class="hljs-string">&quot;monk&quot;</span>
+<span class="hljs-comment"># himonk.sh 中寫變數  ehco &quot;$fb&quot; 指令碼為子程序</span>
+<span class="hljs-built_in">export</span> fb <span class="hljs-comment"># 使指令碼中變數變為可用</span>
+<span class="hljs-built_in">ls</span> -al <span class="hljs-comment">#顯示包含隱藏的檔案</span>
+<span class="hljs-comment"># .bashrc 每次登入就會執行，可在內容設定環境變數</span>
+<span class="hljs-built_in">export</span> fb=<span class="hljs-string">&quot;Monk&quot;</span> <span class="hljs-comment"># 則該fb變數，持久有效</span>
+<span class="hljs-built_in">echo</span> $(( <span class="hljs-number">1</span> + <span class="hljs-number">5</span> )) <span class="hljs-comment"># 直接輸出計算結果</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">#！/bin/bash</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hi Monk&quot;</span>
+
+<span class="hljs-built_in">sleep</span> 3
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;what&quot;</span>
+<span class="hljs-built_in">sleep</span> 3
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;no&quot;</span>
+
+<span class="hljs-built_in">read</span> name <span class="hljs-comment"># 讀取輸入的內容</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hi <span class="hljs-variable">$name</span>&quot;</span> <span class="hljs-comment"># 輸出</span>
+
+<span class="hljs-comment"># 另一種寫法</span>
+name=<span class="hljs-variable">$1</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hi <span class="hljs-variable">$namee</span>&quot;</span>
+
+<span class="hljs-comment"># 指令碼中結合命令 himonk.sh中程式碼</span>
+name=<span class="hljs-variable">$1</span>
+user=$(<span class="hljs-built_in">whoami</span>)
+<span class="hljs-built_in">date</span>=$(<span class="hljs-built_in">date</span>)
+whereami=$(<span class="hljs-built_in">pwd</span>)
+ehco <span class="hljs-string">&quot;Hi <span class="hljs-variable">$name</span> .You logged <span class="hljs-variable">$user</span> .today is <span class="hljs-variable">$date</span> .current dir <span class="hljs-variable">$whereami</span>&quot;</span>
+temp_age=$(((<span class="hljs-variable">$RANDOM</span>%<span class="hljs-number">15</span>)+<span class="hljs-variable">$age</span>))
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$temp_age</span>&quot;</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Do you like coffee?(y/n)&quot;</span>
+<span class="hljs-built_in">read</span> coffee
+<span class="hljs-keyword">if</span>[[<span class="hljs-variable">$coffee</span>==<span class="hljs-string">&quot;y&quot;</span>]];<span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;You are awesome&quot;</span>
+<span class="hljs-keyword">elif</span> [[<span class="hljs-variable">$USER</span>==<span class="hljs-string">&quot;monk&quot;</span>]];<span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;...&quot;</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Leave right now&quot;</span>
+<span class="hljs-keyword">fi</span> <span class="hljs-comment"># 結束符，必須有</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Please select class:&quot;</span>
+1 - Sam
+2 - pri
+3 - pro
+<span class="hljs-built_in">read</span> class
+<span class="hljs-keyword">case</span> <span class="hljs-variable">$class</span> <span class="hljs-keyword">in</span>
+    1)
+        <span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;Sam&quot;</span>
+        hp=10
+        ;; <span class="hljs-comment"># 可以寫多行程式碼 ,必須雙分號結尾</span>
+    2) ...
+<span class="hljs-keyword">esac</span> <span class="hljs-comment"># 結束符</span>
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

@@ -1,0 +1,543 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Git - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Git</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 18 Jan 2558 BE</span> | 
+                <span>Words: 3603</span>
+            </div>
+        </header>
+        <section  ><h2>GitHub TOKEN 到期</h2>
+<ul>
+<li>Account -settings - Developer Settings - Personal access tokens - Tokens(classic) 創建，並勾選 repo ，將內容複製。</li>
+<li>anicca/settings/secrets/actions 下點擊 DEPLOY_TOKEN 的編輯，粘貼新值，更新。</li>
+</ul>
+<!-- - Account -settings - Developer Settings - Personal access tokens - Fine-grained tokens 如果看到到期警告點進警告，重新生成一個TOKEN, -->
+<h3>語義化 commit</h3>
+<p>Added 新新增的功能。
+Changed 對現有功能的變更。
+Deprecated 已經不建議使用，即將移除的功能。
+Removed 已經移除的功能。
+Fixed 對 bug 的修復。
+Security 對安全性的改進</p>
+<h2>刪除歷史提交記錄</h2>
+<pre><code class="hljs">git reset --soft HEAD~1
+
+</code></pre>
+<h2>.github/workflows/deploy_content.yml</h2>
+<pre><code class="hljs"><span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">Anicca</span> <span class="hljs-string">Content</span> <span class="hljs-string">to</span> <span class="hljs-string">Monk</span> <span class="hljs-string">Site</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">main</span> <span class="hljs-comment"># 當 Anicca 倉庫的 main 分支有新的 push 時觸發</span>
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">build-and-deploy:</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span> <span class="hljs-comment"># 在最新的 Ubuntu 虛擬機上運行</span>
+
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span> <span class="hljs-string">Anicca</span> <span class="hljs-string">Content</span> <span class="hljs-comment"># 步驟 1: 拉取 Anicca (內容) 倉庫</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">repository:</span> <span class="hljs-string">Lokavit/anicca</span> <span class="hljs-comment"># 指定內容倉庫</span>
+          <span class="hljs-attr">ref:</span> <span class="hljs-string">main</span> <span class="hljs-comment"># 指定分支</span>
+          <span class="hljs-attr">path:</span> <span class="hljs-string">anicca-content</span> <span class="hljs-comment"># 拉取到一個臨時目錄</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span> <span class="hljs-comment"># 步驟 2: 設置 Node.js 環境，用於運行 Markdown 渲染腳本</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&quot;20&quot;</span> <span class="hljs-comment"># 建議使用最新的 LTS 版本</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Markdown</span> <span class="hljs-string">Renderer</span> <span class="hljs-comment"># 步驟 3: 安裝 Markdown 渲染庫</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          npm install marked # 使用 marked.js 渲染 Markdown
+          # 如果需要其他工具，可以在這裡添加 npm install 命令
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Process</span> <span class="hljs-string">Content</span> <span class="hljs-string">and</span> <span class="hljs-string">Generate</span> <span class="hljs-string">HTML</span> <span class="hljs-comment"># 步驟 4: 處理 Markdown 並生成 HTML</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">node</span> <span class="hljs-string">anicca-content/scripts/generate_html.js</span> <span class="hljs-comment"># 運行你的 JS 腳本來讀取、渲染 Markdown</span>
+        <span class="hljs-attr">env:</span>
+          <span class="hljs-attr">CONTENT_SOURCE_DIR:</span> <span class="hljs-string">anicca-content</span> <span class="hljs-comment"># 傳遞內容源目錄給腳本</span>
+          <span class="hljs-attr">OUTPUT_HTML_DIR:</span> <span class="hljs-string">generated_html_output</span> <span class="hljs-comment"># 腳本將輸出 HTML 到這個臨時目錄</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span> <span class="hljs-string">Monk</span> <span class="hljs-string">Site</span> <span class="hljs-string">Repository</span> <span class="hljs-comment"># 步驟 5: 拉取 monk (發布) 倉庫</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">repository:</span> <span class="hljs-string">Lokavit/monk</span> <span class="hljs-comment"># 指定發布倉庫</span>
+          <span class="hljs-attr">ref:</span> <span class="hljs-string">main</span> <span class="hljs-comment"># 發布到 monk 倉庫的 main 分支</span>
+          <span class="hljs-attr">path:</span> <span class="hljs-string">monk-site-repo</span> <span class="hljs-comment"># 拉取到另一個臨時目錄</span>
+          <span class="hljs-attr">token:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.DEPLOY_TOKEN</span> <span class="hljs-string">}}</span> <span class="hljs-comment"># 使用之前設置的密鑰</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Remove</span> <span class="hljs-string">Old</span> <span class="hljs-string">Articles</span> <span class="hljs-comment"># 步驟 6: 清理 monk 倉庫中舊的 articles 內容</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          rm -rf monk-site-repo/articles/* # 刪除 monk/articles 下所有內容
+          mkdir -p monk-site-repo/articles # 確保目錄存在
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Copy</span> <span class="hljs-string">New</span> <span class="hljs-string">Articles</span> <span class="hljs-comment"># 步驟 7: 將新生成的 HTML 內容複製到 monk 倉庫</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          cp -r generated_html_output/* monk-site-repo/articles/ # 複製所有生成的文件
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Commit</span> <span class="hljs-string">and</span> <span class="hljs-string">Push</span> <span class="hljs-string">to</span> <span class="hljs-string">Monk</span> <span class="hljs-string">Site</span> <span class="hljs-comment"># 步驟 8: 提交並推送到 monk 倉庫</span>
+        <span class="hljs-attr">working-directory:</span> <span class="hljs-string">./monk-site-repo</span> <span class="hljs-comment"># 在 monk 倉庫的臨時目錄下執行 git 命令</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          git config user.name &quot;GitHub Actions&quot;
+          git config user.email &quot;actions@github.com&quot;
+          git add .
+          git commit -m &quot;Automated content update from Anicca repository&quot; || echo &quot;No changes to commit&quot;
+          git push
+</span></code></pre>
+<h2>操作遠端分支</h2>
+<pre><code class="hljs">git branch -a <span class="hljs-comment">#列出本地及遠端分支</span>
+<span class="hljs-comment">#刪除遠端指定分支</span>
+git push origin -d 分支名
+
+git branch 分支名 <span class="hljs-comment">#建立分支</span>
+git checkout 分支名 <span class="hljs-comment">#切換至分支</span>
+git branch -D 分支名 <span class="hljs-comment">#刪除分支</span>
+git push origin 分支名 <span class="hljs-comment">#推送到遠端倉庫</span>
+<span class="hljs-comment"># 將本地master推送到遠端指定分支</span>
+git push -f url master:遠端分支名
+
+<span class="hljs-comment"># 本地倉庫分支關聯遠端倉庫分支</span>
+git push -set-upstream origin 分支名
+</code></pre>
+<h2>本地推遠端倉庫</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 遠端倉庫建同名空倉庫</span>
+<span class="hljs-comment"># 初始化本地專案git</span>
+$ git init
+<span class="hljs-comment"># 關聯遠端倉庫</span>
+$ git remote add origin https://……/倉庫名.git
+<span class="hljs-comment"># 關聯後，先pull</span>
+$ git pull origin master
+<span class="hljs-comment"># 此處會丟擲錯誤[fatal: refusing to merge unrelated histories]</span>
+$ git pull origin main --allow-unrelated-histories
+<span class="hljs-comment"># 將遠端庫裡的檔案pull到本地後，正常push操作即可。</span>
+</code></pre>
+<h2>拉取指定 commit 的程式碼</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 找到commit的值(完整值)</span>
+$ git checkout &lt;commit的長值&gt;
+</code></pre>
+<h2>CentOS 8 &amp; Git</h2>
+<ul>
+<li>
+<ul>
+<li>安裝 GIT 及依賴 git version 2.27.0</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-built_in">mkdir</span> .ssh
+建立檔案 authorized_key
+把每個允許的機器的公鑰放進來
+</code></pre>
+<h2>解除安裝並裝載最新 GIT</h2>
+<pre><code class="hljs">yum remove git -y <span class="hljs-comment"># 解除安裝git</span>
+<span class="hljs-comment"># 裝載基本依賴包</span>
+yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel nss  gcc perl-ExtUtils-MakeMaker -y
+<span class="hljs-comment"># 解壓編譯及裝載</span>
+<span class="hljs-built_in">cd</span> /usr/local/src
+wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.9.5.tar.xz
+tar xf git-2.9.5.tar.xz
+<span class="hljs-built_in">cd</span> git-2.9.5
+make prefix=/usr/local/git all
+make prefix=/usr/local/git install
+
+<span class="hljs-comment"># 配置環境變數</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;export PATH=<span class="hljs-variable">$PATH</span>:/usr/local/git/bin&quot;</span> &gt;&gt; /etc/bashrc
+<span class="hljs-built_in">source</span> /etc/bashrc
+git version <span class="hljs-comment"># 檢視版本號</span>
+</code></pre>
+<h2>搭建 GIT 伺服器</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 新建git倉庫主目錄 可放在/var下，用於存放所有倉庫的.git(bare裸庫)</span>
+<span class="hljs-built_in">mkdir</span> gitrepos
+<span class="hljs-comment"># 檢視使用者列表</span>
+<span class="hljs-built_in">cat</span> /etc/passwd
+<span class="hljs-comment"># 新建訪問使用者 生成於/home/zen家目錄</span>
+useradd zen
+<span class="hljs-comment"># 給使用者設定密碼，用於拉取和提交程式碼</span>
+passwd zen
+
+<span class="hljs-comment"># 變更git倉庫的所有者到任何人 ，賦予nobody就是把許可權給了所有人</span>
+<span class="hljs-built_in">chown</span> -R nobody:nobody /var/gitrepos
+</code></pre>
+<h2>驗證 git 伺服器</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 在/var/gitrepos下建立裸庫</span>
+git init --bare /var/gitrepos/專案名.git
+<span class="hljs-comment"># 修改讀寫許可權，否則會報錯拒絕提交</span>
+<span class="hljs-built_in">chmod</span> -R 777 /var/gitrepos/專案名.git
+
+<span class="hljs-comment"># 客戶端拉取，也可以在伺服器找對應地方拉取該倉庫</span>
+git <span class="hljs-built_in">clone</span> http://114.96.107.178:88/var/gitrepos/test.git
+<span class="hljs-comment"># 拉取下來是空倉庫，新增內容，按照常用操作git形式提交</span>
+git push
+<span class="hljs-comment"># 在伺服器上的www/wwwroot/下拉取倉庫</span>
+git <span class="hljs-built_in">clone</span> http://114.96.107.178:88/var/gitrepos/test.git
+<span class="hljs-comment"># 後續持續推拉倉庫操作</span>
+<span class="hljs-comment">## 在伺服器上找不到push的程式碼。因其為倉庫，而非檔案系統。</span>
+
+git checkout master <span class="hljs-comment"># 是否使用？</span>
+
+<span class="hljs-comment"># 伺服器端存放的叫裸庫(bare)，倉庫的.git/目錄下面的那些東西，不包含工作區(working space)。</span>
+<span class="hljs-comment"># 直接git clone --bare也可以直接拿到裸庫做服務端，從裸庫還原出工作區只需要git clone一次即可。</span>
+
+<span class="hljs-comment"># 報錯</span>
+bash: git-upload-pack: <span class="hljs-built_in">command</span> not found
+fatal: Could not <span class="hljs-built_in">read</span> from remote repository.
+fatal: Could not <span class="hljs-built_in">read</span> from remote repository.
+fatal: Could not <span class="hljs-built_in">read</span> from remote repository.
+<span class="hljs-comment"># 在linux命令列輸入如下命令即可解決</span>
+<span class="hljs-built_in">ln</span> -s /usr/local/git/bin/git-upload-pack /usr/bin/git-upload-pack
+</code></pre>
+<pre><code class="hljs">git init <span class="hljs-comment"># 初始化 使用當前目錄作為Git倉庫</span>
+git init qqn <span class="hljs-comment"># 初始化 使用指定目錄作為Git倉庫</span>
+git commit -m <span class="hljs-string">&#x27;提交說明&#x27;</span> <span class="hljs-comment"># Linux</span>
+git commit -m <span class="hljs-string">&quot;提交說明&quot;</span> <span class="hljs-comment"># Windows</span>
+</code></pre>
+<h2>VSCode 設定同步</h2>
+<ul>
+<li>Settings sync on</li>
+</ul>
+<pre><code class="hljs">$ git branch modal <span class="hljs-comment"># 新建分支</span>
+$ git checkout modal <span class="hljs-comment"># 切換分支</span>
+$ git status
+$ git add .
+$ git status
+$ git checkout master <span class="hljs-comment"># 切換到住分支</span>
+$ git merge modal <span class="hljs-comment"># 提交分支</span>
+
+$ git push origin modal <span class="hljs-comment"># 提交分支到遠端</span>
+
+$ git fetch origin master <span class="hljs-comment"># 下載最新的版本到origin/master分支上</span>
+$ git <span class="hljs-built_in">log</span> -p master..origin/master <span class="hljs-comment"># 比較本地的master分支和origin/master分支的差別</span>
+$ git merge origin/master <span class="hljs-comment"># 最後進行合併</span>
+
+<span class="hljs-comment">## 解決衝突之後</span>
+$ git status
+$ git add .
+$ git status
+$ git commit -m <span class="hljs-string">&quot;++&quot;</span>
+
+<span class="hljs-comment">## 合併到 master</span>
+$ git checkout master
+$ git merge modal
+$ git push origin
+
+<span class="hljs-comment">## 刪除本地及遠端分支</span>
+$ git branch -a <span class="hljs-comment"># 檢視所有分支</span>
+$ git branch -d router <span class="hljs-comment"># 刪除本地 router分支</span>
+$ git push origin --delete router <span class="hljs-comment"># 刪除遠端 router分支</span>
+</code></pre>
+<h2>Git 多倉庫同步</h2>
+<pre><code class="hljs"><span class="hljs-comment"># GitHub與區域網GitLab共享一個專案</span>
+<span class="hljs-comment"># 在兩個倉庫裡分別建立【空】專案[不含READMME.md檔案]</span>
+<span class="hljs-comment"># 本地建立 shiperp ,並初始化 git</span>
+$ <span class="hljs-built_in">cd</span> git init
+<span class="hljs-comment"># 關聯github遠端倉庫</span>
+$ git remote add lokavit https://github.com/Lokavit/shiperp.git
+<span class="hljs-comment"># 關聯區域網gitlab遠端倉庫</span>
+$ git remote add satya http://區域網地址/frontend/shiperp.git
+$ git remote -v <span class="hljs-comment"># 檢視遠端倉庫</span>
+<span class="hljs-comment"># 新建一個 README.md檔案</span>
+$ git status  git add .   git status
+$ git commit -m <span class="hljs-string">&quot;Add README.md&quot;</span>
+$ git push lokavit master <span class="hljs-comment"># 推送到 github的同名專案中</span>
+$ git push satya master <span class="hljs-comment"># 推送到 gitlab的同名專案中</span>
+</code></pre>
+<ul>
+<li>以下為其他情況，或許可以排錯</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 在README.md裡編輯一下</span>
+$ git status <span class="hljs-comment"># 檢視檔案狀態</span>
+$ git add . <span class="hljs-comment"># 新增檔案</span>
+$ git status <span class="hljs-comment"># 檢視暫存狀態</span>
+$ git commit -m <span class="hljs-string">&quot;Add Content 2&quot;</span> <span class="hljs-comment"># 提交msg</span>
+$ git pull origin master <span class="hljs-comment"># 拉去 origin 倉庫主分支</span>
+$ git push origin master <span class="hljs-comment"># 提交 origin 倉庫主分支</span>
+$ git pull mirror master <span class="hljs-comment"># 拉去 mirror 倉庫主分支</span>
+$ git push mirror master <span class="hljs-comment"># 提交 mirror 倉庫主分支</span>
+
+<span class="hljs-comment">## 其他錯誤處理</span>
+$ git pull mirror master --allow-unrelated-histories <span class="hljs-comment"># 確定合併</span>
+</code></pre>
+<pre><code class="hljs">[core]
+	repositoryformatversion = 0
+	filemode = <span class="hljs-literal">false</span>
+	bare = <span class="hljs-literal">false</span>
+	logallrefupdates = <span class="hljs-literal">true</span>
+	symlinks = <span class="hljs-literal">false</span>
+	ignorecase = <span class="hljs-literal">true</span>
+[remote <span class="hljs-string">&quot;lokavit&quot;</span>]
+	url = https://github.com/Lokavit/shiperp.git
+	fetch = +refs/heads/*:refs/remotes/lokavit/*
+[remote <span class="hljs-string">&quot;satya&quot;</span>]
+	url = http://區域網地址/frontend/shiperp.git
+	fetch = +refs/heads/*:refs/remotes/satya/*
+</code></pre>
+<h2>gitBash 開啟 VSCode</h2>
+<pre><code class="hljs"><span class="hljs-comment"># C:\Users\username/.bash_profile檔案</span>
+<span class="hljs-comment"># generated by Git for Windows</span>
+<span class="hljs-built_in">test</span> -f ~/.profile &amp;&amp; . ~/.profile
+<span class="hljs-built_in">test</span> -f ~/.bashrc &amp;&amp; . ~/.bashrc
+
+<span class="hljs-comment"># OPEN Program 注意空格轉義及斜線轉義。</span>
+<span class="hljs-built_in">alias</span> vscode=<span class="hljs-string">&quot;D:/\Program\ Files/\Microsoft\ VS\ Code/Code.exe&quot;</span>
+<span class="hljs-comment"># VUE</span>
+<span class="hljs-built_in">alias</span> vue=<span class="hljs-string">&#x27;winpty vue.cmd&#x27;</span>
+</code></pre>
+<h2>本地建立專案，連線遠端倉庫</h2>
+<p>在 Github 上建立一個空倉庫，亦可見到如下提示</p>
+<pre><code class="hljs"><span class="hljs-comment"># GitHub上建立專案(空)倉庫,本地建立專案</span>
+$ <span class="hljs-built_in">cd</span> 專案根目錄 <span class="hljs-comment"># 進入專案根目錄</span>
+$ git init <span class="hljs-comment"># 初始化</span>
+$ git status <span class="hljs-comment"># 檢視檔案狀態</span>
+$ git add .  <span class="hljs-comment"># 新增到暫存區</span>
+$ git status <span class="hljs-comment"># 檢視檔案狀態</span>
+$ git remote add origin 倉庫地址 <span class="hljs-comment"># 連線到遠端倉庫</span>
+$ git remote -v <span class="hljs-comment"># 檢視是否連線成功</span>
+$ git push -u origin master <span class="hljs-comment"># 當前分支關聯到遠端分支</span>
+</code></pre>
+<h2>git 多人協作</h2>
+<pre><code class="hljs">$ git branch modal <span class="hljs-comment"># 新建分支</span>
+$ git checkout modal <span class="hljs-comment"># 切換分支</span>
+$ git status
+$ git add .
+$ git status
+$ git checkout master <span class="hljs-comment"># 切換到住分支</span>
+$ git merge modal <span class="hljs-comment"># 提交分支</span>
+
+$ git push origin modal <span class="hljs-comment"># 提交分支到遠端</span>
+
+$ git fetch origin master <span class="hljs-comment"># 下載最新的版本到origin/master分支上</span>
+$ git <span class="hljs-built_in">log</span> -p master..origin/master <span class="hljs-comment"># 比較本地的master分支和origin/master分支的差別</span>
+$ git merge origin/master <span class="hljs-comment"># 最後進行合併</span>
+
+<span class="hljs-comment">## 解決衝突之後</span>
+$ git status
+$ git add .
+$ git status
+$ git commit -m <span class="hljs-string">&quot;++&quot;</span>
+
+<span class="hljs-comment">## 合併到 master</span>
+$ git checkout master
+$ git merge modal
+$ git push origin
+
+</code></pre>
+<h2>git bash 使用 tree</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 將tree.exe放入git.usr/bin中</span>
+$ tree -d <span class="hljs-comment"># 顯示目錄名稱而非內容</span>
+$ tree -L 3 <span class="hljs-comment"># 指定層級</span>
+<span class="hljs-comment"># 命令集，詳見末尾</span>
+</code></pre>
+<blockquote>
+<p>warning: LF will be replaced by CRLF in ……………….</p>
+</blockquote>
+<pre><code class="hljs">$ git config --global core.autocrlf <span class="hljs-literal">true</span> <span class="hljs-comment"># 當簽出程式碼時，LF會被轉換成CRLF (Win)</span>
+$ git config --global core.autocrlf input <span class="hljs-comment"># 提交時把CRLF轉換成LF(Mac Linux)</span>
+$ git config --global core.autocrlf <span class="hljs-literal">false</span> <span class="hljs-comment"># 僅執行在Windows上的專案</span>
+</code></pre>
+<h2>Git 拉取遠端分支</h2>
+<pre><code class="hljs">$ git init <span class="hljs-comment"># 本地初始化</span>
+$ git remote add origin 倉庫地址  <span class="hljs-comment"># 連線遠端倉庫</span>
+$ git fetch origin dev <span class="hljs-comment"># dev為遠端倉庫的分支名</span>
+<span class="hljs-comment"># 在本地建立分支dev並切換到該分支</span>
+$ git checkout -b dev origin/dev
+$ git pull origin dev <span class="hljs-comment"># 拉取 git上dev分支上的內容</span>
+</code></pre>
+<h3>Git 術語及名詞解釋</h3>
+<p><strong>Workspace</strong>：工作區</p>
+<ul>
+<li>透過 <em>git init</em>建立程式碼庫的所有檔案,不包含*.git*(版本庫檔案)</li>
+</ul>
+<p><strong>Stage/Index</strong>：暫存區/索引</p>
+<ul>
+<li>透過*git add ./(地址)*新增修改;</li>
+<li>透過<em>git status</em> 可以看到修改的狀態.</li>
+</ul>
+<p><strong>Repository</strong>：倉庫/本地儲存庫</p>
+<p><strong>Remote</strong>：遠端倉庫</p>
+<p><strong>git status -s</strong> 檢視檔案狀態</p>
+<ul>
+<li><em>??</em>：表示新新增未跟蹤的檔案</li>
+<li>_A _：表示新新增到暫存區中的檔案</li>
+<li>_M _：表示修改過的檔案</li>
+<li><em>右 M</em>：表示該檔案被修改但未放入暫存區;</li>
+<li><em>左 M</em>：表示該檔案被修改並放入暫存區;</li>
+<li><em>雙 M</em>：表示工作區修改並提交到暫存區後,又在工作區中被修改,所以左右皆有.</li>
+<li>_R _：表示該檔案被重新命名</li>
+</ul>
+<h3>基本操作流程</h3>
+<p><strong>常規提交-推送流程</strong></p>
+<pre><code class="hljs">$ git status  <span class="hljs-comment"># 檢視檔案狀態,確定是否全部以放入暫存區</span>
+$ git add .  <span class="hljs-comment"># 將未放入暫存區的檔案放入暫存區</span>
+$ git commit <span class="hljs-comment"># 提交</span>
+$ git push  <span class="hljs-comment"># 推送到遠端倉庫</span>
+</code></pre>
+<p><strong>跳過暫存區提交流程</strong></p>
+<pre><code class="hljs">$ git status <span class="hljs-comment"># 檢視檔案狀態,確定是否全部以放入暫存區</span>
+$ git commit -a -m <span class="hljs-string">&#x27;更新說明&#x27;</span>
+</code></pre>
+<p><strong>檢視被打分支下的檔案</strong></p>
+<pre><code class="hljs">$ <span class="hljs-built_in">ls</span> <span class="hljs-comment"># 檢視當前目錄下的所有資料夾及檔案;</span>
+$ <span class="hljs-built_in">cd</span> <span class="hljs-built_in">dir</span> <span class="hljs-comment"># 開啟某資料夾,繼續*ls*檢視;</span>
+</code></pre>
+<p><strong>刪除檔案</strong></p>
+<pre><code class="hljs">$ git <span class="hljs-built_in">rm</span> FileName  <span class="hljs-comment"># 刪除指定檔名的檔案</span>
+$ git <span class="hljs-built_in">rm</span> FileName -r -f <span class="hljs-comment"># 刪除指定資料夾下所有檔案</span>
+$ git status -s  <span class="hljs-comment"># 確認檔案狀態</span>
+$ git commit -m <span class="hljs-string">&#x27;DeleteFIle&#x27;</span> <span class="hljs-comment"># 提交版本的說明</span>
+$ git push  <span class="hljs-comment">#  推送到遠端倉庫</span>
+</code></pre>
+<p><strong>Git 操作目錄</strong></p>
+<pre><code class="hljs">$ <span class="hljs-built_in">cd</span> C:/ <span class="hljs-comment"># 切換磁碟,</span>
+<span class="hljs-comment">## === 進入帶空格的目錄=== ##</span>
+$ <span class="hljs-built_in">cd</span> <span class="hljs-string">&quot;Program Files&quot;</span> <span class="hljs-comment"># 第一種：將檔名加上&quot;&quot;</span>
+$ <span class="hljs-built_in">cd</span> Program<span class="hljs-string">&quot; &quot;</span>Files <span class="hljs-comment"># 第二種：將空格加上&quot;&quot;</span>
+</code></pre>
+<h3>Git 常用命令</h3>
+<pre><code class="hljs">$ git config --global user.name <span class="hljs-string">&quot;yourname&quot;</span> <span class="hljs-comment"># 配置全域性使用者資訊</span>
+$ git config --global user.email 123@456.com <span class="hljs-comment"># 配置全域性使用者資訊</span>
+
+$ git config --list  <span class="hljs-comment"># 檢視配置資訊</span>
+
+$ git config --global core.editor vim <span class="hljs-comment"># 自定義編輯器</span>
+
+$ git helep <span class="hljs-comment"># 檢視幫助手冊</span>
+$ git --<span class="hljs-built_in">help</span> <span class="hljs-comment"># 檢視幫助手冊</span>
+
+$ git <span class="hljs-built_in">help</span> config <span class="hljs-comment"># 檢視config命令手冊</span>
+
+$ git <span class="hljs-built_in">clone</span> url(倉庫地址) <span class="hljs-comment"># 克隆倉庫</span>
+$ git <span class="hljs-built_in">clone</span> url(倉庫地址) MyGit <span class="hljs-comment"># 克隆倉庫,自定義本地儲存庫的名字</span>
+
+$ git init <span class="hljs-comment">#  初始化倉庫 (該命令在需管理的本地儲存庫目錄下執行)</span>
+
+$ git add Test.cs <span class="hljs-comment"># 對檔案跟蹤 ,使檔案處於暫存狀態(允許該命令後再次修改的檔案,需要再次允許該命令)</span>
+$ git commit -m <span class="hljs-string">&#x27;Update Version&#x27;</span>  <span class="hljs-comment"># 提交,備註資訊自定義</span>
+
+$ git status <span class="hljs-comment"># 檢視當前檔案處於什麼狀態</span>
+$ git status -s <span class="hljs-comment"># 檢視當前檔案狀態(緊湊版)</span>
+
+$ git diff <span class="hljs-comment">#  檢視檔案具體修改的地方(只顯示尚未暫存的改動，而非自上次提交以來的所有改動。)</span>
+$ git diff --cached <span class="hljs-comment"># 檢視已經暫存起來的變化</span>
+
+$ git <span class="hljs-built_in">rm</span> <span class="hljs-comment"># 移除檔案(將檔案從暫存區中移除)</span>
+$ git <span class="hljs-built_in">rm</span> <span class="hljs-built_in">log</span>/\*.<span class="hljs-built_in">log</span> <span class="hljs-comment"># 刪除log/目錄下副檔名為.log的所有檔案</span>
+$ git <span class="hljs-built_in">rm</span> \*~   <span class="hljs-comment"># 刪除以 ~ 結尾的所有檔案。</span>
+
+$ git <span class="hljs-built_in">mv</span> file_from file_to <span class="hljs-comment">#  檔案重新命名</span>
+
+$ git <span class="hljs-built_in">log</span>  <span class="hljs-comment"># 檢視提交歷史</span>
+$ git <span class="hljs-built_in">log</span> -p <span class="hljs-comment"># 顯示每次提交的差異</span>
+$ git <span class="hljs-built_in">log</span> -p -2 <span class="hljs-comment"># 僅顯示最近兩次提交</span>
+$ git <span class="hljs-built_in">log</span> --<span class="hljs-built_in">stat</span> <span class="hljs-comment"># 檢視每次提交簡略的統計資訊</span>
+$ git <span class="hljs-built_in">log</span> --pretty=online  <span class="hljs-comment"># 將每個提交放在一行顯示</span>
+
+<span class="hljs-variable">$git</span> commit --amend <span class="hljs-comment"># 重新提交(將暫存區的檔案提交,如未作修改,則只變更提交資訊)</span>
+
+<span class="hljs-comment"># 提交後發現忘記了暫存某些需要的修改</span>
+$ git commit -m <span class="hljs-string">&#x27;Update commit&#x27;</span>
+$ git add (忘記的檔案)
+$ git commit --amend <span class="hljs-comment"># 最終只有一個提交(第二次提交代替第一次提交的結果)</span>
+
+$ git reset HEAD my.txt <span class="hljs-comment"># 取消暫存</span>
+
+$ git checkout -- my.txt <span class="hljs-comment"># 撤銷之前所做的更改</span>
+
+
+$ git remote  <span class="hljs-comment"># 檢視已配置的遠端倉庫伺服器</span>
+$ git remote -v  <span class="hljs-comment"># 顯示需要讀寫遠端倉庫使用的Git儲存的簡寫與其對應的URL</span>
+
+$ git remote add <span class="hljs-built_in">test</span> url(遠端倉庫地址) <span class="hljs-comment"># 新增新的遠端倉庫，並指定一個可以輕鬆引用的簡寫</span>
+<span class="hljs-comment"># 此時,可以用 test 來代替 url</span>
+
+$ git fetch [remote-name] <span class="hljs-comment">#  拉取遠端倉庫</span>
+$ git fetch <span class="hljs-built_in">test</span>  <span class="hljs-comment">#  拉取test的遠端倉庫</span>
+
+$ git pull  <span class="hljs-comment"># 自動抓取後,合併遠端分支到當前分支</span>
+
+$ git push [remote-name] [branch-name]  <span class="hljs-comment"># 推送到遠端倉庫</span>
+$ git push origon master
+
+</code></pre>
+<hr>
+<h2>Git Bash 常用命令</h2>
+<h3>資料夾操作</h3>
+<pre><code class="hljs">$ <span class="hljs-built_in">mkdir</span> 資料夾名  <span class="hljs-comment"># 建立資料夾</span>
+$ <span class="hljs-built_in">mkdir</span> 資料夾名 &amp;&amp; <span class="hljs-built_in">cd</span> 資料夾名  <span class="hljs-comment"># 建立並開啟資料夾</span>
+$ <span class="hljs-built_in">rm</span> -r 資料夾名  <span class="hljs-comment"># 刪除資料夾</span>
+$ <span class="hljs-built_in">cd</span>  <span class="hljs-comment"># 切換到某目錄下</span>
+$ <span class="hljs-built_in">cd</span> ..  <span class="hljs-comment"># 退回到上一目錄</span>
+$ <span class="hljs-built_in">pwd</span>  <span class="hljs-comment"># 顯示當前目錄路徑</span>
+$ <span class="hljs-built_in">ls</span>  <span class="hljs-comment"># 列出當前目錄中所有檔案</span>
+$ ll  <span class="hljs-comment"># 列出當前目錄所有檔案，詳細版</span>
+</code></pre>
+<h3>檔案操作</h3>
+<pre><code class="hljs">$ <span class="hljs-built_in">touch</span> 檔名.字尾名  <span class="hljs-comment"># 新建檔案</span>
+$ <span class="hljs-built_in">rm</span> 檔名.字尾名  <span class="hljs-comment"># 刪除檔案</span>
+$ vi 檔名.字尾名  <span class="hljs-comment"># 新建檔案並進入編輯狀態。</span>
+$ vi index.html encoding:utf8  <span class="hljs-comment"># 建立檔案指定編碼格式</span>
+<span class="hljs-comment"># 注：vi為linux文字編輯器,該命令實則進入vi程式。</span>
+預設為命令模式，按下 i 切換為編輯模式。
+輸入內容，按esc退出編輯模式, 按 :x 退出並儲存，回到命令列介面。
+
+$ <span class="hljs-built_in">mv</span> 檔名.字尾名 目標資料夾
+$ <span class="hljs-built_in">mv</span> index.js src  <span class="hljs-comment"># 表示把當前的index.js檔案移動到src資料夾下</span>
+
+</code></pre>
+<h3>其它操作</h3>
+<pre><code class="hljs">$ rest  <span class="hljs-comment"># 清屏</span>
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

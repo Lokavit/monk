@@ -1,0 +1,345 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Algorithm - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Algorithm</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2557 BE</span> | 
+                <span>Words: 1170</span>
+            </div>
+        </header>
+        <section  ><h2>Filter</h2>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 過濾陣列中相同項 從陣列中，刪除重複項 [簡單的陣列項]
+ */</span>
+<span class="hljs-keyword">const</span> strings = [<span class="hljs-string">&quot;AA&quot;</span>, <span class="hljs-string">&quot;BB&quot;</span>, <span class="hljs-string">&quot;AA&quot;</span>, <span class="hljs-string">&quot;AD&quot;</span>, <span class="hljs-string">&quot;BC&quot;</span>, <span class="hljs-string">&quot;AC&quot;</span>, <span class="hljs-string">&quot;AD&quot;</span>];
+<span class="hljs-comment">// filter函式本來就返回新陣列，所以將邏輯寫在內中，最終返回新陣列。</span>
+<span class="hljs-keyword">const</span> filteredStrings = strings.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> {
+  <span class="hljs-comment">// 如果當前專案的索引與該專案的第一次出現相同，則返回到新陣列</span>
+  <span class="hljs-comment">// console.log(&quot;ITEM:&quot;, item, `|| ${strings.indexOf(item)}`);</span>
+
+  <span class="hljs-keyword">return</span> strings.<span class="hljs-title function_">indexOf</span>(item) === index;
+});
+<span class="hljs-comment">// console.log(&quot;刪除重複項&quot;, filteredStrings);</span>
+
+<span class="hljs-keyword">const</span> arr1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-number">4</span>];
+<span class="hljs-keyword">const</span> arr2 = arr1.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">element, index, self</span>) =&gt;</span> {
+  <span class="hljs-keyword">return</span> self.<span class="hljs-title function_">indexOf</span>(element) === index;
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arr2); <span class="hljs-comment">// [1, 2, 3, 5, 4]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arr1); <span class="hljs-comment">// [1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]</span>
+
+<span class="hljs-comment">// 用於 過濾陣列中相同的物件</span>
+<span class="hljs-keyword">const</span> books = [
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;1&quot;</span>,
+    <span class="hljs-attr">author</span>: <span class="hljs-string">&quot;A&quot;</span>,
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;2&quot;</span>,
+    <span class="hljs-attr">author</span>: <span class="hljs-string">&quot;B&quot;</span>,
+  },
+  {
+    <span class="hljs-attr">author</span>: <span class="hljs-string">&quot;B&quot;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;2&quot;</span>,
+  },
+];
+
+<span class="hljs-comment">/**
+ * 過濾陣列中相同的物件 從陣列中，刪除重複項 [物件型別的陣列項]
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} arr 待刪除的陣列
+ * use: removeDuplicates(books)
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">removeDuplicates</span>(<span class="hljs-params">arr</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> duplicatesIndices = [];
+
+  <span class="hljs-comment">// 迴圈遍歷原始陣列中的每個專案</span>
+  arr.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">current, index</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (duplicatesIndices.<span class="hljs-title function_">includes</span>(index)) <span class="hljs-keyword">return</span>;
+
+    result.<span class="hljs-title function_">push</span>(current);
+
+    <span class="hljs-comment">// 在當前項之後迴圈遍歷陣列中的其他項</span>
+    <span class="hljs-keyword">for</span> (
+      <span class="hljs-keyword">let</span> comparisonIndex = index + <span class="hljs-number">1</span>;
+      comparisonIndex &lt; arr.<span class="hljs-property">length</span>;
+      comparisonIndex++
+    ) {
+      <span class="hljs-keyword">const</span> comparison = arr[comparisonIndex];
+      <span class="hljs-keyword">const</span> currentKeys = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(current);
+      <span class="hljs-keyword">const</span> comparisonKeys = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(comparison);
+
+      <span class="hljs-comment">// 檢查物件中的鍵數</span>
+      <span class="hljs-keyword">if</span> (currentKeys.<span class="hljs-property">length</span> !== comparisonKeys.<span class="hljs-property">length</span>) <span class="hljs-keyword">continue</span>;
+
+      <span class="hljs-comment">// 檢查鍵名</span>
+      <span class="hljs-keyword">const</span> currentKeysString = currentKeys.<span class="hljs-title function_">sort</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&quot;&quot;</span>).<span class="hljs-title function_">toLowerCase</span>();
+      <span class="hljs-keyword">const</span> comparisonKeysString = comparisonKeys.<span class="hljs-title function_">sort</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&quot;&quot;</span>).<span class="hljs-title function_">toLowerCase</span>();
+      <span class="hljs-keyword">if</span> (currentKeysString !== comparisonKeysString) <span class="hljs-keyword">continue</span>;
+
+      <span class="hljs-comment">// 檢查值</span>
+      <span class="hljs-keyword">let</span> valuesEqual = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; currentKeys.<span class="hljs-property">length</span>; i++) {
+        <span class="hljs-keyword">const</span> key = currentKeys[i];
+        <span class="hljs-keyword">if</span> (current[key] !== comparison[key]) {
+          valuesEqual = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">break</span>;
+        }
+      }
+      <span class="hljs-keyword">if</span> (valuesEqual) duplicatesIndices.<span class="hljs-title function_">push</span>(comparisonIndex);
+    } <span class="hljs-comment">// end for loop</span>
+  }); <span class="hljs-comment">// end arr.forEach()</span>
+
+  <span class="hljs-keyword">return</span> result;
+}
+</code></pre>
+<h2>Recursion</h2>
+<pre><code class="hljs"><span class="hljs-comment">/** 基礎示例 */</span>
+<span class="hljs-comment">/**
+ * 遞減
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} num 外部傳入的引數
+ * use: countdown(5)
+ */</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">countdown</span> = (<span class="hljs-params">num</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(num);
+  num &lt; <span class="hljs-number">1</span> ? num : <span class="hljs-title function_">countdown</span>(num - <span class="hljs-number">1</span>);
+};
+
+<span class="hljs-comment">/**
+ * 遞迴 x 的 n 次方
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} <span class="hljs-variable">x</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} <span class="hljs-variable">n</span>
+ * return:x的n次方結果
+ * use: pow(3, 6)
+ */</span>
+<span class="hljs-comment">/* 三元運算子簡寫以上程式碼塊 */</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">pow</span> = (<span class="hljs-params">x, n</span>) =&gt; {
+  <span class="hljs-comment">// n == 1 遞迴的基礎 。遞迴步驟：根據基礎的結果，決定是輸出結果還是再執行一遍函式</span>
+  <span class="hljs-keyword">return</span> n == <span class="hljs-number">1</span> ? x : x * <span class="hljs-title function_">pow</span>(x, n - <span class="hljs-number">1</span>);
+};
+
+<span class="hljs-comment">/** 遞迴計算不同部門的工資 2019.08.08 */</span>
+<span class="hljs-comment">// 物件陣列</span>
+<span class="hljs-keyword">const</span> company = {
+  <span class="hljs-attr">sales</span>: [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Asura&quot;</span>,
+      <span class="hljs-attr">salary</span>: <span class="hljs-number">1000</span>,
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Satya&quot;</span>,
+      <span class="hljs-attr">salary</span>: <span class="hljs-number">600</span>,
+    },
+  ],
+  <span class="hljs-attr">development</span>: {
+    <span class="hljs-attr">sites</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Buddha&quot;</span>,
+        <span class="hljs-attr">salary</span>: <span class="hljs-number">2000</span>,
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Shakya&quot;</span>,
+        <span class="hljs-attr">salary</span>: <span class="hljs-number">1800</span>,
+      },
+    ],
+    <span class="hljs-attr">internals</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Lokavit&quot;</span>,
+        <span class="hljs-attr">salary</span>: <span class="hljs-number">1300</span>,
+      },
+    ],
+  },
+};
+<span class="hljs-comment">/**
+ * 用來完成作業的函式 遞迴計算不同部門的工資 2019.08.08
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} department 部門
+ * use: sumSalaries(company)
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">sumSalaries</span>(<span class="hljs-params">department</span>) {
+  <span class="hljs-comment">// 如果傳入的是陣列</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(department)) {
+    <span class="hljs-comment">// 情況 (1) 求陣列的和</span>
+    <span class="hljs-keyword">return</span> department.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">prev, current</span>) =&gt;</span> prev + current.<span class="hljs-property">salary</span>, <span class="hljs-number">0</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 情況 (2)</span>
+    <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+    <span class="hljs-comment">// 迭代物件中的 values 屬性值 ，每個values則是一個數組</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> subdep <span class="hljs-keyword">of</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(department)) {
+      sum += <span class="hljs-title function_">sumSalaries</span>(subdep); <span class="hljs-comment">// 遞迴呼叫子部門，對結果求和</span>
+    }
+    <span class="hljs-keyword">return</span> sum;
+  }
+}
+
+<span class="hljs-comment">/**
+ * 遞迴刪除深層陣列物件中某資料 2019.10.12
+ * 遞迴新增深層陣列物件中某資料 2019.10.12
+ */</span>
+
+<span class="hljs-comment">/** 物件陣列 */</span>
+<span class="hljs-keyword">const</span> tableData = {
+  <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc&quot;</span>,
+  <span class="hljs-attr">children</span>: [
+    {
+      <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-bcd&quot;</span>,
+      <span class="hljs-attr">children</span>: [
+        {
+          <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-bcd-cde&quot;</span>,
+        },
+        {
+          <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-bcd-def&quot;</span>,
+        },
+      ],
+    },
+    {
+      <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-zxc&quot;</span>,
+      <span class="hljs-attr">children</span>: [
+        {
+          <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-zxc-xcv&quot;</span>,
+        },
+        {
+          <span class="hljs-attr">entry</span>: <span class="hljs-string">&quot;abc-zxc-cvb&quot;</span>,
+        },
+      ],
+    },
+  ],
+};
+
+<span class="hljs-comment">/**
+ * 遞迴刪除深層陣列物件中某資料 2019.10.12
+ * data:傳入需遞迴的大陣列
+ * target:需要刪除的指定值
+ * use: this.recursiveDelete(this.tableData,row.entry)
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">recursiveDelete</span>(<span class="hljs-params">data, target</span>) {
+  <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(data)) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; data.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-comment">// 如果當前的[entry] == target傳入值</span>
+    <span class="hljs-keyword">if</span> (data[i].<span class="hljs-property">entry</span> == target) {
+      <span class="hljs-variable language_">this</span>.$delete(data, i); <span class="hljs-comment">// 從檢視刪除該資料</span>
+      <span class="hljs-comment">// 呼叫刪除API [target] 為外部傳入值，亦為介面所需引數</span>
+      <span class="hljs-title function_">deleteSystemCommoncodes</span>(target);
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-comment">// 非以上情況，且data[i]有children且其長度&gt;0</span>
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">if</span> (data[i].<span class="hljs-property">children</span> &amp;&amp; data[i].<span class="hljs-property">children</span>.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-comment">// 遞迴本函式，繼續尋找 target</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">recursiveDelete</span>(data[i].<span class="hljs-property">children</span>, target);
+      }
+    }
+  }
+}
+
+<span class="hljs-comment">/**
+ * 遞迴新增深層陣列物件中某資料 2019.10.12
+ * data:傳入需遞迴的大陣列
+ * target:需要刪除的指定值
+ * use:this.recursivePost(this.tableData,this.form)
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">recursivePost</span>(<span class="hljs-params">data, target</span>) {
+  <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(data)) <span class="hljs-keyword">return</span>;
+  <span class="hljs-comment">/** 需要考慮以下問題:
+   * 透過 target.parentEntry 判斷當前需新增的是根元素還是子元素
+   * 新增根元素資料:
+   *    直接新增資料:this.$set(data,data.length,target)
+   * 新增子元素,需先判斷待插入資料的物件中[hasElement:true]且是否有[children],
+   * 如果有，則插入為:this.$set(data,data.length,target)
+   * 如果沒有,則在插入資料之前，需改變待插入資料的
+   */</span>
+  <span class="hljs-comment">/** 無父節點的資料，將[target]物件直接新增到傳入的[data]中 */</span>
+  <span class="hljs-keyword">if</span> (!target.<span class="hljs-property">parentEntry</span>) {
+    <span class="hljs-variable language_">this</span>.$set(data, data.<span class="hljs-property">length</span>, target);
+    <span class="hljs-comment">// this.getSystemData(); // 呼叫一下請求，讓資料重新回來。似乎沒有什麼作用</span>
+    <span class="hljs-keyword">return</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">/** 有父節點的資料，即[target.parentEntry]有值的情況下
+     *  遍歷傳入陣列,從中找到某資料.entry == 傳入target.parentEntry
+     */</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; data.<span class="hljs-property">length</span>; i++) {
+      <span class="hljs-comment">// 如果 某資料.entry == 傳入target.parentEntry</span>
+      <span class="hljs-keyword">if</span> (data[i].<span class="hljs-property">entry</span> == target.<span class="hljs-property">parentEntry</span>) {
+        <span class="hljs-comment">/** 判斷該資料的[hasElement]是否有子元素
+         * 如果 [hasElement:false]即沒有子元素，則該資料一定沒有[children]
+         */</span>
+        <span class="hljs-keyword">if</span> (!data[i].<span class="hljs-property">hasElement</span>) {
+          data[i].<span class="hljs-property">hasElement</span> = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 該資料的[hasElement:true]</span>
+          data[i].<span class="hljs-property">children</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(); <span class="hljs-comment">// 為該資料手動新增一個[children:[]]屬性</span>
+          <span class="hljs-comment">// 以上設定完畢後,使用this.$set將資料插入到children陣列中</span>
+          <span class="hljs-variable language_">this</span>.$set(data[i].<span class="hljs-property">children</span>, data[i].<span class="hljs-property">children</span>.<span class="hljs-property">length</span>, target);
+          <span class="hljs-keyword">return</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data[i].<span class="hljs-property">hasElement</span>) {
+          <span class="hljs-comment">/** 如果 [hasElement:ture]即已有子元素 */</span>
+          <span class="hljs-comment">/** 如果該資料沒有[children] 將其加上一個children的陣列 */</span>
+          <span class="hljs-keyword">if</span> (!data[i].<span class="hljs-property">children</span>) data[i].<span class="hljs-property">children</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>();
+          <span class="hljs-variable language_">this</span>.$set(data[i].<span class="hljs-property">children</span>, data[i].<span class="hljs-property">children</span>.<span class="hljs-property">length</span>, target);
+          <span class="hljs-keyword">return</span>;
+        }
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;沒找到entry == parentEntry&quot;</span>);
+        <span class="hljs-comment">// 如果某條資料有 children，並且 長度&gt;=0</span>
+        <span class="hljs-keyword">if</span> (data[i].<span class="hljs-property">children</span> &amp;&amp; data[i].<span class="hljs-property">children</span>.<span class="hljs-property">length</span> &gt;= <span class="hljs-number">0</span>) {
+          <span class="hljs-comment">// 遞迴本函式,直至資料成功插入整體資料的對應層級樹中</span>
+          <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">recursivePost</span>(data[i].<span class="hljs-property">children</span>, target);
+        }
+      }
+    }
+  }
+}
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

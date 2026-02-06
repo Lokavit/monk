@@ -118,6 +118,12 @@
         padding-left: 15px;
         border-left: 1px solid rgba(var(--accent-rgb), 0.3);
       }
+
+      .line-dashed {
+        margin: 1em;
+        border: 1px dashed var(--accent);
+        opacity: 0.1;
+      }
     </style>
   </head>
   <body>
@@ -128,69 +134,81 @@
         <div id="buddhist-date" class="buddhist-date"></div>
       </div>
 
-      <h1>Welcome to Lokavit's Personal Site</h1>
-      <p>
-        Explore my written archives, game projects, and other digital creations.
-      </p>
-      <div class="tile-grid">
-        <a href="./about/index.html" class="tile">
-          <span class="tile-title">ABOUT</span>
-          <span class="tile-desc">Resume & Experience</span>
-          <span class="tile-desc-zh">個人簡歷與經歷介紹</span>
-        </a>
+      <h1>
+        <a href="./about/index.html" class="tile" style="border: none"
+          ><span class="tile-title">Welcome to Lokavit's Personal Site</span></a
+        >
+      </h1>
 
-        <a href="./projects/index.html" class="tile">
+      <h2 class="tile-title" style="margin-top: 2em">DEVELOPMENT</h2>
+      <hr class="line-dashed" />
+      <div class="tile-grid">
+        <a href="./dist/development/index.html" class="tile">
+          <span class="tile-title">Architecture</span>
+          <span class="tile-desc">Coding & Architecture</span>
+          <span class="tile-desc-zh">程式開發與架構筆記</span>
+        </a>
+        <a href="./dist/linux/index.html" class="tile">
+          <span class="tile-title">LINUX</span>
+          <span class="tile-desc">System & Kernel & Shell</span>
+          <span class="tile-desc-zh">系統配置、內核探索與腳本開發</span>
+        </a>
+        <a href="./dist/projects/index.html" class="tile">
           <span class="tile-title">PROJECTS</span>
           <span class="tile-desc">Open Source & Web</span>
           <span class="tile-desc-zh">開源作品與網頁實作</span>
         </a>
-
-        <a href="./edu/index.html" class="tile">
+        <a href="./dist/edu/index.html" class="tile">
           <span class="tile-title">EDU</span>
           <span class="tile-desc">Learning Systems & Tech</span>
           <span class="tile-desc-zh">教育類產品與系統專案</span>
         </a>
 
-        <a href="./dev/index.html" class="tile">
-          <span class="tile-title">DEVELOPMENT</span>
-          <span class="tile-desc">Coding & Architecture</span>
-          <span class="tile-desc-zh">程式開發與架構筆記</span>
-        </a>
-
-        <a href="./games/index.html" class="tile">
+        <a href="./dist/games/index.html" class="tile">
           <span class="tile-title">GAMES</span>
           <span class="tile-desc">Independent Creations</span>
           <span class="tile-desc-zh">獨立遊戲開發與作品</span>
         </a>
 
-        <a href="./linux/index.html" class="tile">
-          <span class="tile-title">LINUX</span>
-          <span class="tile-desc">System & Kernel & Shell</span>
-          <span class="tile-desc-zh">系統配置、內核探索與腳本開發</span>
-        </a>
-
-        <a href="./tools/index.html" class="tile">
+        <a href="./dist/tools/index.html" class="tile">
           <span class="tile-title">TOOLS</span>
           <span class="tile-desc">Plugins & Utilities</span>
           <span class="tile-desc-zh">實用插件與自製工具</span>
         </a>
+      </div>
 
-        <a href="./novels/index.html" class="tile">
-          <span class="tile-title">NOVELS</span>
-          <span class="tile-desc">Fiction & Non-fiction</span>
-          <span class="tile-desc-zh">虛構與非虛構創作</span>
-        </a>
-
-        <a href="./reflections/index.html" class="tile">
+      <h2 class="tile-title" style="margin-top: 3em">Literary & Creative</h2>
+      <hr class="line-dashed" />
+      <div class="tile-grid">
+        <a href="./dist/reflections/index.html" class="tile">
           <span class="tile-title">REFLECTIONS</span>
           <span class="tile-desc">Media, Books & Soulful Sparks</span>
           <span class="tile-desc-zh">影視書評與靈感隨筆</span>
         </a>
-
-        <a href="./life/index.html" class="tile">
+        <a href="./dist/life/index.html" class="tile">
           <span class="tile-title">LIFE</span>
           <span class="tile-desc">Logs & Reflections</span>
           <span class="tile-desc-zh">生活隨筆與日常感悟</span>
+        </a>
+        <a href="./dist/self-existence/index.html" class="tile">
+          <span class="tile-title">Self Existence</span>
+          <span class="tile-desc">Fiction</span>
+          <span class="tile-desc-zh">虛構創作</span>
+        </a>
+        <a href="./dist/daemon-lock/index.html" class="tile">
+          <span class="tile-title">Daemon Lock</span>
+          <span class="tile-desc">Fiction</span>
+          <span class="tile-desc-zh">虛構創作</span>
+        </a>
+        <a href="./dist/abyss/index.html" class="tile">
+          <span class="tile-title">Abyss</span>
+          <span class="tile-desc">Non-fiction</span>
+          <span class="tile-desc-zh">非虛構創作</span>
+        </a>
+        <a href="./dist/deliverance/index.html" class="tile">
+          <span class="tile-title">Deliverance</span>
+          <span class="tile-desc">Non-fiction</span>
+          <span class="tile-desc-zh">非虛構創作</span>
         </a>
       </div>
     </div>

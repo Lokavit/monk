@@ -1,0 +1,400 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>VSCodium - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>VSCodium</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 29 Jan 2558 BE</span> | 
+                <span>Words: 1221</span>
+            </div>
+        </header>
+        <section  ><h2>VSCode Ext Note</h2>
+<pre><code class="hljs"><span class="hljs-comment"># 全域性安裝 用於生成vscode外掛開發的專案</span>
+$ <span class="hljs-built_in">sudo</span> npm install -g yo generator-code
+<span class="hljs-comment"># 建立專案,在此步驟簡單配置</span>
+$ yo code
+</code></pre>
+<h2>直接複製資料夾到外掛目錄下</h2>
+<h2>打包成 vsix 外掛</h2>
+<pre><code class="hljs">npm i vsce -g
+vsce package
+
+<span class="hljs-comment"># VSCodium -&gt;Extension -&gt;...-&gt;Install from vsix</span>
+</code></pre>
+<h2>釋出到外掛市場</h2>
+<ul>
+<li>在<code>marketplace</code>申請建立者，被<code>google</code>驗證牆的死去活來。</li>
+</ul>
+<pre><code class="hljs">$ npm install -g @vscode/vsce
+$ vsce package
+<span class="hljs-comment"># 去註冊、建立釋出者(牆！牆！！牆！！！)</span>
+$ vsce login Lokavit
+<span class="hljs-comment"># paste your token .驗證成功</span>
+The Personal Access Token verification succeeded <span class="hljs-keyword">for</span> the publisher <span class="hljs-string">&#x27;Your Name&#x27;</span>.
+<span class="hljs-comment"># 釋出命令</span>
+$ vsce publish
+<span class="hljs-comment"># 提示你建立倉庫，順便推送到遠端github託管</span>
+$ git remote add origin https://……/倉庫名.git
+$ git branch -M main
+<span class="hljs-comment"># 正常status add . commit -m</span>
+$ git push -u origin main
+<span class="hljs-comment"># 釋出命令 注意將package.json中需要資訊填寫完整</span>
+$ vsce publish <span class="hljs-comment"># 此處依然需要開著飛機，否者無法驗證透過</span>
+<span class="hljs-comment"># 更新時，記得更改package.json中的version。</span>
+$ vsce publish 0.0.3 <span class="hljs-comment"># 更新外掛</span>
+</code></pre>
+<h2>Stupa</h2>
+<p><code>Activating extension 'Lokavit.stupa' failed: name is not defined.</code></p>
+<h3>Insert file info to file</h3>
+<pre><code class="hljs"><span class="hljs-comment">&lt;!-- 
+FileName:檔名。
+ProjectName:專案名(單本小說視為一個專案)
+FileBirthtime:檔案建立時間
+FileMtime: 2023/9/29 17:15:21
+Author:作者
+WordCount:字數統計
+ --&gt;</span>
+
+<span class="hljs-comment">&lt;!-- 對於寫小說可能會需要的一些功能
+左側加一個書本的圖示或emoji。
+自建以.book為字尾的檔案,也支援多本小說共用一套設定檔案。
+如:mybook.timeline.book:時間線相關設定。
+mybook.role.book:小說.角色設定
+mybook.gis.book:小說對於地理相關的設定。
+該檔案中的一些關鍵詞，做處理，用於正文使用時能夠浮現提示。
+在寫正文的時候，輸入角色名，會彈出該角色在角色設定裡面的內容。
+考慮將這些資料與drawio的資料互通。
+
+ --&gt;</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 以下程式碼段，適用於多個tab儲存，或是多個編輯操作進行。
+ * 但是，在_updateWordCount（）{}中會阻止快捷鍵儲存事件
+ */</span>
+<span class="hljs-comment">/**
+ * 對文字多次操作使用
+ */</span>
+<span class="hljs-keyword">let</span> _textEdits = [];
+<span class="hljs-comment">/**
+ * 每個文件內容替換，都push一個替換方法(範圍,替換內容)
+ */</span>
+_textEdits.<span class="hljs-title function_">push</span>(builder.<span class="hljs-title function_">replace</span>(_range, <span class="hljs-string">`<span class="hljs-subst">${_count}</span> 字`</span>));
+<span class="hljs-comment">/**
+ * 用於多次替換。用於同時對多個文件進行多次操作
+ */</span>
+<span class="hljs-keyword">let</span> _workspaceEdit = <span class="hljs-keyword">new</span> vscode.<span class="hljs-title class_">WorkspaceEdit</span>();
+<span class="hljs-comment">/**
+ * 使用set方法，傳入當前文件的uri，以及替換操作的陣列
+ */</span>
+_workspaceEdit.<span class="hljs-title function_">set</span>(_doc.<span class="hljs-property">uri</span>, _textEdits);
+vscode.<span class="hljs-property">workspace</span>.<span class="hljs-title function_">applyEdit</span>(_workspaceEdit);
+</code></pre>
+<p>任何程式語言，任何註釋模板</p>
+<ul>
+<li>自定義程式語言的註釋模板</li>
+<li>自定義正則表示式</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">&lt;!-- 
+ FileName:${name}
+ Project:${project}
+ 
+ --&gt;</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 透過傳入的語言ID，尋找對應的註釋塊。
+ * 用大陣列物件，似乎太重了。
+ */</span>
+<span class="hljs-keyword">switch</span> (lang) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;html&quot;</span>:
+    <span class="hljs-string">``</span>;
+}
+<span class="hljs-comment">// 使用者自己定義，自己佈局</span>
+<span class="hljs-keyword">const</span> _tempLangAndTpl = [
+  {
+    <span class="hljs-attr">lang</span>: <span class="hljs-string">&quot;javascript&quot;</span>,
+    <span class="hljs-attr">tpl</span>: [
+      <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;</span>,
+      <span class="hljs-string">&quot;FileName: ${fileName}&quot;</span>,
+      <span class="hljs-string">&quot;FilePath: ${FilePath}&quot;</span>,
+      <span class="hljs-string">&quot;Project: ${Project}&quot;</span>,
+      <span class="hljs-string">&quot;Author: ${Author}&quot;</span>,
+      <span class="hljs-string">&quot;Birthtime: ${birthime}&quot;</span>,
+      <span class="hljs-string">&quot;-----&quot;</span>,
+      <span class="hljs-string">&quot;Mtime: 2023/9/29 17:15:21
+      &quot;</span><span class="hljs-title class_">WordCount</span>: ${<span class="hljs-title class_">WordCount</span>} 字<span class="hljs-string">&quot;,
+      &quot;</span>-----<span class="hljs-string">&quot;,
+      &quot;</span><span class="hljs-title class_">Copyright</span> © <span class="hljs-number">1911</span> - <span class="hljs-number">2023</span> <span class="hljs-title class_">Lokavit</span><span class="hljs-string">&quot;,
+      &quot;</span>    卍 · 小僧過境　眾生甦醒 · 卍<span class="hljs-string">&quot;,
+      &quot;</span>=====&lt;&lt; 卍 · <span class="hljs-title class_">Description</span> · 卍 &gt;&gt;=====<span class="hljs-string">&quot;,
+    ],
+  },
+];
+// _tempTPL輸出為未解析的字串，需要加一些處理。
+/** Birthtime: ${birthime} */
+// let _tempTPL = _tempLangAndTpl[0].tpl[5];
+// console.info(&quot;</span>獲取某行:<span class="hljs-string">&quot;, _tempTPL);
+// const getBirth = (birthime) =&gt; `${_tempTPL.split(&quot;</span>:<span class="hljs-string">&quot;)[0]}:${birthime}`;
+// const getTest = (val) =&gt; `Test:${val}`;
+
+const tplArry = [
+  {
+    lang: &quot;</span>html<span class="hljs-string">&quot;,
+    comment: {
+      begin: &quot;</span>&lt;!--<span class="hljs-string">&quot;,
+      prefix: &quot;</span><span class="hljs-string">&quot;,
+      end: &quot;</span>--&gt;<span class="hljs-string">&quot;,
+    },
+  },
+  {
+    lang: &quot;</span>javascript<span class="hljs-string">&quot;,
+    comment: {
+      begin: &quot;</span><span class="hljs-comment">/**&quot;,
+      prefix: &quot;*&quot;,
+      end: &quot;*/</span><span class="hljs-string">&quot;,
+    },
+  },
+  {
+    lang: &quot;</span><span class="hljs-title class_">CSharp</span><span class="hljs-string">&quot;,
+    comment: {
+      begin: &quot;</span>#<span class="hljs-string">&quot;,
+      prefix: &quot;</span>#<span class="hljs-string">&quot;,
+      end: &quot;</span>#<span class="hljs-string">&quot;,
+    },
+  },
+];
+</span></code></pre>
+<pre><code class="hljs">  <span class="hljs-comment">// 標頭檔案</span>
+  <span class="hljs-attr">&quot;psi-header.config&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;forceToTop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;blankLinesAfter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">6</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;license&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Custom&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;psi-header.changes-tracking&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;isActive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;modAuthor&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Modified By: &quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;modDate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Last Modified: &quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;modDateFormat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;date&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;include&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-comment">// &quot;exclude&quot;: [&quot;markdown&quot;, &quot;json&quot;, &quot;jsonc&quot;],</span>
+    <span class="hljs-attr">&quot;exclude&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;json&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;jsonc&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-comment">// &quot;excludeGlob&quot;: [&quot;out/**&quot;, &quot;src/**/*.xyz&quot;],</span>
+    <span class="hljs-attr">&quot;excludeGlob&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;out/**&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;autoHeader&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;manualSave&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;psi-header.license-text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;    卍 · 小僧過境　眾生甦醒 · 卍&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;psi-header.variables&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;company&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Lokavit&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;author&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Lokavit&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;authoremail&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;*&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;psi-header.lang-config&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;lua&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;begin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;--[[&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;--&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;--]]&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;blankLinesAfter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;python&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;begin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;###&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;# &quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;###&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;blankLinesAfter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;beforeHeader&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;#!/usr/bin/env python3&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;# -*- coding:utf-8 -*-&quot;</span><span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;javascript&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;begin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/**&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot; * &quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot; */&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;blankLinesAfter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;forceToTop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;typescript&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;mapTo&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;javascript&quot;</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;markdown&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;begin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- &quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;  &quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;end&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot; --&gt;&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;blankLinesAfter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;forceToTop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;psi-header.templates&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;markdown&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;template&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-comment">//　版權宣告 起始</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案在專案中的路徑及檔名字尾名</span>
+        <span class="hljs-string">&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 專案名</span>
+        <span class="hljs-string">&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 作者</span>
+        <span class="hljs-string">&quot;Author: &lt;&lt;author&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案建立時間</span>
+        <span class="hljs-string">&quot;Created Date: &lt;&lt;filecreated(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改時間</span>
+        <span class="hljs-string">&quot;Last Modified: &lt;&lt;dateformat(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改人</span>
+        <span class="hljs-comment">// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 版權宣告</span>
+        <span class="hljs-string">&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&lt;&lt;licensetext&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">//　對當前檔案的描述，或許要註明的更改</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;javascript&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;template&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-comment">//　版權宣告 起始</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案在專案中的路徑及檔名字尾名</span>
+        <span class="hljs-string">&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 專案名</span>
+        <span class="hljs-string">&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 作者</span>
+        <span class="hljs-string">&quot;Author: &lt;&lt;author&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案建立時間</span>
+        <span class="hljs-string">&quot;Created Date: &lt;&lt;filecreated(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改時間</span>
+        <span class="hljs-string">&quot;Last Modified: &lt;&lt;dateformat(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改人</span>
+        <span class="hljs-comment">// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 版權宣告</span>
+        <span class="hljs-string">&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&lt;&lt;licensetext&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">//　對當前檔案的描述，或許要註明的更改</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;css&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;template&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-comment">//　版權宣告 起始</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案在專案中的路徑及檔名字尾名</span>
+        <span class="hljs-string">&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 專案名</span>
+        <span class="hljs-string">&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 作者</span>
+        <span class="hljs-string">&quot;Author: &lt;&lt;author&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案建立時間</span>
+        <span class="hljs-string">&quot;Created Date: &lt;&lt;filecreated(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改時間</span>
+        <span class="hljs-string">&quot;Last Modified: &lt;&lt;dateformat(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改人</span>
+        <span class="hljs-comment">// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 版權宣告</span>
+        <span class="hljs-string">&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&lt;&lt;licensetext&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">//　對當前檔案的描述，或許要註明的更改</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;language&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;typescript&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;template&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-comment">//　版權宣告 起始</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Copyright · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案在專案中的路徑及檔名字尾名</span>
+        <span class="hljs-string">&quot;File: &lt;&lt;filerelativepath&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 專案名</span>
+        <span class="hljs-string">&quot;Project: &lt;&lt;projectname&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 作者</span>
+        <span class="hljs-string">&quot;Author: &lt;&lt;author&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案建立時間</span>
+        <span class="hljs-string">&quot;Created Date: &lt;&lt;filecreated(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改時間</span>
+        <span class="hljs-string">&quot;Last Modified: &lt;&lt;dateformat(&#x27;YYYY-MM-DD h:mm:ss&#x27;)&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 檔案最後修改人</span>
+        <span class="hljs-comment">// &quot;Modified By: &lt;&lt;author&gt;&gt;&quot;,</span>
+        <span class="hljs-string">&quot;-----&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">// 版權宣告</span>
+        <span class="hljs-string">&quot;Copyright © &lt;&lt;yeartoyear(1911,now)&gt;&gt; &lt;&lt;company&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&lt;&lt;licensetext&gt;&gt;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-comment">//　對當前檔案的描述，或許要註明的更改</span>
+        <span class="hljs-string">&quot;=====&lt;&lt; 卍 · Description · 卍 &gt;&gt;=====&quot;</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">&quot;&quot;</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  

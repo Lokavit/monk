@@ -1,0 +1,1479 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Rust - Development</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/variables.css">
+    <link rel="stylesheet" href="../../../assets/typography.css">
+    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Rust</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 31 Dec 2563 BE</span> | 
+                <span>Words: 6792</span>
+            </div>
+        </header>
+        <section  ><h2>常用命令</h2>
+<pre><code class="hljs">rustc --version <span class="hljs-comment"># rustc 1.51.0</span>
+rustup update <span class="hljs-comment"># 更新</span>
+rustup self uninstall <span class="hljs-comment"># 解除安裝。</span>
+rustup install nightly <span class="hljs-comment"># 安裝當前 rust 版本的其他 toolchain</span>
+rustup update nightly <span class="hljs-comment"># 更新當前 rust 版本的 toolchain</span>
+rustup doc <span class="hljs-comment"># 開啟本地文件</span>
+
+<span class="hljs-comment"># Cargo：Rust的構建與套件管理工具</span>
+cargo --version <span class="hljs-comment"># cargo 1.51.0</span>
+cargo install &lt;libname&gt; <span class="hljs-comment"># 裝載庫(name庫名)</span>
+cargo build <span class="hljs-comment"># 透過Cargo.toml中的環境設定裝載所需庫</span>
+cargo run <span class="hljs-comment"># 構建程式</span>
+cargo doc <span class="hljs-comment"># 檢視文件。如下示例</span>
+cargo doc --open <span class="hljs-comment"># pull並在瀏覽器開啟文件，可進行相關函式查閱。</span>
+cargo new &lt;name&gt; <span class="hljs-comment"># 建立專案</span>
+</code></pre>
+<h2>環境及配置</h2>
+<ul>
+<li><a href="https://www.rust-lang.org/">rust-init.exe</a></li>
+<li><a href="https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/">Microsoft C++ 生成工具</a></li>
+</ul>
+<blockquote>
+<p>開啟裝載程式，會檢測系統環境，若提示缺少 vs c++元件，則必須先裝載元件。從 vs2019 的裝載工具中，選在以下單元件<code>MSVC v142 -VS 2019 C++ x64/x86 生成工具(最新版)</code>、<code>Windows 10 SDK (最新版)</code> <strong>沒有這項會在<code>cargo build</code>時報<code>link.exe</code>錯誤</strong></p>
+</blockquote>
+<ul>
+<li>啟動<code>rust-init.exe</code>，環境檢測中可見<code>x86_64-pc-windows-msvc</code></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 程式預設裝載於users資料夾下，可根據提示新增對應環境變數，改變裝載路徑於dev下</span>
+RUSTUP_HOME: dev/rustup <span class="hljs-comment"># 儲存工具鏈和配置檔案</span>
+CARGO_HOME: dev/cargo <span class="hljs-comment"># 儲存cargo的快取</span>
+
+<span class="hljs-comment"># 在dev/cargo/修改或建立config檔案，輸入以下程式碼(內網映象源)</span>
+[source.crates-io]
+registry = <span class="hljs-string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span>
+replace-with = <span class="hljs-string">&#x27;ustc&#x27;</span>
+[source.ustc]
+registry = <span class="hljs-string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span>
+</code></pre>
+<hr>
+<h1>Basic Programming Language</h1>
+<h1>錯誤處理</h1>
+<ul>
+<li><code>panic!</code>,列印錯誤資訊，展開並清理資料，而後退出。</li>
+<li><code>RUST_BACKTRACE=1</code>,backtrace 是一個執行到目前位置所有被呼叫的函式的列表。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 另一種painc! 展開切換為終止</span>
+<span class="hljs-section">[profile.release]</span>
+<span class="hljs-attr">panic</span> = <span class="hljs-string">&#x27;abort&#x27;</span>
+</code></pre>
+<pre><code class="hljs">RUST_BACKTRACE=1 cargo run
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 傳播錯誤及使用?運算子簡寫 ==========*/</span>
+<span class="hljs-keyword">use</span> std::io;
+<span class="hljs-keyword">use</span> std::io::Read;
+<span class="hljs-keyword">use</span> std::fs::File;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">read_username_from_file</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">String</span>, io::Error&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">f</span> = File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>)?;
+    f.<span class="hljs-title function_ invoke__">read_to_string</span>(&amp;<span class="hljs-keyword">mut</span> s)?;
+    <span class="hljs-comment">// 以上兩行可以鏈式為一行程式碼</span>
+    File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>)?.<span class="hljs-title function_ invoke__">read_to_string</span>(&amp;<span class="hljs-keyword">mut</span> s)?;
+
+    <span class="hljs-title function_ invoke__">Ok</span>(s)
+}
+
+<span class="hljs-comment">/*=========== 失敗時 panic 的簡寫：unwrap 和 expect ==========*/</span>
+<span class="hljs-keyword">use</span> std::fs::File;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// 返回Result中Ok的值，或Err下呼叫panic!</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>).<span class="hljs-title function_ invoke__">unwrap</span>();
+    <span class="hljs-comment">// 允許選擇panic!的錯誤資訊，更易於追蹤panic的根源。</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Failed to open hello.txt&quot;</span>);
+}
+
+<span class="hljs-comment">/*=========== Result panic! 更優寫法 ==========*/</span>
+<span class="hljs-keyword">use</span> std::fs::File;
+<span class="hljs-keyword">use</span> std::io::ErrorKind;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|error| {
+        <span class="hljs-keyword">if</span> error.<span class="hljs-title function_ invoke__">kind</span>() == ErrorKind::NotFound {
+            File::<span class="hljs-title function_ invoke__">create</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|error| {
+                <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;Problem creating the file: {:?}&quot;</span>, error);
+            })
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;Problem opening the file: {:?}&quot;</span>, error);
+        }
+    });
+}
+<span class="hljs-comment">/*=========== Result panic! ==========*/</span>
+<span class="hljs-keyword">use</span> std::fs::File;
+<span class="hljs-keyword">use</span> std::io::ErrorKind;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = File::<span class="hljs-title function_ invoke__">open</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>);
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = <span class="hljs-keyword">match</span> f {
+        <span class="hljs-title function_ invoke__">Ok</span>(file) =&gt; file,
+        <span class="hljs-title function_ invoke__">Err</span>(error) =&gt; <span class="hljs-keyword">match</span> error.<span class="hljs-title function_ invoke__">kind</span>() {
+            <span class="hljs-comment">// 嘗試開啟的檔案不存在，則建立該檔案</span>
+            ErrorKind::NotFound =&gt; <span class="hljs-keyword">match</span> File::<span class="hljs-title function_ invoke__">create</span>(<span class="hljs-string">&quot;hello.txt&quot;</span>) {
+                <span class="hljs-title function_ invoke__">Ok</span>(fc) =&gt; fc,
+                <span class="hljs-title function_ invoke__">Err</span>(e) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;Problem creating the file: {:?}&quot;</span>, e),
+            },
+            other_error =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;Problem opening the file: {:?}&quot;</span>, other_error),
+        },
+    };
+}
+</code></pre>
+<h1>常見集合</h1>
+<ul>
+<li>儲存在堆中。常用集合(vector、字串、雜湊 map)</li>
+<li>
+<ul>
+<li>vector:相同型別的值。相鄰排列。(文字行或購物車中商品價格)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>HashMap:鍵值型別需相同。可以使用元組</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>
+<ul>
+<li>字串值插入 HashMap，其所有權亦轉到 HashMap。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 雜湊 map 儲存鍵值對 ==========*/</span>
+<span class="hljs-keyword">use</span> std::collections::HashMap;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+  <span class="hljs-comment">// 新建</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();
+
+  <span class="hljs-comment">// 插入資料</span>
+  scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;a&quot;</span>), <span class="hljs-number">10</span>);
+  scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;b&quot;</span>), <span class="hljs-number">30</span>);
+
+  <span class="hljs-comment">// 使用元素</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">teams</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&#x27;a&#x27;</span>), <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&#x27;b&#x27;</span>)];
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">init_scores</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">10</span>, <span class="hljs-number">30</span>];
+
+  <span class="hljs-comment">/*
+     使用HashMap型別註解，
+     zip():建立一個元組的vector。
+     collect()將元組轉換為HashMap。
+  */</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">scores</span>: HashMap&lt;_, _&gt; = teams.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">zip</span>(init_scores.<span class="hljs-title function_ invoke__">iter</span>()).<span class="hljs-title function_ invoke__">collect</span>();
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, scores);
+
+  <span class="hljs-comment">// 訪問值 返回 Option&lt;V&gt;。有值裝入Some，無值返回None。</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">team_name</span> = <span class="hljs-string">&quot;a&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">score</span> = scores.<span class="hljs-title function_ invoke__">get</span>(&amp;team_name);
+
+  <span class="hljs-comment">// 遍歷的方式訪問</span>
+  <span class="hljs-keyword">for</span> (key, value) <span class="hljs-keyword">in</span> &amp;scores {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}: {}&quot;</span>, key, value);
+  }
+
+  <span class="hljs-comment">// 更新 直接覆蓋</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();
+  scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;b&quot;</span>), <span class="hljs-number">11</span>);
+
+  <span class="hljs-comment">// 只在鍵沒有對應值時插入</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();
+  scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Blue&quot;</span>), <span class="hljs-number">10</span>);
+  <span class="hljs-comment">/*
+    entry()返回列舉。無值則插入值，
+    or_insert():有值則使用返回值的可變引用，
+      無值則將引數作為心智插入並返回新值的可變引用
+  */</span>
+  scores.<span class="hljs-title function_ invoke__">entry</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Yellow&quot;</span>)).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">50</span>);
+  scores.<span class="hljs-title function_ invoke__">entry</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Blue&quot;</span>)).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">50</span>);
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, scores);
+
+  <span class="hljs-comment">// 根據舊值更新一個值</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">text</span> = <span class="hljs-string">&quot;hello world wonderful world&quot;</span>;
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">map</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();
+  <span class="hljs-keyword">for</span> <span class="hljs-variable">word</span> <span class="hljs-keyword">in</span> text.<span class="hljs-title function_ invoke__">split_whitespace</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">count</span> = map.<span class="hljs-title function_ invoke__">entry</span>(word).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">0</span>);
+    *count += <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, map);
+}
+
+<span class="hljs-comment">/*=========== String及常用處理 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+  <span class="hljs-comment">// 建立空字串</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();
+  <span class="hljs-comment">// 建立並初始化字串</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-comment">// 與上行程式碼等效</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">data</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+  <span class="hljs-comment">// 增加字串</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">temp</span> = <span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  temp.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">&quot; world&quot;</span>);
+  <span class="hljs-comment">// 使用+連線字串</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">temp1</span> = <span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">temp3</span> = <span class="hljs-string">&quot; world&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-comment">// 返回結果所有權 = 獲取temp1的所有權 + temp3引用的內容 (temp1無法繼續使用)</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">temp5</span> = temp + &amp;temp3;
+  <span class="hljs-comment">// 使用宏命令進行 複雜的字串拼接</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;{}{}{}&quot;</span>, temp1, temp3, temp5);
+  <span class="hljs-comment">// 遍歷字串</span>
+  <span class="hljs-keyword">for</span> <span class="hljs-variable">c</span> <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;नमस्ते&quot;</span>.<span class="hljs-title function_ invoke__">chars</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, c);
+  }
+
+  <span class="hljs-comment">// 需要被替換的字串</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">temp_comment</span> = <span class="hljs-string">&quot;&lt;!--  --&gt;&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-comment">// 文字內容</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = <span class="hljs-string">&quot;替換註釋&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+  <span class="hljs-comment">// 模板</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">templ</span> = <span class="hljs-string">&quot;&lt;pre&gt;&lt;code&gt;&lt;!--  --&gt;&lt;/code&gt;&lt;/pre&gt;&quot;</span>;
+  <span class="hljs-comment">// 最終輸出 &lt;pre&gt;&lt;code&gt;替換註釋&lt;/code&gt;&lt;/pre&gt;</span>
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, &amp;templ.<span class="hljs-title function_ invoke__">replace</span>(&amp;temp_comment, &amp;temp));
+
+  <span class="hljs-comment">// 型別轉換</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;test&quot;</span>);
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">s3</span> = s1.<span class="hljs-title function_ invoke__">as_str</span>();
+
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-string">&quot;漢字-Test&quot;</span>;
+  <span class="hljs-comment">// 是否包含指定字串</span>
+  <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-literal">true</span>, s1.<span class="hljs-title function_ invoke__">contains</span>(<span class="hljs-string">&quot;漢字&quot;</span>));
+  <span class="hljs-comment">// 是否以指定字串開頭</span>
+  <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-literal">true</span>, s1.<span class="hljs-title function_ invoke__">starts_with</span>(<span class="hljs-string">&quot;漢字&quot;</span>));
+  <span class="hljs-comment">// 是否以指定字串結尾</span>
+  <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-literal">true</span>, s1.<span class="hljs-title function_ invoke__">ends_with</span>(<span class="hljs-string">&quot;Test&quot;</span>));
+  <span class="hljs-comment">// 字母全轉大寫</span>
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, s1.<span class="hljs-title function_ invoke__">to_uppercase</span>());
+  <span class="hljs-comment">//請注意與  to_uppercase() 的不同</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s3</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;漢字-Test&quot;</span>);
+  s3.<span class="hljs-title function_ invoke__">make_ascii_uppercase</span>();
+  <span class="hljs-comment">// 字母全轉小寫</span>
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, s1.<span class="hljs-title function_ invoke__">to_lowercase</span>());
+  <span class="hljs-comment">//請注意與  to_lowercase() 的不同</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s3</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;漢字-Test&quot;</span>);
+  s3.<span class="hljs-title function_ invoke__">make_ascii_lowercase</span>();
+  <span class="hljs-comment">// 字串切割</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;漢字-Test&quot;</span>);
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span>: <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-type">str</span>&gt; = s.<span class="hljs-title function_ invoke__">split</span>(<span class="hljs-string">&quot;-&quot;</span>).<span class="hljs-title function_ invoke__">collect</span>();
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, result); <span class="hljs-comment">// -&gt; [&quot;漢字&quot;, &quot;Test&quot;]</span>
+}
+
+<span class="hljs-comment">/*=========== vector 用來儲存一系列的值 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// 新建vector 用於儲存i32型別的值</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">i32</span>&gt; = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();
+    <span class="hljs-comment">// 新建時包含初始值。使用宏。根據提供值建立一個新的vec</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+    <span class="hljs-comment">// 更新vector。 可變變數。不可變則不能增加元素</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();
+    v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">3</span>); <span class="hljs-comment">// 增加值</span>
+    v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">5</span>); <span class="hljs-comment">// 同類型值</span>
+    v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">7</span>); <span class="hljs-comment">// 所以無需使用&lt;i32&gt;註解</span>
+
+    <span class="hljs-comment">// 丟棄vector時，其所有元素亦會丟棄</span>
+    {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+    } <span class="hljs-comment">// &lt;- 這裡 v 離開作用域並被丟棄</span>
+
+    <span class="hljs-comment">// 讀取vector元素。</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+    <span class="hljs-comment">// 以索引語法獲取vector中的值。索引超出範圍會引發錯誤</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">third</span>: &amp;<span class="hljs-type">i32</span> = &amp;v[<span class="hljs-number">2</span>];
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The third element is {}&quot;</span>, third);
+    <span class="hljs-comment">// 以get方法獲取vector中的值。超出範圍返回None。</span>
+    <span class="hljs-keyword">match</span> v.<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-number">2</span>) {
+        <span class="hljs-title function_ invoke__">Some</span>(third) =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The third element is {}&quot;</span>, third),
+        <span class="hljs-literal">None</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;There is no third element.&quot;</span>),
+    }
+
+    <span class="hljs-comment">// 遍歷vector中的元素</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">33</span>, <span class="hljs-number">66</span>, <span class="hljs-number">99</span>];
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> &amp;v {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, i)
+    }
+
+    <span class="hljs-comment">// 遍歷可變vector中每個元素的可變引用</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">11</span>, <span class="hljs-number">55</span>, <span class="hljs-number">77</span>];
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> &amp;<span class="hljs-keyword">mut</span> v {
+        *i += <span class="hljs-number">50</span>; <span class="hljs-comment">// 解引用i += 50;</span>
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, i)
+    }
+
+    <span class="hljs-comment">// 使用列舉來儲存多種型別</span>
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">SpreadsheetCell</span> {
+        <span class="hljs-title function_ invoke__">Int</span>(<span class="hljs-type">i32</span>),
+        <span class="hljs-title function_ invoke__">Float</span>(<span class="hljs-type">f64</span>),
+        <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-type">String</span>),
+    }
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">row</span> = <span class="hljs-built_in">vec!</span>[
+        SpreadsheetCell::<span class="hljs-title function_ invoke__">Int</span>(<span class="hljs-number">3</span>),
+        SpreadsheetCell::<span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;blue&quot;</span>)),
+        SpreadsheetCell::<span class="hljs-title function_ invoke__">Float</span>(<span class="hljs-number">10.12</span>),
+    ];
+}
+</code></pre>
+<h1>使用包、Crate 和模組</h1>
+<ul>
+<li>模組樹都植根於名為 crate 的隱式模組下</li>
+<li>模組可巢狀，模組中支援結構體、列舉、常量、特性、函式</li>
+<li>路徑後跟一個或多個由雙冒號（::）分割的識別符號</li>
+<li>
+<ul>
+<li>絕對路徑（absolute path）從 crate 根開始，以 crate 名或者字面值 crate 開頭。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>相對路徑（relative path）從當前模組開始，以 self、super 或當前模組的識別符號開頭。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>super 起始的相對路徑，移動模組時，變更很少程式碼。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>use:使用該關鍵字將名稱引入作用域</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>as:使用該關鍵字提供新的名稱。用於 use 至相同名稱的情況</li>
+</ul>
+</li>
+<li>Rust 中預設所有項（函式、方法、結構體、列舉、模組和常量）都是私有的</li>
+<li>
+<ul>
+<li>父模組中的項不能使用子模組中的私有項,子模組中的項可以使用他們父模組中的項</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs">cargo new --lib rust-lib <span class="hljs-comment"># 建庫專案</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 使用 as 關鍵字提供新的名稱 ==========*/</span>
+<span class="hljs-keyword">use</span> std::fmt::<span class="hljs-type">Result</span>;
+<span class="hljs-keyword">use</span> std::io::<span class="hljs-type">Result</span> <span class="hljs-keyword">as</span> IoResult;
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">function1</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span> {}
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">function2</span>() <span class="hljs-punctuation">-&gt;</span> IoResult&lt;()&gt; {}
+
+<span class="hljs-comment">/*=========== 使用 use  ==========*/</span>
+<span class="hljs-comment">// 透過 glob 運算子將所有的公有定義引入作用域。慎用。</span>
+<span class="hljs-keyword">use</span> std::collections::*;
+<span class="hljs-comment">// 一個是另外一個子路徑，同時引入作用域</span>
+<span class="hljs-keyword">use</span> std::io::{<span class="hljs-keyword">self</span>, Write};
+ <span class="hljs-comment">// 巢狀引入</span>
+<span class="hljs-keyword">use</span> std::{cmp::Ordering, io};
+<span class="hljs-comment">// 標準庫引入，無需修改Cargo.toml</span>
+<span class="hljs-keyword">use</span> std::collections::HashMap;
+<span class="hljs-comment">// 外部引入。需在Cargo.toml中新增庫</span>
+<span class="hljs-keyword">use</span> rand::Rng;
+
+<span class="hljs-comment">/*=========== 模組分割入不同檔案 示例及註釋 ==========*/</span>
+<span class="hljs-comment">/* src/front_of_house/hosting.rs */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">add_to_waitlist</span>() {} <span class="hljs-comment">// 模組中函式 使用 pub 關鍵字變為公有</span>
+
+<span class="hljs-comment">/* src/front_of_house.rs */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> hosting;<span class="hljs-comment">// 子模組 使用 pub 關鍵字暴露路徑</span>
+
+<span class="hljs-comment">/* src/lib.rs */</span>
+<span class="hljs-keyword">mod</span> front_of_house; <span class="hljs-comment">// 載入同名模組檔案的內容</span>
+
+<span class="hljs-comment">/*=========== 模組的相關要點 示例及註釋 ==========*/</span>
+<span class="hljs-keyword">mod</span> front_of_house { <span class="hljs-comment">// 這部分已拆分為單獨的檔案</span>
+    <span class="hljs-comment">// 子模組 使用 pub 關鍵字暴露路徑</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> hosting {
+        <span class="hljs-comment">// 模組中函式 使用 pub 關鍵字變為公有</span>
+        <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">add_to_waitlist</span>() {}
+    }
+}
+
+<span class="hljs-comment">// 使用use和相對路徑將項引入作用域</span>
+<span class="hljs-keyword">use</span> front_of_house::hosting;
+<span class="hljs-comment">// 使用pub use 重匯出名稱</span>
+<span class="hljs-comment">// pub use crate::front_of_house::hosting;</span>
+
+<span class="hljs-comment">/** 公有函式 */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">eat_at_restaurant</span>() {
+    <span class="hljs-comment">// 絕對路徑</span>
+    crate::front_of_house::hosting::<span class="hljs-title function_ invoke__">add_to_waitlist</span>();
+    <span class="hljs-comment">// 相對路徑</span>
+    front_of_house::hosting::<span class="hljs-title function_ invoke__">add_to_waitlist</span>();
+    <span class="hljs-comment">// use 與相對路徑結合</span>
+    hosting::<span class="hljs-title function_ invoke__">add_to_waitlist</span>();
+
+    <span class="hljs-comment">// 公有結構體例項</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">meal</span> = back_of_house::Breakfast::<span class="hljs-title function_ invoke__">summer</span>(<span class="hljs-string">&quot;Rye&quot;</span>);
+    meal.toast = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Wheat&quot;</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, meal.toast);
+
+    <span class="hljs-comment">// 公有列舉成員使用</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">order1</span> = back_of_house::Appetizer::Soup;
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">order2</span> = back_of_house::Appetizer::Salad;
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">server_order</span>() {}
+<span class="hljs-keyword">mod</span> back_of_house {
+    <span class="hljs-comment">/** 公有列舉 所有成員皆為公有 */</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Appetizer</span> {
+        Soup,
+        Salad,
+    }
+    <span class="hljs-comment">/** 公有結構體 所有成員預設私有，公有pub需指定 */</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Breakfast</span> {
+        <span class="hljs-keyword">pub</span> toast: <span class="hljs-type">String</span>,      <span class="hljs-comment">// 公有欄位</span>
+        seasonal_fruit: <span class="hljs-type">String</span>, <span class="hljs-comment">// 預設私有欄位</span>
+    }
+    <span class="hljs-comment">// 結構體方法</span>
+    <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Breakfast</span> {
+        <span class="hljs-comment">//</span>
+        <span class="hljs-comment">//</span>
+        <span class="hljs-comment">/**
+         * 公有函式 傳入字串，返回結構體
+         * 具有私有欄位的結構體，需要提供該公共關聯函式來構造結構體例項
+         * 若無該函式則無法在 eat_at_restaurant 中建立該結構體的例項
+         */</span>
+        <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summer</span>(toast: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> Breakfast {
+            <span class="hljs-comment">// 結構體例項化</span>
+            Breakfast {
+                toast: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(toast),
+                seasonal_fruit: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;peaches&quot;</span>),
+            }
+        }
+    }
+
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">cook_order</span>() {}
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">fix_incorrect_order</span>() {
+        <span class="hljs-title function_ invoke__">cook_order</span>();
+        <span class="hljs-comment">// 使用 super 起始的相對路徑</span>
+        super::<span class="hljs-title function_ invoke__">server_order</span>();
+    }
+}
+</code></pre>
+<h1>列舉和模式匹配</h1>
+<ul>
+<li>match:先匹配模式，匹配到則執行關聯程式碼</li>
+<li>if let:處理只匹配一個模式的值而忽略其他模式的情況。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== if let 簡單控制流 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-meta">#[derive(Debug)]</span>
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">UsState</span> {
+        Alabama,
+        Alaska,
+    }
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Coin</span> {
+        Penny,
+        Nickel,
+        Dime,
+        <span class="hljs-title function_ invoke__">Quarter</span>(UsState),
+    }
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">coin</span> = Coin::Penny;
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">count</span> = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Coin</span>::<span class="hljs-title function_ invoke__">Quarter</span>(state) = coin {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;State quarter from {:?}!&quot;</span>, state);
+    } <span class="hljs-keyword">else</span> {
+        count += <span class="hljs-number">1</span>; <span class="hljs-comment">// 對非state的進行計數</span>
+    }
+}
+
+<span class="hljs-comment">/*=========== 匹配 Option&lt;T&gt; ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">plus_one</span>(x: <span class="hljs-type">Option</span>&lt;<span class="hljs-type">i32</span>&gt;) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;<span class="hljs-type">i32</span>&gt; {
+    <span class="hljs-keyword">match</span> x {
+        <span class="hljs-literal">None</span> =&gt; <span class="hljs-literal">None</span>, <span class="hljs-comment">// 要有，否則造成BUG</span>
+        <span class="hljs-title function_ invoke__">Some</span>(i) =&gt; <span class="hljs-title function_ invoke__">Some</span>(i + <span class="hljs-number">1</span>),
+    }
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">five</span> = <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">5</span>);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">six</span> = <span class="hljs-title function_ invoke__">plus_one</span>(five); <span class="hljs-comment">// 6</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">none</span> = <span class="hljs-title function_ invoke__">plus_one</span>(<span class="hljs-literal">None</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?},{:?}&quot;</span>, six, none);
+
+    <span class="hljs-comment">/* _ 萬用字元 */</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">some_u8_value</span> = <span class="hljs-number">0u8</span>;
+    <span class="hljs-keyword">match</span> some_u8_value {
+        <span class="hljs-number">1</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;one&quot;</span>),
+        <span class="hljs-number">3</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;three&quot;</span>),
+        <span class="hljs-number">5</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;five&quot;</span>),
+        <span class="hljs-number">7</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;seven&quot;</span>),
+        _ =&gt; (), <span class="hljs-comment">// 匹配所有之前沒有指定的可能的值</span>
+    }
+}
+
+<span class="hljs-comment">/*=========== match 控制流運算子 及繫結值的模式 ==========*/</span>
+<span class="hljs-meta">#[derive(Debug)]</span>
+
+<span class="hljs-comment">/** 用於傳遞給 Coin列舉中的Quarter項 */</span>
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">UsState</span> { Alabama, Alaska, }
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">Coin</span> { Penny, Nickel, Dime, <span class="hljs-title function_ invoke__">Quarter</span>(UsState), }
+
+<span class="hljs-comment">/** 返回值可以是任何型別 */</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">value_in_cents</span>(coin: Coin) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u8</span> {
+    <span class="hljs-keyword">match</span> coin {
+        <span class="hljs-comment">// 對應列舉中每項，此處亦可用{}</span>
+        Coin::Penny =&gt; {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Penny!&quot;</span>);
+            <span class="hljs-number">1</span>
+        }
+        Coin::Nickel =&gt; <span class="hljs-number">5</span>,
+        Coin::Dime =&gt; <span class="hljs-number">10</span>,
+        Coin::<span class="hljs-title function_ invoke__">Quarter</span>(state) =&gt; {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;state:{:?}&quot;</span>, state);
+            <span class="hljs-number">25</span>
+        }
+    }
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = <span class="hljs-title function_ invoke__">value_in_cents</span>(Coin::<span class="hljs-title function_ invoke__">Quarter</span>(UsState::Alaska));
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;temp:{:?}&quot;</span>, temp);
+}
+
+
+<span class="hljs-comment">/*=========== Option&lt;T&gt; 編碼存在或不存在 ==========*/</span>
+<span class="hljs-keyword">use</span> std::option::<span class="hljs-type">Option</span>; <span class="hljs-comment">// 引入庫</span>
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">some_num</span> = <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">5</span>);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">some_str</span> = <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-string">&quot;a string&quot;</span>);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">absent_num</span>: <span class="hljs-type">Option</span>&lt;<span class="hljs-type">i32</span>&gt; = <span class="hljs-literal">None</span>;
+}
+
+
+<span class="hljs-comment">/*=========== 列舉使用示例 ==========*/</span>
+<span class="hljs-comment">/* 定義列舉 */</span>
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">IpAddr</span> {
+    <span class="hljs-title function_ invoke__">V4</span>(<span class="hljs-type">u8</span>, <span class="hljs-type">u8</span>, <span class="hljs-type">u8</span>, <span class="hljs-type">u8</span>), <span class="hljs-comment">// 可以單獨定義資料型別</span>
+    <span class="hljs-title function_ invoke__">V6</span>(<span class="hljs-type">String</span>),
+}
+
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">Message</span> {
+    Quit,                       <span class="hljs-comment">//沒有關聯任何資料</span>
+    Move { x: <span class="hljs-type">i32</span>, y: <span class="hljs-type">i32</span> },    <span class="hljs-comment">//包含一個匿名體結構</span>
+    <span class="hljs-title function_ invoke__">Write</span>(<span class="hljs-type">String</span>),              <span class="hljs-comment">//包含一個單獨String</span>
+    <span class="hljs-title function_ invoke__">ChangeColor</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>), <span class="hljs-comment">//包含三個i32型別資料</span>
+}
+
+<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Message</span> {
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">call</span>(&amp;<span class="hljs-keyword">self</span>) {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;方法體&quot;</span>)
+    }
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// 例項化列舉::列舉項，併為其賦值</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">home</span> = IpAddr::<span class="hljs-title function_ invoke__">V4</span>(<span class="hljs-number">127</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">loopback</span> = IpAddr::<span class="hljs-title function_ invoke__">V6</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;::1&quot;</span>));
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">m</span> = Message::<span class="hljs-title function_ invoke__">Write</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Hello!&quot;</span>));
+    m.<span class="hljs-title function_ invoke__">call</span>(); <span class="hljs-comment">// 呼叫列舉的方法</span>
+}
+</code></pre>
+<h1>struct 結構體</h1>
+<ul>
+<li>自定義資料型別。允許命名和包裝多個相關的值，形成有意義的組合。</li>
+<li>建立結構體例項。key 為欄位名：value 為資料值。順序無需一致。</li>
+<li>元組結構體：即使型別相同，在函式中結構體型別的引數不能互通。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 結構體使用示例 ==========*/</span>
+<span class="hljs-meta">#[derive(Debug)]</span> <span class="hljs-comment">// 宣告debug可以列印結構體。</span>
+<span class="hljs-comment">/** 建立結構體 */</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rectangle</span> {
+    width: <span class="hljs-type">u32</span>,
+    height: <span class="hljs-type">u32</span>,
+}
+<span class="hljs-comment">// 將某個型別例項能做的事情都放入impl塊中</span>
+<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> {
+    <span class="hljs-comment">// self指呼叫該方法的結構體例項</span>
+    <span class="hljs-comment">// 使用&amp;因只需讀取結構體的資料，不需要寫入(獲取所有權)</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">area</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> {
+        <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.height
+    }
+    <span class="hljs-comment">// 關聯函式。不以self作為引數的函式。不作用於結構體的例項。</span>
+    <span class="hljs-comment">// 經常被用作返回一個結構體新例項的建構函式。</span>
+    <span class="hljs-comment">// 接收一個維度引數</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">square</span>(size: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+<span class="hljs-comment">/**
+ * 每個結構體允許有多個 impl塊，但每個方法有其自己的impl塊。
+ * 此處只為有效示例，非最優寫法。
+ */</span>
+<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> {
+    <span class="hljs-comment">/**
+     * 比較兩個結構體例項的屬性值。返回bool結果。
+     * 引數一：&amp;self，即已知的rect1也就是結構體例項化的變數
+     * 引數二：結構體型別例項。即rect2或rect3
+     */</span>
+    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">can_hold</span>(&amp;<span class="hljs-keyword">self</span>, other: &amp;Rectangle) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> {
+        <span class="hljs-keyword">self</span>.width &gt; other.width &amp;&amp; <span class="hljs-keyword">self</span>.height &gt; other.height
+    }
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect1</span> = Rectangle {
+        width: <span class="hljs-number">30</span>,
+        height: <span class="hljs-number">50</span>,
+    };
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect2</span> = Rectangle {
+        width: <span class="hljs-number">10</span>,
+        height: <span class="hljs-number">40</span>,
+    };
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect3</span> = Rectangle {
+        width: <span class="hljs-number">60</span>,
+        height: <span class="hljs-number">45</span>,
+    };
+    <span class="hljs-comment">// 列印結構體(結構形式輸出)</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:#?}&quot;</span>, rect1);
+    <span class="hljs-comment">// 方法語法。在結構體例項上呼叫其方法</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, rect1.<span class="hljs-title function_ invoke__">area</span>());
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Can rect1 hold rect2? {}&quot;</span>, rect1.<span class="hljs-title function_ invoke__">can_hold</span>(&amp;rect2));
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Can rect1 hold rect3? {}&quot;</span>, rect1.<span class="hljs-title function_ invoke__">can_hold</span>(&amp;rect3));
+    <span class="hljs-comment">// 使用結構體的關聯函式，輸入可見結果。wh皆為3</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;square:{:#?}&quot;</span>, Rectangle::<span class="hljs-title function_ invoke__">square</span>(<span class="hljs-number">3</span>));
+}
+
+<span class="hljs-comment">/*=========== 元組結構體（tuple structs） ==========*/</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Color</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>);
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">back</span> = <span class="hljs-title function_ invoke__">Color</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>); <span class="hljs-comment">// 黑色</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">origin</span> =<span class="hljs-title function_ invoke__">Point</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>); <span class="hljs-comment">// 原點</span>
+<span class="hljs-comment">// 以元組方式使用 欄位.索引</span>
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, back.<span class="hljs-number">1</span>);
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, origin.<span class="hljs-number">1</span>);
+
+<span class="hljs-comment">/*=========== 結構體基本使用 ==========*/</span>
+ <span class="hljs-comment">// 宣告debug可以列印結構體。只有結構、列舉型別可用</span>
+<span class="hljs-meta">#[derive(Debug)]</span>
+<span class="hljs-comment">/** 定義結構體 */</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">User</span> {
+    name: <span class="hljs-type">String</span>,
+    age: <span class="hljs-type">u64</span>,
+    active: <span class="hljs-type">bool</span>,
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// 呼叫構建結構體函式，並傳值</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = <span class="hljs-title function_ invoke__">build_user</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;dd&quot;</span>));
+    <span class="hljs-comment">// 列印結構體(單行形式輸出)</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, temp);
+    <span class="hljs-comment">// 列印結構體(結構形式輸出)</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:#?}&quot;</span>, temp);
+    <span class="hljs-comment">// 例項化結構體</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">user1</span> = User {
+        name: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;aa&quot;</span>),
+        age: <span class="hljs-number">16</span>,
+        active: <span class="hljs-literal">true</span>,
+    };
+    <span class="hljs-comment">// 例項化結構體</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">user3</span> = User {
+        active: <span class="hljs-literal">false</span>,
+        ..user1 <span class="hljs-comment">// 結構體剩餘值使用user1中的值</span>
+    };
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, user3);
+}
+<span class="hljs-comment">/** 構建結構體函式 傳入引數，返回例項化的結構體 */</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">build_user</span>(name: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> User {
+    User {
+        name,
+        age: <span class="hljs-number">15</span>,
+        active: <span class="hljs-literal">true</span>,
+    }
+}
+</code></pre>
+<h1>ownership 所有權</h1>
+<ul>
+<li>透過所有權系統管理記憶體</li>
+<li>clone():字串克隆。</li>
+<li>Copy:整型、浮點、布林、字元、元組(元素同類型)</li>
+<li>&amp;:引用。允許使用值但不獲取其所有權。預設禁止修改引用的值。</li>
+<li>借用：獲取引用作為函式引數。</li>
+<li>可變引用：在特定作用域中的特定資料只能有一個可變引用。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 字串 slice .. range(範圍) 語法 ==========*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;s[<span class="hljs-number">0</span>..<span class="hljs-number">2</span>];
+<span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;s[..<span class="hljs-number">2</span>];
+<span class="hljs-comment">// 或者是如下寫法</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">len</span> = s.<span class="hljs-title function_ invoke__">len</span>();
+<span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;s[<span class="hljs-number">3</span>..len];
+<span class="hljs-comment">// 如果 slice 包含 String 的最後一個位元組，可以捨棄尾部的數字</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;s[<span class="hljs-number">3</span>..];
+<span class="hljs-comment">// 也可以同時捨棄這兩個值來獲取整個字串的 slice</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;s[..];
+
+<span class="hljs-comment">/*=========== 可變引用 作用域 ==========*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+<span class="hljs-comment">// 不可變 = 不可變引用</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">r1</span> = &amp;s; <span class="hljs-comment">// 沒問題</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">r2</span> = &amp;s; <span class="hljs-comment">// 沒問題</span>
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{} and {}&quot;</span>, r1, r2); <span class="hljs-comment">// r1r2是不可變引用</span>
+<span class="hljs-comment">// 此位置之後 r1 和 r2 不再使用。因為最後一次使用不可變引用在宣告可變引用之前</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">r3</span> = &amp;<span class="hljs-keyword">mut</span> s; <span class="hljs-comment">// 沒問題。</span>
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, r3);
+
+<span class="hljs-comment">/*=========== 可變引用 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+    <span class="hljs-comment">// &amp;mut s 在作用域內只能用一次。</span>
+    <span class="hljs-title function_ invoke__">change</span>(&amp;<span class="hljs-keyword">mut</span> s);
+}
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">change</span>(some_string: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-type">String</span>) {
+    some_string.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">&quot;, world&quot;</span>);
+}
+
+<span class="hljs-comment">/*=========== 引用與借用 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+    <span class="hljs-comment">// 建立指標，指向s1的引用</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">len</span> = <span class="hljs-title function_ invoke__">calculate_length</span>(&amp;s1);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The length of &#x27;{}&#x27; is {}.&quot;</span>, s1, len);
+}
+<span class="hljs-comment">// s 是對 String 的引用，因無引用值所有權，s離開作用域，不會報錯。</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">calculate_length</span>(s: &amp;<span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">usize</span> { s.<span class="hljs-title function_ invoke__">len</span>() }
+
+<span class="hljs-comment">/*=========== 返回值與作用域 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-title function_ invoke__">gives_ownership</span>();         <span class="hljs-comment">// gives_ownership 將返回值</span>
+                                        <span class="hljs-comment">// 移給 s1</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);     <span class="hljs-comment">// s2 進入作用域</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">s3</span> = <span class="hljs-title function_ invoke__">takes_and_gives_back</span>(s2);  <span class="hljs-comment">// s2 被移動到</span>
+                                        <span class="hljs-comment">// takes_and_gives_back 中,</span>
+                                        <span class="hljs-comment">// 它也將返回值移給 s3</span>
+} <span class="hljs-comment">// 這裡, s3 移出作用域並被丟棄。s2 也移出作用域，但已被移走，</span>
+  <span class="hljs-comment">// 所以什麼也不會發生。s1 移出作用域並被丟棄</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">gives_ownership</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> {             <span class="hljs-comment">// gives_ownership 將返回值移動給</span>
+                                             <span class="hljs-comment">// 呼叫它的函式</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">some_string</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>); <span class="hljs-comment">// some_string 進入作用域.</span>
+    some_string                              <span class="hljs-comment">// 返回 some_string 並移出給呼叫的函式</span>
+}
+<span class="hljs-comment">// takes_and_gives_back 將傳入字串並返回該值</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">takes_and_gives_back</span>(a_string: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> { <span class="hljs-comment">// a_string 進入作用域</span>
+    a_string  <span class="hljs-comment">// 返回 a_string 並移出給呼叫的函式</span>
+}
+
+<span class="hljs-comment">/*=========== 所有權與函式 ==========*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>(){
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);  <span class="hljs-comment">// s 進入作用域</span>
+    <span class="hljs-title function_ invoke__">takes_ownership</span>(s);             <span class="hljs-comment">// s 的值移動到函數里 ...</span>
+    <span class="hljs-comment">//在此處使用s，會有編譯錯誤      // ... 所以到這裡不再有效</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">5</span>;                      <span class="hljs-comment">// x 進入作用域</span>
+    <span class="hljs-title function_ invoke__">makes_copy</span>(x);                  <span class="hljs-comment">// x 應該移動函數里，</span>
+                                    <span class="hljs-comment">// 但 i32 是 Copy 的，所以在後面可繼續使用 x</span>
+}<span class="hljs-comment">// 這裡, x 先移出了作用域，然後是 s。但因為 s 的值已被移走，</span>
+  <span class="hljs-comment">// 所以不會有特殊操作</span>
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">takes_ownership</span>(some_string: <span class="hljs-type">String</span>) { <span class="hljs-comment">// some_string 進入作用域</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, some_string);
+} <span class="hljs-comment">// 這裡，some_string 移出作用域並呼叫 `drop` 方法。佔用的記憶體被釋放</span>
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">makes_copy</span>(some_integer: <span class="hljs-type">i32</span>) { <span class="hljs-comment">// some_integer 進入作用域</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, some_integer);
+} <span class="hljs-comment">// 這裡，some_integer 移出作用域。不會有特殊操作</span>
+
+<span class="hljs-comment">/*=========== 移動與克隆 ==========*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = s1; <span class="hljs-comment">// 此處 s1被移動，s1不再有效。</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = s1.<span class="hljs-title function_ invoke__">clone</span>(); <span class="hljs-comment">// 克隆。s1,s2皆有效。</span>
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;s1 = {}, s2 = {}&quot;</span>, s1, s2);
+</code></pre>
+<h1>控制流</h1>
+<ul>
+<li>if:多個<code>if else if</code>最好使用<code>match</code></li>
+<li>loop:重複執行。<code>break</code>停止迴圈</li>
+<li>while 條件迴圈。慢！因編譯器增加執行時程式碼對每次迴圈的每個元素進行條件檢查。</li>
+<li>for 遍歷集合。最常用。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/*=========== 控制流 使用 for 遍歷集合 ==========*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>];
+<span class="hljs-keyword">for</span> <span class="hljs-variable">element</span> <span class="hljs-keyword">in</span> a.<span class="hljs-title function_ invoke__">iter</span>() { <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;the value is: {}&quot;</span>, element); }
+
+<span class="hljs-comment">// 倒計時</span>
+<span class="hljs-keyword">for</span> <span class="hljs-variable">number</span> <span class="hljs-keyword">in</span> (<span class="hljs-number">1</span>..<span class="hljs-number">4</span>).<span class="hljs-title function_ invoke__">rev</span>() { <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}!&quot;</span>, number); }
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;LIFTOFF!!!&quot;</span>);
+
+<span class="hljs-comment">/*========= 控制流 while 條件迴圈 =============*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>];
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">index</span> = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">while</span> index &lt; <span class="hljs-number">5</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;the value is: {}&quot;</span>, a[index]);
+    <span class="hljs-comment">// 每次執行，index值增1</span>
+    index = index + <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-comment">/*============ 控制流 loop 重複執行 ==========*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">counter</span> = <span class="hljs-number">0</span>;
+<span class="hljs-comment">// 最終值為20</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-keyword">loop</span> {
+    counter += <span class="hljs-number">1</span>; <span class="hljs-comment">// 每次+1</span>
+    <span class="hljs-comment">// 若加到10，返回時將10*2</span>
+    <span class="hljs-keyword">if</span> counter == <span class="hljs-number">10</span> { <span class="hljs-keyword">break</span> counter * <span class="hljs-number">2</span>; }
+};
+
+<span class="hljs-comment">/*============ 控制流 if 表示式 ===============*/</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">num</span> = <span class="hljs-number">7</span>;
+<span class="hljs-keyword">if</span> num&lt;<span class="hljs-number">5</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The value: {}&quot;</span>,num);
+}<span class="hljs-keyword">else</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;value of x is: {}&quot;</span>,num);
+}
+
+<span class="hljs-comment">// let語句中使用if</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">condition</span> = <span class="hljs-literal">true</span>;
+<span class="hljs-comment">// true為5，false為6 資料型別必須相同</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">number</span> = <span class="hljs-keyword">if</span> condition {<span class="hljs-number">5</span>}<span class="hljs-keyword">else</span>{<span class="hljs-number">6</span>};
+</code></pre>
+<h1>函式</h1>
+<ul>
+<li>函式名<code>fn test_demo(){}</code></li>
+<li>函式引數需指定型別<code>fn test_demo(x:i32,y:i32){}</code></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">// 具有返回值的函式</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">five</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> {<span class="hljs-number">5</span>}
+<span class="hljs-comment">// 具有引數與返回值的函式</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">plus_one</span>(x: <span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> { x + <span class="hljs-number">1</span> }
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>(){
+    <span class="hljs-comment">// 表示式 y=4</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">3</span>;
+        x + <span class="hljs-number">1</span> <span class="hljs-comment">// 注意，表示式結尾沒有分號</span>
+    };
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-title function_ invoke__">five</span>(); <span class="hljs-comment">// 5</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = <span class="hljs-title function_ invoke__">plus_one</span>(<span class="hljs-number">5</span>); <span class="hljs-comment">// 6</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The value of x is: {},{},{}&quot;</span>,y, x,z);
+}
+</code></pre>
+<h1>資料型別</h1>
+<ul>
+<li>標量型別</li>
+<li>
+<ul>
+<li>整數:i/u(±/+)bit(8/16/32/64/128)通常用 i32</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>浮點:f32/f64(單精度浮點/倍精度浮點)。預設 f64</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>布林、字元:('char')</li>
+</ul>
+</li>
+<li>複合型別</li>
+<li>
+<ul>
+<li>tuples:元組.元素型別可不同，可單獨指定。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>arrays:陣列.每個元素型別必須相同。長度固定不可增減。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">// let 預設不可變。加mut修飾符後，可變。</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">test</span> =<span class="hljs-number">5</span>; <span class="hljs-comment">// 不可變</span>
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">testt</span> =<span class="hljs-number">5</span>; <span class="hljs-comment">// 可變</span>
+<span class="hljs-comment">// 常量</span>
+<span class="hljs-keyword">const</span> MAX_POINTS: <span class="hljs-type">u32</span> =<span class="hljs-number">100_000</span>;
+
+<span class="hljs-comment">// 隱藏。用let關鍵字重複生命相同變數名，隱藏變數值。</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> =<span class="hljs-number">5</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> =x+<span class="hljs-number">1</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = x*<span class="hljs-number">2</span>;
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;x的數值為:{}&quot;</span>,x); <span class="hljs-comment">// 12。即(5+1)*2</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-variable">spaces</span> =<span class="hljs-string">&quot;   &quot;</span>; <span class="hljs-comment">// 此處不可加mut修飾(型別不同)。</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">spaces</span> = spaces.<span class="hljs-title function_ invoke__">len</span>();
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>,spaces); <span class="hljs-comment">// 3。</span>
+
+<span class="hljs-comment">// 布林</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">t</span> = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">f</span>: <span class="hljs-type">bool</span> = <span class="hljs-literal">false</span>; <span class="hljs-comment">// 型別詮釋的方式</span>
+
+<span class="hljs-comment">// 元組。為每個元素指定型別</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">tup</span>: (<span class="hljs-type">i32</span>, <span class="hljs-type">f64</span>, <span class="hljs-type">u8</span>) = (<span class="hljs-number">500</span>, <span class="hljs-number">6.4</span>, <span class="hljs-number">1</span>);
+<span class="hljs-comment">// 解構寫法</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">tup</span> = (<span class="hljs-number">500</span>, <span class="hljs-number">6.4</span>, <span class="hljs-number">1</span>);
+<span class="hljs-keyword">let</span> (x, y, z) = tup;
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The value of y is: {}&quot;</span>, y);
+<span class="hljs-comment">// 索引訪問形式</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span>: (<span class="hljs-type">i32</span>, <span class="hljs-type">f64</span>, <span class="hljs-type">u8</span>) = (<span class="hljs-number">500</span>, <span class="hljs-number">6.4</span>, <span class="hljs-number">1</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">five_hundred</span> = x.<span class="hljs-number">0</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">six_point_four</span> = x.<span class="hljs-number">1</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">one</span> = x.<span class="hljs-number">2</span>;
+
+<span class="hljs-comment">// 陣列</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+<span class="hljs-comment">// 另一種寫法</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: [<span class="hljs-type">i32</span>; <span class="hljs-number">5</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+<span class="hljs-comment">// let a = [3; 5]; 等價於 let a = [3, 3, 3, 3, 3];</span>
+<span class="hljs-comment">// 訪問陣列元素</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+<span class="hljs-keyword">let</span> <span class="hljs-variable">first</span> = a[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">let</span> <span class="hljs-variable">second</span> = a[<span class="hljs-number">1</span>];
+</code></pre>
+<h1>demo game</h1>
+<ul>
+<li>隨機 1-100 之間的數字，根據使用者輸入，反饋兩者之間的比較結果</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">use</span> std::io; <span class="hljs-comment">// i/o庫</span>
+<span class="hljs-keyword">use</span> rand::Rng; <span class="hljs-comment">// 隨機數庫</span>
+<span class="hljs-keyword">use</span> std::cmp::Ordering; <span class="hljs-comment">// 實現數字比較所需</span>
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>(){
+    <span class="hljs-comment">// 字串顯示在螢幕</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;請猜測一個數字&quot;</span>);
+    <span class="hljs-comment">// 通常是最方便的隨機性來源</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">rand_number</span> = rand::<span class="hljs-title function_ invoke__">thread_rng</span>().<span class="hljs-title function_ invoke__">gen_range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">101</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;隨機數:{}&quot;</span>,rand_number);
+    <span class="hljs-comment">// 程式循壞執行</span>
+    <span class="hljs-keyword">loop</span> {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;請輸入一個數字&quot;</span>);
+        <span class="hljs-comment">// 可變變數 = String型別 靜態方法 。即新的空String例項賦值給guess變數</span>
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut  </span><span class="hljs-variable">guess</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();
+        <span class="hljs-comment">// io模組 呼叫 stdin函式</span>
+        io::<span class="hljs-title function_ invoke__">stdin</span>()
+            <span class="hljs-comment">// 呼叫函式，獲取使用者輸入。放置到guess中</span>
+            .<span class="hljs-title function_ invoke__">read_line</span>(&amp;<span class="hljs-keyword">mut</span> guess)
+            .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;讀取改行失敗&quot;</span>);
+        <span class="hljs-comment">// 將輸入內容轉為數字。此寫法會在輸入非數字是，終止程式。</span>
+        <span class="hljs-comment">// let guess: u32 = guess.trim().parse().expect(&quot;請輸入一個數字！&quot;);</span>
+        <span class="hljs-comment">// 將輸入內容轉為數字。 注意match</span>
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">guess</span>: <span class="hljs-type">u32</span> = <span class="hljs-keyword">match</span> guess.<span class="hljs-title function_ invoke__">trim</span>().<span class="hljs-title function_ invoke__">parse</span>() {
+            <span class="hljs-title function_ invoke__">Ok</span>(num)=&gt;num, <span class="hljs-comment">// 轉換成功</span>
+            <span class="hljs-title function_ invoke__">Err</span>(_)=&gt;<span class="hljs-keyword">continue</span>, <span class="hljs-comment">// 轉換失敗</span>
+        };
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;猜測的數字：{}&quot;</span>,guess);
+
+        <span class="hljs-comment">// 比較隨機數即輸入數</span>
+        <span class="hljs-keyword">match</span> guess.<span class="hljs-title function_ invoke__">cmp</span>(&amp;rand_number){
+            Ordering::Less =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&lt;{}&quot;</span>,guess,rand_number),
+            Ordering::Greater =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&gt;{}&quot;</span>,guess,rand_number),
+            Ordering::Equal =&gt;{
+                <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}={}&quot;</span>,guess,rand_number);
+                <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 如果兩個數值相等，則停止迴圈。</span>
+            }
+        }
+    }
+}
+</code></pre>
+<hr>
+<h1>Dir&amp;File</h1>
+<ul>
+<li>寫入檔案到指定目錄</li>
+</ul>
+<pre><code class="hljs">
+</code></pre>
+<ul>
+<li>讀取指定路徑下的目錄或檔案</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 深層目錄需遞迴。因遞迴傳入值型別問題。
+ * 此處避免轉換所以使用PathBuf型別。
+ */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">read_dir_or_file</span>(path: &amp;PathBuf) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; {
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">entry</span> <span class="hljs-keyword">in</span> fs::<span class="hljs-title function_ invoke__">read_dir</span>(&amp;path)? {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">dir</span> = entry?;
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">metadata</span> = dir.<span class="hljs-title function_ invoke__">metadata</span>()?;
+        <span class="hljs-comment">// 如果是資料夾，就繼續執行</span>
+        <span class="hljs-keyword">if</span> metadata.<span class="hljs-title function_ invoke__">is_dir</span>() {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;路徑:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">path</span>());
+            <span class="hljs-comment">// 此處應遞迴 傳入路徑</span>
+            <span class="hljs-title function_ invoke__">read_dir_or_file</span>(&amp;dir.<span class="hljs-title function_ invoke__">path</span>());
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-comment">// 程式碼不變……</span>
+        }
+    }
+    <span class="hljs-title function_ invoke__">Ok</span>(())
+}
+</code></pre>
+<pre><code class="hljs">
+<span class="hljs-keyword">use</span> std::fs;
+<span class="hljs-keyword">use</span> std::io::*;
+<span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> chrono; <span class="hljs-comment">// 外鏈庫</span>
+<span class="hljs-keyword">use</span> chrono::prelude::*; <span class="hljs-comment">// 引入庫</span>
+<span class="hljs-keyword">use</span> std::path::PathBuf;
+<span class="hljs-keyword">use</span> std::time::SystemTime;
+<span class="hljs-keyword">use</span> std::time::UNIX_EPOCH;
+
+<span class="hljs-comment">/* 拆分並返回檔名 */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">split_str</span>(s: &amp;<span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">bytes</span> = s.<span class="hljs-title function_ invoke__">as_bytes</span>();
+    <span class="hljs-keyword">for</span> (i, &amp;item) <span class="hljs-keyword">in</span> bytes.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">enumerate</span>() {
+        <span class="hljs-keyword">if</span> item == <span class="hljs-string">b&#x27;.&#x27;</span> {
+            <span class="hljs-keyword">return</span> &amp;s[<span class="hljs-number">0</span>..i];
+        }
+    }
+    &amp;s[..]
+}
+
+
+<span class="hljs-comment">/**
+ * 讀取指定path下的目錄或檔案
+ * 此處避免轉換所以使用PathBuf型別。
+ */</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">read_dir_or_file</span>(path: &amp;PathBuf) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; {
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">entry</span> <span class="hljs-keyword">in</span> fs::<span class="hljs-title function_ invoke__">read_dir</span>(&amp;path)? {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">dir</span> = entry?;
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">metadata</span> = dir.<span class="hljs-title function_ invoke__">metadata</span>()?;
+        <span class="hljs-comment">// 如果是資料夾，就繼續執行</span>
+        <span class="hljs-keyword">if</span> metadata.<span class="hljs-title function_ invoke__">is_dir</span>() {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄:{:?}&quot;</span>, dir);
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;路徑:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">path</span>());
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄名稱:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_name</span>()); <span class="hljs-comment">// 目錄或檔案的名稱</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄型別: {:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_type</span>()); <span class="hljs-comment">// 目錄或檔案的型別</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄元資料:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">metadata</span>()); <span class="hljs-comment">// 目錄或檔案的元資料</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄: {:?}&quot;</span>, metadata.<span class="hljs-title function_ invoke__">is_dir</span>()); <span class="hljs-comment">// 是否為目錄</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">time</span> = metadata.<span class="hljs-title function_ invoke__">modified</span>()?;
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;最後修改時間 格式化:{:?}&quot;</span>, format_datetime(time));
+            <span class="hljs-comment">// 此處應遞迴 傳入路徑</span>
+            <span class="hljs-title function_ invoke__">read_dir_or_file</span>(&amp;dir.<span class="hljs-title function_ invoke__">path</span>());
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;===== 檔案 start =====&quot;</span>);
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄:{:?}&quot;</span>, dir);
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;路徑:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">path</span>());
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔名稱:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_name</span>()); <span class="hljs-comment">// 目錄或檔案的名稱</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔案型別: {:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_type</span>()); <span class="hljs-comment">// 目錄或檔案的型別</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔案元資料:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">metadata</span>()); <span class="hljs-comment">// 目錄或檔案的元資料</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄: {:?}&quot;</span>, metadata.<span class="hljs-title function_ invoke__">is_dir</span>()); <span class="hljs-comment">// 是否為目錄</span>
+                                                       <span class="hljs-comment">//最後修改時間</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">time</span> = metadata.<span class="hljs-title function_ invoke__">modified</span>()?;
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;最後修改時間 格式化:{:?}&quot;</span>, format_datetime(time));
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;===== 檔案 end =====&quot;</span>);
+            <span class="hljs-comment">// 如果是檔案，整理為Vec</span>
+        }
+    }
+    <span class="hljs-title function_ invoke__">Ok</span>(())
+}
+<span class="hljs-comment">/**
+ * 讀取指定path下的目錄或檔案
+ * use example:
+ * read_dir_or_file(&amp;String::from(&quot;../../notes/docs/rust/&quot;));
+ * desc: 需use或者使用 std::io::Result&lt;()&gt;{
+ */</span>
+<span class="hljs-keyword">use</span> std::io::*;
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">read_dir_or_file</span>(path: &amp;<span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; {
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">entry</span> <span class="hljs-keyword">in</span> fs::<span class="hljs-title function_ invoke__">read_dir</span>(&amp;path)? {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">dir</span> = entry?;
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">metadata</span> = dir.<span class="hljs-title function_ invoke__">metadata</span>()?;
+        <span class="hljs-comment">// 如果是資料夾，就繼續執行</span>
+        <span class="hljs-keyword">if</span> metadata.<span class="hljs-title function_ invoke__">is_dir</span>() {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄:{:?}&quot;</span>, dir);
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;路徑:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">path</span>());
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄名稱:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_name</span>()); <span class="hljs-comment">// 目錄或檔案的名稱</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄型別: {:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_type</span>()); <span class="hljs-comment">// 目錄或檔案的型別</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄元資料:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">metadata</span>()); <span class="hljs-comment">// 目錄或檔案的元資料</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄: {:?}&quot;</span>, metadata.<span class="hljs-title function_ invoke__">is_dir</span>()); <span class="hljs-comment">// 是否為目錄</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">time</span> = metadata.<span class="hljs-title function_ invoke__">modified</span>()?;
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;最後修改時間 格式化:{:?}&quot;</span>, format_datetime(time));
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔名稱:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_name</span>()); <span class="hljs-comment">// 目錄或檔案的名稱</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔案型別: {:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">file_type</span>()); <span class="hljs-comment">// 目錄或檔案的型別</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;檔案元資料:{:?}&quot;</span>, dir.<span class="hljs-title function_ invoke__">metadata</span>()); <span class="hljs-comment">// 目錄或檔案的元資料</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;目錄: {:?}&quot;</span>, metadata.<span class="hljs-title function_ invoke__">is_dir</span>()); <span class="hljs-comment">// 是否為目錄</span>
+                                                       <span class="hljs-comment">//最後修改時間</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">time</span> = metadata.<span class="hljs-title function_ invoke__">modified</span>()?;
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;最後修改時間 格式化:{:?}&quot;</span>, format_datetime(time));
+        }
+    }
+    <span class="hljs-title function_ invoke__">Ok</span>(())
+}
+
+</code></pre>
+<hr>
+<h1>DateTime</h1>
+<ul>
+<li>日期時間處理相關</li>
+</ul>
+<h3>時間戳格式化為日期時間(暫未實現)</h3>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 嘗試自己寫個時間戳轉人類易讀
+ * use example:
+ * format_data_time(SystemTime::now());
+ */</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">format_data_time</span>(time: SystemTime) {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試傳入值{:?}&quot;</span>, time);
+    <span class="hljs-comment">// 已知的Rust 1.0釋出日期時間的毫秒值 2015-05-15T00:00:00 / 2015-05-15 08:00:00</span>
+    <span class="hljs-keyword">const</span> DEFAULT_MILLIS_SINCE_EPOCH: <span class="hljs-type">u128</span> = <span class="hljs-number">1431648000000</span>;
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">difference</span> = <span class="hljs-title function_ invoke__">get_epoch_ms</span>(time) - DEFAULT_MILLIS_SINCE_EPOCH;
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試 時間戳差值: {:?}&quot;</span>, difference);
+
+    <span class="hljs-comment">// 186394645574  求出總秒 186394645.574</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = difference <span class="hljs-keyword">as</span> <span class="hljs-type">f64</span> / <span class="hljs-number">1000</span> <span class="hljs-keyword">as</span> <span class="hljs-type">f64</span>;
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試 求出總秒: {:?}&quot;</span>, temp);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試 求出總分: {:?}&quot;</span>, temp / <span class="hljs-number">60.00</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試 求出總小時: {:?}&quot;</span>, temp / <span class="hljs-number">60.00</span> / <span class="hljs-number">60.00</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;測試 求出總日: {:?}&quot;</span>, temp / <span class="hljs-number">86400.00</span>);
+    <span class="hljs-comment">// println!(&quot;測試 求出總月: {:?}&quot;, temp);</span>
+    <span class="hljs-comment">// println!(&quot;測試 求出總年: {:?}&quot;, temp);</span>
+    <span class="hljs-comment">//    &quot;這裡是輸出&quot;</span>
+}
+</code></pre>
+<h1>use chrono</h1>
+<ul>
+<li>使用主流日期時間格式化庫</li>
+<li><code>Cargo.toml</code>檔案加入庫，執行<code>Cargo build</code>命令</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-section">[dependencies]</span>
+<span class="hljs-attr">chrono</span> = <span class="hljs-string">&quot;0.4&quot;</span> <span class="hljs-comment"># 時間格式化</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 格式化傳入的SystemTime型別的日期時間
+ * 返回格式化後的字串
+ * use example:
+ * format_datetime(time); time為SystemTime型別資料
+ */</span>
+<span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> chrono; <span class="hljs-comment">// 外鏈庫</span>
+<span class="hljs-keyword">use</span> chrono::prelude::*; <span class="hljs-comment">// 引入庫</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">format_datetime</span>(time: SystemTime) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> {
+    <span class="hljs-comment">// 使用as 型別強轉</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">dt</span>: DateTime&lt;Local&gt; = Local.<span class="hljs-title function_ invoke__">timestamp_millis</span>(<span class="hljs-title function_ invoke__">get_epoch_ms</span>(time) <span class="hljs-keyword">as</span> <span class="hljs-type">i64</span>);
+    <span class="hljs-comment">// 格式化時間為人類易讀格式: 2021-04-09 23:54:50</span>
+    dt.format(<span class="hljs-string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>).<span class="hljs-title function_ invoke__">to_string</span>()
+}
+</code></pre>
+<h1>SystemTime To UNIX Timestamp</h1>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 將傳入的值轉為 13位時間戳
+ * SystemTime:引數型別
+ * u128:返回值型別
+ * use example:
+ * get_epoch_ms(time)
+*/</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_epoch_ms</span>(time: SystemTime) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u128</span> {
+    <span class="hljs-comment">// SystemTime::now() 系統當前時間</span>
+    time.<span class="hljs-title function_ invoke__">duration_since</span>(UNIX_EPOCH).<span class="hljs-title function_ invoke__">unwrap</span>().<span class="hljs-title function_ invoke__">as_millis</span>()
+}
+
+<span class="hljs-comment">/**
+ * 格式化傳入的SystemTime型別的日期時間
+ * 返回格式化後的字串
+ * use example:
+ * format_datetime(time); time為SystemTime型別資料
+ */</span>
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">format_datetime</span>(time: SystemTime) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> {
+    <span class="hljs-comment">// 使用as 型別強轉</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">dt</span>: DateTime&lt;Local&gt; = Local.<span class="hljs-title function_ invoke__">timestamp_millis</span>(<span class="hljs-title function_ invoke__">get_epoch_ms</span>(time) <span class="hljs-keyword">as</span> <span class="hljs-type">i64</span>);
+    <span class="hljs-comment">// 格式化時間為人類易讀格式: 2021-04-09 23:54:50</span>
+    dt.format(<span class="hljs-string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>).<span class="hljs-title function_ invoke__">to_string</span>()
+}
+</code></pre>
+<h1>Rust 1.8 SystemTime 處理</h1>
+<pre><code class="hljs"><span class="hljs-comment">// 19位時間戳 轉 10位時間戳</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = time.<span class="hljs-title function_ invoke__">duration_since</span>(UNIX_EPOCH).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;時間倒退&quot;</span>);
+<span class="hljs-comment">// 10位時間戳 轉 13位時間戳</span>
+<span class="hljs-keyword">let</span> <span class="hljs-variable">in_ms</span> = temp.<span class="hljs-title function_ invoke__">as_secs</span>() * <span class="hljs-number">1000</span> + temp.<span class="hljs-title function_ invoke__">subsec_nanos</span>() <span class="hljs-keyword">as</span> <span class="hljs-type">u64</span> / <span class="hljs-number">1_000_000</span>;
+</code></pre>
+<hr>
+<h1>String Operating</h1>
+<ul>
+<li>透過內容位元組組以指定字元進行分割並輸出</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment">/**
+ * 根據文字內容中第一個&gt;，
+ * is_info:true 擷取其之前所有內容為當前文字的資訊。
+ * is_info:false 擷取其之後所有內容為當前文字的正文。
+ * use example:
+ * info_or_content(&amp;temp, false);
+ */</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">info_or_content</span>(s: &amp;<span class="hljs-type">String</span>, is_info: <span class="hljs-type">bool</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">bytes</span> = s.<span class="hljs-title function_ invoke__">as_bytes</span>();
+    <span class="hljs-keyword">for</span> (i, &amp;item) <span class="hljs-keyword">in</span> bytes.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">enumerate</span>() {
+        <span class="hljs-keyword">if</span> item == <span class="hljs-string">b&#x27;&gt;&#x27;</span> {
+            <span class="hljs-keyword">if</span> is_info {
+                <span class="hljs-comment">// 擷取文章資訊</span>
+                <span class="hljs-keyword">return</span> &amp;s[<span class="hljs-number">0</span>..i + <span class="hljs-number">1</span>];
+            }
+            <span class="hljs-comment">// 擷取正文</span>
+            <span class="hljs-keyword">return</span> &amp;s[i + <span class="hljs-number">1</span>..];
+        }
+    }
+    &amp;s[..]
+}
+<span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-built_in">include_str!</span>(<span class="hljs-string">&quot;test.md&quot;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">temp</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(&amp;<span class="hljs-type">str</span>.<span class="hljs-title function_ invoke__">to_string</span>());
+
+<span class="hljs-comment">/**
+ * 根據文字內容中第一個:切分並返回文章資訊的每項屬性值
+ * use example:
+ * info_item(&amp;String::from(&quot;dir:rust&quot;));
+ */</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">info_item</span>(s: &amp;<span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">bytes</span> = s.<span class="hljs-title function_ invoke__">as_bytes</span>();
+    <span class="hljs-keyword">for</span> (i, &amp;item) <span class="hljs-keyword">in</span> bytes.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">enumerate</span>() {
+        <span class="hljs-keyword">if</span> item == <span class="hljs-string">b&#x27;:&#x27;</span> {
+            <span class="hljs-keyword">return</span> &amp;s[i + <span class="hljs-number">1</span>..];
+        }
+    }
+    &amp;s[..]
+}
+</code></pre>
+<hr>
+<h1>MySQL Operating</h1>
+<h1>diesel</h1>
+<ul>
+<li><a href="https://diesel.rs/">主流操作資料庫</a></li>
+<li><code>cargo.toml</code>中新增<code>mysql = &quot;*&quot;</code></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">use</span> mysql::*;
+<span class="hljs-keyword">use</span> mysql::prelude::Queryable;
+<span class="hljs-keyword">use</span> crate::chrono::NaiveDate;
+
+<span class="hljs-comment">// user結構體</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">User</span> {
+    id:<span class="hljs-type">u64</span>,
+    firstname:<span class="hljs-type">String</span>,
+    lastname:<span class="hljs-type">String</span>,
+    phone:<span class="hljs-type">String</span>,
+    reg_date:NaiveDate,
+}
+
+<span class="hljs-comment">// 獲取mysql連線</span>
+ <span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>(){
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">url</span> = <span class="hljs-string">&quot;mysql://root:****@localhost:3306/demo&quot;</span>;
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">pool</span> = Pool::<span class="hljs-title function_ invoke__">new</span>(url).<span class="hljs-title function_ invoke__">unwrap</span>(); <span class="hljs-comment">// 獲取連線池</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">conn</span> = pool.<span class="hljs-title function_ invoke__">get_conn</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<span class="hljs-comment">// 獲取連結</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">res</span> = &amp;<span class="hljs-keyword">mut</span> conn.<span class="hljs-title function_ invoke__">query_map</span>(
+        <span class="hljs-string">&quot;select * from user&quot;</span>,
+        |(id,firstname,lastname,phone,reg_date)|User{
+            id:id,
+            firstname:firstname,
+            lastname:lastname,
+            phone:phone,
+            reg_date:reg_date
+        },
+    ).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Query failed.&quot;</span>);
+
+    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> res {
+        <span class="hljs-built_in">println!</span>(
+            <span class="hljs-string">&quot;{},{},{},{},{:?}&quot;</span>,
+            i.id,i.firstname,i.lastname,i.phone,i.reg_date
+        )
+    }
+}
+</code></pre>
+<hr>
+<h1>WebAssembly</h1>
+<h1>WebAssembly &amp; Deno</h1>
+<ul>
+<li><code>rust</code>程式碼編譯為<code>wasm</code>在<code>deno</code>中使用</li>
+<li><code>deno</code>部分使用 TS/JS 皆可。</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># 建立用於構建wasm庫的專案</span>
+cargo new --lib &lt;project-name&gt;
+<span class="hljs-comment"># 獲取用於生成TS/JS介面卡檔案的CLI工具</span>
+cargo install wasm-bindgen-cli
+<span class="hljs-comment"># wasm-pack編譯deno不友好；ssvmup無win系統版。</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-section">[dependencies]</span>
+<span class="hljs-attr">wasm-bindgen</span> = <span class="hljs-string">&quot;0.2.70&quot;</span> <span class="hljs-comment"># wasm與js互動庫</span>
+
+<span class="hljs-section">[lib]</span>
+<span class="hljs-attr">name</span> = <span class="hljs-string">&quot;libname&quot;</span> <span class="hljs-comment"># 此處定義，命令時就無需再指定</span>
+<span class="hljs-comment"># 告知rust編譯器建立一個沒有啟動函式的wasm二進位制檔案。</span>
+<span class="hljs-comment"># 編譯器建立動態庫(win.dll，linux.so，macos.dylib)</span>
+<span class="hljs-comment"># 由於部署單元為wasm，因此編譯器建立.wasm檔案(如:wisesayings.wasm)</span>
+<span class="hljs-attr">crate-type</span> =[<span class="hljs-string">&quot;cdylib&quot;</span>, <span class="hljs-string">&quot;lib&quot;</span>]
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/* src/lib.rs */</span>
+<span class="hljs-keyword">use</span> wasm_bindgen::prelude::*;
+
+<span class="hljs-meta">#[wasm_bindgen]</span> <span class="hljs-comment">// 指示編譯器該程式碼的目標是wasm檔案</span>
+
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_wise_saying</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> {
+    <span class="hljs-comment">// 使用宏命令。從磁碟中獲取檔案，並將資料載入到記憶體中</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-built_in">include_str!</span>(<span class="hljs-string">&quot;1.md&quot;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-type">str</span>.<span class="hljs-title function_ invoke__">to_string</span>(); <span class="hljs-comment">// 返回字串</span>
+}
+
+<span class="hljs-comment">/* src/main.rs */</span>
+<span class="hljs-keyword">use</span> wisesayings::get_wise_saying;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() <span class="hljs-punctuation">-&gt;</span> std::io::<span class="hljs-type">Result</span>&lt;()&gt; {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">str</span> = <span class="hljs-title function_ invoke__">get_wise_saying</span>();
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, <span class="hljs-type">str</span>);
+    <span class="hljs-title function_ invoke__">Ok</span>(())
+}
+
+<span class="hljs-comment">/* 這是MDN教程的示例程式碼 src/lib.rs 只有這一個檔案 */</span>
+<span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> wasm_bindgen;
+
+<span class="hljs-keyword">use</span> wasm_bindgen::prelude::*;
+
+<span class="hljs-meta">#[wasm_bindgen]</span>
+<span class="hljs-keyword">extern</span> {
+    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">alert</span>(s: &amp;<span class="hljs-type">str</span>);
+}
+
+<span class="hljs-meta">#[wasm_bindgen]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">greet</span>(name: &amp;<span class="hljs-type">str</span>) {
+    <span class="hljs-title function_ invoke__">alert</span>(&amp;<span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;Hello, {}!&quot;</span>, name));
+}
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment"># 將原始碼編譯為wasm</span>
+<span class="hljs-comment"># # --lib 指標對./lib目錄中的原始碼構建庫</span>
+<span class="hljs-comment"># # --target 指明使用編譯器，並將構建工件及wasm檔案儲存到該目錄下</span>
+cargo build --lib --target wasm32-unknown-unknown
+<span class="hljs-comment"># 此處如果報錯 error[E0463]: can&#x27;t find crate for core|  = note: the &quot;wasm32-unknown-unknown&quot; target may not be ins。</span>
+<span class="hljs-comment"># 解決以上報錯問題。將WASM目標新增到Rust工具鏈</span>
+rustup target add wasm32-unknown-unknown
+<span class="hljs-comment"># 重新執行 原始碼編譯為wasm</span>
+
+<span class="hljs-comment"># Rust目標三重新命名約定：ARCH-VENDOR-SYS-ABI</span>
+<span class="hljs-comment"># # ARCH:預期目標體系結構。如用於wasm檔案的wasm32，用於intel晶片的i686</span>
+<span class="hljs-comment"># # VENDOR:釋出目標的供應商。如:Nvidai、Apple</span>
+<span class="hljs-comment"># # SYS:作業系統。如:Windows、Linux</span>
+<span class="hljs-comment"># # ABI:指明過程如何啟動。</span>
+<span class="hljs-comment"># # # wasm32-unknown-unknown指明是一個作業系統及ABI未知的二進位制檔案</span>
+</code></pre>
+<ul>
+<li>使用 Deno 部署二進位制檔案伺服器端</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-comment"># wasm-bindgen 建立介面卡檔案和特殊wasm的命令</span>
+<span class="hljs-comment"># --target deno 編譯為deno版本</span>
+<span class="hljs-comment"># --out-dir ./server 編譯完成，檔案的存放位置</span>
+<span class="hljs-comment"># ./target/xxxx.wasm 表示原始wasm檔案的位置</span>
+wasm-bindgen --target deno ./target/wasm32-unknown-unknown/debug/demo.wasm --out-dir ./server
+<span class="hljs-comment"># server 中可見生成的檔案清單。`xxx_bg.wasm`為 bindgen 縮寫</span>
+<span class="hljs-comment"># # demo_bg.wasm</span>
+<span class="hljs-comment"># # demo_bg.wasm.d.ts</span>
+<span class="hljs-comment"># # demo.d.ts</span>
+<span class="hljs-comment"># # demo.js</span>
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/* server/main.ts 也可以寫js */</span>
+<span class="hljs-keyword">import</span> { serve } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;https://deno.land/std/http/server.ts&quot;</span>;
+<span class="hljs-keyword">import</span> { get_wise_saying } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./wisesayings.js&quot;</span>;
+
+<span class="hljs-keyword">const</span> env = <span class="hljs-title class_">Deno</span>.<span class="hljs-property">env</span>.<span class="hljs-title function_">toObject</span>();
+
+<span class="hljs-keyword">let</span> port = <span class="hljs-number">8080</span>;
+<span class="hljs-keyword">if</span> (env.<span class="hljs-property">WISESAYING_PORT</span>) {
+  port = <span class="hljs-title class_">Number</span>(env.<span class="hljs-property">WISESAYING_PORT</span>);
+}
+
+<span class="hljs-keyword">const</span> server = <span class="hljs-title function_">serve</span>({ <span class="hljs-attr">hostname</span>: <span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-attr">port</span>: <span class="hljs-number">8080</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-string">`HTTP webserver running at <span class="hljs-subst">${<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()}</span>.  Access it at:  http://localhost:<span class="hljs-subst">${port}</span>/`</span>
+);
+
+<span class="hljs-keyword">for</span> <span class="hljs-title function_">await</span> (<span class="hljs-keyword">const</span> request <span class="hljs-keyword">of</span> server) {
+  <span class="hljs-keyword">const</span> saying = <span class="hljs-title function_">get_wise_saying</span>();
+  <span class="hljs-comment">// 亂碼，但如果是給前端，則不會有亂碼問題。</span>
+  request.<span class="hljs-title function_">respond</span>({ <span class="hljs-attr">status</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ <span class="hljs-attr">data</span>: saying }) });
+}
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment">/* MDN教程示例程式碼的編譯後使用 main.js */</span>
+<span class="hljs-keyword">import</span> { serve } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;https://deno.land/std@0.92.0/http/server.ts&quot;</span>;
+<span class="hljs-keyword">import</span> { greet } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./demo.js&quot;</span>;
+
+<span class="hljs-keyword">const</span> s = <span class="hljs-title function_">serve</span>({ <span class="hljs-attr">port</span>: <span class="hljs-number">8080</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;http://localhost:8080/&quot;</span>);
+<span class="hljs-comment">// 注意：需有引數值。否則會報錯。</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&quot;greet:&quot;</span>, <span class="hljs-title function_">greet</span>(<span class="hljs-string">&quot;Lokavit&quot;</span>));
+
+<span class="hljs-keyword">for</span> <span class="hljs-title function_">await</span> (<span class="hljs-keyword">const</span> req <span class="hljs-keyword">of</span> s) {
+  req.<span class="hljs-title function_">respond</span>({ <span class="hljs-attr">body</span>: <span class="hljs-string">&quot;Hello World\n&quot;</span> });
+}
+</code></pre>
+<pre><code class="hljs"><span class="hljs-comment"># cd到server目錄下 執行以下命令</span>
+deno run --allow-read --allow-net --allow-env main.ts
+<span class="hljs-comment"># # --allow-read：允許讀取磁碟檔案</span>
+<span class="hljs-comment"># # --allow-net:允許訪問網路</span>
+<span class="hljs-comment"># # --allow-env:讀取環境變數</span>
+</code></pre>
+<ul>
+<li>前端 fetch 請求並渲染到頁面</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;IE=edge&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>前端<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/marked/marked.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">article</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+      <span class="hljs-comment">// 測試連線Deno伺服器，並讀取返回的資料</span>
+      <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getContent</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`http://localhost:8080/`</span>);
+        <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">json</span>();
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&quot;result:&quot;</span>, result);
+        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;article&quot;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title function_">marked</span>(result.<span class="hljs-property">data</span>);
+      }
+      <span class="hljs-title function_">getContent</span>();
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  
