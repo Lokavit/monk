@@ -109,9 +109,9 @@ export const genContentTpl = (categoryName, meta, str) => {
             else document.documentElement.style.background = '#fff';
         })();
     </script>
-    <link rel="stylesheet" href="../../../assets/variables.css">
-    <link rel="stylesheet" href="../../../assets/typography.css">
-    <link rel="stylesheet" href="../../../assets/main.css">
+    <link rel="stylesheet" href="../../assets/variables.css">
+    <link rel="stylesheet" href="../../assets/typography.css">
+    <link rel="stylesheet" href="../../assets/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
@@ -131,7 +131,7 @@ export const genContentTpl = (categoryName, meta, str) => {
             font-family: 'Noto Sans TC', sans-serif;
         }
     </style>
-    <script type="module" src="../../../src/app.js"></script>
+    <script type="module" src="../../src/app.js"></script>
 </head>
 <body  >
     <header>
