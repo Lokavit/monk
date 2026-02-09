@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足球經理儀表板</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Lucide Icons (用於簡化圖標) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 定義自訂顏色，以匹配截圖中的深藍/紫主題 */
+        :root {
+            --bg-deep-dark: #0e0c24; /* 主背景色 */
+            --bg-card: #15112f;      /* 卡片背景色 */
+            --accent-purple: #9b4fd1; /* 強調紫色 */
+            --border-color: #2c2553;  /* 邊框顏色 */
+            --text-light: #e0e0e0;
+            --text-secondary: #b0b0b0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 將 Tailwind 顏色映射到自訂屬性 */
+        .bg-deep-dark { background-color: var(--bg-deep-dark); }
+        .bg-card { background-color: var(--bg-card); }
+        .text-accent-purple { color: var(--accent-purple); }
+        .border-color { border-color: var(--border-color); }
+
+        /* 確保 Lucide Icons 正確顯示 */
+        .icon { stroke-width: 1.5; }
+
+        /* 隱藏滾動條但保持滾動功能 */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* 專門處理表格的行高和視覺效果 */
+        .table-row-hover:hover {
+            background-color: #1e1940;
+        }
+
+        /* 訊息卡片上的活動指示條 */
+        .active-message-tab {
+            border-bottom: 2px solid var(--accent-purple);
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導航欄 -->
+    <header class="bg-card shadow-lg sticky top-0 z-10 border-b border-color">
+        <div class="flex justify-between items-center px-4 py-2">
+            <!-- 左側 Logo & 導航連結 -->
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2 text-xl font-bold text-accent-purple">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    <span>PORTAL</span>
+                </div>
+                <!-- 主要導航項目 -->
+                <nav class="hidden md:flex space-x-4 text-sm text-gray-300">
+                    <a href="#" class="py-2 border-b-2 border-accent-purple text-white font-medium">總覽</a>
+                    <a href="#" class="py-2 hover:text-white">球隊</a>
+                    <a href="#" class="py-2 hover:text-white">招募</a>
+                    <a href="#" class="py-2 hover:text-white">賽程日</a>
+                    <a href="#" class="py-2 hover:text-white">生涯</a>
+                    <div class="group relative">
+                        <a href="#" class="py-2 hover:text-white flex items-center">更多 <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i></a>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- 右側工具與日期 -->
+            <div class="flex items-center space-x-4">
+                <i data-lucide="search" class="w-5 h-5 text-gray-400 cursor-pointer hover:text-white"></i>
+                <i data-lucide="bell" class="w-5 h-5 text-gray-400 cursor-pointer hover:text-white"></i>
+                <i data-lucide="settings" class="w-5 h-5 text-gray-400 cursor-pointer hover:text-white"></i>
+                <div class="text-sm text-gray-300 border-l border-gray-700 pl-4">
+                    4. JAN 2026
+                </div>
+                <button class="px-4 py-2 bg-accent-purple hover:bg-purple-700 text-white rounded-md font-semibold text-sm transition duration-150">
+                    繼續
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="p-4 md:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-deep-dark">
+        
+        <!-- 左側 - 訊息/收件箱 (佔 3 欄) -->
+        <div class="lg:col-span-3 space-y-6">
+            <div class="bg-card p-4 rounded-lg shadow-xl border border-color h-full flex flex-col">
+                <h2 class="text-lg font-semibold mb-4">訊息</h2>
+                
+                <!-- 訊息分類 Tabs -->
+                <div class="flex space-x-4 text-sm text-gray-400 mb-4 border-b border-color">
+                    <a href="#" id="all-tab" class="py-2 px-2 active-message-tab transition duration-150">全部</a>
+                    <a href="#" id="new-tab" class="py-2 px-2 hover:text-white transition duration-150">新訊息 (<span id="new-count">3</span>)</a>
+                    <a href="#" id="tasks-tab" class="py-2 px-2 hover:text-white transition duration-150">任務</a>
+                    <a href="#" id="unread-tab" class="py-2 px-2 hover:text-white transition duration-150">未讀</a>
+                </div>
+
+                <!-- 訊息列表 -->
+                <div id="message-list" class="space-y-1 overflow-y-auto hide-scrollbar flex-grow">
+                    <!-- 訊息項目範例 (今日) -->
+                    <p class="text-xs text-gray-500 pt-2 pb-1 sticky top-0 bg-card z-[5]">今日 Sat 3rd Jan</p>
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer border-l-4 border-accent-purple bg-[#1c1838]">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">George Lynch</span>
+                            <span class="text-xs text-gray-400">Injury to Adam Webster</span>
+                        </div>
+                        <span class="text-xs text-gray-500">16:20</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Simon Newton</span>
+                            <span class="text-xs text-gray-400">Recruitment Focus Update</span>
+                        </div>
+                        <span class="text-xs text-gray-500">15:35</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Jeff Waters</span>
+                            <span class="text-xs text-gray-400">Squad Dynamics Update</span>
+                        </div>
+                        <span class="text-xs text-gray-500">12:00</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">James Field</span>
+                            <span class="text-xs text-gray-400">Match Preparation: Manchester United</span>
+                        </div>
+                        <span class="text-xs text-gray-500">15:40</span>
+                    </div>
+                    
+                    <!-- 訊息項目範例 (昨日) -->
+                    <p class="text-xs text-gray-500 pt-2 pb-1 sticky top-0 bg-card z-[5]">昨日 Fri 2nd Jan</p>
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">John Smith</span>
+                            <span class="text-xs text-gray-400">Brighton Training Week in Review</span>
+                        </div>
+                        <span class="text-xs text-gray-500">11:20</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">James Field</span>
+                            <span class="text-xs text-gray-400">Brighton Tactics Induction</span>
+                        </div>
+                        <span class="text-xs text-gray-500">10:30</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Dave Barnett</span>
+                            <span class="text-xs text-gray-400">Tottenham Scout Report</span>
+                        </div>
+                        <span class="text-xs text-gray-500">10:50</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">John Smith</span>
+                            <span class="text-xs text-gray-400">Fitness Tests</span>
+                        </div>
+                        <span class="text-xs text-gray-500">12:05</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Dave Barnett</span>
+                            <span class="text-xs text-gray-400">Man City Scout Report</span>
+                        </div>
+                        <span class="text-xs text-gray-500">09:30</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center text-xs text-gray-500 border-t border-color pt-3">
+                    [響應式 UI - 最終體驗可能不同]
+                </div>
+            </div>
+        </div>
+
+        <!-- 中間 - 新聞、報告、日曆 (佔 6 欄) -->
+        <div class="lg:col-span-6 space-y-6">
+            
+            <!-- 1. 頂部新聞 (Team of the Week) -->
+            <div class="bg-card p-6 rounded-lg shadow-xl border border-color">
+                <div class="flex justify-between items-start mb-4 border-b border-color pb-3">
+                    <h3 class="text-sm font-semibold text-accent-purple flex items-center">
+                        <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        <span>查看所有新聞</span>
+                    </h3>
+                    <span class="text-xs text-gray-500">Team of the Week</span>
+                </div>
+                
+                <div class="flex justify-between items-center space-x-4">
+                    <!-- 新聞內容 -->
+                    <div class="flex-grow">
+                        <h2 class="text-2xl font-bold mb-2">本週最佳陣容公佈</h2>
+                        <p class="text-sm text-gray-300 mb-3 leading-relaxed">
+                            David Raya, Bryan Ali-Nouni, William Saliba, Luke O'Nien, Josko Gvardiol, Sander Berge, Ezoic La Fee, Bryan Mbeumo, Bryon Gruba, and Youssef Wissa were selected in the Premier League Team of the Week.
+                        </p>
+                        <div class="text-xs text-gray-500 flex items-center">
+                            English Premier League <span class="mx-2">•</span> 1 hour ago
+                        </div>
+                    </div>
+                    <!-- 圖標佔位符 -->
+                    <div class="w-24 h-24 flex-shrink-0 flex items-center justify-center text-gray-600">
+                        <i data-lucide="trophy" class="w-20 h-20 icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 球隊報告 & 賽程 (分兩欄) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 球隊報告卡 -->
+                <div class="bg-card p-4 rounded-lg shadow-xl border border-color">
+                    <h3 class="text-sm font-semibold text-accent-purple mb-4 border-b border-color pb-3">球隊報告</h3>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 flex-shrink-0">
+                            <!-- 曼聯 Logo Placeholder -->
+                            <div class="w-10 h-10 bg-red-800 rounded-full flex items-center justify-center text-white text-sm font-bold">MU</div>
+                        </div>
+                        <div>
+                            <p class="text-base font-medium">Man United (H)</p>
+                            <p class="text-xs text-gray-400">8th in Premier League, Today</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-color">
+                        <p class="text-xs text-gray-400 mb-1">Form:</p>
+                        <div class="flex space-x-1 text-sm">
+                            <span class="w-4 h-4 bg-green-500 rounded-sm" title="Win"></span>
+                            <span class="w-4 h-4 bg-green-500 rounded-sm" title="Win"></span>
+                            <span class="w-4 h-4 bg-gray-500 rounded-sm" title="Draw"></span>
+                            <span class="w-4 h-4 bg-red-600 rounded-sm" title="Loss"></span>
+                            <span class="w-4 h-4 bg-green-500 rounded-sm" title="Win"></span>
+                        </div>
+                        <p class="text-xs text-green-400 mt-2 flex items-center">
+                            <i data-lucide="check-circle" class="w-3 h-3 mr-1"></i>
+                            更好的表現
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 賽程卡 -->
+                <div class="bg-card p-4 rounded-lg shadow-xl border border-color">
+                    <h3 class="text-sm font-semibold text-accent-purple mb-4 border-b border-color pb-3">賽程</h3>
+                    <p class="text-xs text-gray-500 mb-2">GW19 | 28/01/25</p>
+                    <div class="space-y-3 text-sm">
+                        <!-- 賽程項目 1 -->
+                        <div class="flex justify-between items-center py-2 px-3 bg-[#1c1838] rounded-md">
+                            <span class="text-gray-300">Brighton</span>
+                            <div class="flex items-center space-x-2 font-bold">
+                                <span>2 - 1</span>
+                                <span class="text-gray-400">Everton</span>
+                            </div>
+                        </div>
+                        <!-- 賽程項目 2 (當前關注) -->
+                        <div class="flex justify-between items-center py-2 px-3 border border-accent-purple rounded-md bg-[#1c1838]">
+                            <span class="text-gray-300">Man City</span>
+                            <div class="flex items-center space-x-2 font-bold">
+                                <span class="text-accent-purple">1 - 1</span>
+                                <span class="text-gray-400">Spurs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 日曆 -->
+            <div class="bg-card p-4 rounded-lg shadow-xl border border-color">
+                <h3 class="text-sm font-semibold text-accent-purple mb-4 border-b border-color pb-3">日曆 2025</h3>
+                
+                <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium text-gray-400 mb-2">
+                    <span>Sun</span>
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thur</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                </div>
+
+                <div class="grid grid-cols-7 gap-1 text-center text-sm">
+                    <!-- 12月 30, 31 (上個月) -->
+                    <span class="text-gray-600 py-1">Dec 29</span>
+                    <span class="text-gray-600 py-1">30</span>
+                    <span class="text-gray-600 py-1">31</span>
+                    
+                    <!-- 1月 1, 2, 3, 4 (當月) -->
+                    <span class="py-1">Jan 1</span>
+                    <span class="py-1">2</span>
+                    <div class="relative py-1 flex flex-col items-center justify-center bg-accent-purple/20 rounded-md border border-accent-purple">
+                        <span class="text-gray-300 text-sm">3</span>
+                        <!-- 今天的指示點 -->
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full"></span>
+                    </div>
+                    <div class="relative py-1 flex flex-col items-center justify-center bg-accent-purple text-white rounded-md">
+                        <span class="text-sm">4</span>
+                    </div>
+
+                    <!-- 1月 5 - 11 -->
+                    <span class="py-1">5</span>
+                    <span class="py-1">6</span>
+                    <span class="py-1">7</span>
+                    <span class="py-1">8</span>
+                    <span class="py-1">9</span>
+                    <span class="py-1">10</span>
+                    <span class="py-1">11</span>
+                </div>
+
+                <!-- 日曆事件區塊 -->
+                <div class="mt-4 pt-4 border-t border-color space-y-3">
+                    <div class="flex justify-between items-center text-xs">
+                        <div class="flex items-center text-gray-300">
+                            <div class="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
+                            任務
+                        </div>
+                        <span class="text-gray-500">Dec 30</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <div class="flex items-center text-gray-300">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                            開啟
+                        </div>
+                        <span class="text-gray-500">Jan 1</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs p-2 rounded-md bg-[#1c1838] border-l-4 border-accent-purple">
+                        <div class="flex items-center text-gray-300">
+                            <div class="w-3 h-3 bg-accent-purple rounded-full mr-2"></div>
+                            <span class="font-semibold">H</span>
+                            <span class="ml-1 text-gray-400">15:00</span>
+                        </div>
+                        <span class="text-gray-500">Jan 4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側 - 賽程表與積分榜 (佔 3 欄) -->
+        <div class="lg:col-span-3 space-y-6">
+            
+            <!-- 1. 賽程表小部件 -->
+            <div class="bg-card p-4 rounded-lg shadow-xl border border-color">
+                <h3 class="text-sm font-semibold text-accent-purple mb-4 border-b border-color pb-3">賽程表</h3>
+                <div class="space-y-1 text-xs">
+                    <!-- 表格頭部 -->
+                    <div class="grid grid-cols-7 gap-1 text-gray-500 font-semibold uppercase">
+                        <span class="col-span-2">Fri 28/12</span>
+                        <span class="col-span-2">隊伍</span>
+                        <span class="text-right">TGT</span>
+                        <span class="text-right">PRM</span>
+                        <span class="text-right">A-Z</span>
+                    </div>
+                    <!-- 賽程項目 -->
+                    <div class="grid grid-cols-7 gap-1 py-1 table-row-hover rounded-md items-center">
+                        <span class="col-span-2 text-gray-300">TOTTENHAM</span>
+                        <span class="col-span-2 text-gray-400">PRM</span>
+                        <span class="text-right text-green-400">4-2</span>
+                        <span class="text-right text-gray-500">H</span>
+                        <span class="text-right text-gray-500">1-1</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 py-1 table-row-hover rounded-md items-center">
+                        <span class="col-span-2 text-gray-300">SUN 28/12</span>
+                        <span class="col-span-2 text-gray-400">EVE</span>
+                        <span class="text-right text-red-500">2-1</span>
+                        <span class="text-right text-gray-500">H</span>
+                        <span class="text-right text-gray-500">2-1</span>
+                    </div>
+                    <!-- 其他賽程項目... -->
+                    <div class="text-sm text-gray-500 pt-2 pb-1">Sat 04/01</div>
+                    <div class="grid grid-cols-7 gap-1 py-1 table-row-hover rounded-md items-center">
+                        <span class="col-span-2 text-gray-300">MAN U</span>
+                        <span class="col-span-2 text-gray-400">PRM</span>
+                        <span class="text-right text-gray-300">H</span>
+                        <span class="text-right text-gray-500">16:30</span>
+                        <span class="text-right text-gray-500"></span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 py-1 table-row-hover rounded-md items-center">
+                        <span class="col-span-2 text-gray-300">SUN 18/01</span>
+                        <span class="col-span-2 text-gray-400">BYE</span>
+                        <span class="text-right text-gray-300">H</span>
+                        <span class="text-right text-gray-500">15:00</span>
+                        <span class="text-right text-gray-500"></span>
+                    </div>
+                    <!-- ...更多賽程 -->
+                </div>
+            </div>
+            
+            <!-- 2. 積分榜 (Stages) -->
+            <div class="bg-card p-4 rounded-lg shadow-xl border border-color">
+                <h3 class="text-sm font-semibold text-accent-purple mb-4 border-b border-color pb-3">階段</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-xs">
+                        <thead>
+                            <tr class="text-gray-500 uppercase font-semibold border-b border-color">
+                                <th class="py-2 text-left w-6">Pos.</th>
+                                <th class="py-2 text-left">Team</th>
+                                <th class="py-2 text-right">Pld</th>
+                                <th class="py-2 text-right">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 歐冠區 (綠色) -->
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-green-400 font-bold">1</td>
+                                <td class="py-2">Liverpool</td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">44</td>
+                            </tr>
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-green-400 font-bold">2</td>
+                                <td class="py-2">Man City</td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">38</td>
+                            </tr>
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-green-400 font-bold">3</td>
+                                <td class="py-2">Chelsea</td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">33</td>
+                            </tr>
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-green-400 font-bold">4</td>
+                                <td class="py-2">Tottenham</td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">30</td>
+                            </tr>
+                            
+                            <!-- 歐聯/歐協區 (藍色) -->
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-blue-400 font-bold">5</td>
+                                <td class="py-2">Brighton <span class="text-accent-purple font-medium">(你)</span></td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">29</td>
+                            </tr>
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-blue-400 font-bold">6</td>
+                                <td class="py-2">Forest</td>
+                                <td class="py-2 text-right">20</td>
+                                <td class="py-2 text-right">26</td>
+                            </tr>
+
+                            <!-- 降級區 (紅色) -->
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-gray-300">18</td>
+                                <td class="py-2 text-red-500">Everton</td>
+                                <td class="py-2 text-right">21</td>
+                                <td class="py-2 text-right">18</td>
+                            </tr>
+                            <tr class="table-row-hover border-b border-color/50">
+                                <td class="py-2 text-gray-300">19</td>
+                                <td class="py-2 text-red-500">Sheffield U</td>
+                                <td class="py-2 text-right">21</td>
+                                <td class="py-2 text-right">15</td>
+                            </tr>
+                            <tr class="table-row-hover">
+                                <td class="py-2 text-gray-300">20</td>
+                                <td class="py-2 text-red-500">Luton</td>
+                                <td class="py-2 text-right">21</td>
+                                <td class="py-2 text-right">10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-color text-xs text-gray-500">
+                    <p>◼ Qualification</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // 1. 初始化 Lucide Icons
+        // 這是為了將 HTML 中的 data-lucide 屬性轉換為 SVG 圖標
+        lucide.createIcons();
+
+        // 2. 簡單的 Tab 切換邏輯 (JavaScript)
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = [
+                { id: 'all-tab', count: null },
+                { id: 'new-tab', count: 3 },
+                { id: 'tasks-tab', count: null },
+                { id: 'unread-tab', count: null }
+            ];
+            
+            const messageList = document.getElementById('message-list');
+
+            // 處理 Tab 點擊事件
+            tabs.forEach(tab => {
+                const element = document.getElementById(tab.id);
+                if (element) {
+                    element.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        // 移除所有 Tab 的 active 樣式
+                        tabs.forEach(t => {
+                            document.getElementById(t.id).classList.remove('active-message-tab');
+                        });
+                        
+                        // 為點擊的 Tab 添加 active 樣式
+                        element.classList.add('active-message-tab');
+
+                        // 這裡可以加入根據 Tab 過濾訊息列表的邏輯
+                        // 為了簡潔，我們只模擬切換
+                        const tabName = element.textContent.trim().split(' ')[0];
+                        if (tabName === '新訊息') {
+                            messageList.innerHTML = `
+                                <p class="text-xs text-gray-500 pt-2 pb-1 sticky top-0 bg-card z-[5]">今日 Sat 3rd Jan (新訊息)</p>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer border-l-4 border-accent-purple bg-[#1c1838]">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">George Lynch</span>
+                                        <span class="text-xs text-gray-400">Injury to Adam Webster</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">16:20</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Simon Newton</span>
+                                        <span class="text-xs text-gray-400">Recruitment Focus Update</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">15:35</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Jeff Waters</span>
+                                        <span class="text-xs text-gray-400">Squad Dynamics Update</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">12:00</span>
+                                </div>
+                                <div class="mt-4 text-center text-xs text-gray-500">[僅顯示新訊息]</div>
+                            `;
+                        } else {
+                            // 恢復到完整的 '全部' 列表
+                            messageList.innerHTML = `
+                                <p class="text-xs text-gray-500 pt-2 pb-1 sticky top-0 bg-card z-[5]">今日 Sat 3rd Jan</p>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer border-l-4 border-accent-purple bg-[#1c1838]">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">George Lynch</span>
+                                        <span class="text-xs text-gray-400">Injury to Adam Webster</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">16:20</span>
+                                </div>
+
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Simon Newton</span>
+                                        <span class="text-xs text-gray-400">Recruitment Focus Update</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">15:35</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Jeff Waters</span>
+                                        <span class="text-xs text-gray-400">Squad Dynamics Update</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">12:00</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">James Field</span>
+                                        <span class="text-xs text-gray-400">Match Preparation: Manchester United</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">15:40</span>
+                                </div>
+                                
+                                <p class="text-xs text-gray-500 pt-2 pb-1 sticky top-0 bg-card z-[5]">昨日 Fri 2nd Jan</p>
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">John Smith</span>
+                                        <span class="text-xs text-gray-400">Brighton Training Week in Review</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">11:20</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">James Field</span>
+                                        <span class="text-xs text-gray-400">Brighton Tactics Induction</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">10:30</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Dave Barnett</span>
+                                        <span class="text-xs text-gray-400">Tottenham Scout Report</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">10:50</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">John Smith</span>
+                                        <span class="text-xs text-gray-400">Fitness Tests</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">12:05</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 rounded-lg hover:bg-[#201c3d] cursor-pointer">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">Dave Barnett</span>
+                                        <span class="text-xs text-gray-400">Man City Scout Report</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">09:30</span>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

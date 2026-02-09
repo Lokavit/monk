@@ -1,0 +1,64 @@
+<!--
+Filename: c:\GIT\archive\example\grid-layout1.html
+Path: c:\GIT\archive\example
+Created Date: Sunday, April 2nd 2023, 12:06:05 pm
+Author: Zen Prajna
+
+Copyright (c) 2023 Lokavit
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Grid 水平延展</title>
+</head>
+<style>
+    body {
+        line-height: 1.5;
+    }
+
+    .container {
+        margin: 50px;
+        display: grid;
+        /* 缩写法，其中斜线左为横，右为列 */
+        grid-template: 1fr 1fr/2fr 2fr 2fr 2fr 2fr;
+        /* grid-auto-flow: row; */
+        grid-auto-flow: column;
+        grid-gap: 40px;
+    }
+
+    .container div {
+        width: 200px;
+        height: auto;
+        border: 2px solid #00bcd4;
+    }
+
+    .item-a {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        justify-self: center;
+    }
+
+    .item-e {
+        /* 标志了 item-e 在第五列 */
+        grid-column: 5;
+        /* 标志了 item-e 在第五列 */
+        grid-row: 1 / 3;
+    }
+</style>
+
+<body>
+    <section class="container">
+        <div class="item-a">item-a<br />item-a<br />item-a<br />item-a<br />item-a<br /></div>
+        <div class="item-b">item-b</div>
+        <div class="item-c">item-c</div>
+        <div class="item-d">item-d</div>
+        <div class="item-e">item-e</div>
+    </section>
+</body>
+
+</html>

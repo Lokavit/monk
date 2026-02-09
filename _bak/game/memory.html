@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Memory Game</title>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+        }
+
+        .memory-game {
+            width: 800px;
+            height: 800px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            perspective: 1000px;
+        }
+
+        .memory-card {
+            width: calc(25% - 10px);
+            height: calc(33.333% - 10px);
+            margin: 5px;
+            position: relative;
+            transform: scale(1);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .memory-card:active {
+            transform: scale(0.97);
+            transition: transform 0.2s;
+        }
+
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+
+        /* 阳面 */
+        .front-face {
+            background-color: tomato;
+            transform: rotateY(180deg);
+        }
+
+        /* 阴面 */
+        .back-face {
+            background-color: skyblue;
+        }
+
+        /* 阴面 子级元素 */
+        .back-face>p {
+            margin: 0 40%;
+            font-size: 1.5rem;
+        }
+
+        /* 阴阳双面 通用样式 */
+        .front-face,
+        .back-face {
+            width: 80%;
+            height: 85%;
+            padding: 20px;
+            position: absolute;
+            border-radius: 5px;
+            backface-visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="memory-game">
+        <div class="memory-card" data-role="tianzifo">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_tianzifo.jpg" alt="tianzifo" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="tianzifo">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_tianzifo.jpg" alt="tianzifo" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+
+        <div class="memory-card" data-role="dirulai">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_dirulai.jpg" alt="dirulai" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="dirulai">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_dirulai.jpg" alt="dirulai" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+
+        <div class="memory-card" data-role="shu">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_shu.jpg" alt="shu" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="shu">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_shu.jpg" alt="shu" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+
+        <div class="memory-card" data-role="jiujiefohuang">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_jiujiefohuang.jpg"
+                alt="jiujiefohuang" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="jiujiefohuang">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_jiujiefohuang.jpg"
+                alt="jiujiefohuang" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+
+        <div class="memory-card" data-role="yunguodihuan">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_yunguodihuan.jpg"
+                alt="yunguodihuan" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="yunguodihuan">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_yunguodihuan.jpg"
+                alt="yunguodihuan" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+
+        <div class="memory-card" data-role="sanyinlou">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_sanyinlou.jpg" alt="sanyinlou" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+        <div class="memory-card" data-role="sanyinlou">
+            <img class="front-face" src="https://drama.pili.com.tw/role/image/main_sanyinlou.jpg" alt="sanyinlou" />
+            <div class="back-face">
+                <p>霹<br />雳<br />布<br />袋<br />戏</p>
+            </div>
+        </div>
+    </section>
+    <script>
+        // "use strict";
+
+        const cards = document.querySelectorAll(".memory-card");
+
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add("flip");
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.role === secondCard.dataset.role;
+
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.removeEventListener("click", flipCard);
+            secondCard.removeEventListener("click", flipCard);
+
+            resetBoard();
+        }
+
+        /**  */
+        function unflipCards() {
+            lockBoard = true;
+
+            setTimeout(() => {
+                firstCard.classList.remove("flip");
+                secondCard.classList.remove("flip");
+
+                resetBoard();
+            }, 1500);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        (function shuffle() {
+            cards.forEach((card) => {
+                let randomPos = Math.floor(Math.random() * 12);
+                card.style.order = randomPos;
+            });
+        })();
+
+        cards.forEach((card) => card.addEventListener("click", flipCard));
+
+    </script>
+</body>
+
+</html>

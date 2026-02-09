@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Components</title>
+
+</head>
+
+<body>
+  <!-- 太极展示 -->
+  <tai-chi></tai-chi>
+
+  <!-- Modal -->
+  <h3>Please confirme your choice</h3>
+
+  <button onclick="openFormModal()">Open Form</button>
+
+  <!-- 带有遮罩的 -->
+  <dd-modal id="form_modal">
+    <h1 slot="title">MASK</h1>
+    <div slot="main">
+      <form action="">这里可以放表单或其他内容</form>
+    </div>
+  </dd-modal>
+
+  <!-- 组件   太极 -->
+  <!-- <script src="./taichi/taichi-html.js"></script>
+  <script src="./taichi/taichi-css.js"></script>
+  <script src="./taichi/taichi.js"></script> -->
+  <script>
+
+    /*
+     * doc:太极的css文件
+     */
+
+    //  "use strict";
+
+    const TaiChiCSS = `
+    <style>
+        /* 太极的包裹器 */
+        .wrapper{
+            width: 300px;
+            height: 300px;
+            animation: rotation 2s linear infinite;
+            position: relative;
+            margin: 0 auto;
+        }
+        .taichi{
+            position: absolute;
+            width: 0px;
+            height: 300px;
+            box-shadow: 0 0 100px rgb(238, 234, 11);
+            border-left: 150px solid #fff;
+            border-right: 150px solid #000;
+            border-radius: 100%;
+        }
+        .taichi:before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+            background: #000;
+            box-shadow: 0 0 0 50px #fff;
+        }
+        .taichi:after {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 200px;
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+            background: #fff;
+            box-shadow: 0 0 0 50px #000;
+        }
+        /* 太极自转的动画 */
+        @keyframes rotation {
+            0% {-webkit-transform: rotate(0deg);} 
+            25% {-webkit-transform: rotate(90deg);}
+            50% {-webkit-transform: rotate(180deg);}
+            75% {-webkit-transform: rotate(270deg);}
+            100% {-webkit-transform: rotate(360deg);}
+        }
+    </style>`;
+
+    /*
+     * doc:太极的html结构
+     */
+
+    // "use strict";
+
+    const TaiChiHTML = `
+    <div class="wrapper">
+        <div class="taichi"></div>
+    </div>
+    `;
+
+    /*
+     * doc:太极组件主文件
+     */
+
+    //  "use strict";
+
+    /** 定义组件名 */
+    const DD_TAICHI = `tai-chi`;
+
+    // 创建模板标签
+    const template = document.createElement("template");
+    // 将导入的内容，拼接成模板标签的完整内容，
+    template.innerHTML = `${TaiChiCSS}${TaiChiHTML}`;
+
+    class TaiChiComponent extends HTMLElement {
+      constructor() {
+        super();
+        // 创建一个shadowroot。 attachShadow函数 返回 shadow root
+        this._shadowRoot = this.attachShadow({
+          // 设定封装层级。值为['open']或者['closed']
+          mode: "open",
+        });
+        // 将模板内容 克隆到shadowRoot 下
+        this._shadowRoot.appendChild(template.content.cloneNode(true));
+      }
+      /** 自定义元素加入页面时，被调用 */
+      connectedCallback() { }
+    }
+
+    customElements.define(DD_TAICHI, TaiChiComponent);
+  </script>
+
+  <!-- 组件   modal -->
+  <!-- <script src="./modal/modal-html.js"></script>
+  <script src="./modal/modal-css.js"></script>
+  <script src="./modal/modal.js"></script> -->
+
+  <script>
+    /*
+     * doc:modal样式
+     */
+
+    const Modal_CSS = `
+    <style>
+        #backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.25);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal {
+            position: absolute;
+            top: 10vh;
+            left: 25%;
+            z-index: 91;
+            width: 480px;
+            background: #333;
+            border-radius: 0.5rem;
+            border: 0.5rem solid #333;
+            border-top: 3rem solid #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease-out;
+        }
+        /* header固定在modal的border-top中 */
+        header {
+            position:absolute;
+            top: -60px;
+            left: -6px;
+            padding: 1rem;
+            padding-left:2rem;
+            padding-bottom:0.5rem;
+            line-height:1rem;
+            color:#FFF;
+            width: 90%;
+            height:1rem;
+        }
+        /* 最小化按钮 */
+        #min{
+            position: absolute;
+            right: 9%;
+            top: 30%;
+            cursor: pointer;
+            color:#ffd205;
+            font-weight: 900;
+        }
+        /* 关闭窗体按钮 */
+        #close {
+            position: absolute;
+            top: 30%;
+            right: 3%;
+            cursor: pointer;
+            color:#ffd205;
+        }
+        #min:hover, #close:hover{
+            color:aqua;
+        }
+        ::slotted(h1) {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+        :host([opened]) #backdrop,
+        :host([opened]) .modal
+            {
+            opacity: 1;
+            pointer-events: all;
+        }
+        #actions {
+            border-top: 1px solid #ccc;
+            padding: 1rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        #action button {
+            margin: 0 .25rem;
+        }
+        #actions .cancel {
+            background: crimson;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+        #actions .ok {
+            background: green;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+        /* 拖拽标识区域 */
+        .drag {
+            width: 88%;
+            height: 15%;
+            position: absolute;
+            left: -1%;
+            top: -19%;
+        }
+        /* 缩放标识区域 */
+        .resize {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-right: 6px solid #b2b2b2;
+            border-bottom: 6px solid #b2b2b2;
+            right: -6px;
+            bottom: -6px;
+            overflow: hidden;
+            cursor: nw-resize;
+        }
+    </style>`;
+
+    /*
+     * doc:modal结构
+     */
+
+    /** 写法一: 常量赋值HTML结构字符串 */
+    // const Modal_HTML = `这里写组件的HTML结构`;
+
+    /**
+     * 写法二: 常量函数式写法
+     * @param {*} title HTML结构组件中所需参数
+     * @returns 返回自定义组件HTML结构
+     */
+    const Modal_HTML = (title) => {
+      return `
+    <div id="backdrop"></div>
+    <div class="modal">
+        <header>
+            <div>${title}</div>
+            <div id="min">-</div>
+            <div id="close">X</div>
+        </header>
+        <section id="body">
+            <slot name="body"></slot>
+        </section>
+        <section id="actions">
+            <button id="cancel-button" class="cancel">Cancel</button>
+            <button id="confirm-button" class="ok">Okay</button>
+        </section> 
+    </div>`;
+    };
+
+
+    /* doc:modal组件 */
+
+    /** 定义本组件在html中使用时的元素标签名 */
+    const DD_MODAL = `dd-modal`;
+
+    class Modal extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+        /** 是否打开的标识 */
+        this._isOpen = false;
+        /** 窗体的title */
+        this._title = "默认值:我是个Title";
+        /** 窗体挂载于shadowRoot下 */
+        this.shadowRoot.innerHTML = `${Modal_CSS}${Modal_HTML(this._title)}`;
+        /** 当前组件 */
+        this.modal = this.shadowRoot.querySelector(".modal");
+
+        /** 点击背景，有时需要直接关闭对话框 */
+        this.backdrop = this.shadowRoot.getElementById("backdrop");
+        this.backdrop.addEventListener("click", this._cancel.bind(this));
+        /** 底部操作区域 取消按钮 */
+        this.btn_cancel = this.shadowRoot.getElementById("cancel-button");
+        this.btn_cancel.addEventListener("click", this._cancel.bind(this));
+        /** 底部操作区域 确认按钮 */
+        this.btn_confirm = this.shadowRoot.getElementById("confirm-button");
+        this.btn_confirm.addEventListener("click", this._confirm.bind(this));
+        /** 右上角 关闭按钮 */
+        this.btn_close = this.shadowRoot.getElementById("close");
+        this.btn_close.addEventListener("click", this._cancel.bind(this));
+        /** 右上角 最小按钮 */
+        this.btn_min = this.shadowRoot.getElementById("min");
+        this.btn_min.addEventListener("click", this._cancel.bind(this));
+      }
+
+      connectedCallback() {
+        /** 如果当前自定义组件元素设置类以下属性，则进行相关处理
+         * 去除遮罩，去除底部按钮组
+         * 将本窗体设置到右下角位置
+         * use: <dd-modal id="form_modal" not-mask>
+         */
+        if (this.hasAttribute("not-mask")) {
+          // 遮罩层
+          this.backdrop.style.display = "none";
+        }
+
+        /** 如果元素设置了 拖拽及缩放属性 */
+        if (this.hasAttribute("not-actions")) {
+          // 底部操作区域
+          let actions = this.shadowRoot.querySelector("#actions");
+          actions.style.display = "none";
+        }
+      }
+
+      /** 父组件  属性发生变化时，被调用 */
+      attributeChangedCallback(name, oldValue, newValue) {
+        console.log("属性发生变化:", name, oldValue, newValue);
+        // if (name === 'opened') {
+        // if (this.hasAttribute("opened")) {
+        //   // this.shadowRoot.querySelector('#backdrop').style.opacity = 1;
+        //   // this.shadowRoot.querySelector('#backdrop').style.pointerEvents = 'all';
+        //   // this.shadowRoot.querySelector('#modal').style.opacity = 1;
+        //   // this.shadowRoot.querySelector('#modal').style.pointerEvents = 'all';
+        //   this.isOpen = true;
+        // } else {
+        //   this.isOpen = false;
+        // }
+        // // }
+      }
+
+      // static get observedAttribute() {
+      //     return ['opened'];
+      // }
+      open = () => {
+        this.setAttribute("opened", "");
+        this._isOpen = true;
+      };
+
+      hide = () => {
+        if (this.hasAttribute("opened")) {
+          this.removeAttribute("opened");
+          this._isOpen = false;
+        }
+      };
+
+      _cancel = () => {
+        this.hide();
+        const cancelEvent = new Event("cancelled", {
+          bubbles: true,
+          composed: true,
+        });
+        this.dispatchEvent(cancelEvent);
+      };
+
+      _confirm = () => {
+        this.hide();
+        const confirmedEvent = new Event("confirmed");
+        this.dispatchEvent(confirmedEvent);
+      };
+    }
+
+    customElements.define(DD_MODAL, Modal);
+
+  </script>
+
+
+  <script>
+
+    const modalForm = document.querySelector("#form_modal");
+    modalForm.addEventListener("confirmed", () => {
+      console.log("提交表单");
+    });
+
+    modalForm.addEventListener("cancelled", () => {
+      console.log("关闭表单");
+    });
+
+    openFormModal = () => {
+      if (!modalForm.isOpen) {
+        modalForm.open();
+        console.log("open", modalForm.isOpen);
+      }
+    };
+
+
+  </script>
+</body>
+
+</html>

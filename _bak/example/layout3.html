@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width,user-scale=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" />
+  <title>局部滚动</title>
+  <!-- <link rel="stylesheet" href="./layout3.css" /> -->
+  <style>
+    /* doc: header及footer固定，main滚动 */
+
+    * {
+      box-sizing: border-box;
+      /* 视口计算的方式设置字体，使用计算，已保证移动端字号不能超出最小 */
+      font-size: calc(14px + 1vw);
+    }
+
+    html {
+      height: -webkit-fill-available;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      /* mobile viewport bug fix */
+      min-height: -webkit-fill-available;
+    }
+
+    body {
+      line-height: 1.4;
+    }
+
+    header,
+    footer {
+      color: aqua;
+      background: #333;
+    }
+
+    header,
+    footer,
+    main {
+      padding: 1rem;
+    }
+
+    main {
+      /* background: #eee; */
+      flex-grow: 1;
+    }
+
+    /* 固定 header footer */
+    header,
+    footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+    }
+
+    header {
+      top: 0;
+    }
+
+    footer {
+      bottom: 0;
+    }
+
+    /* main 向下移动 */
+    main {
+      margin-top: 6vh;
+    }
+
+    /* 弹窗 */
+    .is_show {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      z-index: -99;
+      opacity: 0;
+    }
+
+    .mask {
+      background-color: rgba(0, 0, 0, 0.3);
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      bottom: 50px;
+    }
+
+    .content {
+      background-color: skyblue;
+      padding: 50px;
+      z-index: 3;
+    }
+
+    .content>img {
+      height: 240px;
+    }
+
+    .content>div {
+      background-color: aqua;
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      /* z-index: 99; */
+    }
+  </style>
+</head>
+
+<body>
+  <header>HEADER</header>
+  <main>
+    MAIN
+    <div>
+      <img src="https://i.loli.net/2020/07/29/vCoweN1RHd8M4GF.jpg" alt="" style="object-fit: fill; width: 70%;" />
+    </div>
+    <div>
+      <!-- 手动调整宽度(px或%都可以)，并且使用填充  -->
+      <img src="https://i.loli.net/2020/07/29/vCoweN1RHd8M4GF.jpg" alt=""
+        style="object-fit: fill; width: 100%; height: 100px;" />
+    </div>
+    <div>
+      <img src="https://i.loli.net/2020/07/29/vCoweN1RHd8M4GF.jpg" alt="" />
+    </div>
+    <div>
+      <img src="https://i.loli.net/2020/07/29/vCoweN1RHd8M4GF.jpg" alt="" />
+    </div>
+  </main>
+  <footer>
+    <div onclick="showDialog()">FOOTER</div>
+  </footer>
+
+  <!-- 显示弹窗 -->
+  <div class="is_show">
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 内容 -->
+    <div class="content">
+      <div onclick="handlerClose()">XXXXX</div>
+      <img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt="">
+    </div>
+  </div>
+
+
+  <script>
+    let isShow = document.querySelector('.is_show');
+    function showDialog() {
+      console.log('showDialog()');
+      isShow.style.zIndex = 0;
+      isShow.style.opacity = 1;
+    }
+
+    function handlerClose() {
+      console.log('handlerClose()');
+    }
+
+  </script>
+
+</body>
+
+</html>

@@ -24,7 +24,7 @@ export const genIndexTpl = (categoryName) => {
     <link rel="stylesheet" href="../../assets/typography.css" />
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400&display=swap" rel="stylesheet" />
     <style>
-      .list-container { max-width: 800px; margin: 4em auto; padding: 0 20px; }
+      .list-container { max-width: 1280px; margin: 4em auto; padding: 0 20px; }
       .page-title { font-family: "Ma Shan Zheng", cursive; font-size: 3em; color: var(--accent); margin-bottom: 1em; border-bottom: 1px solid var(--accent); padding-bottom: 0.5em; text-transform: capitalize; }
       .post-item { margin-bottom: 1.5em; transition: transform 0.3s ease; list-style: none; border-bottom: 1px dashed var(--accent); padding-bottom: 1.5em; }
       .post-link { text-decoration: none; display: block; }

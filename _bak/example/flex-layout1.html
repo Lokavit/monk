@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>布局 示例 1</title>
+</head>
+<style>
+    body {
+        line-height: 1.5;
+    }
+
+    .component {
+        background: #EAE7DB;
+        border: 2px solid rgb(138, 138, 141);
+    }
+
+    @media (min-width: 1200px) {
+        .component {
+            font-size: 1.5em;
+        }
+    }
+
+    .component+.component {
+        margin-top: 2rem;
+    }
+
+    .component__title {
+        font-size: 2em;
+        padding: 0.5em 0.75em;
+        background: rgb(179, 179, 180);
+        margin: 0;
+    }
+
+    .component p {
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+        margin: 1.5em 0;
+    }
+
+    /* Small variant */
+    .component--small .component__title {
+        font-size: 1em;
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+    }
+
+    .l-cs {
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+        margin-left: -1em;
+        margin-right: -1em;
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    .l-cs>div {
+        margin: 1em;
+    }
+
+    .l-cs>div:first-child {
+        display: flex;
+        flex-basis: -1.3em;
+    }
+
+    .l-cs>div:last-child {
+        flex-basis: -1.7em;
+    }
+</style>
+
+<body>
+    <div class="l-cs">
+        <div>
+            <div class="component">
+                <h2 class="component__title">左 标题</h2>
+                <p>　　是日已过，寺中一片静寂。不知打哪儿窜出来一个身长不足二尺的小人，鬼鬼祟祟地由一处九层佛塔后方绕到塔门前。谨慎观察了周遭环境，方才小心翼翼地将塔门推开一个缝隙。<br/><br/>
+                    　　这小家伙推罢了门，也不急着进去，而是在门前稍稍定住片刻，确认了没有任何意外动静，才敢将门推至一个仅仅能容下他自己进入的宽窄。随即一个抢背，翻进内中，再背手将门关闭。虽是身形短小，这一连串闯空门的动作倒是干净利落。<br/><br/>
+                    　　小家伙站起身，借满月之光看清楚面前供桌上的佛龛，似乎想起来什么，一拍他那光溜溜的小脑袋，低声自语道：“诶？我怎么像个小贼一般摸进来？师父又没说这里来不得。”说罢，自己笑出了声，又慌忙捂住嘴，警惕地看了看四周，这才顺着扶梯，一步步爬上塔顶。
+                </p>
+            </div>
+        </div>
+        <div>
+            <div class="component component--small">
+                <h2 class="component__title">右 上 标题</h2>
+                <p>　　趁夜入塔的这名小家伙，倒也非是什么歹人，乃是这般若寺中年龄最小的出家僧人，法号心谣。这娃娃年方五岁，打他记事儿起，每日跟着寺里僧众学习沙弥戒律，勤修佛法。僧众对这个因缘来此的小家伙也是格外照顾，疼爱有加之余，也好三不五时逗他玩儿。</p>
+            </div>
+            <div class="component component--small">
+                <h2 class="component__title">右 下 标题</h2>
+                <p>　　随着扶梯慢慢向上绕，对于一个小娃儿来说，爬这么陡的扶梯，体力消耗还是很大。心谣默默数了十八绕之后，前方出现一缕光亮。难道是师兄白日里来打扫时续了香油？心谣这样想着，手脚并用地加快速度爬到顶。</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

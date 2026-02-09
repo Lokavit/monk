@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tai Chi</title>
+    <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
+    <script type="module" src="./modal.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            margin: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <c-modal>
+        <h1 slot="title">Mi título</h1>
+        <button slot="switch">Abrir</button>
+        <p>Mi contenido</p>
+    </c-modal>
+
+    <script>
+        const confirmButton = document.querySelector("button");
+        const modal = document.querySelector("c-modal");
+        // Custom events dispatched by our component
+        modal.addEventListener("confirm", () => {
+            console.log("Confirmed...");
+        });
+        modal.addEventListener("cancel", () => {
+            console.log("Cancelled...");
+        });
+        confirmButton.addEventListener("click", () => {
+            if (!modal.isOpen) {
+                // Custom action that can be performed on this component
+                modal.open();
+                console.log("opening...");
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layout 三端适应布局</title>
+  <!-- <link rel="stylesheet" href="./layout1.css" /> -->
+  <style>
+    /* doc:多端适应 */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Rubik";
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    body {
+      line-height: 1.1;
+      /* 视口计算的方式设置字体，使用计算，已保证移动端字号不能超出最小 */
+      font-size: calc(12px + 1vw);
+    }
+
+    header {
+      color: aqua;
+      background: #333;
+    }
+
+    header,
+    footer,
+    main {
+      padding: 1rem;
+    }
+
+    main {
+      /* background: #eee; */
+      flex-grow: 1;
+    }
+
+    footer {
+      color: aqua;
+      background: #333;
+    }
+
+    /* header内中所有元素布局 */
+
+    p::after,
+    p::before {
+      content: ":";
+    }
+
+    p {
+      font-size: 30vmin;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: auto;
+    }
+
+    /* 图标垂直居中 */
+    .inline-icon {
+      display: inline-block;
+      width: 1lh;
+      height: 1lh;
+    }
+
+    /* LOGOS 格子 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-gap: 1rem;
+    }
+
+    .grid>div {
+      background-color: #333;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .grid>div::before {
+      content: "";
+      padding-bottom: 100%;
+      display: block;
+    }
+
+    .grid>div>img {
+      position: absolute;
+      max-width: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <!-- logo -->
+    <!-- <div>
+        <a href="http://steam.leadersir.com/" target="_blank">
+          <img src="https://kid.leadersir.net/biancheng-logo.png"
+        /></a>
+      </div> -->
+
+    <!-- 语言选择 -->
+    <!-- <div>语言选择器</div> -->
+
+    <!-- 文件 -->
+
+    <h1>Logo</h1>
+  </header>
+  <main class="main">
+    Main Content
+    <p id="anim">(</p>
+
+    <!-- LOGOS 格子 输入: .grid>div*5>img 构建 -->
+    <div class="grid">
+      <!-- 这里可以放一些 LOGOS -->
+      <div><img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt=""></div>
+      <div><img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt=""></div>
+      <div><img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt=""></div>
+      <div><img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt=""></div>
+      <div><img src="https://i.loli.net/2020/07/29/j2r5pb4DeLfiJx1.jpg" alt=""></div>
+    </div>
+
+    <button onclick="checkDevops()">CHECK DEVOPS</button>
+  </main>
+  <footer>Footer</footer>
+
+  <script>
+    // 整理创作环境判断
+    checkDevops = () => {
+      let checkResult = document.createElement("div");
+      checkResult.innerHTML = `
+          浏览器平台（操作系统）:${navigator.platform}<br/>
+          浏览器的应用程序名称:${navigator.appName}<br/>
+          浏览器的应用程序代码名称:${navigator.appCodeName}<br/>
+          浏览器引擎的产品名称:${navigator.product}<br/>
+          有关浏览器的版本信息:${navigator.appVersion}<br/>
+          由浏览器发送到服务器的用户代理报头:${navigator.userAgent}<br/>
+          浏览器语言:${navigator.language}<br/>
+          浏览器联网状态:${navigator.onLine}<br/>
+          `;
+
+      let main_content = document.querySelector(".main");
+      main_content.appendChild(checkResult);
+    };
+
+    if (navigator.userAgent.indexOf("Chrome") >= -1) {
+      console.log("是否为chrome");
+    }
+
+    /* 动画 */
+    const frames = { opacity: [0, 0, 1] };
+    const options = {
+      duration: 1500,
+      iterations: Infinity,
+      direction: "alternate",
+    };
+
+    const a = anim.animate(frames, {
+      ...options,
+      pseudoElement: "::after",
+    });
+
+    const b = anim.animate(frames, {
+      ...options,
+      direction: "alternate-reverse",
+      pseudoElement: "::before",
+    });
+
+    console.log("pseudoElement?", a.effect.pseudoElement);
+
+  </script>
+</body>
+
+</html>

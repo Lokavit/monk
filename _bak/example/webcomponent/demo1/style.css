@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-weight: 300;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI';
+    overflow: hidden;
+    background-color: #eafbea;
+}
+
+header {
+    padding: 16px;
+    color: #fa4252;
+    background-color: #ffa259;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+ul {
+    background-color: #fff;
+    padding: 0;
+    margin: 50px;
+    box-shadow: 0 10px 10px 5px #6f9a8d;
+}
+
+ul li {
+    list-style: none;
+    background-color: #fa4252;
+    color: #fff;
+    text-shadow: 1px 1px 2px #801336;
+    height: 40px;
+    font-weight: bold;
+    padding: 20px 10px 0 10px;
+    line-height: 22px;
+}
+
+span {
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.name {
+    width: 250px;
+}
+
+.isfood {
+    width: 230px;
+}
+
+.white {
+    color: #fff !important;
+}
