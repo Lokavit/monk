@@ -1,5 +1,19 @@
 [
   {
+    "title": "Arch + Hyprland",
+    "date": "2026-03-06T00:00:00.000Z",
+    "buddhistDate": "5 Mar 2569 BE",
+    "tags": [
+      "Arch",
+      "Hyprland",
+      "Linux"
+    ],
+    "description": "\n Arch + Hyprland\nbash\n$ setfont ter-128n  設定字型，僅限當前有效...",
+    "wordCount": 633,
+    "author": "Monk",
+    "link": "arch-hyprland.html"
+  },
+  {
     "title": "Linux",
     "date": "2026-01-01T00:00:00.000Z",
     "buddhistDate": "31 Dec 2568 BE",
@@ -7,9 +21,24 @@
       "Linux",
       "Arch"
     ],
-    "description": "\n~~Arch~~：有牆，沒做路由出境，裝不上。\n\n arch\n\narchinstall\n檢查連線\n選擇映象...",
-    "wordCount": 1542,
+    "description": " \n<!--\n第一階段：Ubuntu\n每天讓終端成為主入口。能用 CLI 的不用 GUI。\n\n窗口控制\nSuper 鍵（...",
+    "wordCount": 708,
     "author": "Monk",
     "link": "linux.html"
+  },
+  {
+    "title": "Neovim",
+    "date": "2026-01-01T00:00:00.000Z",
+    "buddhistDate": "31 Dec 2568 BE",
+    "tags": [
+      "Neovim",
+      "Vim",
+      "Linux",
+      "Arch"
+    ],
+    "description": "\n Neovim\n\nshell\n 使用 AppImage (免安裝，版本最精準) Ubuntu倉庫中的版本太...",
+    "wordCount": 818,
+    "author": "Monk",
+    "link": "vim.html"
   }
 ]

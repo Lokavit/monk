@@ -1,0 +1,198 @@
+
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Arch + Hyprland - Linux</title>
+    <script> 
+        (function() {
+            const saved = localStorage.getItem('theme-name') || 'Matrix';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'Matrix') document.documentElement.style.background = '#000';
+            else document.documentElement.style.background = '#fff';
+        })();
+    </script>
+    <link rel="stylesheet" href="../../assets/variables.css">
+    <link rel="stylesheet" href="../../assets/typography.css">
+    <link rel="stylesheet" href="../../assets/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        header {
+            border-bottom: dashed 1px var(--accent);
+            padding-bottom: 2em;
+            margin-bottom: 2em;
+        }
+        h1 { 
+            color: var(--accent);
+        }
+        .post-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+    <script type="module" src="../../src/app.js"></script>
+</head>
+<body  >
+    <header>
+      <h1 class="header_site_name">
+        <a href="./index.html" style="text-decoration: none; color: inherit"
+          >Monk's Personal Site</a
+        >
+      </h1>
+      <div class="header_site_tip">Lotus. Dust. Zen. Void</div>
+    </header>
+    <article class="post-content">
+        <header  >
+            <h1>Arch + Hyprland</h1>
+            <div class="post-meta" >
+            <span>Author: Monk</span> | 
+                <span>Date: 5 Mar 2569 BE</span> | 
+                <span>Words: 633</span>
+            </div>
+        </header>
+        <section  ><h2>Arch + Hyprland</h2>
+<pre><code class="hljs">$ setfont ter-128n <span class="hljs-comment"># 設定字型，僅限當前有效</span>
+$ archinstall 快速安裝
+</code></pre>
+<h3>Archinstall language</h3>
+<h3>Locales</h3>
+<h3>Mirrors and repositories (鏡像源指定)</h3>
+<ul>
+<li>進入 Mirror region -&gt; 找到並勾選 你的所在地</li>
+<li>Mirror Region (鏡像區域) Hong Kong</li>
+<li>進入 Optional repositories -&gt; 勾選 multilib。</li>
+<li>按 Back（返回）回到主菜單即可。</li>
+</ul>
+<h3>Disk configuration (磁盤分區)</h3>
+<ul>
+<li>選擇 Manual partitioning</li>
+<li>選擇硬盤 /dev/nvme0n1</li>
+<li>抹除硬盤痕跡</li>
+<li>create  primary 2048 2099200 1GiB fat32 /boot  boot,esp</li>
+<li>create  primary 2099200 35653632 16GiB linux-swap</li>
+<li>create primary  35653632 500115456 221.5GiB ext4 /</li>
+</ul>
+<h3>Swap (內存緩衝)</h3>
+<ul>
+<li>Would you like to use swap on zaram ? No</li>
+</ul>
+<h3>Bootloader (引導程序)</h3>
+<ul>
+<li>進入Bootloader 選擇 grub</li>
+</ul>
+<h3>Kernels (核心)</h3>
+<ul>
+<li>Linux</li>
+</ul>
+<h3>Hostname</h3>
+<ul>
+<li>monk</li>
+</ul>
+<h3>Authentication （認證）</h3>
+<ul>
+<li>Root Password  設置強密碼</li>
+<li>User Account 設置賬戶</li>
+</ul>
+<h3>Profile (決定 Arch Linux 長什麼樣子)</h3>
+<ul>
+<li>選擇 Minimal</li>
+<li>必須在Additional packages 安裝以下：</li>
+<li>git hyprland kitty networkmanager pipewire-pulse terminus-font</li>
+<li>輸入/ 在輸入關鍵字，則會定位</li>
+</ul>
+<h3>Applications 跳過</h3>
+<h3>Network configuration</h3>
+<ul>
+<li>進入選擇：Use NetworkManager(default backend)</li>
+</ul>
+<h3>Additional packages</h3>
+<h3>Timezone</h3>
+<ul>
+<li>Asia/Hong_Kong</li>
+</ul>
+<h3>Automatic time sync (NTP)</h3>
+<h3>Save configuration (保存配置)</h3>
+<h3>Install (開始安裝)</h3>
+<h3>Abort (中止/取消)</h3>
+<pre><code class="hljs"><span class="hljs-comment"># Instaillation completed in 4m53s</span>
+<span class="hljs-comment"># What would you like to do next?</span>
+<span class="hljs-comment"># Exit archinstall</span>
+<span class="hljs-comment"># Reboot system (重啟系統)</span>
+<span class="hljs-comment"># chroot into installaction for post-installation configurations</span>
+
+<span class="hljs-comment"># 選擇 Reboot system ，進入Arch Linux系統</span>
+<span class="hljs-comment"># 輸入用戶名、密碼</span>
+<span class="hljs-comment"># 檢測網路：ping -c 3 google.com</span>
+<span class="hljs-comment"># 更新系統時間：sudo timedatectl set-ntp true</span>
+<span class="hljs-comment"># 啟動 Hyprland</span>
+$ Hyprland
+
+<span class="hljs-comment"># 字號設置 </span>
+setfont ter-v24n
+
+<span class="hljs-comment"># 安裝軟件</span>
+<span class="hljs-built_in">sudo</span> pacman -S waybar rofi-wayland swaybg hyprpolkitagent xdg-desktop-portal-hyprland neovim yazi ffmpeg 7zip jq poppler fd rg fzf zoxide
+ 
+<span class="hljs-comment"># File manager (yazi):  </span>
+<span class="hljs-comment"># Status bar (waybar): 螢幕上方的狀態列（這是顯示佛曆的最佳位置）。</span>
+<span class="hljs-comment"># Application launcher (rofi-wayland): 按下快捷鍵後可以搜尋並打開程式。</span>
+<span class="hljs-comment"># Wallpaper (swaybg): 讓你設置佛曆背景或任何桌布的工具。</span>
+<span class="hljs-comment"># Authentication agent (hyprpolkitagent): 讓你在圖形界面輸入密碼（例如裝軟體時彈出的視窗）。</span>
+<span class="hljs-comment"># XDG Desktop Portal: 確保螢幕分享和文件開啟能正常運作。</span>
+</code></pre>
+<h3>常用命令</h3>
+<pre><code class="hljs">$ reboot <span class="hljs-comment"># 重啓</span>
+$ <span class="hljs-built_in">sudo</span> poweroff <span class="hljs-comment"># 關機</span>
+$ Hyprland <span class="hljs-comment"># 啟動 Hyprland</span>
+Super + Q Create Teminal 
+Super + E  File manager
+Super + R Launcher
+Super + C Close window
+Super + V Toggle floating
+Super + M Exit Hyprland
+Super + [1-9] Move window to workspace 1-9
+Super + Arrows Move focus around
+
+<span class="hljs-comment"># hyprland設置</span>
+nvim ~/.config/hypr/hyprland.conf
+<span class="hljs-comment"># 末尾添加</span>
+<span class="hljs-comment"># 啟動狀態欄</span>
+exec-once = waybar
+<span class="hljs-comment"># 啟動桌布 (請換成你的圖片路徑)</span>
+exec-once = swaybg -i /home/monk/Pictures/wallpaper.jpg -m fill
+<span class="hljs-comment"># 啟動密碼驗證代理 (這很重要，否則你打不開需要權限的軟體)</span>
+exec-once = hyprpolkitagent
+
+<span class="hljs-comment"># kitty設置</span>
+nvim ~/.config/kitty/kitty.conf
+<span class="hljs-comment"># --- 透明度設定 ---</span>
+<span class="hljs-comment"># background_opacity 決定背景透明度 (0.0 完全透明, 1.0 完全不透明)</span>
+background_opacity 0.85
+kitty +kitten themes <span class="hljs-comment"># 選一個配色</span>
+Modify kitty.conf to load Base2Tone Field Dark <span class="hljs-comment"># 按鍵盤M</span>
+
+<span class="hljs-comment"># 佛曆設置</span>
+$ <span class="hljs-built_in">mkdir</span> -p ~/.config/waybar
+$ <span class="hljs-built_in">cp</span> /etc/xdg/waybar/config.jsonc ~/.config/waybar/config.jsonc
+$ <span class="hljs-built_in">cp</span> /etc/xdg/waybar/style.css ~/.config/waybar/style.css
+$ waybar
+$ <span class="hljs-built_in">cp</span> ~/.config/waybar/config.jsonc ~/.config/waybar/config.working
+<span class="hljs-string">&quot;modules-right&quot;</span>: [<span class="hljs-string">&quot;network&quot;</span>, <span class="hljs-string">&quot;cpu&quot;</span>, <span class="hljs-string">&quot;memory&quot;</span>, <span class="hljs-string">&quot;custom/buddhist&quot;</span>],
+<span class="hljs-string">&quot;custom/buddhist&quot;</span>: {
+    <span class="hljs-string">&quot;exec&quot;</span>: <span class="hljs-string">&quot;echo <span class="hljs-subst">$(date +&#x27;%d %b&#x27;)</span> <span class="hljs-subst">$(($(date +&#x27;%Y&#x27;)</span> + 543)) BE &#x27;|&#x27; <span class="hljs-subst">$(date +&#x27;%H:%M:%S&#x27;)</span>&quot;</span>,
+    <span class="hljs-string">&quot;interval&quot;</span>: 1,
+    <span class="hljs-string">&quot;format&quot;</span>: <span class="hljs-string">&quot;{}&quot;</span>
+},
+
+</code></pre>
+</section>
+    </article>
+
+    
+</body>
+</html>
+  
