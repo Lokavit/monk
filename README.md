@@ -1,8 +1,5 @@
 # monk
 
-```bash
-./sync.sh
-```
 
 <!--
 # IDEA & ACTION
