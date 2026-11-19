@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 017 章 · 小菜一碟 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">小菜一碟</a>
+          <span class="sep">/</span>
+          <span>第 017 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 017 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：17 Jan 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,088 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>比起这些，没有客人又算得了什么。</p>
+        <p>反正，也不是只有她家没生意。</p>
+        <p>整个市场，从下午到晚上，一共没有几家开张的。</p>
+        <p>菜小妹想，这种情况，至少持续到果蔬超市的开业活动结束。</p>
+        <p>她赶着宋大姐收摊前，想要买几个包子。</p>
+        <p>包子不能隔夜，宋大姐半买半送，一股脑儿打包给菜小妹了。</p>
+        <p>菜小妹掰开一个，看是肉的，递给菜小弟，「这个你吃。」</p>
+        <p>菜小弟啃着包子，含糊不清地说：「姐，我们给陆哥哥带包子。」</p>
+        <p>菜小妹差点咬到舌头。</p>
+        <p>「嗯。那你给他带吧。」她说。</p>
+        <p>这个时间，陆崇远肯定吃过晚饭了。</p>
+        <p>那就当宵夜吧。</p>
+        <p>她想。</p>
+        <p>吃完了饭没多久，菜小弟闹着要给陆崇远送包子。</p>
+        <p>几乎是每隔十分钟就问一遍。</p>
+        <p>菜小妹不想这么早收摊。</p>
+        <p>倒不是为了等客人，而是她不想那么多人看到她在网吧门口和陆崇远聊天。</p>
+        <p>以往，她总是市场里最后一个收摊的，根本没人会注意到她。</p>
+        <p>晚上不比白天，路上偶尔有车经过，她不放心菜小弟自己穿马路去网吧。</p>
+        <p>她想了想，打开手机，给陆崇远发消息：「你还没吃夜宵吧？」</p>
+        <p>不一会儿，陆崇远的消息回过来：「没有，还不到九点。怎么了？」</p>
+        <p>菜小妹发了一句：「你小老弟给你留了包子，闹着要给你送过去。」</p>
+        <p>她在文字末尾，加了一个扶额的表情。</p>
+        <p>她斟酌了几秒钟，发出去一句：「我们一会儿给你送过去。」</p>
+        <p>「我自己跑来拿，是不是显得很不要脸？」</p>
+        <p>菜小妹惊愕抬头。</p>
+        <p>陆崇远站在摊位外面，一副做了什么没脸见人的事情的模样。</p>
+        <p>「陆哥哥！」菜小弟立刻站起来，拿出塑料袋，「给你！包子！肉馅的！」</p>
+        <p>菜小妹拉都拉不住，下意识看了看周围。</p>
+        <p>本来摊位前有个人就会招来其他摊主的目光，加上菜小弟这一嗓子有够响亮。</p>
+        <p>不知多少双眼睛，正盯着菜小妹家的摊位，和她。</p>
+        <p>菜小妹不假思索，扯下一个塑料袋，胡乱抓了两根黄瓜塞进去，递给陆崇远。</p>
+        <p>陆崇远眨了眨眼睛，扫码付钱，拎着黄瓜和包子。</p>
+        <p>挺大手机非常大声的到账提示语音，菜小妹松了一口气。</p>
+        <p>她想，这样就可以证明，陆崇远就是顾客！你们别多想，别乱嚼舌头！</p>
+        <p>「小老弟，要不要跟我去玩？」陆崇远来了一句。</p>
+        <p>「要！」</p>
+        <p>菜小妹尚未来得及反应，小弟已经从台子下面钻出去，拉着陆崇远的手。</p>
+        <p>陆崇远低声说：「我带他去我那儿玩会儿，你收摊了，过去接他吧。」</p>
+        <p>菜小妹点点头，「好。麻烦你了。」</p>
+        <p>陆崇远冲菜小妹挑了挑眉头，领着菜小弟走了。</p>
+        <p>也不知道陆崇远说了什么，菜小弟笑得前仰后合。</p>
+        <p>菜小妹收到一条消息。</p>
+        <p>陆崇远：「我带他过来，一会儿你来，就不会惹人怀疑说闲话了。」</p>
+        <p>菜小妹发了一个比赞的手势。</p>
+        <p>难得清闲，她点开未看完的小说，很快沉浸在女主角的爱情故事里。</p>
+        <p>看着看着，脑子里不由得闪过陆崇远的脸、陆崇远的笑、陆崇远的声音……</p>
+        <p>想着想着，她又开始叹气。</p>
+        <p>叹自己只是一个普通到丢进人堆里找不见的女孩儿；</p>
+        <p>叹自己一无是处，连初中都没有念完；</p>
+        <p>叹自己有一个双腿截肢被刑事拘留的老爹；</p>
+        <p>更叹自己还有一个眼看该上学了，要没完没了花钱的弟弟。</p>
+        <p>而她看得那些爱情小说，女主角无一不是身份光鲜，男主角更是实力雄厚。</p>
+        <p>简而言之，有钱人的爱情故事。</p>
+        <p>她可以想象男主角的脸如陆崇远，但必须忘记陆崇远也不过是一个网管。</p>
+        <p>即使每天晚上聊天，她对陆崇远知之甚少。</p>
+        <p>只知道陆崇远今年21岁，本科毕业，随便找了这个工作。</p>
+        <p>一个本科生，不是应该有很好的工作吗？</p>
+        <p>不是应该在城市的高楼大厦里，吹着空调，喝着咖啡，对着电脑吗？</p>
+        <p>怎么会跑来偏远的梧桐镇，当一个网管？</p>
+        <p>而且连个住得地方都没有，睡在网吧连排椅子。</p>
+        <p>她始终记得，第一次走进网吧，看到陆崇远的睡相，仿佛无家可归的流浪汉。</p>
+        <p>「美女，给我来点绿叶菜。」</p>
+        <p>菜小妹惊讶抬头。</p>
+        <p>摊位前面正站着一位年轻的女顾客，低着头挑拣。</p>
+        <p>「来了！您随便挑！」菜小妹立马起身，扯过一只塑料袋，为顾客撑开。</p>
+        <p>这位顾客偶尔来过，似乎是在附近某间工厂上班。</p>
+        <p>菜小妹偷偷瞥一眼时间，已经十点半了。</p>
+        <p>在看看周围，整个市场黑漆漆，只有她家摊位亮着灯。</p>
+        <p>就连对面的果蔬超市，也只剩下招牌灯忽闪忽闪。</p>
+        <p>「幸亏这还有你家没收摊，不然今晚要饿着睡觉了。」</p>
+        <p>菜小妹露出招牌笑容，把东西过了秤，「您给十块钱吧。」</p>
+        <p>「哦对了！能给我两头蒜吗？」</p>
+        <p>菜小妹大方的拿了两头，放进塑料袋里，递给顾客。</p>
+        <p>她迅速地收了摊子，骑着三轮摩托去网吧门口。</p>
+        <p>陆崇远走出来，「看小说看入迷了？」</p>
+        <p>「你怎么知道？!」</p>
+        <p>我出来看了几次，就你一个人在市场里，低头看手机。</p>
+        <p>菜小妹不好意思地笑了笑，「小弟呢？」</p>
+        <p>「睡着呢。让他在这儿睡吧。」陆崇远说。</p>
+        <p>「不了。我还是带他回去。不然，他睡醒了可能会闹腾你。」</p>
+        <p>「行。」</p>
+        <p>陆崇远转身进网吧，抱着被衣服裹住的菜小弟，轻轻放在车后斗的破被子堆里。</p>
+        <p>菜小妹伸手去掀外套。</p>
+        <p>陆崇远按住她的胳膊，「晚上凉，给他包着吧。」</p>
+        <p>菜小妹缩回手，同时躲开陆崇远的手，「回头还你。我先走了。」</p>
+        <p>「路上骑车小心。有时给我发消息。」</p>
+        <p>回到家后，菜小妹先把小弟转移到床上，然后拎起陆崇远的外套。</p>
+        <p>外套的背面绣着人像，带着兜帽和墨镜，只能看到一点儿上翻的眼白，双手带着白色手套，十指飞舞。</p>
+        <p>陆崇远第一次出现在农贸市场时，就穿着这件外套。</p>
+        <p>而后，一直是这件外套。</p>
+        <p>偶尔，会晾在网吧门上。</p>
+        <p>菜小妹直觉，陆崇远就这么一件御寒外衣。</p>
+        <p>不过，现在天气越来越暖，该是用不上了。</p>
+        <p>次日早上，菜小妹醒来的时候，又发现菜小弟在窗边坐着，连姿势都和昨天一模一样。</p>
+        <p>「姐！爸什么时候回来？」他问。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./016.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./018.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 010 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 010 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 010 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：10 May 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,130 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>新的周一，第三会议室的气氛异常压抑。沈知遇从进来就没敢抬头，坐在角落里，只愿是个透明人。</p>
+        <p>会议桌主位坐着公司老总，左边一侧四个一脸严肃的甲方人员，右边则是以杭天禄为首的整个项目组人员。</p>
+        <p>沈知遇坐在末位，专心记录。</p>
+        <p>她越听越是疑惑，对面甲方人员里，有一个全程没说话，一脸高深莫测，另外三个人，三种想法，各抒己见，互相认可，一致推翻了大部分之前敲定出来的需求，直接把项目进度推到负节点。</p>
+        <p>结果就是，整个组的所有人，基本白忙两周。</p>
+        <p>沈知遇偷偷看一眼主位，身为项目承接方，老总全程陪着笑脸，对甲方的需求频频点头。</p>
+        <p>她又看向杭天禄和老章，以及其他团队成员，一个个脸上没什么表情。</p>
+        <p>原来，只有她震惊得像是没见过世面。</p>
+        <p>甲方批判完了洛秋颜的设计方案，又对着沈知遇的方案一通评头论足。</p>
+        <p>沈知遇索性停下笔，等甲方彻底说完，她在本上一笔一划写下两个字——「重做」。</p>
+        <p>她用了太大力气，中性笔的珠子被她写崩出去，找不到了，索性装模作样起来，不记了。</p>
+        <p>后面甲方说了什么她已经没有心思去听，心里只剩下后悔，后悔自己的认真，后悔自己无数个熬夜，后悔第一次对项目投入感情。</p>
+        <p>甲方一顿指点江山，受害最大的人，除了她和洛秋颜，还有邵骏邕。</p>
+        <p>沈知遇想起来邵骏邕熬了一个通宵的定制化编辑器，被甲方给否了。</p>
+        <p>下午，杭天禄紧急组织内部会议，共同商议如何最小改动的情况下，满足甲方新的需求。</p>
+        <p>老章不愧是老资历的产品，虽然在大会上没有反驳甲方任何需求，但他能精准抓住甲方的真实意图，丢弃了一些不合理的需求。</p>
+        <p>沈知遇把本子上的「重做」两个字涂黑，记录下来需要重点调整的几个地方。</p>
+        <p>老章提到定制化编辑器，沉默了几秒钟，「小沈，这个地方去掉。」</p>
+        <p>沈知遇动作一顿。</p>
+        <p>「理由。」</p>
+        <p>从上午与甲方的四小时会议，到下午团队内的会议，这是邵骏邕第一次开口，蹦出来俩字，冰冷的俩字。</p>
+        <p>沈知遇听出邵骏邕的话里语气有点儿冲。</p>
+        <p>老章像是没感觉到，拿出他招牌式的笑容，「理由就是不配，他们不配。」</p>
+        <p>沈知遇攥着笔，思索是否应该说什么，这毕竟是她设计出来的。</p>
+        <p>「那我有数了。」邵骏邕说完，玩着手里的笔。</p>
+        <p>「小沈，」老章指了指设计稿，「这几个地方，按照甲方的需求来做，他们要什么，就给上什么。明白吗？」</p>
+        <p>沈知遇脑子里一团浆糊，迟疑着点点头，脑子里浮现出甲方其中一人的话。</p>
+        <p>那个人摇着头说：「没有特色，没有吸引力，没有竞争力。我要用户看到我们的产品能够眼前一亮，要有科技感，要有冲击力……」</p>
+        <p>沈知遇勉强回忆起来一些内容，她当时听着那个人的离谱发言，可谓是眼前一黑，在心里说：「世界上怎么会有如此盲目自信还偏要指点江山的人？！」</p>
+        <p>所以，她脑子里早已把对方的话当作废料信息处理了。</p>
+        <p>现在，只能硬着头皮往上堆了。</p>
+        <p>由于工期缩短，洛秋颜和沈知遇的压力最大，必须在三天之内赶出来最新版设计稿。</p>
+        <p>沈知遇根本不想熬夜，但是不加班就改不完，她一边暗自咒骂甲方，一边还要为了保住工作，不能被看出来太敷衍。</p>
+        <p>感觉自己就要精神分裂了。</p>
+        <p>周四夜里十一点半，办公室里只有沈知遇头上的一盏灯依然亮着。</p>
+        <p>她按了按突突跳的太阳穴，整个人靠在椅子上闭目养神。手边是邵骏邕推荐的灌装咖啡，她拿起来，一饮而尽。</p>
+        <p>「啪！」罐子砸进垃圾桶，和另外三个撞在一起。</p>
+        <p>为了应付甲方离谱的需求，她把学生端的动效和交互全部推倒重做，加上所谓的「科技感」、「冲击力」，连始终没有舍得彻底砍掉的定制化编辑器，也被她咬着牙全部移除，换上她认为最具科技感和冲击力的元素，把她平时不太用的粒子集合、辉光效果都堆进去，又给卡片磁贴等布局加上了阴影和海拔。最终的设计稿，她不想多看一眼。</p>
+        <p>但是，这就是甲方要的。最起码，她是这样认为的。</p>
+        <p>沈知遇强迫自己重头到尾做最后一次检查，锤了锤酸痛的脖子，看着屏幕上区域完美的视觉呈现。</p>
+        <p>她想，这一次，应该能在老章那里完美过关了吧。</p>
+        <p>周五早上的内部会议，主要围绕着她和洛秋颜的最新设计稿。</p>
+        <p>沈知遇仔细看了洛秋颜的最新版本，改动不太大。由于是教研人员或老师在用，甲方只提出加入一些功能，对页面表现没有什么要求。</p>
+        <p>没人对洛秋颜的设计稿提出异议，轮到沈知遇了。</p>
+        <p>沈知遇按下投屏，将最新设计稿呈现在众人眼前。</p>
+        <p>当她点击开始播放，明显听到安静的会议室里，似乎有人吸一口凉气。</p>
+        <p>她下意识看向邵骏邕。</p>
+        <p>对面邵骏邕盯着大屏幕，眉头紧锁，手里的笔掉在桌子上。</p>
+        <p>「沈知遇。」邵骏邕开口了，目光没有离开大屏。</p>
+        <p>他捡起笔，指着大屏，「这套设计稿的所有动效和交互效果，全部重做。」</p>
+        <p>沈知遇脑子里「嗡」地一声，太阳穴比昨晚抽搐地还厉害。</p>
+        <p>她沉下一口气，「为什么？这套效果是按照甲方需求做的，视觉层面的冲击力、元素的科技感，完全符合甲方的要求。」</p>
+        <p>说到后面，她的语气有一点儿抖。这是她第一次在会议上表达自己，更是她第一次当众出声反驳邵骏邕。</p>
+        <p>她忽然意识到，以往的工作和会议，邵骏邕从来没有指责她的设计有问题，也从来没有表达任何看法，就连那个复杂的定制化编辑器，也是熬通宵实现出来了。</p>
+        <p>「视觉上是够冲击的，但也要考虑代码落地。」邵骏邕的目光依旧在大屏上，语气冷淡，「你堆砌了大量的动效，前端对于贝塞尔曲线的表现差异巨大。学生端覆盖面广，多端设备兼容，需要考虑低端设备用户。你的这些效果，一般的设备上用，会卡成PPT播放。为了『好看』牺牲核心的交互流畅度，本末倒置。另外，这些东西，对于学生来说，是新奇，也是干扰。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./009.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./011.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

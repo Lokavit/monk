@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 004 章 · 闲居一品 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">闲居一品</a>
+          <span class="sep">/</span>
+          <span>第 004 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 004 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Apr 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,093 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「有了初步构想。目前暂定，押注AI直播带货这个赛道。不过，具体怎么操作，还需要深思。如果有你这样一个资深运营……」</p>
+        <p>赵语歆听了赛道，脑子就跑了，低头抿着咖啡，频频给曹纬铭使眼色。</p>
+        <p>「你有兴趣吗？来当我的合伙人。」张鹏远说。</p>
+        <p>「啊？」赵语歆做出一副思考的模样，「我想想。」</p>
+        <p>曹纬铭端着托盘过来，放下两人点的东西。</p>
+        <p>赵语歆的目光落在张鹏远面前的新品上。</p>
+        <p>这是她和曹纬铭前两天琢磨出来的实验品。</p>
+        <p>张鹏远吃了一口，微微皱眉，喝了一大口咖啡，再也没碰过。</p>
+        <p>赵语歆没什么话题，尤其是面对着张鹏远这个初见的陌生人。</p>
+        <p>张鹏远毕竟是做电商的，全程滔滔不绝，说了好几个构想。</p>
+        <p>临走时，张鹏远选了一份甜点，送给赵语歆，问她要不要去兜风？</p>
+        <p>赵语歆婉拒了，说要回家。</p>
+        <p>她真的拎着甜点回家了，把甜点交给在家等消息的老妈。</p>
+        <p>「怎么样？有戏吗？这是小张给你买的？」</p>
+        <p>赵语歆连答三个「嗯」，换了身居家服，倒在沙发上，翘着二郎腿。</p>
+        <p>她又可以舒服地躺在家里了，不必每天出门躲老妈。</p>
+        <p>张鹏远发消息特别积极，像是找她报备一样。从工作室选址，到工商局注册，到税务局登记等等……</p>
+        <p>一周之后，赵语歆再次接到张鹏远的约饭邀请，她答应了。</p>
+        <p>张鹏远打开副驾驶的车门，赵语歆坐进去，这才发现，后排还坐着一男一女。</p>
+        <p>「这是我朋友，和他老婆。」张鹏远说，「大家一起吃饭，聊聊公司的事情。」</p>
+        <p>赵语歆心里生出反感，淡淡打了个招呼。</p>
+        <p>如果不是怕再来一个黄昌吉转头告状的行为，她真想直接下车。</p>
+        <p>张鹏远事先丝毫没有告诉她，今天的约饭还有其他人。像是把她当作一个展品，特地拿出来，供人欣赏品鉴一般。</p>
+        <p>赵语歆的性子一点儿都不软。她想过立马叫曹纬铭来，就说他们也有事情要商量。</p>
+        <p>转头一想，太幼稚了。</p>
+        <p>而且，平白无故把曹纬铭拉来，不太好。</p>
+        <p>席间，赵语歆默默夹菜，保持着最慢的频率，脑子里在思考，回去之后，到闲居一品吃点什么？是不是该现在就发给曹纬铭，叫他先做着？</p>
+        <p>张鹏远与夫妻朋友，聊得热火朝天，从市场到经济，从资本到哲学……</p>
+        <p>一顿饭，从中午吃到下午一点半，张鹏远提议去写字楼坐坐。</p>
+        <p>四个人来到一栋高层建筑，上了十二楼。</p>
+        <p>走出电梯，就能看到张鹏远的公司名牌。</p>
+        <p>赵语歆心道，张鹏远居然租了这么大地方？这是要做大买卖啊。</p>
+        <p>几秒钟后，她看懂了。这是一处共享办公间，张鹏远租的是其中一张写字台！周围好几个自称老板的人，都是租着写字台，桌上几份文件。</p>
+        <p>「现在这个扶持政策，特别利好。」张鹏远对赵语歆说，「要我说，你也注册个公司，咱们互相成为合伙人，互相作为出资股东，一荣俱荣。」</p>
+        <p>他指着朋友两人，「他们也注册了。他俩都是我的出资股东兼合伙人。你要不要也来参与？我们准备启动项目了。」</p>
+        <p>两夫妻笑了笑，「小赵啊。张哥说你以前做运营的，我们现在就缺一个懂运营的。」</p>
+        <p>赵语歆微微一愣，笑着说：「我就是个被裁的小运营。这我不太行，我不懂这方面的事情。」</p>
+        <p>「嗐！我这儿就有现成的经验，有什么不懂得，尽管问我。」张鹏远拍着胸脯。</p>
+        <p>赵语歆没再接话，直觉三个人似乎在给她挖坑，再多说一句，就掉坑里了。</p>
+        <p>回去之后，她把事情告诉了曹纬铭，并说出自己的推断。</p>
+        <p>「他们把你当什么都不懂的小白花呢。」</p>
+        <p>赵语歆点点头，「也不知道我妈在哪儿找来的这种人。」</p>
+        <p>她顿了顿，补充道：「哦。是我二姨奶找的。」</p>
+        <p>「我估计，下一步就要提入股的事情了。」曹纬铭说。</p>
+        <p>「你是没看到另外两个人。三个人一看就是一路的，一搭一唱，说话虚头巴脑的……」</p>
+        <p>赵语歆毫无保留，尽情吐槽，说完之后，她松了一口气，「心情好多了。」</p>
+        <p>曹纬铭一脸无奈，「你说你，要不然就直接给阿姨说，你没有相亲的意愿，叫她别忙活了。」</p>
+        <p>「谁说我没有？」赵语歆问。</p>
+        <p>「嗯？」曹纬铭眼神一暗。</p>
+        <p>「你看不出来我想结婚吗？」赵语歆说，「就算我不想，我妈能放过我吗？为了堵我老妈的口，我也得把这个婚结了。」</p>
+        <p>曹纬铭一声轻叹，没说话。</p>
+        <p>赵语歆狐疑看着他，「你家里怎么不对你催婚？」</p>
+        <p>「我爸妈过世了。」曹纬铭说。</p>
+        <p>赵语歆心中一沉，她很多年没有关注过曹纬铭的家人。记忆里，还是小学时，去曹纬铭家蹭饭。后来大了，怕被传绯闻，再也没去过。</p>
+        <p>「三年前。」曹纬铭说。</p>
+        <p>「所以，你开了这家店？」</p>
+        <p>曹纬铭点点头。</p>
+        <p>赵语歆没有追问，但回家问了老妈。</p>
+        <p>从老妈的叙述里，她知道了曹纬铭的情况。</p>
+        <p>三年前，曹纬铭的父母先后过世，留下了一点资产。那时候，好几家抢着去说媒，曹纬铭以守孝为由，一一婉拒了。</p>
+        <p>后来，又开了一家从来没人光顾的咖啡馆。</p>
+        <p>便没有人再去给他说媒了，因为做事太不靠谱了。</p>
+        <p>赵语歆想，外人看来，一定认为曹纬铭把父母的遗产败光了，又不去上班，没人敢嫁。</p>
+        <p>其实，闲居一品还是有盈利路子的。她还没来得及和曹纬铭说。</p>
+        <p>约莫大半个月过去，张鹏远又一次约赵语歆吃饭。</p>
+        <p>赵语歆心生抵触，推拒了两次，惊动了二姨奶。</p>
+        <p>她只好稍作打扮，出门赴约。这一次，张鹏远没有带人来，但约饭地点在二姨奶家，除了二姨奶之外，还有几个亲戚。</p>
+        <p>怎么看都像是压阵来了。</p>
+        <p>赵语歆心中比上次还要反感，恰巧张鹏远叫她出去单聊。</p>
+        <p>两人坐在二姨奶家院子的小凉亭，沉默不语。</p>
+        <p>「你看我给你发的消息了吗？」张鹏远率先打破沉。</p>
+        <p>赵语歆努力回想，张鹏远每天的一大堆消息，轻轻点点头。</p>
+        <p>「我们已经完成一部分计划，资金都投进去近百万了，正在洽谈一家上市公司的合作。」</p>
+        <p>「那挺好的。」赵语歆说。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./003.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./005.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

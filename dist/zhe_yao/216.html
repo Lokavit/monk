@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 216 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 216 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 216 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Aug 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,125 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>有涯略微皱了眉头，郑重其事地重申道：「我要去找无为。」</p>
+        <p>「我看你真是脑子不好！」妖主面上几分无奈，「别以为我不知道你们俩的关系。不过是出于对你的尊重，懒得去管！然而，如果有任何一个，因私事罔顾妖界众生灵，别怪我手上无生一戟双杀！」他说到最后，冷哼一声。</p>
+        <p>良久，有涯一手拍了拍对方的肩头，「我去带无为回来，想办法让他回归自己的身份。」他纵身跃下，不等离去，眼前便被五只小妖拦住去路。</p>
+        <p>汩淼看了有涯一眼，「你不能离开无生崖！」</p>
+        <p>有涯依次看过五只小妖，淡淡问道：「你们不想回归原主吗？」</p>
+        <p>「无为不是我们的原主！」钰鑫口快地说道。</p>
+        <p>「我同意。」楀森面上明显不悦，对有涯道，「你应该还记得，当时他差点儿杀死域垚。」</p>
+        <p>「那不能怪他。」有涯解释道，「人间界有一句话，不知者无罪。」</p>
+        <p>「说得对！」妖主此时也来到一众身边，凝视著有涯，「你也说，那是人间界的话。他先在三乘界待了不知多少岁月，是怎么对待妖界众生的，你也看到了。而后，拜你所赐，又在人间界蹦哒许多时日。」顿了顿，叹道，「他身上沾染过太多污秽，恐怕早已找不到初心，放弃吧。」</p>
+        <p>有涯不由得一怔，后退了两步，看著面前妖主，以及旁边五只小妖。忽地轻笑一声，「你们这是对我的做法不满，兴师问罪来了？」他眼中闪过一抹金色，「如果我一定要去三乘界找他呢？」</p>
+        <p>四周一次次亮起，又一次次恢复黑暗。无为呆坐了很久很久，久到他将自己和御龙皇相处的一点一滴，全都在脑中过了一遍。把所有事情串联起来，方才恍然大悟。原来他是如此幸运，有一只大妖尽心尽力，掏心掏肺地为他挡风遮雨，时刻守护在他左右。</p>
+        <p>「不行！」无为嗖地蹦起来，双手一抬，催动内元。他要出去，离开这里，离开三乘界。是有涯也好，是御龙皇也罢。他要去寻找他，与其并肩而立，用余生与之相守。</p>
+        <p>外面一阵清亮的鸟鸣声。三长一短，代表三乘界被夜袭，来犯者只有一位！无为忽地惊觉，既然能够听到外头的声音，莫非还是在困魔塔中？来的只有一位，该不会是御龙皇吧？！不知时过多久，更不那只大妖功体是否恢复，就敢独身闯入三乘界？！</p>
+        <p>无为越想越心急，加速催动内元。眉间莲华再次放出白光，照亮前方。他焦急地四下张望，双掌到处胡乱放招，企图找到一个出口。</p>
+        <p>突然间，「砰」地一声闷响。无为立马听出，刚才发招的那个位置有异。他转首望去，正是之前粗略看过的那一墙绘画。正欲再次出招，墙壁却好似被什么重击了一下，震动不停。继而，一声龙吟，由墙壁之后传来。</p>
+        <p>无为感受到一缕金光窜入身后，猛然转首，白光与金光相撞。他惊讶地看著对方，「真的是你？！」</p>
+        <p>下一瞬，墙壁轰然一声塌陷。内中霎时投入月光，一名小释子立在不远处，冷言道：「原来是你！」</p>
+        <p>有涯只手拉过无为，警惕地看一眼小释子，瞧出端倪，了然道：「果然是你！」</p>
+        <p>无为一头雾水，看看小释子，又看看有涯，「你们……认识？！」然而，另外两个根本不理他。</p>
+        <p>「你不能带他走！」小释子上前一步。</p>
+        <p>有涯冷哼一声，「你挡得住我吗？」</p>
+        <p>「你不妨试试看！」小释子缓缓抬起一只手。</p>
+        <p>突然间，半空掠过一道黑影儿，「废什么话？！走啊！」话音甫落，一掌打向小释子。</p>
+        <p>与此同时，有涯一手拉住无为，身形一转，一尾金龙直冲天际。眨眼之间，消失不见。</p>
+        <p>察觉到搂著自己的双手越来越紧，有涯不禁稍微扭动了一下身子。一个俯冲，落在地上，「已经到人间界了，暂时安全了。」</p>
+        <p>「对不起。」无为紧紧搂著有涯，「如果我说，从现在开始，无论你是有涯，还是御龙皇，我都会坚定不移的与你相守。你会不会嫌我太迟？」</p>
+        <p>闻言，有涯又惊又喜，托著无为脸颊。对方却执拗地不肯与他对视。他便略微低首，凝视著无为的眼睛，「你想明白了？我可是出身妖界的大妖。」后者耳根发热，笃定地点点头。他一把将无为拥在怀里，心中万分欢喜，过往一切，总算有了回报。</p>
+        <p>「可是我还有一个问题。」无为面露难色，小声地说道，「我是该叫你有涯，还是喊你御龙皇？这应该是你的封号吧？」</p>
+        <p>有涯忍俊不禁，笑道：「算是吧。‘御龙有涯’是我的全名。」紧接著，他面上露出几分得意之色，「所以，我并没有骗你，‘有涯’确实是我的名字。」</p>
+        <p>御龙有涯？这名字是不是在哪里听过？</p>
+        <p>无为对这个疑惑并未细究，朝著有涯那一脸得意，砸个白眼儿过去，「你还敢……说……」本来兴师问罪的口气，到最后自己先没了气势。因为他心中明了，无论有涯做过什么，其实全都是为他做的。拥有这样一份真挚的情谊，他感到无比荣幸。</p>
+        <p>无为心头一热，昂首贴上有涯的双唇。</p>
+        <p>「咳咳！」</p>
+        <p>身后莫名来一声咳嗽。吓得无为全身一僵，不是因为担心被谁撞见，而是惊讶对方居然无声无息的出现，更甚不知道出现了多久，听去了多少？！</p>
+        <p>妖主斜视著无为，忽略对方那一脸惊愕，开口调侃道：「我说你俩啊，差不多得了，黏黏乎乎地干啥呀！」</p>
+        <p>无为不禁老脸一红，说话都有点儿结巴了，「你……你是谁？不知道‘非礼勿视’吗？」后者甩他一记眼刀，「你可不就是在‘非礼’御龙皇吗？」闻言，他登时被噎地说不出话。</p>
+        <p>有涯连忙言道：「无为，他是妖界上主，摩赦帝，仲羿首罗。」</p>
+        <p>原来这才是妖界之主？！无为瞪大眼睛瞧著仲羿首罗，一身黑亮的战甲在月色下闪闪发亮。实言，比起御龙皇来说，这位确实一看就知道是妖界出来的。他越看越是眼熟，脑中灵光一现。猛然想起来，当年大战之时，这位也有参与。他偷偷觑一眼有涯，心中揣测，这个妖界之主，是不是比御龙皇还要厉害？</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./215.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./217.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 128 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 128 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 128 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：08 May 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,073 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>可是，海上没有讯号，联络不上礼谌。出了这么大事故，一定会上新闻。太子爷会很担心吧？就算不担心人，也会担心新闻对天地集团造成的恶劣影响吧？即使他有一颗悲天悯人的佛心，要怎么向董事长交代呢？</p>
+        <p>明明前几天才检修过的车子莫名出故障，而且是刹车和档位全出问题。宿业努力回忆，当时情况太过突然，他尽量以最快反应躲避路上的行人和车辆，为此冲进海里。</p>
+        <p>警察调查取证，不会把事故断定为报复社会吧？他两手揪著头发，把头埋在胸前。</p>
+        <p>唯一值得庆幸的是，礼谌不在车上。</p>
+        <p>初秋的海边，昼夜温差较大。鲜少有人会在清早就来海边。扬帆俱乐部也根据最易下海的时段儿，调整开放时间。</p>
+        <p>由于客流量减少，道路两旁，不愁没有位置停车。行逸把车慢慢开到最近俱乐部的地方停下，抬头就能看到落锁的俱乐部大门。他看了一眼时间，心知要等个把小时，才会有人来开门。当然，来的人一定不会是慕璟。他转头看向坐在副驾驶的人。</p>
+        <p>礼谌不安地揉搓著自己贴著创口帖的两只手，双脚时而交叉，时而松开。他从车还没停下就遥望海上，发现慕璟的游艇不在。他也早就给慕璟打过电话，只收到对方不在服务区的提示音。</p>
+        <p>游艇不在海上，游艇主人又不在服务区。他心中有所推测，但仍就时不时抬头眺望海上，心中希望，慕璟只是把游艇搁在了他看不到视角盲区。</p>
+        <p>中控仪表上的时间，一秒一秒的跳动。海风一阵阵无情的刮过，车外呼呼的风声。礼谌两手捧著手机，一次次地点亮又熄灭萤幕。手机萤幕一亮，才响起一个音节，他立即接通，甚至没有去看来电显示。</p>
+        <p>「哥？哥……你没事吧？」礼乐焦急地声音传出听筒。</p>
+        <p>礼谌缓缓放下手机，深深叹息。这不是他在等的电话，不是他期盼的讯息，他紧紧攥著手里的手机，压抑著想要甩手扔掉的冲动。</p>
+        <p>「哥？你别吓我啊！哥……」礼乐音调越来越高。</p>
+        <p>行逸立马拿过礼谌手里的手机，放在耳边：「乐乐，你哥没事儿。和我在一起呢。」</p>
+        <p>「逸哥，我看到新闻说业哥失踪了。你们在哪儿？」</p>
+        <p>「我带你哥来找慕璟，借他的游艇出海找人。你不用太担心，安心去上课。」</p>
+        <p>行逸出言安慰著礼乐，把手机塞回礼谌手里。这边，他的电话又响了起来，一看是裕阳，毫不犹豫地接通，声音自然而然的柔和起来。他安抚了对方之后，嘱咐道：「你顺便去看看礼乐，接她一起去学校，免得……」</p>
+        <p>正在说著，礼谌嗖地开启车门，直奔扬帆俱乐部。行逸这才发现，俱乐部有人来开门了。他匆匆交代完裕阳，正准备下车，礼谌已经回来了。</p>
+        <p>「怎么样？慕璟什么时候过来？」行逸著急地问。对方一言不发。他努力调整呼吸，开启车门，一只脚刚迈出去。</p>
+        <p>「慕璟昨晚出海了。」礼谌总算开口了，声音嘶哑，转头瞭望大海，双目无神，「没说地方，也没说什么时候回来。」</p>
+        <p>行逸缩回脚，重重关上车门，难以置信地凝视著礼谌。对方上一次出现这样的状态，还是在董事长夫人去世的那一天。然后，嘴上说著努力学习，考上心仪大学的礼谌，瞒著所有人，考进了佛学院。</p>
+        <p>「我先送你回去，一晚上没睡觉了。你回家好好休息。」</p>
+        <p>「嗯。」礼谌靠在椅背，茫然地看著大海距离自己越来越远。脑海中挥之不去，车被拖上岸时，扭曲变形，窗棂留著玻璃碎片。</p>
+        <p>无尽大海，宿业能游到哪儿去呢？身上会不会被玻璃划伤？伤口在海水浸泡，会发炎感染吧？若是游地太久，会被海水冲到某一段儿沙滩吗？</p>
+        <p>无论何时何地，社会新闻都会受到全社会人的关注。而在网路上，社会人扮演著网民的角色，对此次事件，大肆发表评论，其中不少人支援司机是恶劣报复社会的论调。所有大小媒体，谈到这件社会新闻，都会在标题上，加大加粗醒目提到：天地集团。</p>
+        <p>作为泰威集团的吴老板，一清早看到这样的新闻，对著手机哈哈大笑，一巴掌拍著旁边人的肩头：「老张，你快看看！哈哈哈！我看他天地，这次是要花很大精力公关了！」</p>
+        <p>同在车上的小鬼，偷瞄一眼车窗外的后视镜，看到吴总和老张皆是一脸幸灾乐祸的模样。他考虑著，是否该告知吴总，做成这件事情的人是谁？</p>
+        <p>「老张，你去找人，带带舆论风向，给天地集团再加把火。」吴总笑哈哈地说。</p>
+        <p>小鬼听到这话，打消念头，一双眼睛盯著车前。</p>
+        <p>「小鬼，你这事儿做的很漂亮。我都不敢相信，会是一个毛孩子做出来的。」</p>
+        <p>小鬼面上一怔，一手悄悄揪住座垫边缘，脸上浮现笑容：「谢谢吴总。」</p>
+        <p>「你也教教你司哥，改改他那死板的脑子。」吴老板说完，又是一阵哈哈大笑。</p>
+        <p>直到彻底脱离了吴总的视线，小鬼长舒一口气。自以为做的很隐蔽，却没有瞒过老板。他怎么会知道是我干得呢？莫非真就有手眼通天的关系？那岂不是说，车检能查出来是人为？！</p>
+        <p>他在心里嘀咕了半天，皱眉吸著烟。没有注意到，有人眉头紧锁，已经盯著他看了许久。</p>
+        <p>当吴总说出是小鬼干的。小司明显察觉自己心跳变得剧烈。跟随吴总多年，他早已练就，任何事情发生在眼前都能够做到面不改色，但也只是面不改色。这样，就可以给人造成一种，有个聋子在身边的错觉，说话也就不避讳他。</p>
+        <p>他狠狠吸了一口烟，想起那个明明能够自己游走，却在危急关头，将他从摩托艇下拉出来的人。他有一定水性，应该能够活下来吧？承诺偿还的救命之恩，应该有机会还回去吧？他这样期望著。</p>
+        <p>行逸把车开到礼谌家大门口，特地留了一段儿距离。如今，给大门加装报警的人不在，就要避免误触报警器。他并不想下车，爬上门柱，去关报警器。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./127.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./129.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

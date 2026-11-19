@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 093 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 093 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 093 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：03 Apr 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,066 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「礼乐，怎么不去教室？」一个男生走过来，看到礼乐泪眼婆娑，「你怎么了？」他一手扶著人，抬头敌视著少年，「这位同学，你是哪个系……」</p>
+        <p>「蒋帅，你开车了吗？送我去医务室一趟。」礼乐打断蒋帅，甩开少年的手。她靠著蒋帅，一瘸一拐，走到不远处，坐进车里，「麻烦你了。」</p>
+        <p>少年站在原地，望著豪车远去的背影。他从口袋里拿出手机，点开一个头像，翻了翻聊天内容，放大一张对面发来的照片，仔细看了看，眼睛眯成一条线，露出笑容：「找到你了！」</p>
+        <p>肇事的滑板，倒扣在一旁。他走到滑板跟前，脚尖一挑，一脚踏上去，一脚向后蹬，速度越来越块。一路各种花式越过障碍，穿过步道，尾随著豪车。但是，很快被甩开。</p>
+        <p>「还好，不严重。」校医仔细地给礼乐处理脚踝的伤，抹了药，用纱布缠起来，嘱咐她不要碰水，尽量少走路。</p>
+        <p>「你这是怎么伤的？」蒋帅做到床边的凳子上，顺手抽出一张纸，递给礼乐。</p>
+        <p>「被那个人的滑板撞到。」礼乐接过来，一手擦著眼角，「不知道几天能消肿。」</p>
+        <p>「希望没事。」蒋帅面色凝重，「不然，你可就没办法参加比赛了。」</p>
+        <p>「你要替我保密。别跟老师说。」</p>
+        <p>「那要看你恢复的怎么样。」蒋帅看著礼乐，忽地笑出声，「大小姐，要我揹著你出去吗？」</p>
+        <p>「不要！」礼乐果断拒绝，「我等一下就能走了。」</p>
+        <p>「脚不想要了？还是舞不想跳了？」校医从外屋探头过来，一脸严肃，「我刚才怎么和你说的？！」</p>
+        <p>礼乐俏皮的吐舌：「我知道了。」</p>
+        <p>宿业开车从天地出来，对后座的礼谌说道：「谌少，我们先去接乐乐。」</p>
+        <p>「小妹没回家？」</p>
+        <p>劳碌了一天，回到家中。礼谌换下工作服，全身放松，躺在浴缸里。</p>
+        <p>自从在礼乐那儿得知，礼谌的满背佛，大有来历。宿业一整天都在暗戳戳的谋划，怎么能找个机会，仔细看看，纹身之下，到底藏著什么？</p>
+        <p>整个一二楼没有看到礼谌的身影，他把目光落在关闭的浴室门。蹑手蹑脚地走过去，悄无声息地推开门。果然，人在里面，且浑然未觉。</p>
+        <p>他尽量放低身形，磨蹭过去。由于礼谌躺在浴缸里，只能看到后肩上没有被遮住的几个烟疤。他小心翼翼地伸出手，抚摸著已经淡化许多的瘢痕。</p>
+        <p>礼谌猛地惊醒：「宿业？你进来做什么？」他左右看看，拿起浴巾，丢在水面，遮住腰身。</p>
+        <p>「解谜。」宿业一本正经。蹲在浴缸旁边，再次伸出手。对方皱著眉头，侧身躲开。却不知，正中下怀。他趁机一手抚过对方的后背，心中惊疑。满背佛下，有著不属于纹身线条正常走势的凹凸。</p>
+        <p>「你？！」礼谌换了个角度，躲开他的手，「你做什么？」</p>
+        <p>他满眼好奇：「谌少，你为什么纹满背？」</p>
+        <p>「我不想说。」</p>
+        <p>「那你身后这几处明显的烟头烫伤，是谁留下的？」</p>
+        <p>礼谌眼神一暗：「我不想说。」</p>
+        <p>「好！」宿业心道，「好一个不想说！」</p>
+        <p>他露出个狡黠地笑，凑近礼谌。浴缸空间有限，吃准了对方不敢直接出来。他一手应付对方的躲闪，一手结结实实地把对方满背摸了个遍，面色骇然。他不敢置信，著急著确认真相，「你别乱动！」</p>
+        <p>礼谌不肯配合，一手抓住宿业的手腕儿，眼中透著不悦之色：「你别胡闹，出去。」</p>
+        <p>「我非要知道是什么！」宿业不甘半途而废，使出个小擒拿，反客为主。</p>
+        <p>两人都是自小练武，你来我往的拆招。一通扑腾，浴缸里的水，溅地满地都是。原本漂在水面的浴巾，也因越来越大的动作，慢慢漂移，偏了发挥最大作用的位置。</p>
+        <p>「谌少，你走光了。」宿业趁著对方惊骇低头的时候，顺便把对方一只胳膊扭在身后，注意力亦全放在礼谌身后，想方设法地要把对方另一只手制住。因为只有这样，他才能好好确认，对方纹身之下，到底是什么。</p>
+        <p>不料，对方使劲儿一拽。他一个不留神，脚下一滑，整个人摔进浴缸，扑在礼谌身上。</p>
+        <p>「嘭」地一声响。浴缸突然容纳下两个人，挤出去多余一个人容积的温水。</p>
+        <p>宿业瞬间全身湿透，衣服裤子都贴在身上。他赶紧抬起头，胡乱抹一把脸上的水，跪坐著，看向礼谌。这才发现，对方一双丹凤眼，神色严厉。</p>
+        <p>「你玩儿够了吗？」</p>
+        <p>「我想知道，」宿业握紧双拳，咬著嘴角，沉下一口气，「是谁干的？！」</p>
+        <p>外面忽然传来刺耳地警鸣，他嗖地站起身：「有贼光顾？！」</p>
+        <p>大门外停著一辆不错的跑车。蒋帅人都吓傻了，面色煞白，提高声音问道：「大小姐，为什么你家大门会触发警鸣？！」</p>
+        <p>礼乐捂著耳朵：「我不知道！以前从来没有发生过。」</p>
+        <p>宿业第一个冲出来，直奔大门。</p>
+        <p>随后出来的礼谌，安抚叔叔阿姨：「我去看看，你们回屋吧。」</p>
+        <p>蒋帅惊愕地看著大门内的两人，努力深呼吸，放下车窗，探头出来，面带讨好的笑容：「他哥，我是礼乐的同学，送她回来。」</p>
+        <p>礼乐也伸出脑袋：「哥，能先关了吗？吵死了！」</p>
+        <p>宿业一个箭步蹿到门柱上，摘下灯罩，关掉警鸣，开启大门。然后，翻身跳下来，稳稳落在蒋帅的车前。</p>
+        <p>礼谌走上前，客气地表达感谢，偏头看著依旧赖在车里的礼乐：「小妹，到家门口儿了，你还不下车？」</p>
+        <p>「呃……」蒋帅后腰吃痛，笑著对礼谌说，「他哥，请允许我做一次绅士，将我的公主，送进去。」他等著外面两人各自让开，缓缓把车开进别墅，低声说，「大小姐，你想害死我啊。」</p>
+        <p>「我的脚伤，不能被我哥知道！」礼乐担心地看了看依旧在大门口的两人，对蒋帅说，「往你的右手边拐。」</p>
+        <p>礼谌一脸担忧，目光始终注意著车子。待到车停在礼乐的楼下，人却迟迟没有下来。</p>
+        <p>蒋帅从主驾驶下来，开启后座的车门，绅士的伸出一只手。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./092.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./094.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

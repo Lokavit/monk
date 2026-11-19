@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 003 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 003 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 003 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：03 Jan 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,017 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>宿业心中窃喜。三步并作两步地上了天桥。一眼望去，桥上的执勤警员已经全部离开了，只剩下几个摆地摊的。</p>
+        <p>与此同时，两人走上天桥。接头人拨打电话。</p>
+        <p>他转身背对著两人，眼睛余光四处瞟，找到栏杆一块儿镜面。看到两人对著他的背影一番打量，又相互递个眼色。</p>
+        <p>他一手伸进裤兜，拿出手机：「哥。我不想惹上麻烦，咱们还是不要照面。我就站在这里，你把钱打过来，我把证交给你。」</p>
+        <p>「我们这行只认现金交易，按规矩需要先验货。」接头人的声音，来自听筒，亦来自身后。</p>
+        <p>宿业时刻注意著身后的动静。发现两人已轻手轻脚地拉开些距离，对他做成围堵地夹角。他结束通话电话，开启录音机，猛然转身。</p>
+        <p>两人看到他，面上一惊。接头人笑著问他：「哥们儿，你的献血证呢？」</p>
+        <p>宿业一手在上衣里兜摸索半晌，扯出一截儿，又连忙藏回去，挑眉问：「钱呢？！」</p>
+        <p>两人相视一眼。同伙拿出钱包，在手里晃晃：「你把红本给我们吧。」</p>
+        <p>宿业点点头，走近大哥，故作神秘地掀起外套。趁著对方把注意力放在他的左手上，他右手闪电般抢过钱包，冲下天桥，奔入小巷。</p>
+        <p>身后两人的叫骂声越来越远。他得空开启钱包，一巴掌拍在脑门儿。</p>
+        <p>很好！黑吃黑，谁也没吃亏！</p>
+        <p>见两人紧追不舍，他甩手把钱包扔过去。两人拾起钱包，还是气势汹汹地朝他冲过来。</p>
+        <p>宿业转身就跑。偶尔回头看一眼，低声咒骂：「两个死脑筋，追我几条巷子了？！我跑死你俩！」</p>
+        <p>「嘭！」他一个没留神，撞在别人身上。</p>
+        <p>宿业退后一步，稳住身形：「抱歉！」他头也不抬，绕过人形障碍物，却被扯住胳膊。</p>
+        <p>他停步回头，扫一眼面前的人，略微一愣：「怎么个意思？」问话的同时，他稍稍正视著对方。</p>
+        <p>这个身形，这个帽子，这个揹包上的小沙弥挂件儿，还有这风中的檀香味。他瞬间想起来，是在公交车上见过的。这人怎么走到这儿来了？难道是……</p>
+        <p>「你和那俩人一伙儿的？！」他提著拳头，警惕地盯著面前的人。不然怎么会这么巧？在同一个地方下车，都过去那么长时间了，竟然又遇到，还抓著他不放手。</p>
+        <p>就在这片刻间，接头两人追上来，却在一定距离之外停住。两人先后撸起袖子：「还有帮手？！」</p>
+        <p>宿业的一只拳头停在半空，看了看身边的人，再看看对面两人。</p>
+        <p>「喂！钱包还你了还死咬著不放。你没钱，我没证。不如就此算了。否则打起来，还不知道进医院的是谁！」</p>
+        <p>他话喊得硬气，再次觑一眼身边还没有放手的人，反手抓著对方的手腕儿，压低声音问一句：「兄弟，会打架吗？一起挡挡。」说完，双手握拳，拉开架势。</p>
+        <p>身边的人没有说话，反倒是一只手把帽簷拉得更低，然后从兜里拿出手机，按了几下，又举起手机，萤幕朝向对面两人。</p>
+        <p>宿业惊讶看著这人的一通操作，不由得脑补出「一个电话，千军万马」的场景。</p>
+        <p>在短暂忙音之后，手机的扬声器传出一个女声：「您好，这里是１１０呼叫中心，请问您遇到什么……」</p>
+        <p>听到１１０三个数字。接头两人面面相觑，撒丫子就跑。</p>
+        <p>宿业更是像只被踩了尾巴的猫，一蹦三尺高，毫不犹豫地朝另一方向狂奔。</p>
+        <p>这小子打电话不是叫人，是报警！</p>
+        <p>他飞快奔到小巷岔路，稍微减速，回头冲身后人竖起大拇指，扬声说道：「嘿！兄弟，你可真是个……」他呑回骂人的话，补上两个字，「人才！」</p>
+        <p>哪儿来的天真小子？！这么点儿破事儿，一言不发就报警？！虽然说，可以解围，避免了一场巷斗。但真把警察招来，怕是大家都要进去坐坐。</p>
+        <p>留在原地的人，一手抬了抬棒球帽，露出大半张阳光帅气的容貌。先是对著电话解释一番，然后捡起地上一个红蓝相间的纸盒。</p>
+        <p>他看得清楚，这盒子是两人相撞时，由对方裤兜儿掉出来的。只是没来及提醒，对方已经逃命似地跑没影儿了。</p>
+        <p>他翻译著盒上的文字，从诸多陌生词汇里推测出个大概，这是一盒注射针剂。他看到一侧开口，顺手扯出里面塑胶盒。一支明显用过的注射针，一些医用垃圾，以及一份药物说明书。</p>
+        <p>这个人身上会掉出这些？他想起不经意瞥见对方手机萤幕的内容，以及对方说到血液中心和贩卖献血证。刚刚又看到对方被两个人追，口中说著钱和证。</p>
+        <p>他把东西收拾起来，装进揹包。看一眼对方离去的方向，而后朝巷子深处走去。</p>
+        <p>以防离开的两人在巷口蹲堵，宿业特地换了一条路。人生地不熟，正埋头跟著手机地图走的他，完全不知道危险逼近。</p>
+        <p>「艹！在这儿！」大哥五大三粗的身躯挡住小巷口。</p>
+        <p>「真是冤家路窄！」宿业掉头就跑，又一个急刹车。</p>
+        <p>接头人迎面走来：「老子在这片儿混十年了！你还想活著走出去？」他扬起手里短棍，面上露出狞笑。</p>
+        <p>宿业不由得皱眉，一言不发的活动筋骨，握紧双拳，卯足劲儿冲向接头人。</p>
+        <p>在他还是个街头混混的时候，这种场面没少遇到。被围堵，若只要盯住一个弱的往死里打，就有机会杀出去。他把首要目标锁定在接头人身上，也是为了先夺下对方的武器。</p>
+        <p>岂料，接头人也是有点儿底子的，不但轻易躲过了他的拳头，而且看出来他的意图。</p>
+        <p>宿业一拳打空，对方逮到机会，一棍轮在他大腿上。好巧不巧，不偏不倚，抡在了他下午才扎过针的位置上。</p>
+        <p>霎时，挨过针的地方钻心得疼，他身形一晃，靠在墙上，一边揉著自己的大腿，一边看向左右。这下惨了！棍没夺下来，两人把他围住。逼仄的巷子，赤手空拳的他，被打地抱头鼠窜。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./002.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./004.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

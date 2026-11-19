@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 028 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 028 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 028 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：28 May 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,085 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>父亲住院第四天，身体状况稳定，各种高昂设备陆续撤下来，每日住院开销控制在三百以下。</p>
+        <p>按照医生的说法，一周之后可以出院，医院应该会退不少钱。</p>
+        <p>邵骏杰发来消息：「沈女士，登报公告期满，下周三开庭，请在下周二来一趟事务所，我们有一些细节需要讨论。」</p>
+        <p>沈知遇第一时间把这个好消息告诉父亲，「你放心吧。就算那些人龟缩起来，不肯面对，照样可以缺席审理，法官照样开庭，他们跑不掉的。」</p>
+        <p>她在父亲床前说了很多话，是说给父亲听得，也是为了安慰她自己，使她有力量支撑下去。</p>
+        <p>父亲出院的日子与她出门的日子重叠，她毫不犹豫地找医生，申请父亲在疗养病房住几天。</p>
+        <p>她赶到邵骏杰所在的律师事务所，拿出医院最新的伤残鉴定书。</p>
+        <p>邵骏杰微微皱眉，「你想通过这份鉴定书，提高赔偿金额。」</p>
+        <p>「可以吗？」</p>
+        <p>「可以。只不过，我们明天就开庭了，你这个诉求我会加进去，这份鉴定书够不够份量，能不能提高赔偿，要看法官的决定。你想追加多少？」</p>
+        <p>「三十万。」沈知遇几乎是立刻说出。</p>
+        <p>三十万。是她深思熟虑的结果。三十万，以防老章那边遥遥无期；三十万，以防父亲的身体再出现什么问题，她没有钱的尴尬局面；三十万，可以兜住父亲住疗养院很久的开销。</p>
+        <p>周三。沈知遇这辈子第一次进入法庭，与她想象的完全不同，与电视上看到的更是差距甚远。</p>
+        <p>一间不足八十平的屋子，两列长会议桌，中间留空的位置吊着乱七八糟的线。</p>
+        <p>会议室的主位有个牌子，写着「主法官」，旁边桌上牌子写着「书记」。</p>
+        <p>在主位的左侧分别是「原告」、「原告律师」等，右侧则是「被告」、「被告律师」等。</p>
+        <p>沈知遇坐下，看着面前的显示器。屏幕里是打开的办公软件，她这里没有键鼠，只能看着。</p>
+        <p>约莫十分钟左右，进来两名身着制服的人，分别坐在「主法官」和「书记」的位置。</p>
+        <p>整个开庭过程，基本是法官和邵骏杰再说，沈知遇只需要回答几个问题。</p>
+        <p>随着书记啪啪敲键盘，沈知遇面前的显示器内容发生变化。文档里面的留空地方被异议填上内容。</p>
+        <p>开庭进行到后半程，邵骏杰提出，「根据最新的鉴定报告书，鉴定原告伤残『完全护理依赖』，我方要求变更诉讼请求，增加三十万赔偿金额。」</p>
+        <p>法庭一片安静。</p>
+        <p>沈知遇心跳如擂鼓，偷偷瞄一眼主位。</p>
+        <p>法官翻阅鉴定报告书，神情严肃，「资料没什么问题，记录上去。」</p>
+        <p>沈知遇看着面前屏幕的文档，赔偿金额追加三十万，总赔偿金额115万元。</p>
+        <p>她暗自松一口气，有了这些钱，就可以安排父亲住在条件好的疗养院，往后一直住下去。</p>
+        <p>一旦将父亲安顿好，她可以毫无顾虑地出发，重启自己的人生。</p>
+        <p>沈知遇回到县医院，把开庭过程和赔偿金额告诉父亲，把后面的计划和安排也说给父亲听。</p>
+        <p>父亲眼眶湿润，手指颤抖。</p>
+        <p>久病床前，无微不至地照顾，沈知遇对父亲的任何细微变化都能够读懂。</p>
+        <p>她拉着父亲枯木般的手，用双手轻轻握住，「没事。都过去了。等一两个月，裁决书下来，对方就给咱们赔钱。」</p>
+        <p>「您放心。我先回家一趟，明天来办出院，接您回家。」</p>
+        <p>沈知遇回家，把原本安置父亲的小屋子彻底收拾，床板全部拆掉，所有东西扔掉，又把最大的屋子重新布置为适合静养的环境。</p>
+        <p>这个家，原本就只有三间房，当她出去回来，发现屋子被小弟占用，就极少再回来，偶尔回来，也只有睡沙发。</p>
+        <p>自从父亲瘫痪在床，单独使用小屋，另外两间就被老妈和小弟占据。</p>
+        <p>老妈从来没有邀请她进屋睡，她也从来不往屋里去。</p>
+        <p>即使小弟每周回来一次，即使老妈三不五时的失踪半月一月，两间屋子都空着，她也不会去睡。</p>
+        <p>现在，她必须趁着无人在家，做最大改动，她可以一直睡沙发，但父亲必须安置在全天向阳的大卧室。</p>
+        <p>当她去医院接父亲出院的时候，护工帮她把父亲抱到车里，没有急着走，而是站在一旁看着她。</p>
+        <p>沈知遇小声和护工商量，「我想请你帮我，来回的车费和误工费我来出。五百，怎么样？」</p>
+        <p>「妥了！」护工一拍巴掌，爽快答应，顺便帮沈知遇从医院带出来一些患者居家常用物品。</p>
+        <p>沈知遇也不吝啬，转给护工五百五十块钱，目送护工坐车离开。</p>
+        <p>这一刻，她懂得，一切用钱能解决的问题，其实都不是问题。</p>
+        <p>父亲住在主卧，气色明显好了不少。</p>
+        <p>沈知遇没有再私聊老章，奇怪的是，老章已经很久没有组织线上会议了，之前口口声声说甲方验收的事情，也没了后续。</p>
+        <p>好在，沈知遇早就不指望老章，而且把重心放在网上的私单，以及父亲官司的赔偿金。</p>
+        <p>裁决书下来的日子，比预期晚了一个月。</p>
+        <p>沈知遇主动打电话给老妈。</p>
+        <p>一听说是去拿裁决书，老妈当晚就回家了，反复追问她，「到底赔偿多少钱？」</p>
+        <p>「要看裁决书才知道最后确定的赔偿金额。」沈知遇语气冷淡。</p>
+        <p>「咳！这么说，钱还没准儿呢。」老妈放下包，停步在主卧门口，「这是怎么回事？！你爸怎么占着大屋？」</p>
+        <p>「医生说，需要静养、需要室内恒温、开阔、有阳光。」</p>
+        <p>「那我睡哪儿？」老妈推开次卧，「这你弟的屋子，你倒是没动。」</p>
+        <p>「你只能睡你儿子的床。」沈知遇说。</p>
+        <p>「那你睡哪儿？」</p>
+        <p>沈知遇有一瞬间感动，被亲妈关心的感动。</p>
+        <p>她指了指沙发，「我一直睡这儿。」</p>
+        <p>老妈嘴角动了动，没有说什么，推开原来的小屋，里面堆着几样患者居家常用物，和一些老旧的东西。</p>
+        <p>「你什么时候回来？」</p>
+        <p>「最快明晚。」沈知遇答。</p>
+        <p>她把电脑装进背包，在车上的几小时，还能赶一赶昨天接到的私单。没有了邵骏邕的AI工具，她赚得每一笔都是辛苦钱。</p>
+        <p>律师事务所的走廊里，永远是大群的苦主聚集地。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./027.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./029.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

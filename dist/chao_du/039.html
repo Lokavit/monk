@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 039 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 039 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 039 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：08 Feb 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,116 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>宿业想问问一礼，行逸那么有钱，又是名校学子，为什么要来白鹿寺吃斋念佛两年多？可转念一想，一礼八成不会说。于是，他忍住了。</p>
+        <p>他思前想后，做下决定。趁著一礼去上课，将自己的寻常衣服拿到机房，藏在伺服器后面。等到夜里十点半，换下僧服，翻出白鹿寺，直奔工作地。</p>
+        <p>来到金色大地门前，宿业给当时见到的豪哥打电话。不一会儿，有个年轻人出来，把他领进去。在透过安检门时，被保安一双糙手，上上下下摸个遍，生怕夹带了什么进去。</p>
+        <p>过了安检之后，还要上交身上的所有东西，等到下班再来取走。这是为了防止，有人在里面做什么不可告人的交易，招来警察，影响运营。</p>
+        <p>宿业掏了半天，兜儿比脸干净，只有一部手机上交。他跟著年轻人穿过门厅，越往里走，音乐声越响。等他看到大厅人头攒动的时候，震耳欲聋地音乐，完全淹没其它声音。</p>
+        <p>他不适地捂住耳朵，忍受著从舞台下穿过，乘电梯来到二楼，见到豪哥。</p>
+        <p>「你这穿得什么玩意儿？能有交易就有鬼了！」豪哥打量著宿业，语气十分不悦，「一会儿找人带你去领一套衣服。」</p>
+        <p>宿业有几年社会经验，遇到这种情况，立马点头哈腰装孙子：「谢谢豪哥。」毕竟还要在这里赚钱，不能得罪了小老板。</p>
+        <p>豪哥看他很上道，打电话喊来刚才的年轻人：「你，带他去挑一身儿衣服，熟悉熟悉环境，了解了解规矩。」</p>
+        <p>于是，宿业换了一身看起来像小白脸的衣服，在稀里糊涂地听完规矩之后，开始巡场，搜寻意向目标客户。连续碰壁两三次，终于捡到一个客人。</p>
+        <p>就在他伸手接钱的时候，莫名出现第三只手，抢在他之前，收下客人的钱。他有口难言，还被对方推搡几下，语出威胁。想到赚钱为第一要务，他又一次忍下来了。</p>
+        <p>他迅速向对方道歉，站在角落里，观察了半天。场子里但凡长得不错，频繁换人攀谈的，多数是他这样的酒推子。看来，想赚钱，还得要凭本事找生意啊。</p>
+        <p>转眼将近十二点，舞台上的表演人员清空，全场灯光倏然关闭，陷入一片漆黑中。宿业不知道发生了什么，习惯性掏出手机照明，想起来手机交出去了，只好朝角落躲了躲。</p>
+        <p>「准备好了吗？！」一个铿锵有力地女声，从音响中传出，回荡在整个大厅。</p>
+        <p>「准备好了！」一群客人热血沸腾地喊叫，此起彼伏地流氓哨。</p>
+        <p>轻柔地音乐传入每个人耳中，猛然陡转地同时，场内亮起五光十色的炫彩灯。</p>
+        <p>宿业昂首望去，被台上的景象惊艳到。</p>
+        <p>舞台之上的高台上，一名身穿黑色皮衣的女生，眉清目秀，头戴白色监听耳机，彩色丝带扎著高马尾，更显身材高挑。她站在ＤＪ台后面，手持话筒。场内众人，跟著她高声喊著倒计时，至整点爆炸音效，「嗨起来吧！」说完，低头调音。</p>
+        <p>令人血脉膨胀地音乐，响彻整个金色大地。在她身后的墙上，有几个人为抠出来地格子，每个里面皆有一名靓丽的女生，随著音乐舞动。台下多数人站起身，走近舞台，随著音乐，摇头晃脑，放声嚎叫，尽情释放。</p>
+        <p>夜店的后半夜，上客率飞速上涨。毕竟谁都不差那一百块钱，来此疯狂个把小时，什么烦恼郁结，统统烟消云散。虽然人数急剧增多，但这些人基本不会花钱在高阶酒水身上，就算嗨累了，也只买低价的饮品。</p>
+        <p>宿业忙活整个晚上，直到三点收场，一笔交易都没达成。垂头丧气地走出金色大地，却被几个酒推子拦住，向他要钱，说是拜山头。这下点起他憋闷一晚上的火气：「我今天没开张，改天再说。」</p>
+        <p>「不交钱，你就别想在这儿赚钱！」</p>
+        <p>他斜眼看著对方，想起来是晚上截了客人的那位，心里火气更大了起来：「你挺横啊？！我不是让你一个客人吗？」</p>
+        <p>「每行有每行的规矩，你小子刚来，就学著点儿。」他抬手推搡著宿业，「赶紧拿钱来，不然打得你明天来不了！」</p>
+        <p>宿业冷哼一声，一手抓住对方手腕，反手一扣，在对方惨叫地同时，一脚揣在对方膝窝。他冰冷地扫视其他几个跃跃欲试的人：「都是出来赚钱的，和平共存行不行？」</p>
+        <p>「你们还愣著干什么？帮我打他！」几个人应声而上。</p>
+        <p>人擅长群体行动，在有领头的情况下，会听令行事，以数量取胜。如果有人想要加入，要么奉承他们，要么降服他们。拥有丰厚打架经验的宿业，选择后者。这些酒推子，一个比一个绣花枕头，真正动起手来，没一个能打的。</p>
+        <p>「没人告诉你们，不要招惹光头吗？！」宿业一脚踩在带头挑事人的背上，看著地上横七竖八，哼哼唧唧地几个人，「我再问一遍，和平共存行不行？」</p>
+        <p>「行，行，行！老大，你说了算，你说了算。」挑事人率先服软。其他几个也跟著附和。</p>
+        <p>「为了你们还能赚钱，我可没往你们脸上打。」宿业面无表情地说著，「回去好好休息，不行就擦点儿药。」他一手抄兜，离开金色大地。</p>
+        <p>早已在二楼窥视许久的一名年轻人，嘴角滑出一抹笑容：「豪子，这人新来的？」</p>
+        <p>豪子看一眼窗外：「昂，今儿晚上才来。我看他挺上道，就留下试试。怎么了？」</p>
+        <p>「挺有意思。」年轻人望著远去的背影，「我想找机会认识认识。」</p>
+        <p>一晚上没赚到钱，还搭上了近百块的来回打车费。宿业一边换衣服，一边在心里咒骂，出了机房，直奔宿舍。他蹑手蹑脚地进屋，轻手轻脚地躺下，看一眼对面床铺熟睡的人，松了口气，蒙头大睡。</p>
+        <p>一礼悄无声息地睁开眼睛，转头看一眼宿业的床铺，若有所思。</p>
+        <p>当宿业第二天晚上，再去金色大地。一群酒推子对他的态度，来了个一百八十度大转变。好心地告诉他，哪些人最好不要去问，哪些人是常客，哪些人出手阔绰。甚至告诉他，要想多赚钱，就去二楼ＶＩＰ区域，坐那儿的人个个出手给几千的小费，就是多数脾气不太好，难以捉摸。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./038.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./040.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

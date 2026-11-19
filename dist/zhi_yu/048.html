@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 048 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 048 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 048 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：17 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,946 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 8 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>她自觉没脸再进去了，也知道自己没脸再留在这里了。</p>
+        <p>文创部的群连续好几条消息，最后一条是婉转的提醒她，不要多管闲事。</p>
+        <p>沈知遇快速敲下一句话，「围绕着村公社那里是村落的灵魂，不能动。」</p>
+        <p>下一秒，她被踢出文创部的群。</p>
+        <p>她愣了一下，又点开文创品牌的群。</p>
+        <p>这是她签约的群，这群人隔三差五在群里对她催稿，绝对不会踢她。</p>
+        <p>但是，沈知遇犹豫了，她删掉了打出去的一长串文字，将手机熄屏。</p>
+        <p>她再次把自己关在屋里，她想走，却不知道能去哪里。</p>
+        <p>她想起饭团的那个小村落，但那里太偏僻，她跟本无法凭着自己的能力过去。</p>
+        <p>那个村落小到一眼望得到尽头，就像一眼能看到人生的尽头。</p>
+        <p>将自己困在房子几天，沈知遇忽然注意到，外面的噪杂声全没了。</p>
+        <p>她拉开窗帘，推开窗户。</p>
+        <p>样板房没了，挖掘机没了，推土机没了，吊车没了，一堆施工料还堆在村口。</p>
+        <p>几辆卡车正一车车装，一车车拉。</p>
+        <p>沈知遇询问其中一个司机，才知道，甲方集团资金链问题，施工队紧急撤离，就连现在拉走的这些工程料，也是施工队低价卖给其他工程队的。</p>
+        <p>现实如此残酷，原本的村落，现在由一部分商业化完成的建筑，一部分断壁残垣，一间保留下来的村公社组成。</p>
+        <p>所有烂摊子摊开在眼前时，沈知遇心里半分愧疚都生不出来，只剩翻涌不休的烦躁、愤怒与厌弃。</p>
+        <p>她早该清楚资本骨子里只看重利益，合同里藏着层层陷阱，村民贪图小额补偿轻易妥协，所有人都各取所需，唯独她夹在中间，攥着一点可笑的设计执念撞得头破血流。</p>
+        <p>她不愿留下来周旋扯皮，不想和甲方对峙打官司，她在法律、官司上吃得亏已经够多了，够深刻了。</p>
+        <p>当初的争执、追责、拉扯、漫长的诉讼拉锯，最终等来的是父亲的死不瞑目。</p>
+        <p>她悄悄收拾所有东西，一个大背包，和一个行李箱。</p>
+        <p>想到这一次回来，带着满满一行李箱的礼物，带着资本家入场后，商业化后，大家都能过得更富裕的理想。</p>
+        <p>而今空空的，轻飘飘的行李箱，就像现在的她，没有了理想，只剩下尽快逃离的坚决。</p>
+        <p>她没和任何人道别，切断了大部分往来联系方式，买下一张去往北方的车票。</p>
+        <p>曾经三千多公里的来时路，现在又是两千多公里的去路。</p>
+        <p>她曾孤身一身进藏，而今只身北上，停留在一座物价较低的海边小城市。</p>
+        <p>她的梦想是租下海景房，但存款上的数字不足以支撑她的梦想。</p>
+        <p>这是一座曾经繁华，而今颓败的城市。</p>
+        <p>繁华，是因为它曾靠着房价成为全国人尽皆知的养老圣地。那些手握资金的投资人，蜂拥而至，将一个小城市的房价推升到离谱的高度。</p>
+        <p>然而，仅是短短两三年过去，小城市退回到最初的模样。那些新开发的楼盘和地段，房屋破陋、没有灯火，婉如一座鬼城。</p>
+        <p>沈知遇在资本家那里吃了一次又一次的亏，她学聪明了。面对一群看她像是看到嘴边肥肉的无良中介。</p>
+        <p>她连一个眼神儿都不给。自己骑着一辆共享自行车，在老城区穿梭，寻找一处高性价比的房子。</p>
+        <p>很快，她找到了。</p>
+        <p>一处老市区的步梯楼房，九十年代的建筑，外部看起来非常陈旧，但内里被房东重新整修过，厨卫设施一应俱全，一个月只需要一千二百元。</p>
+        <p>沈知遇最喜欢的，是这里的阁楼，斜顶落地窗正对海面，她可以在这里摆上小桌椅，欣赏大海。</p>
+        <p>这会令她想起鹿垣的次卧海景，想起邵骏邕，想起老章，想起父亲，想起官司……</p>
+        <p>也会想起自己一路迷茫，跌跌撞撞，兜兜转转，孑然一身。</p>
+        <p>正当她拎着沉重的大箱子吭哧吭哧上楼时，身后传来急促的脚步声，轻快跑上来，在她身后停下。</p>
+        <p>沈知遇回头。</p>
+        <p>男生穿着一身轻薄的休闲服，单肩背着一个黑色书包，上面挂着一个「我要暴富」的布条。</p>
+        <p>老房子的楼梯空间狭窄，沈知遇使劲儿挪了挪箱子，整个人几乎贴到墙上，仍是腾不出来地方。</p>
+        <p>「几楼？」男生问。</p>
+        <p>沈知遇防备地看着他，犹豫了几秒钟，「顶楼。」</p>
+        <p>「好！」男生把背包交给沈知遇，拎起箱子，扛在肩头，噔噔噔上楼。</p>
+        <p>沈知遇在后面跟着，扶着扶手向上爬，艰难地爬到了顶楼，感觉心肺要炸了。</p>
+        <p>男生拿回自己的背包，「还有吗？我帮你搬。」</p>
+        <p>沈知遇摇摇头，「谢谢你。」</p>
+        <p>男生挥挥手，又噔噔噔跑下楼。</p>
+        <p>沈知遇屏气听了听。男生在三楼停下，用钥匙开门进屋了。</p>
+        <p>沈知遇推了推箱子，打开门，用力把箱子拉进屋里，整个人瘫在沙发上。</p>
+        <p>她只顾着找个看海的房，忘了要每天上下七层楼。以她的体格，每次上下楼，都将是一场极限有氧运动。</p>
+        <p>将房屋打扫干净后，她打开箱子，把衣服一件件挂进衣橱，把自己的小物件拿出来，摆在书桌上，正中间，是一台笔记本。</p>
+        <p>冰箱里空空如也。</p>
+        <p>沈知遇磨蹭了几个小时，饿得实在受不了了，换衣服下楼。</p>
+        <p>走了约莫十分钟，找到房东说的生活超市。</p>
+        <p>她推着一辆购物车，一边走，一边看，留意价格。</p>
+        <p>大多数东西价格亲民，尤其是蔬菜水果，肉蛋海鲜，还有各式各样的熟食。</p>
+        <p>沈知遇逛着逛着，选了大半购物车。</p>
+        <p>排队结账后，她看着三大塑料袋的东西，猛然想起来，要提的！</p>
+        <p>可是，东西都买了，退是不能退的。</p>
+        <p>她站在购物车旁边发愁，时不时看了看外面。</p>
+        <p>过了半个多小时，可算是看到一辆出租车。她立马冲出去，一样一样提到车上。</p>
+        <p>车子在楼下停住，司机看了看她，没有下车。</p>
+        <p>沈知遇咬着牙，一兜一兜地提下来，放在楼道。</p>
+        <p>她仰头望着顶楼，还没有开始爬，就觉得心跳似乎已经飙到一百八往上了。</p>
+        <p>一个大叔走过来，经过她的身边，打量了她一番，看了看她脚边的三个大兜子，上楼了。</p>
+        <p>沈知遇暗自叹气，咒骂自己。</p>
+        <p>沈知遇啊，沈知遇！你怎么总是等人帮忙？自己不能提吗？提不上去，就不能多提几趟吗？</p>
+        <p>她把东西分拆成六个塑料袋，一次提着两袋，一步一步地爬着楼梯。</p>
+        <p>一趟之后，额头渗出汗珠。 两趟之后，衣服湿透贴着后背。 三趟之后，她发誓再也不买这么多东西了！</p>
+        <p>当她吃着自己辛苦扛上来的晚餐，内心无比满足。</p>
+        <p>体力严重透支的一天，她早早洗漱，抱着笔记本上了阁楼。</p>
+        <p>外面，海风呼啸。阁楼的窗户严重漏风，她不得不回到卧室。</p>
+        <p>躺在床上，手指划着手机，留意到一条推送。</p>
+        <p>那个再熟悉不过的地名，配着几张照片。</p>
+        <p>没有商业化商铺，没有网红打卡墙，漫山遍野飘着褪色经幡，木架上立着老旧转经筒，最中间一张，是唐杰站在村口石板路上，笑得干净坦荡。</p>
+        <p>沈知遇看了好一会儿，向下滑动。</p>
+        <p>底下最前面是几条高赞评论： 「这才是『朝圣之地』。」 「最后一块没有被资本腐蚀的净土。」 「标记！马上就去！」 「我去过这里，真心推荐。」</p>
+        <p>沈知遇点下视频的循环播放，一遍又一遍，看了很久很久。</p>
+        <p>某个清晨，她从超市拉着购物小推车回来，再次看到帮他提行李箱的男生。</p>
+        <p>男生蹲在一间草厦子里，「过来吃……你的在这里……不要抢你兄弟的……」</p>
+        <p>沈知遇听到一阵嘤嘤声，好奇地抻着脖子往里看。</p>
+        <p>果然是小狗！两只可爱的小狗崽，像是还不会走路。</p>
+        <p>沈知遇不由自主地走过去，「不到一个月吧？」</p>
+        <p>「昂。快了。」男生说。</p>
+        <p>「真漂亮的小土狗。」沈知遇说。</p>
+        <p>「你喜欢吗？」男生问，「送你一只？」</p>
+        <p>沈知遇惊讶地睁大眼睛，「啊？可以吗？」</p>
+        <p>「嗐！这有啥不可以的。你不就住在七楼吗？又不是狗贩子。再说，多了我也嫌闹腾。」</p>
+        <p>沈知遇没管住自己的手，把一只小土狗抱回了家。</p>
+        <p>她一边忙乱的准备东西，一边想起来邵骏邕和她讲过的，如何养小狗崽，有哪些注意事项。</p>
+        <p>看着奶奶的小家伙儿，沈知遇忘记了那些阴霾与不快，对着小狗又是捏又是亲，睡觉都要把狗搂在怀里。</p>
+        <p>这一晚，沈知遇睡得特别沉，梦里看到饭团。饭团开心地朝她跑过来，拱着她的小腿。</p>
+        <p>沈知遇睁开眼，腿边一团温热绒毛轻轻蹭过来，小土狗叼住她的睡裤，轻轻往下拉扯。</p>
+        <p>她抱起小土狗，「怎么了？饿了？给你做好吃的。」</p>
+        <p>一段时间之后，她开始带着小土狗下楼，沿着海边的步道跑步。</p>
+        <p>她忽然想起，一人一狗在阳光下奔跑的画。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./047.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <span class="nav-btn disabled">
+          下一章 <span class="arrow">→</span>
+        </span>
+      </nav>
+    </div>
+  </body>
+</html>

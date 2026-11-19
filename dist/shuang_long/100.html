@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 100 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 100 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 100 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：10 Apr 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,078 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>杨虎也不计较，拿起桌上一碗凉白开，以茶代酒，爽快碰杯，连声道歉。</p>
+        <p>三个人聊得有来有回，说话最少的依然是少龙。</p>
+        <p>他专心吃饭，心里挺高兴，也很羡慕。</p>
+        <p>张扬能在如此快的时间里，和这一龙一虎聊起来。从一个游戏话题引入，聊到南北方地域文化差异，聊到各自生长环境，天南海北，无一不侃。</p>
+        <p>听著几个人把话题往他身上引，少龙抬头挨著个儿看过去，三人识趣的换话题。</p>
+        <p>张扬这个人，诚实，没心眼儿，问什么答什么。问到敏感的地方，就会直言，不方便说。</p>
+        <p>可面对龙辰这种心细如尘，世故的人精，根本防不胜防。</p>
+        <p>一旦聊开了，少龙怎么在桌下提醒都没用，张扬照样往外吐露。</p>
+        <p>杨虎更是有什么说什么，直言不讳。把那些少龙不想告诉张扬的，不想被张扬知道的，负面的人事物，一通向外抖落。</p>
+        <p>龙辰偶尔朝少龙递个意味深长地眼神儿，偶尔嘴角咬住笑意，看著一脸无奈的少龙。</p>
+        <p>一顿饭吃到很晚才散场。</p>
+        <p>「这里，真不是人待的地方。」张扬唉声叹气，又欣慰地说，「不管怎么说，你有新朋友了。我放心很多。」</p>
+        <p>「你说龙辰？」少龙擦干头发，把浴巾扔在门把手。</p>
+        <p>「嗯。」张扬靠在床头，「今天游戏厅，你拦著我报警，我才见识到什么叫土匪窝。我后来想想，你拦住我是对的。我报警，当时处理了。他们出来，还是会报复。周而复始，不厌其烦。再说，你还有六百多天才能离开，万一在这里得罪了什么人，比如那个玄武的地头蛇。有个本地朋友，你日子也能好过一些。」</p>
+        <p>少龙站在窗前，看著不服网咖的孤灯，听著张扬分析利弊。</p>
+        <p>「我看龙辰性格不错，为人处事，也挺世故，值得相处。」</p>
+        <p>少龙拉上窗帘：「你都看出来他世故，你还跟他说那么多。」</p>
+        <p>「我有分寸。」张扬自信一笑，「你看他对你多好奇。我肯定要透露一点儿，这样他就会稍微照顾照顾你。他们说的很多事情，你都没和我说过。不过，我也知道，你是不想我为你担心。」</p>
+        <p>「我不惹事儿。」少龙关掉房间最后一盏灯。</p>
+        <p>「你是不惹事儿，你就是太多事儿看不爽，非要表达出来。」</p>
+        <p>少龙本想让张扬好好休息，可是张扬不肯睡觉，非要聊天。从社会新闻，聊到家里的鸡毛蒜皮，聊到学校的同学和老师。</p>
+        <p>他陪著说几句，更多的，早被龙辰和杨虎都说完了。龙辰还是顾及他的，没有把他最不愿被人知道的事情说出来。甚至也曾假装无意，打断杨虎的话。</p>
+        <p>「你如果不想住在那个破屋子，我回去找我妈借钱。借给你，长租这个酒店。」</p>
+        <p>「笑笑进不来。」少龙说。</p>
+        <p>「把它忘了。那你在学校附近租个房子。这里小破地方，房租应该不贵。」</p>
+        <p>少龙暗自叹气，淡淡地说：「我想过租房。只不过，这里面还有其它原因，我再考虑考虑。」</p>
+        <p>「是因为……那个……那个人？」张扬摇摇头，「我没见过她，也没机会见了。但我知道，你俩关系不好，因为那个破房子，因为你从来没有对我提起她。」</p>
+        <p>少龙沉默半晌。</p>
+        <p>「少龙，我明天就走了。希望我能带走你所有烦恼，这也是我来的另一个目的。」</p>
+        <p>少龙心知，始终不说，张扬今晚就不会睡觉。他接受好兄弟的的关怀，不再硬扛著。把来到这里的种种糟心遭遇，鬼屋在这里的见鬼传闻，以及那如鬼似魅的女人，尽数倾吐。</p>
+        <p>可是，即使他把能说的，不能说的说尽了，张扬还是没睡觉，又聊起两人当下最重要的学习和高考，聊起曾经探讨过很多次的人生选择。</p>
+        <p>两人仿佛再见无期，你一言我一语，聊到天亮。</p>
+        <p>张扬来时带著大堆资料，走时箱子空空。</p>
+        <p>「你的衣服。」</p>
+        <p>「你带走吧。」少龙说，「万一路上变天，还能应急。」</p>
+        <p>张扬点点头，把常用物放在单肩小包里，剩下的揹包和衣服，全塞进行李箱。</p>
+        <p>少龙带著张扬，尝过龙辰曾极力给他推荐的小笼包。</p>
+        <p>两人去往车站，走上站前广场，少龙惊觉自己没再像之前几次那样烦躁。</p>
+        <p>第一次进入候车大厅，他环视四周，找个清净的地方，和张扬挨著坐下。</p>
+        <p>大厅的人比想象中的要多，四五十岁的人占多数。他们穿著破烂，扛著行李，毫无形象地倒在椅子上。更有甚者，抖开铺盖卷儿，躺在地上，呼呼大睡。</p>
+        <p>张扬这一趟过来，少龙才知道。从机场坐火车，八§九个小时到终点站，然后再转一趟绿皮慢车，才能到达这里。</p>
+        <p>现在，他们在等那趟绿皮慢车进站。</p>
+        <p>手机在兜里震动。少龙拿出来看看，不由得笑了，把萤幕转向张扬。</p>
+        <p>龙辰：『你们今天可以去公园，那边有个鹤归湖，景色不错。从玄武广场一直向北走，就看到了。』</p>
+        <p>张扬也笑了，不加掩饰的苦笑。他向下拉一拉帽簷：「你这同桌，真热心。」</p>
+        <p>少龙略微一怔，颇为认可。</p>
+        <p>张扬昨晚告诉他，这次回去，就不能向之前那样，每周都远端影片学习了，连周六日能用手机的时间也被缩短。</p>
+        <p>少龙垂首，对著龙辰的聊天框，反反复复输入，删除。</p>
+        <p>突然，旁边一道有些熟悉的女人声音飘来。</p>
+        <p>他觑过一眼，大惊失色，摘下张扬的鸭舌帽，戴在头上。</p>
+        <p>女人手里拿著几个充电宝，手肘上挂著几根资料线，沿著过道，一边走，一边热情推销，有意伪装说话的声音。</p>
+        <p>随著距离越来越近，声音越来越清晰。</p>
+        <p>少龙一手握住张扬的手腕，嗖地站起来，拉著张扬，大步流星地离开，直接翻过栏杆，冲进站台。</p>
+        <p>警员随后而来，张扬连忙补站台票。巧在火车进站，张扬拽一拽少龙：「上车。」</p>
+        <p>少龙和张扬坐的是头等座，整个车厢，只有他们俩。</p>
+        <p>待到火车完全驶出站台，他把帽子还给张扬，靠在沙发背，望著窗外发呆。</p>
+        <p>倘若，就著这趟列车，离开这个土匪窝，该有多好。</p>
+        <p>张扬帮少龙补上车票，试探著问：「就是那个女人吧？」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./099.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./101.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

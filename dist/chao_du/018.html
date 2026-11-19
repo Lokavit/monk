@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 018 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 018 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 018 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：18 Jan 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,076 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>三点半。这个本该熟睡的时间，寺院钟声响过，众寮里体验班的戒子们，一个都没起床。</p>
+        <p>不知过了多久，一阵噪杂的吵闹声，惊醒宿业。才睁开眼，看到门口的异常状况，他一个激灵坐起来，低声问缩在旁边的裕阳，「什么情况？」</p>
+        <p>裕阳见宿业醒了，连忙凑过去，抓著对方的胳膊，小声说：「好象是因为被吵醒，起床气比较重。他俩就和那个师兄打起来了。」</p>
+        <p>宿业听出裕阳说话声音有些颤抖，明显是被吓到。到底是小孩儿，没见过什么阵仗。他拍了拍裕阳后背，「没事儿。快穿衣服。」</p>
+        <p>就这一会儿，进来六七个僧人，两名起床气重的戒子也被制住。戒律师走进来，以「触犯戒律，毁坏三宝」为由，把两人除名。两人先是服软几句，见没有效果。收拾东西，骂骂咧咧地离开众寮。</p>
+        <p>好嘛。这才刚过去一天，就请走了五六人，照此下去，估计能撑一个月的没几人。</p>
+        <p>由于众寮里所有戒子，没有一人能做到穿戴整齐，虔诚普佛。并且因为哄闹，错过了朝课。戒律师要求他们，洒扫寺院。</p>
+        <p>向来好吃懒做的宿业，早就遛达到没人注意的地方去了。天还没大亮，只有大雄宝殿里传出敲击木鱼的声音，以及住持率领僧众绕佛，念诵著经咒。</p>
+        <p>朝课结束。见到寺里僧人各司其职、各有分工，互不打扰，宿业心中稍稍提升了对和尚的好感。</p>
+        <p>而此刻的他，正与其他戒子们，坐在一间佛堂内，等候法师来上课。</p>
+        <p>不一会儿，寺院钟声响起。几名身著褐色海青，外加五条衣的僧人，依次步入佛堂。各自将手上的法器搁置在桌上，轻手轻脚地入座。</p>
+        <p>宿业皱眉瞅著面前桌案，一尊佛像，一鼎香炉，一些稀奇古怪的法器，推断这些应该就是唱佛歌需要的乐器。他百无聊赖地望向窗外，目光有了著落点。</p>
+        <p>一礼穿著一身黄色海青，覆著褐色七条衣，手捧经书，步履不疾不徐。朝阳落在他身上，光芒更胜。</p>
+        <p>宿业暗自嘀咕，「怎么又是一礼来教？到底是他全能，职务多，还是寺里没别人了？」</p>
+        <p>一礼领著一屋子僧人和戒子，焚香顶礼，正式上课。他先讲述了梵呗的历史、音乐形式，然后讲到作用，可以陶冶性情、修养身心，传播著积极、平等、和谐的精神。接著，对桌上的磬、铛、铪、铃、鼓、鱼等法器，一一详细介绍。</p>
+        <p>最后，由其余几名僧人手持法器，在一礼的磬声引导下，奏起佛乐。</p>
+        <p>本来昏昏欲睡地宿业，在听到一礼唱出第一个音节后，倏然抬首，眼睛一眨不眨地盯著一礼的一举一动。</p>
+        <p>这声音与一礼平时说话有些不同，他唱梵呗的声音正直和雅，清澈深远，不偏不缺，节奏如大海潮水波浪，令听者有一种轻安的感觉。</p>
+        <p>宿业双手托腮，听得极为认真，忘乎所以地鼓掌叫好。声音戛然而止，众人用怪异眼神儿看著他。</p>
+        <p>「阿弥陀佛。出家人需时时持平常心、平静心，切勿大喜大悲，反应乖张。」</p>
+        <p>宿业非常给面子，连忙起身，双手合十，面带歉意，「师兄说的有道理。受教了。」</p>
+        <p>整个上午的时间，就在一礼极为耐心的，一字一句教他们梵呗中结束。</p>
+        <p>听到打板声，宿业拉著裕阳，直奔五观堂。他们的上一顿还是在昨天中午，又偏不巧，他昨天下午就把肚子倒空。再加上今天上午的体力消耗，现在就比其他人更饿，已经感觉到自己眼冒金星、脚步虚浮。</p>
+        <p>他度秒如年的等到第二次打板，跟著排队的僧人进入斋堂，依次向后，在裕阳旁边就座。看著眼前的俩空碗，暗自叹气，不著痕迹地揉揉肚子，就怕冷不丁发出声响。</p>
+        <p>直到第三次打板，住持进入斋堂，带领僧众和戒子们，行仪念咒，做五观想。随后，有几个僧人抬著饭菜进来，逐一为桌上的每个碗派饭菜。</p>
+        <p>宿业看著眼前的半碗大锅素菜，一小个馒头，忍不住吞咽口水。已经前胸贴后背的他，早把这点儿东西当成珍馐佳肴。可是，还不能动筷子。</p>
+        <p>戒律师围绕著饭桌，强调仪规。什么举止手势、捧碗持筷，不得出声，不得狼吞虎咽，更不许剩饭剩菜。更离谱的是，前三口只能吃饭，每吃一口都要发愿，第四口才能吃菜。</p>
+        <p>一顿饭吃得是心力交瘁，还只是垫了个底儿。宿业觑一眼因为出声挨了板子的戒子，犹豫再三，不敢要求添饭，想著等一会儿出去，多喝点儿水。他想离开斋堂，却忘了戒律师说过的饭后步骤是什么。</p>
+        <p>见其他人双手合十，嘴皮子动一动，片刻起身离开。他跟著有样学样，成功蹓出。</p>
+        <p>与昨日同样。戒子们在午休之后，出坡劳作。宿业开始怀疑，短期出家班，是为了给寺里找免费苦力。他回到众寮，换上罗汉褂，低头审视自己一番。对这一身看起来像电影龙套僧的装扮，较为满意。一时玩儿心大起，趁著周围没人，耍一套拳。</p>
+        <p>眼角瞥见一道壮实的身影，他猛地停住。戒律师手持戒板，不怒自威。站在不远处，不知看了他多久。整个下午，宿业被扣在五谷轮回之所打扫。按照戒律师的意思，叫他放下傲慢。</p>
+        <p>又到了洗澡净身的时间。宿业特地磨蹭了好一会儿，拿上毛巾和皂角，不紧不慢地走出众寮，晃晃悠悠地进入浴室院，只为能等到最后一个格子空闲。</p>
+        <p>然而，当他路过一大片空格子，还没走到最后一格，就听到哗啦啦地流水声。他好奇地检视，登时愣住，尴尬地笑笑，「好巧啊！师兄。」</p>
+        <p>心里却在嘀咕，「这也太不巧了。怎么就赶上一礼也这么晚过来？他不是应该按时按点儿的洗澡吗？」</p>
+        <p>半晌没听到回答。宿业侧身朝向隔壁，一只胳膊架在腰门上，单手撑著脑袋，看了一会儿一礼，笑著问：「师兄，需要帮你搓背吗？我看你好像不太会洗澡的样子。」</p>
+        <p>浴室院里，只有流水声。他讨了个没趣，无论怎么耍贫，对方全程没有说一字一句。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./017.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./019.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

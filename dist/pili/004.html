@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 004 章 丘山云雨时 · 大霹雳世界 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">大霹雳世界</a>
+          <span class="sep">/</span>
+          <span>第 004 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 004 章</span>
+          <span class="chapter-name">丘山云雨时</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Mar 2557 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 1,277 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 4 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p>开经偈：无上甚深微妙法，百千万劫难遭遇；我今见闻得受持，愿解如来真实义。</p>
+      </div>
+
+      <article class="chapter-content">
+        <p>**『楔』**</p>
+        <p>开经偈：无上甚深微妙法，百千万劫难遭遇；我今见闻得受持，愿解如来真实义。</p>
+        <p>如是我瞎掰。一时光尊玉菩提在天佛原乡，与众下属不知多少佛者俱。</p>
+        <p>尔时光尊衣著光鲜，长发披肩，持杖未托钵，随意而坐，侃侃而谈。众佛者无不双足跏趺，专心聆听。</p>
+        <p>玉菩提言：过去久远以前，有王凶残暴虐，心性成魔，杀戮释子，无法降伏。彼时，有阿罗汉大悲熏心，以慈悯力化色身，往其所。彼王见此人，欲心炽盛，而抱其身。彼阿罗汉言，王实欲触我身者，可随我道。彼王欣然受之，依缘护法，转为金刚尊者。</p>
+        <p>时，神州动荡，大地众生惊惶奔走。</p>
+        <p>光尊玉菩提，面色忧虑，言：劫数矣。今下界有一大妖初醒，聚千百妖，自号圣婴主。在座尔等，有何见解？</p>
+        <p>时，大众中一佛者，即从座起，行至玉菩提前，右膝著地，合掌恭敬，而言：希有光尊！裳璎珞愿前往度之。</p>
+        <p>光尊闻言莞尔，众佛者面带微笑，皆双手合十，愿力加持。</p>
+        <p>**〖一〗**</p>
+        <p>四海之内，八纮之地，有山，名丘山，山巅有一处府邸，上书：烈云洞府。此山原本无路，只因到烈云洞府去拜山头得山精妖怪太多，便踏出一条百妖路。</p>
+        <p>烈云洞府的主人，正是让天佛原乡为之头疼，自号圣婴主的炎无上。这大妖历劫初醒，对时事尚未明朗，过著靠山吃山，韬光养晦的逍遥日子。</p>
+        <p>这一日，秋高气爽，风轻云净。掌管众妖伙食的妖天师，悄咪咪告知圣婴主，已经很久没有小妖送贡品，烈云洞府就快揭不开锅了。炎无上听闻，未往心里去，只打发妖受骨前去检视。</p>
+        <p>妖受骨得令，眨眼间，一阵旋风来回，神色慌张：“爷，不好了！山中来个吃素的，端在百妖路上打坐嘞，有意把路堵死，各家小妖更是不敢轻易上来。”</p>
+        <p>“妖刹刹！带上几名好手，把那尊不开眼的秃驴，给本爷挪走！”炎无上吩咐罢了，甩手离开议事厅，慢慢悠悠步出烈云洞府。</p>
+        <p>头顶流云飞鸟，脚下荆棘丛生。思绪不知道飘到哪里去，凭著直觉四处乱走。</p>
+        <p>犹记得数日前，一个月明如水的夜晚。独自对月独酌，酒至半酣，就看见半山腰一处闪著白光，继而一棵花树，由地底蹿出，花叶飘落中，有一道浅绿色的人影，随之浮现。炎无上醉眼迷蒙地瞧了个大概，只当是花树成精，跑来丘山避世。</p>
+        <p>再回神，花树近在眼前，枝繁叶茂，引人瞩目。</p>
+        <p>树下一道竹青身影，正昂首凝视著花树。一阵凉风抚过，其只手上前，适时接下一朵调皮地落花。那花朵在掌心随风摆动，仿佛与之交流，那人面上绽出笑容，继而轻轻摇首，俯身翻掌，助它归根。</p>
+        <p>这一连串动作，成功留住不知道自己要往哪儿去地大妖。</p>
+        <p>树下的人忽觉似是有目光灼灼而来，转首望去，入眼一袭火红的人，负手而立，尽显王者风范。目光相撞，对方有意生出几分傲气地偏了首。</p>
+        <p>炎无上将人打量了一番，言道：“小花妖，来到本爷地盘避劫难，可有拜过山头？”</p>
+        <p>那人双手合十，道一句：“阿弥陀佛。”</p>
+        <p>“秃……呃……”炎无上瞪大眼睛，看那兜帽下的一头长发，不确定地问道：“你！是个和尚？！”</p>
+        <p>那身著竹青的人嘴唇动了动，并未作言语，只回以微笑。</p>
+        <p>“请问佛者西来意？”</p>
+        <p>“为你。”</p>
+        <p>**〖楔子白话文版〗：** 玉菩提日常忽悠，讲出一个‘美人计’的故事。这时候炎无上在丘山初醒，玉菩提问：你们谁愿意牺牲一下色相？裳璎珞毛遂自荐。玉菩提及其他佛者喜闻乐见，齐道：祝你成功。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./003.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./005.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

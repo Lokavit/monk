@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 028 章 · 致命谎言 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">致命谎言</a>
+          <span class="sep">/</span>
+          <span>第 028 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 028 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：28 Jul 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,070 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>顾文宗端着枪，瞄准人质旁边的其中一个恐怖分子，屏气凝神，手指扣动扳机。</p>
+        <p>肩头忽然被人一拍。</p>
+        <p>人质被他一枪爆头。</p>
+        <p>顾文宗转头，瞪了一眼罪魁祸首。</p>
+        <p>陆星光笑得直不起腰，指了指顾文宗，指了指屏幕，笑了好一会儿，冲着顾文宗竖起大拇指，「老兄，好枪法！哈哈哈哈哈哈……」</p>
+        <p>顾文宗握紧了枪，沉着脸，努力压下想把陆星光当反恐分子突突了地冲动。</p>
+        <p>「嘿！还有一秒钟！」陆星光喊出口，「噢！到时间了。」</p>
+        <p>顾文宗是怎么都没想到，会在电玩城遇到陆星光。</p>
+        <p>「嘿！老兄！你解放了？」陆星光顿了顿，「不对，今天鹿府报到。你还在死撑？」</p>
+        <p>「嗯。」顾文宗态度冷淡，低头数着筐里剩下的游戏币。</p>
+        <p>他其实还想玩这个，只因他这种新手，玩哪个游戏的试错成本都很高，这个射击类游戏的画风他比较喜欢，而且刚刚摸出门道儿，如果好好玩，说不定能用剩下的币通关一次。</p>
+        <p>「对了。」陆星光说，「上次的事儿，不好意思哈。你也挺够意思的，没卖我。」</p>
+        <p>「彼此彼此。」</p>
+        <p>顾文宗心里清楚，就算说陆星光一天都没补习，也不会给陆星光造成什么影响，顶多是陆星光回去被他老子揍一顿。</p>
+        <p>可是，如果陆星光说出他顾文宗没考上大学，成绩稀烂，那顾文宗确实完犊子了。</p>
+        <p>顾文宗塞了五个币，端起仿真枪，重开一局。</p>
+        <p>陆星光也塞了五个币进去，端起二把的仿真枪，「一起，一起。」</p>
+        <p>游戏回到开始，自动切为双人协作模式。</p>
+        <p>「你……」</p>
+        <p>「开始了，开始了！」</p>
+        <p>顾文宗把话憋回去，认真打游戏。</p>
+        <p>多了一个人，多了两只眼睛，打起来也顺畅多了。</p>
+        <p>两人无需口头商量，默契地一人负责一边。</p>
+        <p>就像两人默契地没有出卖对方。</p>
+        <p>很快看到第一个人质，那个被顾文宗手滑爆头的人质。</p>
+        <p>「老兄，当心点儿，别再把人质爆头了。」</p>
+        <p>陆星光憋着笑，盯着屏幕，端着枪的手微微抖。</p>
+        <p>顾文宗扫了一眼陆星光，率先击毙人质旁边一个恐怖分子，另一个被陆星光击毙。</p>
+        <p>第一个人质解救成功，出现结算画面，分数非常高。</p>
+        <p>第二关开始，完全是顾文宗没有见过的场景，他根本不知道恐怖分子会从哪儿出来，不到半分钟，血条被打得剩下一口，只要再稍微擦到子弹，就得躺下。</p>
+        <p>「躲起来，等我一下。」陆星光说。</p>
+        <p>顾文宗找地方。</p>
+        <p>「躲左下角箱子那里。」</p>
+        <p>顾文宗狐疑看了看陆星光，蹲在几个箱子的夹角里，还真就挤进去了。</p>
+        <p>他看着陆星光秀了一分多钟，剩下一个恐怖分子，似乎不着急打死。</p>
+        <p>「出来，到右边来，有一个血包，能奶你一口。」</p>
+        <p>顾文宗花了几秒钟才找到，蹲着挪了过去，拾起血包用掉。</p>
+        <p>与此同时，陆星光干掉最后一个恐怖分子，画面切到过场动画。</p>
+        <p>「老兄，你躲好，下个场景里没有血包了。」</p>
+        <p>顾文宗有点儿不服气，「我有游戏币。」</p>
+        <p>「老兄，你打游戏靠游戏币续命？」</p>
+        <p>顾文宗还想说什么。</p>
+        <p>陆星光的胳膊肘撞了顾文宗一下，「开始了。」</p>
+        <p>顾文宗并没有按照陆星光说得躲起来，而是英勇地冲在前面，英勇地与恐怖分子拼抢，英勇地躺在地上。</p>
+        <p>整个过程，不到五秒钟。</p>
+        <p>陆星光似乎是受到了影响，很快被打得剩半格血。</p>
+        <p>「投币，投币！」</p>
+        <p>顾文宗没有动，轻飘飘一句，「你打游戏靠游戏币续命？」</p>
+        <p>「啊？」陆星光愣住。</p>
+        <p>两个玩家角色全躺了，游戏画面进入投币续命倒计时。</p>
+        <p>陆星光张了张嘴，却什么都没说出来。</p>
+        <p>顾文宗想笑，硬是憋住了。</p>
+        <p>「陆星光！」</p>
+        <p>两个男生走过来，「诶？第二关就挂完了？」</p>
+        <p>其中一人注意到顾文宗，「这是？」</p>
+        <p>「我老兄。」陆星光说。</p>
+        <p>另一个人说：「我定了小包，人快到了，咱们先过去吧。」</p>
+        <p>「老兄，一起去吧。」</p>
+        <p>顾文宗听出来，陆星光这次不是问句。</p>
+        <p>他本想拒绝，可旁边还有俩人，如果拒绝，可能会让陆星光没面子。</p>
+        <p>「好。」</p>
+        <p>陆星光打个响指，「走！」</p>
+        <p>顾文宗把剩下几个游戏币装进口袋，和陆星光几个人一路。</p>
+        <p>他们也没走多远，从商场直梯上了几层楼，来到一家量贩KTV门口。</p>
+        <p>一个人去前台核销，另一个人去选酒，陆星光悠哉坐在沙发上。</p>
+        <p>KTV这种地方，顾文宗长这么大第一次来。</p>
+        <p>他仔仔细细打量了一圈儿。</p>
+        <p>大厅散放着几套沙发，每面墙上各嵌有一台大尺寸的屏幕，放着不同的内容。</p>
+        <p>有的是某某歌曲的MV，有的是这家KTV的宣传广告。</p>
+        <p>几个人进入一间昏暗的小包厢，里面的大屏正在播放龙哥的公益宣传。</p>
+        <p>服务员推着小车进来，放下酒水饮料。</p>
+        <p>其中一人点了一首歌，拿着麦克风，「我先找找感觉，不能掉链子。」</p>
+        <p>陆星光凑近顾文宗，「这小子终于有勇气约女生了，今天是来给他撑场面的。」</p>
+        <p>顾文宗点点头，心想，你们这么多人，不会把女生吓到吗？</p>
+        <p>陆星光开了四瓶酒，给顾文宗一瓶，「老兄，你应该没问题吧？」</p>
+        <p>顾文宗摇摇头，「我是没问题，但你……」</p>
+        <p>陆星光比了一个暂停的手势，「老兄，你才十八，不要像个八十岁的人那么爱说教。」</p>
+        <p>顾文宗没再说什么。</p>
+        <p>不一会儿，服务员推开包厢门，在门口做了一个请进的手势。</p>
+        <p>一个，两个，三个。</p>
+        <p>三个女生，先后进来，互相打招呼。</p>
+        <p>看起来，女生也找了人来撑场面。</p>
+        <p>顾文宗很快从男生的行动和表情里，确定三个女生，哪个才是这个包厢里的女主角。</p>
+        <p>很快，男主角和女主角在角落并坐着聊天。</p>
+        <p>另一个男生拿着话筒在唱歌，有点麦霸的意思。</p>
+        <p>顾文宗被陆星光拉着，和另外两个女生一起玩猜点。</p>
+        <p>每人手里的骰盅有五个骰子，轮流往上叫数，开错或者点数不够的人要喝酒，一点百搭，可以充当任意数字，五个骰子皆不同直接清零，五个数字一样点数翻倍。</p>
+        <p>顾文宗第一次接触，倒是听说过这个游戏。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./027.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./029.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

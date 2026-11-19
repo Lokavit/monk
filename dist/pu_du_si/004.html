@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 004 章 · 普渡寺冒险 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">普渡寺冒险</a>
+          <span class="sep">/</span>
+          <span>第 004 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 004 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Oct 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,257 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>法会这天的早上，古寺门口停了一辆三轮车，来了仨老头儿，仨老太太。他们把车斗里的两个筐抬进斋堂，又把斋堂里的两个空筐扔回车斗里。</p>
+        <p>班朝辰围着车转了两圈，跑去问宗静尘，「那就是你说的，可以藏人的车？藏哪儿？」</p>
+        <p>宗静尘指了指灶台旁边的菜筐，「是不是有两个空的在车斗里？」</p>
+        <p>班朝辰瞪大眼睛，「还有别的选择吗？」</p>
+        <p>宗静尘耸耸肩，抡着大勺炒菜。</p>
+        <p>班朝辰站在筐边，量了量自己的身形。</p>
+        <p>「诶？你怎么做这么多？」他问。</p>
+        <p>「香客在这儿吃斋，还要给师父多准备一些。」</p>
+        <p>「我出去收拾东西，顺便看看有没有更好的地方可以藏。」</p>
+        <p>班朝辰从斋堂出来，路过大雄宝殿，朝内望了一眼。</p>
+        <p>老和尚一反常态，披了袈裟，在佛像下结跏趺坐，身边围着五名香客，皆盘着腿，一副用心聆听的模样。</p>
+        <p>班朝辰猫腰溜走，沿着回廊往寮房走。</p>
+        <p>忽然注意到有个人正站在转轮堂门口，趴着门缝往里看。</p>
+        <p>班朝辰走过去，「喂！你干什么呢？」</p>
+        <p>对方朝他看过来，尴尬笑了笑，「这转轮堂怎么锁了？」</p>
+        <p>班朝辰没回答，打量着这个人。</p>
+        <p>五十来岁小老头，身形瘦小干巴，穿着典型的农民装，后腰别着一根细烟杆。进了寺里瞎转悠，其他五个都在听老和尚讲经，偏就这个行为鬼鬼祟祟。</p>
+        <p>「以前怎没见过你？」小老头咧嘴笑着，露出一口烟熏老牙。</p>
+        <p>班朝辰还是没回答，站在转轮堂门边。</p>
+        <p>这时，钟声响了。</p>
+        <p>小老头笑着搓了搓手，「哟，放斋了。」</p>
+        <p>班朝辰狐疑盯着小老头离去的背影，再看看莫名被锁起来的转轮堂。</p>
+        <p>他赫然发现，转轮堂不仅落了锁，而且所有门窗都被黑色布帘罩住了。</p>
+        <p>来到古寺这么久，这还是第一次。</p>
+        <p>斋饭过后，这些香客帮忙洗涮，打扫古寺每一间殿堂，修剪了院里的几颗老树。</p>
+        <p>班朝辰趁机溜回寮房，收拾背包。</p>
+        <p>宗静尘进来，手里拿着一包东西，「我从斋堂打包了些馒头和菜，路上吃。」</p>
+        <p>班朝辰一巴掌拍在自己脑门儿，从宗静尘手里拿过干粮，放在桌上，「山下什么都有，不会饿着你的。」</p>
+        <p>「快换衣服。」他说。</p>
+        <p>「衣服？」宗静尘问，「什么衣服？」</p>
+        <p>班朝辰停下动作，「当然是你的衣服。你难道要穿着这身破僧袍，在人群里晃吗？」</p>
+        <p>宗静尘摇摇头，「我只有僧袍，是师父亲手做的。」</p>
+        <p>班朝辰眼前一黑，打开背包，翻出来一身，交在宗静尘手里，「应该差不多合身，快点换！我听着，那些香客就要走了。」</p>
+        <p>他等着宗静尘换完衣服，又把自己的鸭舌帽戴在宗静尘脑袋上，打了个响指，「可以了，特有摇滚范儿。」</p>
+        <p>屋外，老和尚在几名香客的簇拥下，一边走，一边为香客解惑。</p>
+        <p>等到几个人走远，班朝辰冲着宗静尘招招手。</p>
+        <p>两人像作贼似的，卡着回廊柱子的死角，一点点挪到了古寺外，爬上了车斗。</p>
+        <p>两个边角发霉的破菜筐，随意倒着。</p>
+        <p>班朝辰皱着眉头，压低声音，「一定只能这样吗？」</p>
+        <p>宗静尘已经拿起一个，走到车斗里角，蹲下身，举着菜筐，把自己扣起来了。</p>
+        <p>班朝辰依稀听到人声越来越近，俯下身，偷偷瞟了一眼古寺院落，赶忙挪到宗静尘的菜筐旁边，怀里抱着书包，把自己完全罩住。</p>
+        <p>筐底的泥土哗啦哗啦掉在他的头上，烂菜叶子味道直冲脑门儿。</p>
+        <p>几个老人吭哧吭哧爬上车斗，各自找了位置坐下。其中一个老太太，坐在了班朝辰的菜筐旁边，宽厚的身躯，直接靠上了菜筐。</p>
+        <p>三轮车慢慢起步，晃晃悠悠地往山下开，一路颠簸。</p>
+        <p>几个老人七嘴八舌闲聊。有人说今天做了什么功德，有人说把抄好的经文拿来回向给冤亲债主，有人说小和尚做的斋菜好吃。</p>
+        <p>「那个转轮堂，怎么锁上了？」</p>
+        <p>班朝辰透过菜筐看，又是那个古怪的小老头。</p>
+        <p>「一直都锁着。」有个老太太说。</p>
+        <p>班朝辰心中狐疑，转轮堂分明是一直都开着。</p>
+        <p>「为什么锁着？」小老头又问。</p>
+        <p>另一个老太太问：「你第一次上来吧？」</p>
+        <p>「对。」小老头说，「我才知道这里有座寺。」</p>
+        <p>「我都来十多年了。」老太太说，「大师父说，转轮堂里面当初就没修缮完。唉，他那腿也不好，还就一只胳膊，却是干不了活儿，就那样一直搁置了。」</p>
+        <p>「我也问过。」另一个老头说，「我问大师父，要不然在我们村找几个人来给帮帮忙。大师父非常客气地拒绝了，我也就没再提。」</p>
+        <p>班朝辰心里越发觉得古怪，转轮堂里不过是一堆无名牌位，怎么好像见不得人似的，见人就给罩上？</p>
+        <p>隔着菜筐，他冲着宗静尘使眼色，对方丝毫接受不到他的脑电波，一脸茫然。</p>
+        <p>下山之后，路平坦了，三轮车时不时停一下。</p>
+        <p>到了天擦黑，倚着菜筐的老太太起身，「我也到家了，先走了哈。」</p>
+        <p>一个小瓶子，顺着菜筐提手滚了进来，停在班朝辰的脚边。</p>
+        <p>他拿起来看看，像是药瓶，瓶身什么都没写。</p>
+        <p>本想还给老太太，他忽然察觉古怪小老头正盯着他们俩的菜筐。</p>
+        <p>小老头站起身，朝着班朝辰这边走来。</p>
+        <p>前面驾驶的大叔喊了一句：「我说啊！我这副驾驶空着呢，你过来坐？」</p>
+        <p>三轮车在夜色里行驶，车后斗只有两个菜筐，和里面的两个人。</p>
+        <p>班朝辰悄悄掀开，观察四周，继而把整个筐掀起来，丢在一旁。他又敲了敲宗静尘的菜筐，帮着举起来。</p>
+        <p>「山已经很远了，不用再藏了。」他说着，指向远处。</p>
+        <p>宗静尘回头，遥望深山，抱膝坐着。</p>
+        <p>「师父找不到我们，一定心急如焚。」</p>
+        <p>「我给他留了字条。」班朝辰说。</p>
+        <p>而此时，老和尚正在两人的寮房里，手上拿着班朝辰留下的字条，在灯光下辨认着狗爬式的一堆字。</p>
+        <p>「哈哈哈！我赢了！老和尚，我不但下山了，还带走了宗静尘！你别急，我带他去玩儿几天就回来。他给你留了三大锅馒头，别饿着自己。我会照顾好他的。」</p>
+        <p>末尾，画了一个满脸得逞笑容的小人。</p>
+        <p>老和尚连声叹气。</p>
+        <p>他回到房间，把字条放在桌上，费力地蹲下，一只手使劲儿在床底下拽，拖出一口木箱。</p>
+        <p>掀开木箱，里面有寻常的衣裤鞋袜，一块手表，一部手机，一枚三十年警龄纪念章，几个旧勋章，和一沓证书。</p>
+        <p>他换上一身便装，拿起手表，目光落在空荡荡的左边衣袖，叹了口气，把手表放回箱子里。</p>
+        <p>走出古寺，老和尚回身把寺门关上，打开手电筒，一瘸一拐地朝着山下走。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./003.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./005.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

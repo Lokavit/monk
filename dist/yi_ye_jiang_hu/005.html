@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 005 章 · 一页江湖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">一页江湖</a>
+          <span class="sep">/</span>
+          <span>第 005 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 005 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：05 Jan 2559 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,097 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>这一身褴褛的老头子没想到有人竟敢附和自己，心下不由得好奇，帮腔的是哪路来得莽夫，他拨开围在面前的众人，四处寻找声音的主人。</p>
+        <p>对方大概也怕老汉寻不见自己，亮著嗓子继续说道：「不过，现下却有一尾漏网之鱼，待本少去完善了老人家的结论，免得外人说您老诽谤上阳城的少城主！」</p>
+        <p>老汉这会儿倒是将对方的声音听了个真切，整个人霎时变了脸色，眼神在数张饭桌之间游走，瞟到临窗位置，登时怔住。</p>
+        <p>那儿有名倚靠栏杆随意斜坐的年轻人，一身锦衣华服，一手持著酒杯，缓缓送到嘴边，一饮而尽。其身侧站著两名统一著装的佩刀护卫，衬托出年轻人的不凡身份。</p>
+        <p>老汉瞅见了此人，额上立即渗出些汗水，也不似刚才的口若悬河了，他连忙小跑几步，但又不敢离得太近，冲著那年轻人深深作揖，结结巴巴地说道：「少……少城主……您……」</p>
+        <p>少城主面上挂著浅浅地笑容，拿起身边的酒壶，再斟上满满一杯酒，看也不看一眼，转手将酒杯丢向窗外。</p>
+        <p>众人随之画个弧线，未等来瓷器破碎地声响，外头倒是传来了一句问话：「楼上的朋友，这是何意？」</p>
+        <p>几名茶客听到外头有人答话，一个个匆匆赶到窗边，从另一侧趴在栏杆看热闹。</p>
+        <p>楼下原来是一名身穿绣著金丝云龙纹长衫的年轻男子，只这一身黑衣，简单朴素，除了腰间一个同样黑底金漆雕龙的酒葫芦外，便再无它物。既不似个赶路的，也不似个念书的，瞧这一手接地挺稳当，大概是个跑江湖的。</p>
+        <p>少城主一点都不意外有人问话，也不看对方一眼，挥了挥手臂，一派潇洒地回道：「来者是客，这杯请你了！」</p>
+        <p>「多谢。」黑衣公子话语中带著几分爽快，冲著楼上的背影托了酒杯，一饮而尽。</p>
+        <p>少城主正目光灼灼地盯著对方，注意到其欲将酒杯掷回，出声言道：「哪有将空杯还于主人家的？礼尚往来，在下亦想问兄台讨杯酒吃，不知可否？」说著，指向那人腰间的酒葫芦。</p>
+        <p>黑衣公子一手附上腰间的酒葫芦，动作略有迟疑，他笑道：「我这酒，阁下还真饮不得。」</p>
+        <p>「那你要如何偿还杯酒之情？」少城主一拍栏杆，翻身跳出窗外。</p>
+        <p>与此同时，大街两侧立即冲上来六名著麻布衣的中年人，一侧是四人抬著架龙王座，另一侧的两人，一人端著把价值不菲的长剑，一人端著个托盘，上面一只银白色的酒壶，两盏白玉羽觞。</p>
+        <p>优雅翩然地落在座位上，少城主一手覆于膝盖，身体略微倾斜，对眼前的新面孔说道：「异乡人，进庙拜佛，进城拜吾。你也不能例外！」</p>
+        <p>这一身黑衣的年轻公子倒也是个见过市面的，他朝著龙王座的方向稍稍迈出一步，剑眉一挑，略微低声说道：「我观阁下也是个性情中人，怎么就要学那些个石雕的，泥儿捏的一般，矗在那里吃香灰？岂不可惜了这一副好皮相？」</p>
+        <p>这上阳城的地角比较偏，平日里也鲜少有陌生面孔出现，少城主许久未遇到进城的新人，也是第一次听到有人敢这样反驳自己，一时间还没缕清楚是该驳他的‘香灰’，还是承认自己‘好皮相’。</p>
+        <p>「这是上阳城的规矩，不能被你打破！」</p>
+        <p>黑衣公子面露一副为难的神色，连连摇首，无奈地说道：「也罢，既然饮过你的酒，也算是缘份一场，待到阁下魂归阴司，鄙人自当前去坟头祭拜。你看可好？」</p>
+        <p>这一番言语，楼上楼下围观群众，皆等著看少城主会如何整治这个白目的黑衣小子。</p>
+        <p>然而，事情进展并不在众人所认为的常理之中，最起码不似少城主平日的行事风格。只见他沉思片刻，双手一拍，一副赞赏之姿，说道：「这位兄台言语中尽显高人风范，在下著实佩服。」又一派谦逊地问道「敢问兄台何名何姓？在下将来也好从墓中听名辨人。」</p>
+        <p>黑衣公子也是个给杆儿就爬的主儿，竟继续与少城主呛声，他道：「姓名省下，我若去了，少城主必然认得出。」</p>
+        <p>一连两次挑衅，少城主面上依旧没什么太大的表情变化，试探著询问对方：「名字都不肯透露的神秘者，作为上阳城的少城主，是否可以请问阁下，来此所为何事？」</p>
+        <p>「在下只是偶然路过此地，请问，可知‘般若寺’如何去得？」</p>
+        <p>「原来是个跑到上阳城里找庙门的！」少城主暗地里嘀咕一句，将对方再次仔细打量了一番，穿著板正，一头黑发，方才还饮了酒，完全不似个出家人。他问道：「阁下是要去进香？」</p>
+        <p>「非也，为寻一名得到高僧。还请少城主指路。」</p>
+        <p>少城主听闻此话，一手托腮，沉思了良久，露出个真诚地笑颜，伸出手来，向天一指，也不作声。</p>
+        <p>黑衣公子顺著对方的手势看了眼天空的流云飞鸟，疑惑地问道：「这是……？恕在下不能明了，还望少城主详述。」</p>
+        <p>「很简单，本少……不知道！」少城主说完，悠哉哉地抖著二郎腿儿，等待对方回过味儿来，暴跳如雷，这样就有理由直接擒回去关起来，师出有名，届时想要怎样，可就全凭心情了。</p>
+        <p>哪成想，这黑衣公子也不知是家教太好，还是自身修养太好，如此明显的捉弄，他面上完全没有任何不悦，反而对少城主露出和善地微笑：「风趣幽默的少城主，有缘再见。」说完，将手中的酒杯轻轻一弹。</p>
+        <p>目光随著飞起的酒杯画个弧线，落进身旁护卫的托盘中。再抬首望去，眼前哪里还有对方的身影。少城主猛然站起身，锐利地眼神扫过周围每一张面孔，那人却是如凭空消失一般，无迹可寻。</p>
+        <p>一个护卫抖著声音说道：「少……少城主……酒……」</p>
+        <p>「不喝！」少城主不耐烦地回道。排开三方阵仗，竟是连一个人都困不住，还让对方毫发无损的离开了，如此被人削面子，以后要怎样在上阳城里立威？！</p>
+        <p>「酒……酒杯……」那护卫吞吞吐吐地将话说完，成功唤起了数道目光的注意。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./004.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./006.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

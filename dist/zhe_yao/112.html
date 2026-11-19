@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 112 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 112 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 112 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：22 Apr 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,044 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「哼！我会受你这小妖威胁？！简直笑话！」无为才说完，转首看到有涯缓缓走到他跟前，频频摇首，低声言道：「心竺……唉……」他猛然望向房间，里面二老，对著无法再伪装成凌修竹的心竺，相顾无言。</p>
+        <p>「事情本因小僧而起，这一番因缘走过，终是未能避免您们二老，白发人送黑发人的悲哀。」</p>
+        <p>无为清清楚楚看到心竺双手无力地垂落，耳边传来二老地失声痛哭。不知道两位老人家，到底是在哀恸早就过世的凌修竹，还是在为心竺的死悲伤？他抓著镇邪卷，「喂！小妖！是不是我摒弃前嫌，你们就能帮我拿到地元？」</p>
+        <p>钰鑫双手一摊，笑吟吟地点点头，有意无意地瞥有涯一眼。</p>
+        <p>「好！」无为毫不犹豫地答应，「你什么时候能找来它俩？若是拖到那妖僧走掉，别怪我连你一起打！」</p>
+        <p>钰鑫挤眉弄眼地掏掏耳朵，「那么凶做什么？本小仙现在就可以叫它们来。记得你的话！」他说著，拍拍双手，推拒无为，「让开，让开。掉下来砸到你，我可不负责！」说罢，提气纵身跃上半空，盘膝而坐，口中念念有词。</p>
+        <p>无为听钰鑫如是说，并未完全相信。他还记得，那两只妖当时的反应，似乎并不认识这小妖？可此刻再看对方煞有介事地模样，钰鑫莫非真和另外两只有什么瓜葛不成？他暗自踌躇片刻，低声问有涯，「这小妖搞什么名堂？这样真能把那两只喊来？」</p>
+        <p>「看著挺唬人。」有涯昂首看一眼半空的钰鑫，「几千年的道行应该假不了。」</p>
+        <p>突然间，乌云蔽月，天地失色。狂风乍起，带走将落不落的一树黄叶，卷起地上无数沙尘。枯叶飞沙，遮蔽双目。无为不禁擎手去挡，透过指间缝隙，看到令他惊愕的一幕。</p>
+        <p>两道身影翩然出现在眼前。还是那身装束，还是那副面孔。不过，此番看上去，已经有几分朝气蓬勃的意思。楀森对翻身落地的钰鑫抱拳，「感谢昔日舍身相救。不知，这回找我们来，有什么事情？」</p>
+        <p>「不必客气。」钰鑫摆摆手，哈哈一笑。他反手向后一指，犹豫著说道：「他找你们。」</p>
+        <p>二妖顺著方向看过去，齐齐望著不知作何表情的无为，以及旁边一个热情打招呼的有涯。</p>
+        <p>无为察觉域垚的目光移过来，倏然心升警觉，见对方缓缓抬起手臂。他一手拉著有涯，连忙躲开，「小心！」后者猝不及防被拽个趔趄，一脸茫然。</p>
+        <p>带到无为看清楚，域垚只是揉了揉眼睛，他才稍稍放下心来。</p>
+        <p>可域垚却是嗖地一个闪身，躲到楀森身后。</p>
+        <p>「无为少爷，找我们什么事情？」楀森一边安抚域垚，一边随口问道。</p>
+        <p>无为憋了半晌，才支支吾吾言道「帮忙打个架……」</p>
+        <p>「心竺，我来看你了。」</p>
+        <p>夜值三更，峋山寺的大雄宝殿内盘膝坐著名小僧，其怀中抱著个出气儿多，进气儿少，黑乎乎的小兽。听闻说话声音，他缓缓抬起头，目光呆滞地看向来者。</p>
+        <p>就在此刻，怀中小兽倏然起身，嗖地窜出，扑到来者身上，消失不见。</p>
+        <p>心竺一瞬失神，继而慢慢垂下手臂，对来者问道：「凌修竹，你来有什么事情？」</p>
+        <p>「我有东西送你。」凌修竹说著，一手掏在怀中，忽地面色泛白，紧张地一阵翻找，口中念叨著：「咦？怎么不见了？我明明记得带在身上了呀。」他说著，对小僧露出歉意地笑容，「心竺，我真的有东西送你，容我找找，找找……」</p>
+        <p>心竺端量片刻，见他一脸焦急，试探著言道：「会不会是路上掉在哪里了？」</p>
+        <p>凌修竹努力想了想，缓缓摇头，「我带在身上，一路未作停留，来到你这里，怎么会不翼而飞呢？」</p>
+        <p>「找不到就算了吧。」</p>
+        <p>「不……不行！」凌修竹略微红著脸，「那个……那个是我精心制作，想要送给你作为……作为……」他暗自纠结，支支吾吾了半晌，鼓起勇气言道：「定情信物！」一句话说得掷地有声。言罢，偷偷瞄一眼对方。</p>
+        <p>心竺手中数珠转了一圈儿又一圈儿。良久，他叹息一声，「大概是机缘不足吧。」</p>
+        <p>闻言，凌修竹心中更加懊恼，若非丢了东西，也许就成了。见心竺重新坐下，一副老僧入定的模样。他长吁短叹起来，「唉，真羡慕峋山寺的佛菩萨们，有你日日夜夜守护陪伴。可怜我每每对月思人，来一趟还要翻山越岭。」</p>
+        <p>「听你言下之意，可是愿意留在峋山寺，陪我一起守著青灯古佛？」</p>
+        <p>凌修竹正不安分地踱来踱去，听到询问，猛然止步，嗖地冲到心竺面前，「只要是你，我当然愿意！一百个愿意！」</p>
+        <p>「切记你的承诺，不可离开此地。」</p>
+        <p>倘若没有凌修竹，说不定有朝一日还能在三乘界看到心竺小法师。但如今只落得是上天无路，入地无门，脱凡之身，在这人间界不会留下一丝遗迹。可叹，我佛慈悲，摩顶放踵，却无释子一归宿。</p>
+        <p>为防止悟谌找来，给这座村落带来灾祸。无为主张立即出发，「心竺已死，此处不再太平无事。我们现在就走！不能让悟谌杀到这里！」</p>
+        <p>有涯点点头，「反正这会儿不去找对方，待到天一亮，对方养足精神，也会找来找我们。事不宜迟，可别辜负了小法师生前的一番苦心。」</p>
+        <p>一众连忙出了旬邑县，行至山间。域垚突然停下，蹲伏在地，手中拾起几个小石子儿，在掌心里来回揉搓，继而起身指出方向，「那边！五里之外，有很强大的地之灵力！」</p>
+        <p>钰鑫拍拍巴掌，对无为和有涯言道：「二位，请吧。」</p>
+        <p>无为看看另外三只，不悦地言道：「小妖，难不成你所谓的帮忙，就是拉帮结伙的站在一旁观战兼喝彩？」</p>
+        <p>钰鑫作出一脸爱莫能助地神情，「无为大少爷，那家伙身上有地元，本小妖还不想死！我的任务只负责紧急抢救。其它事情，你找它俩。」说著指了指身旁两只。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./111.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./113.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

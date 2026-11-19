@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 008 章 · 闲居一品 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">闲居一品</a>
+          <span class="sep">/</span>
+          <span>第 008 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 008 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：08 Apr 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,073 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>她一点儿都不着急，和孟玉溪有一搭没一搭的闲聊。</p>
+        <p>孟玉溪的手机响了，他接起来，一边听，一边对赵语歆指了指门外，起身朝外走。</p>
+        <p>赵语歆重新翻开书本。若非为了试探曹纬铭的反应，她是不会和这种随时待命的公职人员相亲的。</p>
+        <p>她点的手磨美式上来了，小刘给她端来的。</p>
+        <p>赵语歆放下书，孟玉溪没回来，倒是给她发了个信息，说有任务，表达了抱歉。</p>
+        <p>她回复了一句：「可以理解。你们是最伟大的人。」</p>
+        <p>赵语歆放下手机，端起杯子，品了一口手磨美式。</p>
+        <p>咖啡进入嘴里，她不由皱眉，瞥了一眼曹纬铭，什么都没说。</p>
+        <p>赵语歆又点了一份简餐。</p>
+        <p>这会儿，将近晚上九点了，闲居一品里只剩下她一个客人。</p>
+        <p>小刘解下围裙，「纬铭哥，我先回去了。」</p>
+        <p>「晚了。我送你回去。」曹纬铭说着，拎出两个头盔。</p>
+        <p>「别了。语歆姐还在这儿，你招呼着。」</p>
+        <p>赵语歆正一根根吃着意面，听到这句话，连忙说：「哎呀，那我快点吃。别影响你们关门。」</p>
+        <p>小刘急忙摆摆手，「语歆姐，我不是那意思。」</p>
+        <p>曹纬铭看一眼赵语歆，「我去送她，有什么需要的，你自己招呼自己。」</p>
+        <p>赵语歆耸耸肩，没说话。</p>
+        <p>两人一同出去，低语说着什么，小刘笑了一声，点点头。</p>
+        <p>曹纬铭带上头盔，发动摩托车。</p>
+        <p>小刘侧坐在车尾，一只手搭在曹纬铭肩头，另一只手抓着车尾，朝着屋里的赵语歆笑了笑，挥手再见。</p>
+        <p>摩托车一溜烟走了。</p>
+        <p>赵语歆放下叉子，靠着沙发，环顾闲居一品。</p>
+        <p>除了多了个小刘，一切还是原来的样子。</p>
+        <p>只是，坐在曹纬铭摩托车尾的从她换成了小刘。</p>
+        <p>再这样下去，没准儿那天小刘就坐到了闲居一品的柜台里，成为正式的老板娘。</p>
+        <p>赵语歆起身给自己倒了一杯水，一边喝，一边转悠，像是归家的兽王在巡视领地。</p>
+        <p>小刘家距离闲居一品两公里左右，以曹纬铭骑摩托车的习惯，最多二十分钟就该回来了。</p>
+        <p>然而，已经过去四十分钟了！</p>
+        <p>赵语歆等到了深夜十一点，曹纬铭没有回来。</p>
+        <p>她锁门回家，赌气屏蔽了曹纬铭。</p>
+        <p>孟玉溪消失了一周，拎着一一箱纯牛奶，一兜水果，出现在赵语歆家楼下。</p>
+        <p>赵语歆正陪着老妈从集市回来，老妈热情地叫孟玉溪进屋坐。</p>
+        <p>孟玉溪把东西拎上楼，放在赵语歆屋里，人却没有迈进去。</p>
+        <p>「我那天，临时有任务，不好意思，把你自己留在咖啡馆。我今天刚回来，过来给你道歉，希望你别介意。」</p>
+        <p>赵语歆倚着门框，笑了笑，「没什么。我理解你的工作性质，不会为这种事情跟你生气。你刚回来，要不要在我家吃个饭？」</p>
+        <p>「对！」老妈在屋里接话，「小孟啊，留下吃饭吧，我刚买的新鲜排骨，给你们做糖醋排骨。」</p>
+        <p>孟玉溪说：「不了，阿姨，我还要回家一趟。」</p>
+        <p>赵语歆心中动容，孟玉溪先来了她家，先来给她道歉。</p>
+        <p>她忽然觉得有点儿对不住孟玉溪，「谢谢你的牛奶和水果。」</p>
+        <p>她晃了晃手机，「我们哪天再约。」</p>
+        <p>赵语歆目送孟玉溪离开，关上家门。</p>
+        <p>老妈在厨房里处理排骨，嘴上不闲着，「小孟这孩子很不错，别看比你小两岁，办事儿多体面？你跟人家好好处着。」</p>
+        <p>赵语歆应了一声。</p>
+        <p>次日下午，孟玉溪给她发来邀约，约她晚上一起吃饭，发了时间和地点。</p>
+        <p>孟玉溪选在了县城的一家特色小炒饭馆，里面热热闹闹几乎坐满了。</p>
+        <p>两人坐在角落的桌位，孟玉溪把赵语歆让在里面，自己坐在外面，挡住人来人往。</p>
+        <p>席间，都没怎么说话，只围绕着地道小炒聊了几句，聊到各自的日常生活和兴趣。</p>
+        <p>吃完了饭，孟玉溪提议去县城的小河边走一走。</p>
+        <p>走出小饭馆，赵语歆深吸一口气。</p>
+        <p>她习惯了家里只有老妈，也习惯了闲居一品的安静，对这类一刻不得安宁的场所有些不适。</p>
+        <p>秋末初冬交替的季节，冷风嗖嗖。</p>
+        <p>赵语歆只想回家，缩在软乎乎的沙发，翘着二郎腿刷手机。</p>
+        <p>可是，看在刚吃了一顿饭的份儿上，她还是决定委屈一下自己。</p>
+        <p>孟玉溪走在她的外侧，告诉她附近哪里是小流氓聚居地，哪里小偷小摸扎堆儿，说话的时候，时不时看看四周，像是在巡察情况。</p>
+        <p>赵语歆听着，应着，捡了几个以前好奇的问题，问了孟玉溪，并努力尝试把话题延续下去。</p>
+        <p>两人走出很远，走上一座石桥。</p>
+        <p>石桥两侧十二根石柱子，每个上面一个石雕属相，有的被人系上了红绳，有的柱身还留着去年的对联。</p>
+        <p>从石桥的另一侧下来，沿着小径一直走，就能看到一个公园。</p>
+        <p>赵语歆没往深了走，而是依旧沿着河边走。</p>
+        <p>孟玉溪忽然拽了她一下，低声说：「你等我一下。」</p>
+        <p>赵语歆茫然站在原地。</p>
+        <p>孟玉溪四处张望，朝着树丛慢慢走过去。</p>
+        <p>赵语歆好奇心作祟，蹑手蹑脚地跟过去，看到树丛后面有辆私家车。</p>
+        <p>随着孟玉溪掀动灌木丛，赵语歆伸着脖子张望。</p>
+        <p>这辆车的另一侧似乎撞了什么，大面积刮擦，多处坑坑洼洼。</p>
+        <p>孟玉溪拿出手机拍视频，然后打了个电话，「对。是那辆肇事逃逸的车，我现在就在这辆车旁边，你们过来吧。」</p>
+        <p>「有车祸？」赵语歆问。</p>
+        <p>「嗯。」孟玉溪说，「前几天，有个私家车把摩托车撞了，撞完人就跑了。几个县的派出所都接到任务，找出这辆车。」</p>
+        <p>「哦。被撞的就是我们第一次见面那家咖啡馆的老板，叫……」</p>
+        <p>赵语歆没有听完，她甚至没有意识到自己正在拼命狂奔，也没有意识到把孟玉溪扔下了，更没意识到还没有追问曹纬铭状况……</p>
+        <p>她一边跑，一边把曹纬铭从屏蔽里放出来，没有任何消息。</p>
+        <p>她抬手拦了一辆出租车，直奔闲居一品。</p>
+        <p>玻璃门扶手上挂着链锁，缠了一圈半，锁从第三个环扣穿过，这是她的习惯，这把锁自从她锁上，就没打开过。</p>
+        <p>赵语歆犹豫了几秒钟，给曹纬铭打过去网络电话。</p>
+        <p>「哎，是语歆姐啊，你等等。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./007.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./009.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

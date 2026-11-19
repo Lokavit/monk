@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 185 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 185 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 185 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Jul 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,096 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>有涯此刻已经把无为身上衣服褪去，将四个元灵拿出来，按照五行八卦的方位搁置好。听到外面两人言语，以及匆匆离去地脚步声，他莞尔一笑，对著已关闭五识，渐渐入三摩地的无为低声言语，「无为，你听到了吗？是你将元功全部灌给少师夫人，她才能这么快醒过来。少师老爷正高兴地感谢你呢，你听到了吧？」</p>
+        <p>望著面前宛如死去的人，有涯面上缓缓浮现愁容，「无为啊无为，可知道你是何等的自私？每次都选择一死了之，不管他人会为你伤心难过。当初御龙皇没能留住你，而今我也没能使你放弃坚持。或许真的如你最初所言，能够令你改变的，还不存在于这世上。」</p>
+        <p>此时，四个元灵各自浮现一道光芒，渐渐上升，皆冲向无为心口的妖封。内中妖形图腾，仿佛被点醒的妖兽，一点点吸收著四道不同的光芒。随著四个元灵之力不停灌入，妖封之上，唯有最中心的位置，不曾有丝毫改变。</p>
+        <p>有涯注视著那一处，心道：「果然，缺一不可吗？是否有别得能够代替呢？」他不禁皱紧眉头，苦思冥想，意图找到其它办法。</p>
+        <p>与此同时，在少师府外，来了一大队人马，一顶软轿，里面走出一名头戴乌纱的官家老爷。有人小跑上前，「启禀老爷，少师府外的所有衙役，全都被人打晕了。」</p>
+        <p>仇老爷听后，脸都气黑了，「两队人马把少师府给我围起来，剩下的随我进去！」</p>
+        <p>少师老爷正亲手给夫人为补汤，一边将无为的事情讲述给夫人知晓。</p>
+        <p>少师夫人耳目好，听到外头一阵不寻常的杂音，她面色一变，「老爷，外面似乎来了很多人。」</p>
+        <p>「咱们家就剩管叔了，哪里会有很多人？」少师老爷说著，忽地也听到外头一阵乱哄哄。想起那边两个小子的事情，他连忙搁下碗，嘱咐道，「夫人，你先躺下休息，我出去看看。」说罢，疾步走出房门。</p>
+        <p>还不等出了院子，管叔已经跑得气喘吁吁，「老爷，仇……仇老爷，带著好多衙役……来府上，喊著要拿人……」</p>
+        <p>闻言，少师老爷大为震惊，这么晚带著衙役来，难道是已经知道无为在府上？可那些事情，尚未查明是无为做的啊？他们怎么就敢直接闯进来？！他心中一阵叫苦不跌，今晚上的事情已经够多了，可别再来了。一想到无为那边十分要紧，他脚步匆匆，赶到前院儿。</p>
+        <p>仇老爷倒也算是给少师府面子，只带著一众衙役等在前院，没再整出太大动静。看在多年交情份儿上，一心等著少师老爷出来。</p>
+        <p>少师老爷来到前院儿，看一眼几十号衙役，将目光落在仇老爷身上，也顾不得说什么场面话了，直言问道：「仇老爷，您这是做什么？」</p>
+        <p>「来抓人！」仇老爷面上三分不悦，板著官家态度，「我派来固守在外的衙役，不知为何，全被人打晕在地。本官听闻，少师无为已经回到府上，可有此事？！」</p>
+        <p>「这……」少师老爷面色犹豫，不做正面回应，「息丹城九十九口人被杀取心，事情毫无线索，仇老爷将我少师府围困了数日，现在又直言来抓人，敢问可有证据证明是小儿？！」</p>
+        <p>仇老爷缕著胡须，没想到少师老爷此刻火气这么大。他心中不悦，打著官腔儿言道：「有人来我衙门击鼓，说是找到最近连环命案的真凶了，犯案者就在少师府！本官特地连夜前来缉拿。」</p>
+        <p>「什么？！」少师老爷一脸惊愕，怎么还会有人去击鼓举报？难道还有人在针对少师府？他语气软和几分，「这……此事疑点太多。仇老爷何以凭一个举报，就断定少师无为是凶手呢？」</p>
+        <p>「是与不是，拿起来到大堂上去审问！」仇老爷怒道，「你劝你莫再包庇，最好赶快把人交出来，让我把令郎带回，好好审问。看在多年交情，此案我一定万分仔细审理，你尽管放心。」</p>
+        <p>少师老爷登时奴上眉山，袖子一甩，「你先摆出证据！再来我府上拿人！」</p>
+        <p>闻言，仇老爷眼中闪过一丝厉色，亮著嗓子喊一句，「来人啊！给我把少师无为搜出来！」</p>
+        <p>「谁敢越雷池一步，休怪我长枪染赤血！」少师夫人不知何时来到，正手持银枪，直指仇老爷。</p>
+        <p>「你们！你这是公然与官府违抗！」仇老爷气得脸色铁青，一手指著少师二老，「我要将此事上报，少师府多少代的功绩都保不住你们！」</p>
+        <p>就在双方剑拔弩张地时候，远处有人高声喊了一句，「大人，真凶在这里！」</p>
+        <p>众人寻声望去，原来是一年轻的公子。少师老爷面上惊骇，只见饶天泽只手提著一个人，走上前来，把人直接丢在地上。</p>
+        <p>那人被砰地一摔，也没反应，好像瘫了，就那么躺在地上。</p>
+        <p>少师二老仔细一看，「啊，是墨绶！天泽，你这是？」</p>
+        <p>饶天泽对著仇老爷抱拳作揖，「大人，此人便是息丹城九十九条命案的真凶，他还杀了少师无为的跟班侍童，只在息丹城里就是一百条人命。」她又对著众人高声言道，「想必你们也听说过，他处也曾发生过杀人取心的命案，那些也都是此人所为！」</p>
+        <p>乍闻此讯息，在场所有人不禁倒吸一口冷气。一众衙役皆不由自主地按上腰间佩刀。</p>
+        <p>仇老爷问道：「这……凡事讲求证据，你说是他杀了那么多人？可是你亲眼所见。」</p>
+        <p>脑中闪过第一次见到墨绶杀人食心的模样，饶天泽不由得握紧手上长剑。她瞥了仇老爷一眼，这会儿倒是知道要证据了？刚才气势汹汹要拿少师无为时候，怎么不说摆证据？若再晚来一步，指不定会出多大乱子。她俯视著墨绶，一脚踢上去，「你自己说，还是我替你说？」</p>
+        <p>墨绶笑了，淡淡言道：「昂，所有杀人取心的命案，都是我做的。」</p>
+        <p>仇老爷缕著胡须，眉头深锁，「这……确实是你？不是替别人顶罪？」</p>
+        <p>墨绶叹息一声，抬手抹一把脸，面容瞬间变成另一个人。他再抹一把，又换一张面孔，一连数次，全都是不同形貌，好似变脸的把戏一般。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./184.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./186.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

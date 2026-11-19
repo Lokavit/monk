@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 231 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 231 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 231 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：19 Aug 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,098 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「她是回来接他儿子的。」龙辰说，「明天上来，先和二狗子见个面，看看二狗子的反应。如果不太抗拒，最晚后天就带走了。」</p>
+        <p>少龙等了一会儿，龙辰没再说话。他想起二狗子之前的种种反应，对龙辰说：「你明早试着和二狗子说一下。」</p>
+        <p>「没什么好说的。他们母子之间的事情，他们自己解决。我就想看看，母子见面之后，二狗子会不会发疯。」</p>
+        <p>「那我明天早点出去。」</p>
+        <p>「你不用刻意回避。除非你怕尴尬。」</p>
+        <p>龙辰后面又说了很多话，关于家，关于父母，关于二狗子。他的语气一直很平静，像是在给少龙转述别人家的八卦。</p>
+        <p>天光越来越亮。少龙不知不觉听睡着了。</p>
+        <p>再醒来，听到外面客厅几个人的说话声。他看一眼关闭的卧室门，换成仰卧姿势，怔怔地望向天花板。</p>
+        <p>二狗子说：「跟你走，我就不是野孩子了？我能上学吗？学校里会有人骂我『杂种』吗？」</p>
+        <p>「不会。妈妈来接你走，再也不会有人欺负你了。妈妈会一直陪着你。你不是野孩子。」</p>
+        <p>女人说话的声音有些哽咽。</p>
+        <p>少龙看得是卧室房门。但他仿佛看清楚了客厅里母子重逢，母亲掩面哭泣，小儿子好奇追问，以及大儿子冷漠站在一旁。</p>
+        <p>「那我跟你走。」二狗子没想多久，「我们什么时候走？明天就走行不行？」</p>
+        <p>「好。好好。」女人的声音哽咽，「明天就走。明天就走。」</p>
+        <p>「那你能现在就跟我出去吗？」</p>
+        <p>「干什么去？」</p>
+        <p>「去玄武广场，去不服。干什么都行。我要告诉别人，我有妈。我不是野孩子，更不是『杂种』」</p>
+        <p>「这…」女人犹豫了几秒钟，「走。妈带你出去。你去穿件外套。」</p>
+        <p>「好！你等等！」二狗子兴奋的跑回房。</p>
+        <p>「大龙啊。」</p>
+        <p>少龙不由自主地攥紧被角。她要和龙辰说什么？</p>
+        <p>「你姐说你开学就上高三了。好好学习，考个好大学，离开这里。我和你爸之间的事情，不是那时候的你能懂的。现在你长大了，有自己的是非判断，比你爹强多了。过去那些事情我也不想再提，你永远是我儿子，以后有什么困难，尽管和我开口。」</p>
+        <p>龙辰没有说话。</p>
+        <p>少龙在心里读秒，过去差不多五分钟。</p>
+        <p>「我们走吧。」二狗子打破客厅的沉默。</p>
+        <p>大门一开一关。客厅里再次陷入长时间安静。</p>
+        <p>少龙起身，轻轻拉开卧室房门。</p>
+        <p>龙辰独自坐在沙发上，嘴角叼着烟，没点。</p>
+        <p>少龙坐在龙辰旁边。</p>
+        <p>桌上一张名片，浅色卡纸，烫花金边。第一行是公司名字，中间是人名，职位是副总经理，底下的小字是电话和邮箱。</p>
+        <p>龙辰拿起打火机，打着火，一手拾起名片，斜着一角点着。</p>
+        <p>「二狗子认娘倒是认得痛快。看不到他们母子吵架，真令人失望。」</p>
+        <p>名片不易燃，几秒钟才烧出明火。龙辰举起来点着烟，吸一口，手一偏，朝向少龙。</p>
+        <p>少龙立马掏出烟，也跟着点着。</p>
+        <p>龙辰把烧剩下的名片丢进烟灰缸。</p>
+        <p>两人看着它一点点燃尽，成为小小一块油性物。</p>
+        <p>直到第二天清早，二狗子才回来。只有一个人。专程来叫醒少龙，说再见。</p>
+        <p>二狗子从怀里掏出一个厚厚的牛皮纸袋，放在桌上，「我妈给的。龙辰肯定不会收，你帮他保管吧。他听你的。」</p>
+        <p>少龙转身回到卧室，拿出滑板，交给二狗子，「没什么可以送你的，只有这个。虽然我现在说你可能听不懂，祝福你从此刻起有自己的人生。」</p>
+        <p>「我听得懂。」二狗子露出笑脸，「我哥有你，我就放心了。」</p>
+        <p>少龙也忍不住笑起来。他第一次看到二狗子纯粹的、真诚的笑容，第一次听到二狗子承认龙辰的兄长身份。</p>
+        <p>二狗子抱着滑板走了。</p>
+        <p>少龙对着桌子上的牛皮纸袋犯难。纸袋撑得鼓鼓囊囊，若是一张一百，至少有三十万元。对龙辰来说，如果没有外债，这一笔钱完全可以支持整个大学期间。不过——</p>
+        <p>他看一眼烟灰缸。那块油污粘在玻璃上，抠不下来。</p>
+        <p>龙辰晚上回来，拿起牛皮纸袋，在手上垫一垫，扔回桌子上。</p>
+        <p>「当年她把家里的钱全卷走了，导致酒厂资金周转不过来。我老子不得不去给人家赌拳，连命都赌没了。现在留下一沓钱，不知道是想买她自己的愧疚，还是买她在二狗子心中的母亲形象。」</p>
+        <p>龙辰一脚踹开二狗子的房间。</p>
+        <p>「上天真是不开眼。」龙辰语气平静，「我放任他做任何事情，就是想看他再毁掉她的家。可是，他懂事了，她回来把他接走了。我所做的一切，就像是场笑话。」</p>
+        <p>少龙靠墙站立，看着乱七八糟的房间，「现在，你想做什么？」</p>
+        <p>「自然是把这屋的东西全拆了，全扔了。如果可以，我甚至想把墙重新刷一遍。不过，」龙辰停顿一瞬，「算了。懒得折腾，当仓库，帮我把姐的东西全搬过来放着吧。」</p>
+        <p>次日，两人睡到中午才起床。</p>
+        <p>少龙拿出速写本，放在龙辰面前，「你先看一遍这里的内容。」</p>
+        <p>龙辰接过去翻开，第一页赫然几个大字——</p>
+        <p>「高考备战计划？!」</p>
+        <p>少龙对龙辰的反应毫不意外，淡淡地说：「往下翻。」</p>
+        <p>龙辰翻一页，是大目录，划分了暑假期间的补习内容、高三上学期的课外安排，以及……</p>
+        <p>「等等！这里怎么会有单招？！你之前不是说不招了？」</p>
+        <p>「我前几天得到小道消息，学府明年大概率会重新开放招收武术套路，而且，你那张证书可以免学费。」少龙顿了顿，看一眼桌子上的牛皮纸袋，「虽然，你现在有学费了。」</p>
+        <p>龙辰张了张嘴，低头继续翻，指着纸上的内容，「那这又是什么情况？怎么还有个备选方案？这个备选方案内容看起来更多。」</p>
+        <p>「以防明年招生政策有变动。一旦没有单招策略，你必须和我一起参加高考。我做两手准备，保证有一条路你能够走通，能够走出去。」</p>
+        <p>「你……你这是……」龙辰合上速写本，「你对我的这份爱还真是沉重。」</p>
+        <p>少龙拿回计划本，「你没问题是吧？那我要告诉你我的下一个决定。」</p>
+        <p>「还有下一个？」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./230.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./232.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 005 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 005 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 005 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：05 May 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,057 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>沈知遇坐直，整理整理头发，若无其事的盯着笔记本，偶尔滚动两下鼠标。</p>
+        <p>项目第一个会议开了整整一下午，其中大部分时间是身为产品经理的章奇文在讲，几十页的PPT讲完，沈知遇只觉得脑瓜子嗡嗡的。</p>
+        <p>第一次参与重大项目，而且是从零开始，老章的很多东西，她听得一知半解。</p>
+        <p>什么B端教研需求、知识库设计、评测子系统；什么C端学生操作逻辑、引导沉浸、轻负担交互。</p>
+        <p>沈知遇记了四五页的笔记，其实心里根本不知道要如何开始。</p>
+        <p>过往，有组长给她画好大致的原型图，她只需要照着粗糙的原型图稍微美化一下，甚至不需要了解这个东西怎么来，怎么去。</p>
+        <p>现在，她被点名，要求一周交出第一版设计稿，设计内容是C端，面向学生群体。</p>
+        <p>沈知遇偷偷看一眼洛秋颜，连一个眼神儿回应都没收到。她忍不住再次想起洛秋颜对她的评价。</p>
+        <p>可爱？靠脸？谁捞的？</p>
+        <p>她下意识握紧笔，发誓一定要在周五交出镇住洛秋颜的作品！</p>
+        <p>不为别的，只因她承受不起毕业即失业的后果。</p>
+        <p>接下来的几天，沈知遇每天大部分时间泡在会议室，听着产品、后端、前端、UI之间没完没了的敲定、推翻、拉扯、争论。而她永远是在角落里说不出话的一个，到最后，她看着自己的会议记录，已经理不清楚，到底那些是真正定下来的。</p>
+        <p>她不再是每天等点下班，不再卡点进办公室，从挤出会议之外的时间，到开会时也抱着笔电，一边记录，一边调整。</p>
+        <p>周四晚上，沈知遇盯着屏幕上修改十几遍，色彩、动效、交互都堪称完美的设计稿，长长舒一口气，伸个懒腰。</p>
+        <p>她拿起杯子，里面是不知什么时候喝过的咖啡，没有喝完，咖啡渍在杯子内壁划出好几个圈儿。</p>
+        <p>办公室里仅剩她一人，只有她这个位置亮着灯。</p>
+        <p>她起身去茶水间，洗干净杯子，重新接上一杯温水。</p>
+        <p>不必再靠咖啡续命，她要回家睡个好觉，静待周五的一周总结会议。</p>
+        <p>独自走在路上，沈知遇一首歌循环哼一路，心情就像此刻清亮的月光，依稀的海浪声。</p>
+        <p>她轻手轻脚地打开门，饭团热情地迎上来。</p>
+        <p>沈知遇摸着饭团的脑袋，低声说：「你最好了，不管我多晚回来，你都会迎接我。明晚带你去沙滩玩，好不好？」</p>
+        <p>饭团叫了一声，尾巴摇得更欢了。</p>
+        <p>「嘘～」沈知遇指了指主卧的门，「别吵醒你主子，睡觉去吧。」</p>
+        <p>沈知遇洗漱完毕，敷上一个面膜，她要以最佳状态展示最优秀的设计稿。</p>
+        <p>周五早上，沈知遇在玄关换鞋。</p>
+        <p>邵骏邕带着饭团回来，一人一狗，浑身散发热气，似乎进行了一场赛跑。</p>
+        <p>这是两人一周之内第二次在家里照面。</p>
+        <p>沈知遇抬手点亮屏幕，不是她晚了，是他回来早了。</p>
+        <p>邵骏邕什么都没说，径自进洗手间。</p>
+        <p>沈知遇一路上在脑子里演练无数遍，今天的会议，她要如何震慑全场，如何叫洛秋颜刮目相看。</p>
+        <p>临开会前，她去洗了把脸，又做最后检查，确保每一个动效，每一个交互，丝滑顺畅。</p>
+        <p>今天的会议内容很明确，最重要的就是初版设计稿的全员审查、讨论、定稿。</p>
+        <p>杭天禄简单的陈述几句，轮到洛秋颜。</p>
+        <p>洛秋颜把设计稿投在大屏，「有问题就说。」</p>
+        <p>沈知遇第一次见识洛秋颜的设计稿，她得知洛秋颜主要设计B端教研系统和知识库，心中其实有点忿忿不平。</p>
+        <p>在她看来，两个后台有什么好设计的？随便找模板改改就能交差。而她要设计的学生版才是最复杂的。</p>
+        <p>所以，她盯着洛秋颜的设计稿看了几分钟，也没看出什么独特之处。</p>
+        <p>没有人对洛秋颜的设计稿提出异议。</p>
+        <p>「小沈，你那边呢？可以看初稿吗？」</p>
+        <p>杭天禄语气总是很温柔。</p>
+        <p>这给了沈知遇不少信心。</p>
+        <p>「嗯！」她答应一声，把奋斗一周的成果展示在众人眼前。</p>
+        <p>会议室里安静了。</p>
+        <p>沈知遇想着，是不是该说点什么？可是洛秋颜那种底气十足的冷语气，她学不来。</p>
+        <p>「一周时间，你就做了这么个花里胡哨的玩意儿？」</p>
+        <p>洛秋颜声音本就偏低沉，话说出来带着严重的质疑。</p>
+        <p>沈知遇心一沉，感觉太阳穴一抽一抽地疼。</p>
+        <p>她咬着嘴角，「我的这个设计是…」</p>
+        <p>「你等等。」洛秋颜打断她，指着大屏，「你从哪儿东拼西凑来的？这第一张和第二张，底色明度明显差了0.7%。」</p>
+        <p>沈知遇瞪大眼睛，手有点哆嗦，立刻点开两张底图的HSL。</p>
+        <p>果然明度差了0.7%。</p>
+        <p>沈知遇不敢置信，明明是一张一张复制改的，底图色值不该变，她就没想过逐一检查。</p>
+        <p>「还是这两张，容器边距值，第二张明显右偏一个像素，两边出血值也不平均。」洛秋颜不耐烦地甩甩手，「太多了，我不想说了，浪费大家时间。」</p>
+        <p>沈知遇抠着手指，低着头。</p>
+        <p>她不再用数值确认洛秋颜的话，那样只会让她更像一个小丑。</p>
+        <p>「你浪费了所有人的一周，你知道这意味着什么吗？」洛秋颜的语气比刚才更冷。</p>
+        <p>杭天禄咳嗽一声，「那个…」</p>
+        <p>「意味着整个项目工期缩短一周，所有人要拿出私人时间去补这一周。」</p>
+        <p>会议室鸦雀无声。</p>
+        <p>沈知遇止不住地发抖，洛秋颜的每一个字像冰雹砸在她身上。她死死咬着嘴角，偷偷看一眼其他人。</p>
+        <p>杭天禄失望地摇摇头，邵骏邕盯着大屏转笔，洛秋颜甩她一个白眼…</p>
+        <p>这就是她往死里努力了一周收到的反馈，所有的加班熬夜、废寝忘食，在他人看来，毫无意义。</p>
+        <p>她再也忍不住，起身跑出去。</p>
+        <p>「啪！」邵骏邕的笔掉了。</p>
+        <p>「秋颜，你这说得也太狠了。还是个小姑娘，哪经得住…」</p>
+        <p>杭天禄没有往下说。</p>
+        <p>「哎呀，这事儿闹得……谁去给哄回来？」章奇文问。</p>
+        <p>「哄什么？我们这儿是幼稚园吗？」邵骏邕说完，抬腕看一眼时间，继续转笔。</p>
+        <p>「秋颜去！」程乐邦开口，「女孩子之间比较好说话。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./004.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./006.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 125 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 125 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 125 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：05 May 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,091 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>把饶天泽安顿在房中，墨绶起身正准备离去。却见饶天泽身上凭空多出一块块白色，在黑色夜行衣上很是扎眼。白色的范围越来越大，向四周扩散，上面似乎还有气体蒸腾。</p>
+        <p>墨绶谨慎探了探，触手冰凉，「是霜？！」他在饶天泽衣服上抓了一把，果然是一手的霜，更甚带起一块儿碎布，而被抓过得地方，又冒出一层霜。</p>
+        <p>与此同时，饶天泽嘴唇泛青，面上血色逐渐褪去。而她身上结霜越来越厚，衣服更是莫名其妙的片片碎裂。</p>
+        <p>「怎么会这样？！」墨绶犹豫再三，小心翼翼地掀开饶天泽的衣服。只见其身前一道白色的掌印，寒气正是由此处沿著奇经八脉扩散至全身。片刻功夫，衣服碎地不成样子。他当机立断，将所有被子统统盖到饶天泽身上。</p>
+        <p>墨绶忙活完，立在桌前饮一杯凉茶。文世遗莫非练了什么邪功？非但刀剑不入，而且那看似无力的一掌，居然能够有这种奇异的后果。他一边暗自揣测，一边转首看向床榻。</p>
+        <p>这一看不要紧，令他更为头疼的事情正在发生著。就在这一会儿的时间里，榻上铺盖早已结了厚厚一层霜。饶天泽全身不住地打哆嗦，抖了一地的白霜。</p>
+        <p>只闻一阵轻微的嘶嘶声响，被霜覆盖的被子正在一点点碎裂。见此情景，墨绶怒不可遏，一拳砸在桌子上，烦躁地在房内来回踱步。思虑半晌，他忽地想起一事，立即掏出自己身上一个小布包，翻找片刻，拿出一张赤色的小纸人。转身奔向塌边，踌躇一瞬，扬手掀开所有被子。</p>
+        <p>「你终是我逃不开的劫。」墨绶脱了上衣，坐到床上，一手把饶天泽搂在怀里，另一手反手将赤色小纸人贴在身后，打个响指。随著身后纸人燃烧，他全身如火烧似地，由内向外透著赤红色。</p>
+        <p>墨绶擎起通红的手掌，隔著衣服，覆在那道掌印之上。渐渐的，饶天泽身上唯一一件里衣不再结霜；渐渐的，依稀可见其所中白色掌印亦越来越浅。而他自己，全身上下仿佛被烙熟了一般。</p>
+        <p>饶天泽转醒，再次看到这个世间。知道一定是父母的在天之灵保佑，那一阵极寒的折腾，支援著她挺过来。待她看清楚自己所处情形，毫不犹豫甩过一掌。</p>
+        <p>墨绶是被一个巴掌打醒的。不过，这也不出他意料之外。根据这一巴掌十足的力道看来，推测这丫头应该是暂时没事了。</p>
+        <p>饶天泽先是一脚把墨绶踹开，又一手抓过被子，窝在里头，狠狠骂道：「流氓！趁人之危！伪君子！」</p>
+        <p>「昨晚你受了那一掌，身上莫名结霜，情况危机，我找不到别的办法。」墨绶语气平淡，似乎只为陈述事实。</p>
+        <p>饶天泽甩他一个白眼，「我衣服呢？！」</p>
+        <p>「碎了。」</p>
+        <p>闻言，饶天泽两眼一黑，怒火再一次被点燃，「你……你……你……你居然还撕了我的衣服……你这个无耻之徒！你这个卑鄙小人！」</p>
+        <p>「我没有。」墨绶指著榻上的碎布，「是冰霜。」</p>
+        <p>饶天泽这才发现，被子上确实好多碎布。她觑了墨绶一眼，略微缓和了语气，「那我穿什么？」</p>
+        <p>「我这就去街上帮你置办一身。」墨绶说完，转身就走。</p>
+        <p>「等一下！」饶天泽看了看周身环境，「这什么地方啊？万一有人进来怎么办？先拿你的来。」</p>
+        <p>墨绶犹豫一瞬，转身从包袱里拿出一件，递给饶天泽，「暂且将就，我去去就回。」走至门口，他略微停顿，「那一掌非同小可，你在此安心修养吧。」</p>
+        <p>无为和有涯在白石郡已经逗留数日，本地人们看到他两人也是一副见怪不怪的模样。</p>
+        <p>这一日，风轻云净。两人百无聊赖的倚著栏杆瞧街上热闹。</p>
+        <p>有涯注意到无为又一次出神儿，不由地淡笑，「无为，你嘴上说著不管闲事。可停滞在这里磨叽好几天，依然不肯走。是为什么？」说罢，向对方挑了眉头。</p>
+        <p>「嗯？」无为不疾不徐地言道，「此处山清水秀，人杰地灵，简直福寿宝地啊。」</p>
+        <p>有涯不禁抖了一下嘴角，暗自腹诽，「一边是百兽蛰伏的黑貂岭，一边是诡异冰冻的小凌江。地势险要，易守难攻是真，但哪里体现出来的‘福寿宝地’？」</p>
+        <p>正欲调侃无为睁眼说瞎话，却闻其口中慢悠悠飘出一句，「不过呢，与我来说，最重要的是有你相陪。」</p>
+        <p>「咳咳！」有涯连声咳嗽，觑了无为一眼。见对方略微偏著脑袋，一双眼眸盯著自己，逐渐露出笑容。他清了清嗓子，「虽然很高兴你这么说，但是无为，你这样我很不习惯。」</p>
+        <p>「那你可要学著习惯了。」无为再次转首望著远处天空，「毕竟，人之将死，其言从善。 」</p>
+        <p>原来无为从未想过放弃舍身。之前见他曾露出犹豫，还以为事情有了转机，结果不过是自己的一厢情愿罢了。有涯一声苦笑，把茶水当酒，昂首灌下去，将茶盏重重放在桌上。他目光有意撇开无为，心中很不是滋味。</p>
+        <p>一时无声，有涯忽地感受到唇边一暖。待他反应过来，无为早已坐回原位，老神在在地饮茶，仿佛什么都没发生过似得。</p>
+        <p>有涯面上又惊又喜，猛然意识到现在是青天白日，朗朗乾坤。心虚地瞄了一眼四周，还好没引起他人注意，他突然在人群中看见一道熟悉的倩影。</p>
+        <p>「饶天泽什么时候开始带起小弟了？」有涯指著街角一处摊位，「那个人似乎有意跟著她？」</p>
+        <p>无为顺势看过去，见饶丫头依旧一副男儿装扮，慢慢悠悠地逛著街边摊位。而在其身后，始终有一人尾随著，与之保持一定距离。仔细端量，乃是一名约莫十五六岁的少年人，从其身法即可断定，必是个练家子。</p>
+        <p>「这丫头莫不是遇到麻烦了？」无为心下狐疑。</p>
+        <p>饶天泽一路停停走走，距离两人所处的客栈越来越近。行过客栈门楼时，她猛然来了一个潇洒地转身，把手上长剑做个调换，沿著来时的路继续逛。</p>
+        <p>「身法还是那么秀气。」有涯调侃一句，对无为言道，「饶天泽知不知道有人盯著她？咱们要不去问问？」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./124.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./126.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

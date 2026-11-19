@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 006 章 香尘葬云霄 · 大霹雳世界 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">大霹雳世界</a>
+          <span class="sep">/</span>
+          <span>第 006 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 006 章</span>
+          <span class="chapter-name">香尘葬云霄</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Jun 2557 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,915 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 8 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p>这是一段关于香尘与云霄之间，烟灭散尽的灵魂补完。</p>
+      </div>
+
+      <article class="chapter-content">
+        <p>是日已过，夜幕降临。</p>
+        <p>春宵幽梦楼，一片寂静。庭院灯笼高挂，遍地奇花异草。</p>
+        <p>步香尘摇著手中的扇子，看著榻上的人，自言自语：「明明是如此单纯可爱，一旦决定了，却也是不顾生死。最终，又是谁逃开了谁呢？」</p>
+        <p>门外小奴来报：「夫人，人带来了。」一名穿著邋遢，满面尘土，胡子拉碴，二十多岁的汉子，打小奴身后探出头来。</p>
+        <p>步香尘上下打量了一下送进来的人，「过来，我瞧瞧！」</p>
+        <p>那人偷偷看一圈屋内，最后觑了女主人一眼，问道：「夫人，叫小的来有什么事情？」</p>
+        <p>步香尘也不答话，将对方端详了个仔细，才懒懒言道：「只问你借一样东西。」</p>
+        <p>听到这话，那人稍稍放下心来，借呗，反正我一穷二白。他笑吟吟地问道：「夫人太客气了。若小的有夫人需要之物，双手奉上也无妨。」</p>
+        <p>「很好！」步香尘赞许似地点点头，「我也不会提出什么太过分的要求，只需要你的心！」说完，起掌便是八花奥义绝式，打在对方胸口，将一颗尚在跳动地心脏，缓慢取出。</p>
+        <p>那汉子吓得面如土色，说不出话来，只想想伸手去抓自己的心，身体却僵硬在原地不肯配合。眼睁睁看著自己的心脏离体，又进入榻上一个年轻人的胸口。他张口欲言，忽地意识涣散，栽倒在地。</p>
+        <p>葬云霄醒来，感觉自己睡了很久很久，久到自己似乎忘记了许多事情。四周的一切皆是陌生，又有一丝丝熟悉。仔细想来却换得头痛欲裂，只好作罢。</p>
+        <p>小奴端著一碗药，看到站在屋内的葬云霄，惊喜地道：「爷，你醒了！我去通知夫人。」葬云霄转身只看到个小步跑走的背影。</p>
+        <p>「你终于醒了！」</p>
+        <p>葬云霄连忙掰开环抱自己的双臂，转身说道：「姑娘，请自重！」</p>
+        <p>步香尘愣愣的看著这他，问道：「云霄，你不记得我了？」</p>
+        <p>葬云霄看著他，努力的想了想，问道：「云霄？是我的名字？」</p>
+        <p>步香尘见他如此反应，不由得痛心，只道一句：「大病初愈，注意休息。」便离开了。</p>
+        <p>一旁的小奴，说道：「爷，你怎么能这样对夫人，她耗费毕生功力才将你救回来。你居然这样伤她。」</p>
+        <p>葬云霄感觉有些昏沉，问道：「这是哪里？我是谁？你家夫人又是谁？」</p>
+        <p>小奴急的跺脚，「这里自然是你的家。你是这家的主人，夫人便是你的夫人。你怎么全然不记得？」</p>
+        <p>葬云霄忍者头痛问道：「那我叫什么？你家夫人又是何名号？」</p>
+        <p>「葬云霄，夫人名号是春锁红颜步香尘。」</p>
+        <p>「步香尘？！」似乎对这个名字有些印象。</p>
+        <p>小奴对他察言观色片刻，继续说道：「爷曾经在毒后手下救了夫人的性命，也因此得罪了毒后，将你毒杀，又将尸体送来。夫人耗尽毕生修为用八品神通将你从鬼门关拉回来。又…………」小奴尚未说完，眼前人影一闪，哪里还有葬云霄的影子。</p>
+        <p>庭院中，步香尘伫立花园中，摇著扇子赏月，身后响起一个声音：「感谢姑娘救命之恩。」</p>
+        <p>步香尘转首看到葬云霄单膝跪地，连忙将其扶起来：「救你，我心甘情愿，你不必放在心上。」还在犹豫是否该继续说点什么，一个黑影窜入，手中的刀光闪闪直刺步香尘。葬云霄眼疾手快，徒手抓住对方匕首。又一掌打向对方胸前空门，那人趁机遁走。步香尘拿出手绢帮他包扎伤口。</p>
+        <p>「我留下保护你的安全，直到你功力恢复为止。」无论过去如何，她耗尽功力救了我，我应当留下保护她。如今自己连自己是谁都需要别人告诉，倒不如留在这里报答救命之恩。</p>
+        <p>步香尘面上不动声色，说道：「春宵幽梦楼这么大，也不多你一双筷子。只是……」摇著他受伤的手继续说道：“你连武功都忘了。又如何能护我呢？」</p>
+        <p>葬云霄听到此话，不禁握紧拳头，原本处理好的伤口再次渗血。</p>
+        <p>若，最初的相遇是你我的开始，结果是不是就像现在这样？连我也不由得留恋这种安逸的日子。步香尘看著院中正在习武的葬云霄，人，仍旧是那个单纯善良又傻得可爱的人，剑，依旧是那把专门为他打造的剑，只是这之中多了许多尘杂。亦正因为有这些尘杂，才能如此平和相处。</p>
+        <p>是夜，步香尘提了两坛酒来带葬云霄屋里，随手丢给他一坛，「陪我一醉方休吧。」</p>
+        <p>葬云霄犹豫片刻，点点头，与她碰坛，饮下一大口。</p>
+        <p>「如果能这样醉死，不再醒来，倒也是好事。你觉得呢，云霄？」</p>
+        <p>葬云霄动了动嘴唇，没有说话，一个劲儿的灌酒。步香尘慢慢品著酒，看著葬云霄已将一坛酒饮尽，又伸手过来抢她的半坛，手臂向前一伸躲开。葬云霄一坛烈酒下肚，已有些醉意，被这一躲，重心失衡向前倾，一手按在桌上，一手撑著步香尘的肩，使劲摇摇头，想让自己清醒一下，「我……」</p>
+        <p>步香尘灌下一口酒，堵住他的话语。</p>
+        <p>葬云霄犹豫片刻，闭上双眼，回应她的索取，双手环上她的腰，触到一道伤口，哑声问道：「是谁伤你？」</p>
+        <p>步香尘想起葬云霄为了傅月影，对上自己一剑穿腹而过，那样单纯善良的小妖，不应该被这江湖污染，纵使知晓自己苦苦寻找的妖心就在这小妖身上，仍是没有狠心强取。纵然有八品神通，步香尘却不医这道剑伤，任其在腹部留下痕迹。</p>
+        <p>葬云霄没等到回答，又问道：「为何不说话？」</p>
+        <p>步香尘轻叹一声，说道：「这道剑伤，是一个单纯善良的小妖受人蛊惑，在我全无防备的情况下伤了我，虽是如此，我却没有责怪他，他太单纯，太善良，所以才会被人利用，伤了我。」</p>
+        <p>葬云霄看著那道伤口，蹙眉说道：「他既然伤了你，你就无须再记得他。今后有我在，绝对不会让任何人伤到你。」步香尘微笑的吻上他的唇。</p>
+        <p>芙蓉帐暖一夜缠绵，此时无声胜有声一切尽在不言中。</p>
+        <p>次日，小奴在门外轻声说道：「夫人，毒后来犯。」</p>
+        <p>步香尘懒懒的起身，随意得披件衣服，看了看葬云霄，慢慢地出门。</p>
+        <p>「步姐姐，葬云霄怎么不在你身边？」虽如是说，目光却瞟到步香尘似是有意无意的露出的锁骨。步香尘也不应声，随手甩出一尊牌位，上面写著“葬云霄之灵位」，傅月影一脚踩碎牌位，“步姐姐，莫要拿我当三岁孩子哄骗，你用八花奥义救了他，我的人来刺杀你，又被他打伤。」</p>
+        <p>「妹妹这是杀孽过重，良心不安？！」</p>
+        <p>「我不信他死了。」</p>
+        <p>面对傅月影的跳脚，步香尘不急不缓的说道：「毒是你下的，他是死是活你应当最为清楚。你若不信，葬云霄的坟就在幽梦楼后山，你可以去挖坟验尸，只要，你有勇气对上他。」</p>
+        <p>傅月影听闻此话，笑道：「步姐姐若认为我不敢，那可就错了。还请步姐姐带路。」</p>
+        <p>步香尘面上依旧波澜不惊，「既如此，请吧。」说完，当真带著傅月影来到幽梦楼后山。一眼看到孤零零的坟包。</p>
+        <p>傅月影蹙眉看了一眼步香尘，对身后随从道：「把它给我挖出来。」</p>
+        <p>就在几人准备动手的时候，一道剑气穿过几人颈间，不留任何挣扎机会。来者正是葬云霄，他走到步香尘身边，怒视傅月影道：「毒后果然不辱其名，葬云霄就在这里，怎的不动手呢？」</p>
+        <p>此时照顾葬云霄的小奴匆匆跑过来，跪在步香尘面前，「夫人，小奴拦不住……」</p>
+        <p>葬云霄打断她，「莫要责怪她，是我坚持要来。」</p>
+        <p>步香尘叹道：「罢了，自己去小黑屋反省吧。」</p>
+        <p>傅月影已明白自己又被步香尘算计了，索性放手一搏，「葬云霄，你对我只有拔剑相向了吗？」</p>
+        <p>葬云霄收回剑，说道：「毒后若就此离开，我们与你前尘旧事，再无瓜葛。」</p>
+        <p>傅月影闻言，挑衅问道：「那我若是要步香尘的命呢？」</p>
+        <p>葬云霄长剑一抖，厉声道：「想动她，从我的尸体上踏过去。」</p>
+        <p>傅月影自是知道步香尘的手段，却未料到，那一连串的计谋换来的却是，将葬云霄彻底的推向了步香尘。今日他对她的呵护，就如同当初他对自己的呵护，一样的死心塌地，一样的不顾一切。</p>
+        <p>「步姐姐，当真好手段。妹妹甘拜下风，但是妹妹不甘心，咱们再开一局可好？」</p>
+        <p>「既然当得起妹妹一句‘姐姐’，步香尘自当奉陪到底！」</p>
+        <p>傅月影看著怒视她的葬云霄，轻声说道：「妖心……」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./005.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <span class="nav-btn disabled">
+          下一章 <span class="arrow">→</span>
+        </span>
+      </nav>
+    </div>
+  </body>
+</html>

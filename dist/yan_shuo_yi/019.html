@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 019 章 · 给总裁当爹 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">给总裁当爹</a>
+          <span class="sep">/</span>
+          <span>第 019 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 019 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：19 Sep 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,074 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>晏朔一伸手，对着屏幕比出一个矩形，眼前一亮。</p>
+        <p>难怪怎么都找不到偷拍人，视频根本不是偷拍，是监控录像直接被人流出去了！并且在流出去的时候，做了画面拉大，裁切了四周其他内容。</p>
+        <p>队长挂断电话，「晏总，夜班在来集团的路上。」</p>
+        <p>「来了叫他直接上十九楼找我。另外，」晏朔一指着屏幕，「这一整段录像，发到我邮箱一份。」</p>
+        <p>晏朔一收到邮件后，找来了章律师，把发现告诉了章律师。</p>
+        <p>「这件事情，必须追究责任。你来负责。」</p>
+        <p>章律师点点头，「好。我这就准备。晏先生，请将视频文件转发我一份。」</p>
+        <p>不一会儿，苗助理带着一个人进来了。</p>
+        <p>夜班队员穿着一身保安服，走到晏朔一跟前，「晏总，不是我！我不知道！」</p>
+        <p>晏朔一皱眉，「我还没问呢，你就说你不知道？」</p>
+        <p>「我……我问过同事了……他们说……说的……晏总，我真不知道监控录像怎么会流出去的，真不是我。」</p>
+        <p>「夜班还有谁？怎么就你自己来了？」晏朔一问。</p>
+        <p>「夜班两个人，另一个请假回家了。」</p>
+        <p>「监控室里，昨夜就两人，你说不是你。他来再说不是他……」</p>
+        <p>队员支支吾吾，「晏总……我们是轮值睡觉。我昨晚下半夜当值，那段录像的发生时间，我在储藏室睡觉。」</p>
+        <p>晏朔一听懂了，挥挥手。</p>
+        <p>「章律师，这两个人，你都查一查。绝对是他俩之一。从这里找到录像流出源头，再去找那个发布视频的，看看是不是同一个人。」</p>
+        <p>身后休息室的门被拉开，狄恒炀探出头，「爸爸？」</p>
+        <p>晏朔一转身朝着狄恒炀招招手，「过来。」</p>
+        <p>狄恒炀小跑过去，趴在桌子上，拿起小汽车，满地趴着推车。</p>
+        <p>「狄总现在……」</p>
+        <p>「绝对不超过三岁。」晏朔一笑得无奈，「他特别喜欢你儿子这个玩具，能自己玩一天不出声。」</p>
+        <p>章律师的目光望向狄恒炀，「或许是狄总潜意识里对这个车有特殊的记忆点。咳咳……之前看了点儿童心理学的书，随口说的。」</p>
+        <p>「不，你说的有道理。你天天那么忙，有时间陪儿子吗？」</p>
+        <p>「我请了个保姆。臭小子，天天把保姆折腾毁了。」</p>
+        <p>晏朔一的脑海里闪过一张脸，曾陪伴他和狄恒炀十多年的，温柔和善的，漂亮的脸。是比父亲的陪伴更长久的存在。</p>
+        <p>那一天，原本他们要拉着惠芳阿姨一起去旅行，但惠芳阿姨要回老家相亲。之后发生一连串的事情，再也没有见过惠芳阿姨。</p>
+        <p>章律师傍晚就把结果带回来了。</p>
+        <p>「一进去，全交代了。不过，他坚持只把视频发给了朋友。警方那边取证，证实了这一点。」</p>
+        <p>「查，顺着那个接收视频的人继续查！如果找不到线索，就去查那个发布这段视频的人。我要知道，到底是谁，是什么目的。」</p>
+        <p>狄恒炀凑到晏朔一怀里，「爸爸……饿……」</p>
+        <p>「那我先走了。」章律师说。</p>
+        <p>晏朔一叫住他，「早点回家，陪陪你儿子。」</p>
+        <p>章律师脸上出现温和的笑容，点点头，离开了。</p>
+        <p>「爸爸……饭饭……饿」狄恒炀揪着晏朔一的胳膊，一副嗷嗷待哺的模样。</p>
+        <p>「好好好。饭，吃饭。爸爸带你回家吃饭。」</p>
+        <p>狄恒炀的情况全网传开，晏朔一从愤怒到欣然接受。他再也不需要为此担心了，也不需要等到没人在离开集团了。他可以带着狄恒炀，随意的出现在任何地方。</p>
+        <p>他们离开时，遇到几个加班结束的员工，收到的是礼貌地点头打招呼。没有同情，没有议论，只有祝福。</p>
+        <p>至于背后如何，那不是晏朔一能够控制的，他也不会把精力放在管控这种事情上。</p>
+        <p>董事会给出的七十二小时截至时间逼近，而在这三天里，朔一集团的股价成功回稳，主导舆论偏向于正面，尤其是一句「唯有真情最动人」，全网疯传，配的是晏朔一把狄恒炀护在身后的一幕。</p>
+        <p>偶尔，也会有议论的、八卦的，微不足道的声音在巨浪中毫无涟漪。</p>
+        <p>上一次的董事会议，晏朔一称之为「闹剧」，虽然他这个暂代人的职权引无数人垂涎，但没有一个人敢真正站出来，接下这个职责。</p>
+        <p>当风波逐渐平息，晏朔一便没有再把七十二小时放在心上。</p>
+        <p>周三下午，章律师赶来见晏朔一，拿出一沓资料，一边陈述，一边把资料铺在桌子上。</p>
+        <p>晏朔一听后，指着照片中的人，「他是集团里的员工吗？」</p>
+        <p>「是陈经理的司机。」章律师说着，翻到后一页。</p>
+        <p>「这个陈经理？」</p>
+        <p>「但是，」章律师说，「司机只交代看着搞笑，就分享给了朋友，不知道会传播到网上。可是，司机口中的朋友，两人只有关于视频的简短聊天。经查，对面是自由媒体人，也是视频上传者。」</p>
+        <p>「以你专业分析……」</p>
+        <p>章律师答：「司机全揽下来了。他应该知道，手上没有直接性证据，能证明是陈经理指使，索性给陈经理卖个人情。」</p>
+        <p>「你试过别的方式了？」晏朔一问。</p>
+        <p>「嗯。能用的都用上了。我和他谈的时候，他一副无所谓的模样。并且向我透露，他已经查过相关刑罚。」</p>
+        <p>「算了。这事儿就这样，你那边不要向外透露。」</p>
+        <p>晏朔一抬腕看表，「准你提前下班，这个时间，还来得及接你儿子放学。」</p>
+        <p>晏朔一进入系统，详细翻看陈经理的资料。这个人已经在集团五年了，晋升又稳又快，业绩表上挑不出什么毛病，找不到能够做文章的地方。</p>
+        <p>晏朔一心里很不爽，可他知道，没有证据，是无法开除陈经理的。别说董事会，就是高管们，也不会答应。</p>
+        <p>周四早上，一场临时董事会议上，有人站起来，提出对晏朔一的暂代人能力重新评估。</p>
+        <p>晏朔一瞥了一眼鲁运杰，没有说话。</p>
+        <p>这个出头鸟挑起，立马有几个人纷纷发表自己的看法，绝口不提晏朔一挽救了什么，条条状状，都是晏朔一自来集团之后，造成了什么什么不良影响。</p>
+        <p>晏朔一听了五分钟，提高声音，「直说吧。你们想选谁？」</p>
+        <p>会议桌上安静了。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./018.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./020.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

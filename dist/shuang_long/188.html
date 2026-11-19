@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 188 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 188 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 188 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：07 Jul 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,046 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>饥肠辘辘的两人，慢慢地朝家走。少龙挨近龙辰，不经意擦过对方的手背。下一瞬，龙辰抓著他的手，揣进外套口袋。</p>
+        <p>两人谁都没作声，甚至不去看彼此一眼。</p>
+        <p>夜色朦胧，无人注意到在寒风里散步的两人。</p>
+        <p>迈上家门口最后一道台阶，少龙不紧不慢地缩回手，看一眼龙菲家的大门。隔著厚重的防盗门，挡不住屋里骂骂咧咧，唏哩哗啦地打牌声音。</p>
+        <p>龙辰阻止龙菲再回去，即使需要收拾换洗衣服，也是由他陪著一块儿过去。</p>
+        <p>少龙惊觉，对于龙辰还要继续和他睡主卧的这件事情，他心中是有一丝窃喜的，以至于躺下时才想起来，他又要数半宿的羊。</p>
+        <p>随著回乡年轻人陆陆续续离开，过年的气氛亦一天天冷却下来。</p>
+        <p>一切，恢复到猫冬时的景象，寒冷，寂静。</p>
+        <p>而此时，他们正坐在一辆七座家用旅行车，离开小镇。</p>
+        <p>虽然，只是暂时的。</p>
+        <p>少龙暗自叹气，什么时候才能彻底离开？带著身边这条龙离开。他瞥一眼后视镜，看到最后排睡觉的二狗子，以及欣赏窗外风景的龙菲。不由得去想，当他带走龙辰时，会不会就如眼前一样，附带一大一小？</p>
+        <p>这一趟出来，完全是因为杨虎从他堂哥那里得知今年的冰灯节比以往盛大，更适合约会。杨虎曲线救国，表面上约龙辰，实际自然是为了龙菲，就不可避免要带上二狗子，最后剩下打算在家学习的少龙，索性一起带上。</p>
+        <p>一场本该简单又浪漫的约会，变成全家出游。</p>
+        <p>少龙觉得，杨虎的堂哥出人又出车，可能悔得肠子都青了。听著主副驾驶两人的聊天，他很快推翻刚才的想法。</p>
+        <p>尚在准备考研的堂哥，对杨虎说的，都是经验之谈。杨虎的反应与大多数处在迷茫期的高中生如出一辙——不爱听。堂哥也不再多念叨，转而与龙菲话家常。</p>
+        <p>少龙这才知道，两人以前是同学。他转头看窗外，视线落在玻璃投射的人身上，庆幸不管前路如何，这条龙是愿意和他一起努力的。</p>
+        <p>只有他自己知道，答应帮龙辰说服龙菲去冰灯节，其实是他的自私心作祟，他比杨虎更希望这一次约会结果令人满意。他需要想尽办法，分担龙辰肩头的重任，卸下龙辰身上的枷锁。对方是杨虎，龙辰才能彻底放心。至于另一道锁，他忍过年关，决定回去就找个时间和龙辰好好聊聊二狗子的事情。</p>
+        <p>抵达目的地已是午饭过后，堂哥稍微安排一下，对杨虎嘱咐几句。</p>
+        <p>「你们玩儿得尽兴。」他对龙菲摆摆手，「大菲，来年见。这一年一见，跟牛郎织女似的。」</p>
+        <p>「嘭！」杨虎大力甩上车门，冲车里的人挥挥拳头。</p>
+        <p>酒店房价水涨船高。少龙有些过意不去，他是附带来的，反倒单独占了一间房。</p>
+        <p>龙辰跟著他进房，放下揹包，倒在其中一张床上：「啊！坐车六个多小时，比打一场拳赛都累。」</p>
+        <p>「你……不是和杨虎……一间？」</p>
+        <p>「给飞虎制造机会。」龙辰说，「他肯定不能去我姐那屋，就看他有没有本事把我姐请到他屋里了。」说著，冲少龙露出狡黠一笑。</p>
+        <p>「你真认准杨虎做你姐夫了？！」</p>
+        <p>「那都是玩笑话。飞虎确实喜欢我姐，但也要看我姐什么意思。给他们制造机会，让他们给彼此一个机会。」</p>
+        <p>「我看，他做你姐夫挺好……」少龙矢口把想法说出，连忙找补，「杨虎人不错。」</p>
+        <p>「哦……」龙辰低头倒腾揹包，「走，先去吃饭。然后，我带你去玩儿。」</p>
+        <p>一群人吃完饭，向冰雪大世界进发。酒店距离目的地不算远，在这个打车困难的时候，一行人蹓跶过去。</p>
+        <p>一座座用冰或雪雕刻出来的艺术品，造型活灵活现。沿著路边，一一排开，每一座的跟前皆有人在照相。尤其是那些象征爱情的雕刻品，围聚著一对对小情侣，手持自拍杆，笑容灿烂。</p>
+        <p>龙辰提议分开，并要求带著二狗子。</p>
+        <p>龙菲前面都同意，但坚持二狗子由她来带。</p>
+        <p>龙辰执拗不过，收到杨虎的眼色，叮嘱几句。</p>
+        <p>二狗子难得一路上非常配合，不闹不叫，任由龙菲牵著他的手，一边走，一边东张西望。杨虎走在二狗子旁边，顾著两人。</p>
+        <p>「唉，被我姐看穿了，只能祝飞虎好运咯～」龙辰牵著少龙的手，「没见过吧？带你去看冰雕和雪雕。等晚上这些地方亮起灯，更好看。」</p>
+        <p>少龙猛地缩回手，余光瞥向四周。光天化日，两个男生手拉著手逛，像怎么回事？！万一被龙菲或杨虎看到，解释都解释不清。</p>
+        <p>龙辰握一握空了的手：「人这么多，别走散了。」</p>
+        <p>「我能一眼在人群里认出你。」</p>
+        <p>龙辰嘴角上扬：「那走吧。想在哪里拍照就和我说，我们……应该不会再来了。」</p>
+        <p>少龙心情瞬间低落几分，轻声说：「等到大学寒假，想来还是可以来的。」</p>
+        <p>「嗯。」龙辰随口答应，朝远处一指，「有条龙，走！」</p>
+        <p>两人站在一座雪雕的飞龙跟前，下面乘著同样雪雕的祥云。</p>
+        <p>少龙不禁想起倒计时日历，龙辰写下的那句『飞龙乘云』，用于这座雪雕，再适合不过了。</p>
+        <p>「我想在这里拍张照。」他拿出手机，碍于周围全是人，不敢挨近龙辰，别扭地站一起。擎著手机倒腾，要么是两人不能一起入镜，要么是飞龙缺头少尾。</p>
+        <p>「我来，等你整出来，雪雕都化了。」龙辰拿过去手机，一手揽著少龙的肩头，迅速调整画面，按下连拍。</p>
+        <p>雪雕底座的一圈儿灯，恰巧在此时亮起，引人瞩目。</p>
+        <p>少龙感觉一群人的目光，唰唰朝他们身上扫。他低著头，不尴不尬地翻照片，挑挑拣拣，把自己眼中带著惊慌的全删了，好歹找出张看起来勉强算是自然的，发给龙辰。</p>
+        <p>自从拍完合照，龙辰是既没去掏手机看照片，也没把胳膊从少龙肩头移开。就这样，一路蹓蹓跶跶地走。</p>
+        <p>暮色降临，整个冰雪大世界的冰灯先后亮起来，光芒五彩绚烂。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./187.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./189.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

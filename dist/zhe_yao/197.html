@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 197 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 197 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 197 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：16 Jul 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,127 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>无为他猛然醒神儿，纵身一跃，冲上前去，拦下对方，不确定地问道：「是你吗？！」</p>
+        <p>龙首战盔的人看了无为一眼，不做言语，转身就走。</p>
+        <p>「别走！」无为双手化出施无畏，提棍就攻了过去。他这一招虽是奔著对方后脑勺儿，但心中十分清楚，御龙皇也不是一记闷棍就能敲死的。果然，他棍势尚未到，对方倏然一个转身，只手挡开施无畏，另一手以快不及眨眼地速度出招。</p>
+        <p>一掌击出，正中胸口。无为猝不及防地吃了一招不说，而且这一招准确无误地打在妖封上，牵动了他心口一阵锥刺般地疼痛。身形一晃，不由自主地跪了下去，上半身全靠施无畏撑著。</p>
+        <p>对方一击得手，并未继续，反倒是向后退了两步，双手负于身后，冷眼觑著无为。</p>
+        <p>怎么会？完全扛不住？！难道真的是御龙皇？！无为缓缓抬首，双目紧紧盯著对方，下一瞬，他便失去意识，身体砰然倒地。</p>
+        <p>「你！别走……别走啊！」无为突然坐起身，看到周围环境，原来是程府的客房。他抹一把额头上的冷汗，突然停住动作，暗自疑惑，我不是因为妖封而疼晕过去了吗？怎么会在床上？谁把我带回来的？</p>
+        <p>垂首发现自己只著了一件里衣，无为心里一凉，动作一滞，呆愣了好半晌，一手缓缓举起，照著自己的脸就是一巴掌下去。顿时疼得他眼前直冒金星儿，确定不是在梦里，也不是在什么幻境里，他脑子里就更乱了。我昨晚到底出去没有？那个戴龙首战盔的究竟是不是御龙皇？！</p>
+        <p>想起昨晚是趁夜溜出程府，这也没人可以询问，事情是否真的发生过。无为心烦意乱，使劲儿揉了揉脸，垂头丧气地穿衣服。</p>
+        <p>外面一名小丫鬟，听到房内有动静，礼貌地叩门。随之几名下人也依次进来，有捧著脸盆的，有端著托盘的，还有两个各自提著食盒，拿出几样早点，摆在桌上。</p>
+        <p>无为整理妥当，看到桌上香气四溢地点心，慢慢地靠近桌边儿。一只手刚摸上筷子，脑中霎时想起来有涯的提醒。他闪电般地缩回手，拿起竹筒灌下两口。</p>
+        <p>「无为少侠已经起来了，不知住得可还习惯？」程子晋步入房间，抱拳作揖。</p>
+        <p>无为回一个笑容，「多谢程公子款待，实感宾至如归。」</p>
+        <p>程子晋连忙摆摆手，见无为有几分没精打采，心知八成是为不见的朋友忧心著呢。他也不再客套，单刀直入，「想必无为少侠未能安眠，毕竟少侠的朋友下落不明。」</p>
+        <p>「呃……」无为犹豫片刻，「子晋啊，你就不要少侠来，少侠去的。直接叫我名字吧。」</p>
+        <p>程子晋先是一愣，点点头，「今早我已去请来一名画师，让他画出你朋友的人像图，再拓印几分，派府中人出去帮忙打听。无为，认为如何？」</p>
+        <p>跟著你来程府，就是为了你家人手多。无为自然赞成这个注意。随著程子晋来到偏厅，已有一名长须文生站在那里，看上去约莫四十来岁，正缕著胡须，欣赏著墙上的丹青。</p>
+        <p>「刘先生，我们来了。」程子晋礼貌地言道。</p>
+        <p>刘先生闻声转身，连忙上前作揖，「见过程少爷。」</p>
+        <p>「先生不必多礼。」程子晋抬手扶了一把，「事不宜迟，咱们尽早把人像图画出来。」</p>
+        <p>刘先生走到书案之后，手执狼毫，吸饱了墨，对两人言道：「可以开始了。」</p>
+        <p>无为不由得在房中来回踱步，脑海中浮现出有涯的相貌，尽可能用词准确地描绘著。他希望自己能够说明白，这是找人的唯一法子了，虽然机会渺茫。当他叙述完毕的时候，刘先生亦随之停笔。</p>
+        <p>「画好了？这么快？」无为心生好奇地走过去，看到书案上的画像，一瞬间愣住了。</p>
+        <p>程子晋看清楚画像上的人脸，登时惊讶万分，暗自腹诽，没想到，居然是他？！这么说，当时看不到脸的那位，莫非就是眼前之人？他率先反应过来，夸赞道，「我只道无为玉树临风，想不到还有个龙颜凤姿的朋友。」</p>
+        <p>闻言，无为回过神儿，对程子晋笑了笑，「谬赞了。」他转身询问刘先生，「你这是按照我方才的叙述所画？」</p>
+        <p>刘先生作揖言道：「回公子爷，不敢有任何错漏，一切皆以公子爷的描述为准。」</p>
+        <p>程子晋观察著无为面上表情，斟酌著言道，「刘先生作画数十年，专职为府衙绘制人像。难道他画得不像？」虽然当时只有朦胧月色，但这画像，可以说是与那个人很像了。</p>
+        <p>无为盯著画像，缓缓摇头，连忙解释道，「子晋误会了，这幅画，画得像极了。」但似乎不只是像有涯那么简单。他对刘先生作揖言道，「在下有个不情之请，可否烦劳您再画一张？」</p>
+        <p>程子晋狐疑，「无为，这张若是合格，拿去拓印就可以了。」</p>
+        <p>无为道：「不，我的意思是，请先生帮我画另外一幅人像图。」</p>
+        <p>刘先生将画像搁在一旁，重新摊开一张纸，「公子爷请说。」</p>
+        <p>无为闭上眼睛，叹息一声，回忆起另一幅面孔，一幅泰半被战盔遮盖的容颜，缓缓道出。对龙首战盔的描述，对仅仅能看到的双目以及下颌部分，他极力思索著每个细节，全部讲了出来。</p>
+        <p>看到有涯的人像图之后，程子晋心中就已经猜出来，这两人的关系非比寻常的朋友。他看向在厅里走来走去地无为，敏锐察觉出情况有异。要找的人已经画好了，怎么又要画一个？因他始终站在书案旁边，手上还拿著第一幅人像图，时不时看一眼刘先生在画的那幅。</p>
+        <p>见另一幅也完成了，无为走到桌前，看向书案上的那张人像图，「先生画工出神，果然画得很像。」那么和第一张对比一下，会是什么结果呢？他心里莫名开始打怵，不敢去看程子晋手上那张人像图。</p>
+        <p>程子晋可不知道这其中有什么利害关系，他只觉得有些疑惑，便把第一张人像图放在第二张旁边，还特地保持一个水平线，一手托腮，说出自己的看法，「单就画像来说，第二幅的人，虽然被面罩遮住大半张脸。不过，这眉眼儿和露出的下颌部分，与第一张的人比较，看上去长得有个五分相像。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./196.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./198.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

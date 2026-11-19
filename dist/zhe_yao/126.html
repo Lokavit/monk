@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 126 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 126 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 126 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：06 May 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,078 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>无为注意到那尾随的少年目光移上来，一手拉著有涯躲开对方视线，「这丫头八成惹上事儿了，跟去瞧瞧。」</p>
+        <p>两人谨慎跟随饶天泽一路，直至对方迈进一所较为偏僻的小院儿，再也不见出来。而那个始终尾随的少年人，此刻也整整衣服，进了宅院。</p>
+        <p>「出入自如，不像是麻烦缠身。」无为暗自嘀咕，「难道饶丫头还有另外投靠？」</p>
+        <p>此时，由另一个方向走来一名身著青绿色水袖长衫的女子，后面跟著六名十四五岁的少年。一行人停在宅院门外。为首的女子抬头看一圈周围，率先跨入宅院。身后六人亦跟进去。</p>
+        <p>无为几番踌躇，不知要不要进入一探究竟。一方面考虑现面了就要安顿饶天泽，一方面又不想对方介入，打乱自己的计划。踌躇再三，「还能提著剑逛街，应该是没有生命危险。咱们走吧。」这话也不知道是做真，还为了安慰自己。</p>
+        <p>有涯暗自摇首，「来都来了，进去看一眼吧，毕竟她是少师夫人姐妹的女儿。」</p>
+        <p>尚在犹豫不决，两人同时看到宅院中走过的一道人影，「墨绶？！」</p>
+        <p>无为双手一摊掌，「既然是他，饶丫头应该没事，回去吧。」</p>
+        <p>墨绶迈入偏厅，眼前一袭青绿色著装的女子，正在房内慢悠悠踱步。他径自走过去，坐在椅子上，「盭绶，你来得好快。」一句话说得一语双关。这个人确实来的太快了，以至于他来不及做好准备，也来不及做下抉择。</p>
+        <p>盭绶一个优雅地转身，有意倾倒在墨绶怀里，一手搭在对方肩头，娇嗔一句，「许久不见，人家好想你。接到讯息就马不停蹄地赶过来，一路上跑死了五匹良驹。」</p>
+        <p>正调侃著，盭绶忽然感受到一道异样的目光投过来。她顿了顿，伸出玉手在墨绶下巴上一挑，「小黑，门外这位是你相好的？」说罢，看向门口一名男装打扮的女子，露出一个笑容。</p>
+        <p>饶天泽立在门口，一手紧紧攥著剑，面无表情的看一眼屋里两个人，转身离去。</p>
+        <p>「你可以下去了吗？」墨绶不动如山的坐在椅子上，目送饶天泽走远。</p>
+        <p>盭绶不慌不忙，略微偏著脑袋，换上一副贼贼地笑容，「神情不对哦？你该不会是真的……」</p>
+        <p>「下去！」墨绶语气颇为不悦，肩头向前一送，想要把对方丢下去。</p>
+        <p>盭绶一个翻身，站在地上，只手抚过墨绶脸颊，低声说道：「今晚，我等你！」她见对方面色越来越沉，「小黑，你可要提防自己变成目标啊。」</p>
+        <p>饶天泽独自坐在院中不起眼儿的位置，目光毫无重点的落在不远处，脑中一阵神游。那边几个十四五的少年人，皆著一身草绿色短打，相互打打闹闹，嘻嘻哈哈。她知道这几个人便是方才那名女子带来的，他们是什么人呢？</p>
+        <p>几个少年人看似随意地打闹，但下盘功夫一个赛一个的稳健，再结合身法以及凌厉地手法。</p>
+        <p>好歹也是跟著父母练过几年把式，饶天泽看得出，这五人是在磨练合作对敌。她不由得嫌弃自己，那般年纪的时候，还只知道四处惹祸，又不肯认真练武。想到过世的父母，心中又是一阵哀伤。</p>
+        <p>饶天泽转首把目光投向树下，那里躺著个唯一没有参与的少年人。她暗自腹诽，「那时候的自己，也就和这个偷懒的差不多了。」</p>
+        <p>「嘘！嘘！」一名少年指了指树下，另外几个也依次停手，相互露出个贼笑，轻手轻脚地走过去。突地一拥而上，抬胳膊拽腿儿，把那偷懒的少年架起来，异口同声地喊道：「一，二，三！飞咯！」五人一起使劲儿，把打盹儿的少年向上空抛去。</p>
+        <p>那少年被抛到半空，还能不紧不慢地伸个懒腰，继而一招梯云纵，凌空一个翻身儿，倒挂在树桠间，任由身体随意荡悠，睁著一双有神的大眼睛，「嘿嘿！小弟正梦见自己身似云中燕，醒来梦境成真，多谢五位哥哥一臂之力。」</p>
+        <p>「别客气，咱们马上就让你这只小燕儿变成死家巧儿。弟兄们，上！」一声令下，几个人依次纵身上树。</p>
+        <p>「日夜兼程赶来，你们还有这么大精力胡闹？现在统统给我滚到房里睡觉去！」</p>
+        <p>饶天泽转身看过去，原来是方才与墨绶在厅里的那名女子。她竟未察觉对方是何时来到自己身后，这若是想下黑手，估计自己早死上几百次了。</p>
+        <p>「你就是饶天泽？」盭绶优雅地走到桌前，看一眼缓缓起身的饶天泽，「明明是个漂亮的女孩儿家，却偏要做男儿装，是出于内心的自我防卫吗？」</p>
+        <p>饶天泽抱拳问道：「尚未请教，阁下何许人？」</p>
+        <p>「名字吗？这种东西不曾有过。你可以叫我盭绶。」盭绶顿了顿，对饶天泽笑道，「至于我是什么人嘛？你这么聪慧可爱，心中认为我会是什么人？」</p>
+        <p>「墨绶的朋友。」</p>
+        <p>「朋友？！」盭绶面上一愣，继而放声大笑，「真是个天真的丫头，能活这么大也是不容易啊。」她一副感慨的模样，见饶天泽面上无什么表情，「我这样说，你会生气吗？」</p>
+        <p>饶天泽摇摇头，「你是墨绶的朋友。」</p>
+        <p>盭绶眼神一暗，「就算是朋友，也会有反目的时候。你怎知我不是先杀了小黑，再来杀你？」</p>
+        <p>闻言，饶天泽面上神情瞬变，但身形并未有动作，反而冲对方露出笑容，「你不会杀他。」</p>
+        <p>「自以为是！」话音甫落。盭绶手起掌落。</p>
+        <p>饶天泽登时两眼一黑，生死不知。</p>
+        <p>盭绶一手扶住饶天泽，对著院门外言道：「你再不出来，别怪我真杀了她！」</p>
+        <p>墨绶阴沉著脸走进来，从盭绶手上接过饶天泽，「你也不用这么早就打晕她。」他把人横抱起来，放到屋内榻上，小心翼翼地帮对方盖上薄被。</p>
+        <p>「小黑，你是看上这丫头的傻劲儿了吗？」盭绶坐在桌前，毫不客气地甩给墨绶一个白眼儿，「看在多年相识的份上儿，我必须提醒你一句，她姓饶，这是不可改变的事实。」</p>
+        <p>墨绶手上动作明显一滞，看向盭绶，「时辰尚早，你也去休息吧，别误了事情。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./125.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./127.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

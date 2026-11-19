@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 040 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 040 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 040 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：09 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,074 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>沈知遇点头，「希望尽快，藏区的冬天已经结束，我还要赶到那边。」</p>
+        <p>太子爷抬腕看一眼时间，对沈知遇说：「中午了。是否有荣幸请沈女士一同吃午饭。」</p>
+        <p>沈知遇大方接受。</p>
+        <p>下午两点，同一个会议室内，所有人员到齐。</p>
+        <p>沈知遇仔细查看最新「文旅开发框架协议」，里面单独列明了，她沈知遇的主创设计决策权、项目参与分红等相关条款。</p>
+        <p>双方正是签署协议。</p>
+        <p>落笔确认补充框架协议的瞬间，沈知遇心底翻涌起难以按捺的骄傲。</p>
+        <p>她成功了！</p>
+        <p>从大学出来，被社会、职场、生活，毒打得体无完肤，她终于站直了。</p>
+        <p>如今，不仅画作有了稳定文创商用渠道，连心心念念的藏寨改造，都能由自己把控审美底线，不用任由旁人随意篡改画面里珍贵的乡土模样。</p>
+        <p>她笃定自己步步为营争取来的决策权是实打实的筹码，两份白纸黑字的合同牢牢攥在自己手中，艺术终于能落地生根，长久的规划眼看就要一步步实现，满心都是尘埃落定的踏实与期待。</p>
+        <p>有了这些，她既能安稳做文创，又能守住藏地村落原本的模样，这场博弈已然完胜。</p>
+        <p>她相信，就算是未来面对唐杰，她依然可以挺直腰板。</p>
+        <p>在决定买票之前，沈知遇翻看自己的作品，不知怎么就想起来央吉，又想到村里的老人和小孩。</p>
+        <p>她网购了儿童读物、速写本、彩铅套装、积木、玩偶等等，一批经济实用的东西。</p>
+        <p>这一次，除了身上的大背包，她又多了一个大行李箱，里面塞满了她的心意。</p>
+        <p>火车到达市区后，沈知遇像回家一样熟练，在特定的位置，找到晚上路过村落的车。</p>
+        <p>距离村落越近，她的心情越好，时不时探头看向远处。</p>
+        <p>到达村落，她背着大背包，拉着行李箱，在街上走着。</p>
+        <p>很快，她发现了不同。</p>
+        <p>街上的陌生面孔比她想象的要多，还有几个国际友人。去年那种平静不复存在，取而代之的是城市人的嘈杂，几间小店门里门外聚着三三两两年轻人。</p>
+        <p>沈知遇一路走，一路看。</p>
+        <p>她没有告诉唐杰回来的具体日期，此刻，也不想打扰唐杰。</p>
+        <p>找到小屋的房东阿妈，她用练熟的藏语，和阿妈交流继续租房。</p>
+        <p>却从阿妈口中得知，房子已经租出去了。</p>
+        <p>沈知遇的心一沉。</p>
+        <p>唐杰食言了！</p>
+        <p>说好帮她留下那间小屋，却被别人租了。</p>
+        <p>去年，她是因为唐杰的推荐，住进小屋；</p>
+        <p>今年，她是真真正正迫切需要那间小屋！</p>
+        <p>只有那间屋子的视角，才能为她提供源源不断的创作。</p>
+        <p>她悻悻地走向小屋，不敢奢求租户割爱，好歹也要再附近找个空房住。</p>
+        <p>「大画师！」</p>
+        <p>唐杰是跑来的，说话带着点气喘，「你怎么也不提前说一声。」</p>
+        <p>「你食言了！」沈知遇说。</p>
+        <p>「什么？」唐杰一怔，忽然笑了，把钥匙在沈知遇眼前晃一晃。</p>
+        <p>沈知遇眼前一亮，认出穿钥匙的链，这是她新学的，亲手编的，去年交出去钥匙的时候，没有摘下来。</p>
+        <p>「钥匙怎么在你这儿？」沈知遇立即反应过来，「是你帮我租下了！」</p>
+        <p>唐杰点点头，「是啊。那个房子位置太好，总有人问，我就先替你租下来了。」</p>
+        <p>沈知遇接过钥匙，「谢谢。我一会儿把钱转给你。」</p>
+        <p>「好说。」</p>
+        <p>唐杰帮沈知遇拎着大行李箱，「挺重的，你准备今年在这里过冬了？」</p>
+        <p>沈知遇在唐杰面前打开箱子，「这些都是给大伙儿带的礼物。」</p>
+        <p>唐杰蹲下，拿起几样看看，「你真有心。他们一定会喜欢。」</p>
+        <p>沈知遇却突然想到，没给唐杰准备礼物，幸好唐杰没问。</p>
+        <p>安顿好一切，那种熟悉的感觉被她找回来了。</p>
+        <p>不同的是，一边要和甲方团队频繁交涉，一边要抽时间带着礼物走访几家。</p>
+        <p>给小孩子送礼物，用藏语和长辈交流。</p>
+        <p>唐杰毫不吝啬地夸赞沈知遇藏语说得不错，并邀请她加入小队。</p>
+        <p>小队一共三个人，主要负责帮村民解决问题，为游客做翻译、向导等。</p>
+        <p>沈知遇更是组织几个小孩子，教他们日常汉语，买来一批画具，教他们画画。</p>
+        <p>从这些日常中，积累下来大量素材，为她的构想、设计、绘画，打下基础，也是为了传递给甲方，这里真实的情况，以便于甲方那边的协作。</p>
+        <p>沈知遇的账号下，越来越多的藏区生活、村落人文、街景、定格、绘画作品。</p>
+        <p>每月平台结算下来的金额，也是一笔不小的收入。</p>
+        <p>一切准备就绪，沈知遇迅速进入工作状态，开启全域文旅改造方案的打磨工作。</p>
+        <p>她没有沿用市面上千篇一律的网红村落改造模板，而是扎根实地，每日沿着村落的街道、边角步行踏勘，对照自己积累的手绘原稿、实地记忆，一点点校准细节。</p>
+        <p>民居外立面保留藏式原生夯土肌理，只做防潮加固与极简修缮，摒弃浮夸的网红涂装；村落步道沿用原有老路，仅修补破损路段；新增的文旅配套、休息景观、导视标牌，全部适配藏地传统纹样与低饱和色调，最大程度保留村落的烟火质感。</p>
+        <p>沈知遇白日实地踏勘记录细节，夜晚伏案绘图，细化平面布局、视觉体系、色彩配比，短短几日，整套概念方案、分区效果图、改造细节说明书便初具雏形。</p>
+        <p>然而，从她启动方案打磨的第三日开始，甲方的干涉便接踵而至。</p>
+        <p>品牌对接人的消息、电话络绎不绝，没有任何实地调研的支撑，只带着资本固化的商业思维，不断提出细碎且功利的修改要求。</p>
+        <p>甲方要求她提亮建筑配色、增加大面积网红打卡装置、统一商业化门头，删减所有小众质朴的原生细节，目的只为视觉冲击力更强、更博眼球、更方便后期营销造势。</p>
+        <p>沈知遇始终从容强硬，逐条驳回所有改动提议。</p>
+        <p>她拿出合同里主创设计终审权、美学品控决策权的条款，冷静告知对方，「这片村落的核心价值，在于独一无二的原生人文质感，过度网红化、模板化的改造，只会透支土地的底蕴，短期博流量，长期彻底丧失文旅长线价值。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./039.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./041.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

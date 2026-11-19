@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 014 章 · 普渡寺冒险 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">普渡寺冒险</a>
+          <span class="sep">/</span>
+          <span>第 014 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 014 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：14 Oct 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,507 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 7 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>清晨，普渡寺响起钟声。</p>
+        <p>班朝辰缓缓睁开眼睛，看着熟悉的寮房，有一瞬恍惚。</p>
+        <p>回来了！从未感觉普渡寺是如此的舒适。</p>
+        <p>对面床铺空着，宗静尘不在。</p>
+        <p>但这钟声，一定是宗静尘敲的。</p>
+        <p>自从两人在小黑的掩护下见面，直到现在，没有说过一句话。</p>
+        <p>宗静尘对他的态度，就像是他第一天来普渡寺。</p>
+        <p>他走出寮房，穿过回廊，停在转轮堂门前。</p>
+        <p>转轮堂的门开着，窗户上没有任何遮蔽物。</p>
+        <p>班朝辰犹豫了几秒钟，走了进去。</p>
+        <p>他绕到一个不起眼的角落，随手选了一个无名牌位，找到一块贝叶。</p>
+        <p>正如宗静尘所说，贝叶上刻着一组一组的点。</p>
+        <p>班朝辰一连翻了几个，点阵形状确实不同。</p>
+        <p>他直觉这应该是一份份资料，记录了死者的信息。</p>
+        <p>「师父，这是这次出任务牺牲人员的信息。麻烦你了。」</p>
+        <p>班朝辰听出是老爸，立马躲了起来，暗自思忖，师父？我爸怎么管老和尚叫师父？</p>
+        <p>他偷偷看过去。</p>
+        <p>班永康把一张纸交给老和尚。</p>
+        <p>老和尚接过去，扫了一眼，「唉。转轮堂里又添五名英魂。」</p>
+        <p>「师父，他俩在那里那么久，静尘已经知道自己的身世了。」班永康的语气里充满担忧。</p>
+        <p>「都怪我家那个小兔崽子，我就不该带他来。」班永康说。</p>
+        <p>老和尚摆摆手，「怪不得你儿子。」</p>
+        <p>班永康说：「我原本想着，叫我家那小子上来，免得静尘没有同龄人，太孤独。这小子……真能给我找麻烦。」</p>
+        <p>「也算是解了静尘的心事。」老和尚说，「放心吧。静尘自己能想明白。」</p>
+        <p>两人又是一阵沉默。</p>
+        <p>「师父，我上次的提议，你看怎么样？」班永康问。</p>
+        <p>「你是说，叫静尘下山去上学？」</p>
+        <p>「对。跟我家那小子一起，也有个照应。」班永康说，「你也看到了。我家那小子太皮了，有静尘盯着，我能放心一些。」</p>
+        <p>「原本我是不赞成的。」老和尚说，「现在，我倒认为，是个好主意。就是不知道，静尘愿意不愿意。」</p>
+        <p>「我问问他。师父，如果他乐意，我可今天就带他走了。」</p>
+        <p>「嗯。」</p>
+        <p>两人说着，离开了转轮堂。</p>
+        <p>班朝辰松了一口气，悄悄向外张望，直起了腰。走出转轮堂时，他想起父亲交给老和尚的纸条，蹑手蹑脚地过去翻出来，展开纸条。</p>
+        <p>上面是五个人名，和一个日期，是昨天。</p>
+        <p>班朝辰笃定自己地揣测，这转轮堂里，全是牺牲地无名者。</p>
+        <p>跑船，原来是这么危险的工作。</p>
+        <p>该叫老爸换个工作，太危险了。</p>
+        <p>当班永康向宗静尘提起，一同下山上学的时候，宗静尘拒绝了，理由是不能放任师父一个人在山上。</p>
+        <p>班朝辰偷偷瞟一眼宗静尘，没有说话。</p>
+        <p>他其实也希望宗静尘下山，跟他一起去上学。</p>
+        <p>他有伴，他也有伴。</p>
+        <p>他更想盯着宗静尘，以免宗静尘沾了太多土匪气，未来真的去当土匪。</p>
+        <p>吃过斋饭后，班永康决定回去。</p>
+        <p>班朝辰来时一个露营大背包，在寨子的时候全被烧了，他身上现在还穿着宗静尘的僧袍。</p>
+        <p>他不等班永康寒暄完，率先走出去，打开副驾驶的车门，坐了进去。</p>
+        <p>这辆车贴了防偷窥，他在里面能看到宗静尘正朝着这边看过来，也知道宗静尘看不见他在看他。</p>
+        <p>班永康坐进了主驾驶，慢慢把车调整方向。</p>
+        <p>班朝辰看着站在门口的一老一小两个和尚，仰头注视着普渡寺三个字。</p>
+        <p>车子缓缓驶离，眼中的一切越来越小，越来越模糊。</p>
+        <p>「没有别的办法吗？」班朝辰问。</p>
+        <p>「什么？」班永康看了他一眼。</p>
+        <p>「那堆牌位，在哪儿供不是供？非要在这破普渡寺吗？」班朝辰说，「每次来人，老和尚还要像见不得光似的，把整个转轮堂全罩上，把门锁上。」</p>
+        <p>「你知道什么。」班永康说。</p>
+        <p>「我知道啊。我听到你和你师父的话了。」</p>
+        <p>班永康猛地刹车，转头问：「你听到什么了？」</p>
+        <p>「我比你俩进去的早，比你俩出来的晚。」</p>
+        <p>班朝辰顿了顿，「爸，你没有跟我说过，跑船的工作那么危险，转轮堂里少说几十副牌位了。你别做了，换个工作吧。我没妈了，可不能再没爹。」</p>
+        <p>班永康像是松了一口气，重新发动车子，「现在什么都不好干，有工作就不错了，哪里还有挑三拣四的空间。你好好学习，以后找个好工作。」</p>
+        <p>班朝辰吹了一声口哨，一副吊儿郎当的样子。</p>
+        <p>回到花都的家里，已经是夜里十一点了。父子俩难得一起，去逛了夜市，买回一堆吃的。</p>
+        <p>班朝辰叹气，「要是宗静尘在这里就更好了。这些他能吃，他都没吃过。」</p>
+        <p>他想了想，「哦。肉他也能吃。我们在寨子里的时候，他破戒吃肉了。不过，他也不是真和尚，没……」</p>
+        <p>「别再提你们闯祸的事儿了。」班永康打断班朝辰的话。</p>
+        <p>班朝辰闭嘴了。</p>
+        <p>次日一早，家里没有了班永康的影子，只有一张字条在茶几，上面放着一个新手机。</p>
+        <p>「我去工作了。在家好好照顾自己。」</p>
+        <p>班朝辰拿起新手机，忍不住想起来原来那部，在寨子里被踩碎的手机。</p>
+        <p>他连忙登录账号，同步数据。</p>
+        <p>经过数个小时的等待，找回了一些照片和视频。</p>
+        <p>宗静尘在提水，宗静尘在做饭，宗静尘在念经，宗静尘在打坐……</p>
+        <p>班朝辰点开一个视频，是他和宗静尘一起去抬水，两人大声唱着：</p>
+        <p>「一个呀和尚挑呀么挑水喝 「嘿嘿 挑呀么挑水喝 「咿咿 挑呀么挑水喝 「两个呀和尚抬呀么抬水喝 「嘿嘿 抬呀么抬水喝 「咿咿 抬呀么抬水喝……」</p>
+        <p>高考结束，班朝辰立即报了驾考，用最短的时间考到驾照，拿出自己多年攒下的积蓄，买了一辆车。</p>
+        <p>车一般，但是能满足他上山下海的需求。</p>
+        <p>他按照导航，一路开到了沧龙关，接着开到沧云古镇，买了几样小吃，全都是他和宗静尘爱吃的。</p>
+        <p>五年过去，通往普渡寺的山路依旧那么崎岖。</p>
+        <p>他凭着记忆，小心翼翼地开上山，眼前的一景一物越来越熟悉。</p>
+        <p>直到，他看见一座被烧毁的古寺。</p>
+        <p>普渡寺三个大字被烧得难以辨认，两侧大门被熏成了黑色。</p>
+        <p>班朝辰下车，站在古寺门口，里面的杂草有半人高，房屋全部坍塌。</p>
+        <p>他抬起脚，正准备迈进去，又缩了回来。</p>
+        <p>这里，显然已经多年无人打理。</p>
+        <p>老和尚和宗静尘哪去了?</p>
+        <p>班朝辰找了根长一点的棍子，一边打草惊蛇，一边往里走。</p>
+        <p>他走到大雄宝殿，屋顶塌了，里面佛像几乎全烧完。</p>
+        <p>他走到转轮堂的位置，除了地上没有烧干净的一块匾，什么都没有了。</p>
+        <p>他走到曾经住过的寮房，从灰烬里扒拉出来两块砚台，这是他唯一能找到的东西。</p>
+        <p>班朝辰回到车上，坐了好一会儿，开车下山。</p>
+        <p>到了山下，他四处找人打听，想着那些曾经上山的香客，怎么也该知道原因吧。</p>
+        <p>然而，没人知道原因，只知道是某个夜里，山上起火了，甚至不知道老和尚和小和尚是不是还活着。</p>
+        <p>班朝辰在沧云古镇住了一晚，带着满肚子的疑问，回到家里。</p>
+        <p>他没有问班永康，仿佛什么都没发生。</p>
+        <p>因为，五年来，班永康每年都会去普渡寺。最起码，每当班朝辰叫老爸给宗静尘捎带东西、书籍的时候，班永康永远是满口答应下来。</p>
+        <p>他已不是当初那个楞头楞脑的少年，有些事情，他自己就能够推出真相，无需求证。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./013.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <span class="nav-btn disabled">
+          下一章 <span class="arrow">→</span>
+        </span>
+      </nav>
+    </div>
+  </body>
+</html>

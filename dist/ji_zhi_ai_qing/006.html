@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 006 章 · 极致爱情 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">极致爱情</a>
+          <span class="sep">/</span>
+          <span>第 006 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 006 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：06 Mar 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,049 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>此刻的父亲，挺直的腰板，微抬的下巴，爽朗的语气，豪壮的承诺。</p>
+        <p>他太了解父亲了。</p>
+        <p>父亲一辈子都在维护一个面子，为此当年才会同意他出国，才会在他回来后，把他推到所有人眼前，就是为了告诉那些人，他们周家站起来了，有钱了，出过国了。</p>
+        <p>「嗯。我问问几个国外的朋友。他们若是感兴趣，大家可以合作，把水果出口。」</p>
+        <p>周天恩顿了顿，注意到村干部一脸喜色，像是已经看到钱进口袋了。</p>
+        <p>「不过。水果是生鲜，比一般的产品成本要高出不少。具体高多少，要等调查之后才知道。」</p>
+        <p>村干部的脸垮了几分，笑得勉强，「不放事。你先给问问。」</p>
+        <p>周天恩点点头。</p>
+        <p>周老父亲热情地留村干部吃饭，摆下酒菜。</p>
+        <p>喝到半途，村干部 盯着哥俩，发出感慨，「老周啊！你会养儿子啊！有出息，有本事。」</p>
+        <p>周老父亲脸上笑呵呵，客气了几句，眉眼里尽是以子为傲。</p>
+        <p>建冷库也好，水果出口也罢。周天恩根本没有那个闲钱，也没有那个本事。</p>
+        <p>他感觉自己快被「父爱」这座大山压死了。</p>
+        <p>可是，他现在被父亲宣扬成了人尽皆知的大人物，他没有勇气对父亲说实话。</p>
+        <p>即使眼前已经是关关难过，他仍旧拿出手机，给李秋瑾发信息。假装自己还在船上工作，假装一切如常。</p>
+        <p>李秋瑾一天回不上三条消息。</p>
+        <p>周天恩就抱着手机给李秋瑾打电话，一遍又一遍地打。</p>
+        <p>李秋瑾冲他发脾气，「你别总打电话！有事就留言，我看到回给你回复。人都有自己的私人空间。你在船上，信号这么稳定吗？这么闲吗？」</p>
+        <p>「我回国了。」周天恩说。</p>
+        <p>电话那边沉默了几秒钟。</p>
+        <p>「什么时候？」</p>
+        <p>「昨天。」周天恩说。</p>
+        <p>「你怎么没有提前说？你现在在哪儿？已经回家了吗？……」</p>
+        <p>周天恩心里暖烘烘，嘴角不自觉地上扬，等着李秋瑾问完。</p>
+        <p>李秋瑾还是爱他的，还是关心他的。</p>
+        <p>「你怎么不回答我？」</p>
+        <p>「我想给你一个惊喜。」周天恩笑着说。</p>
+        <p>「你没提前告诉我，我回老家了。」</p>
+        <p>周天恩脸上的笑容不见了。他以为弟弟看新房的名义，隔三差五就骑着小电驴去圣水家园晃悠，每每能看到李秋瑾接孩子放学。</p>
+        <p>「我还有事儿，先挂了。」</p>
+        <p>周天恩没有机会说，没有机会问，再打过去，李秋瑾不接电话。</p>
+        <p>手机上又收到陌生人的消息，提醒他，这月还款日期将近，必须在三天内还钱。否则，后果自负。</p>
+        <p>周天恩十分清楚，平台里几个小额贷款逾期，最多是影响他的征信，但高利贷逾期，可不是闹着玩儿的。</p>
+        <p>他其实本想找李秋瑾开口借钱，却没有一次能说出口，只要听到李秋瑾的声音，他就忘记了一切，只想和李秋瑾甜言蜜语。</p>
+        <p>周天恩回家的路上，巧遇村干部，一边和他说，建冷库的事情差不多要立项了，一边问他出口的事情有眉目了吗？</p>
+        <p>他随口胡诌了几句，把话题拐回建冷库，关系集资款项，关心寻找项目方。又以一副经验老道的口气，提醒村干部，擦亮眼睛，别被坑了。</p>
+        <p>「才筹集到一万多块，没有项目方愿意接吧？」周天恩说。</p>
+        <p>村干部皱着眉头，「是啊。」</p>
+        <p>周天恩叹了一口气，给村干部递烟，「这种事儿，通常要有一个比较具有影响力的人物。这样，大家才会愿意跟随出钱。」</p>
+        <p>「是啊。」村干部抽一口烟，「呀，这烟，劲儿不一样。」</p>
+        <p>「昂。国内没有。我从外面带回来的。」</p>
+        <p>村干部瞪眼盯着周天恩，一拍巴掌，指着他说：「我怎么把你给忘了！」</p>
+        <p>周天恩想起父亲承诺过的一万块，连忙说：「你放心。我们家出一万，这事儿我记得呢。」</p>
+        <p>村干部摆摆手，「不是那事儿。你刚才说的，领头人的事儿！你不就是现成的咱们村最有影响力的人物吗？别说是咱们村，放眼周围几个镇子，也没人比得了你啊。」</p>
+        <p>周天恩赶紧摆摆手，「不行不行，我可不行。我这就是刚回来，啥都不了解呢。」</p>
+        <p>村干部揽着周天恩的肩头，「天恩，你行，你绝对行！你吃过洋面包，见过大世面。不说别的，就说你们周家愿意拿出来一万，就没人比你更有资格。」</p>
+        <p>周天恩还想拒绝，听到村干部提起他们家要出一万的事儿，忽然有了主意。</p>
+        <p>这事儿摆在眼前，他若是不趁机接下来，就要想办法去找一万块上交，还要再想办法找一万三还高利贷。</p>
+        <p>高利贷那边的时间就到明天。</p>
+        <p>周天恩把这事儿接下来了，手里攥着集资账户下的一万多块钱。</p>
+        <p>父亲一口一个夸奖，一口一个叮咛，叫他务必把事儿办体面了。</p>
+        <p>周天赐满眼崇拜地盯着他，说了最简单直白的言辞：「哥，你太牛了！这下，你真成大人物了！」</p>
+        <p>周天恩整宿没睡着，抽了两包烟。</p>
+        <p>等他醒来，已经是下午了。他是被电话吵醒的，一通陌生号码的来电。</p>
+        <p>周天恩接听电话，不待对方说话，抢先说道：「我在路上，一会儿就到。」</p>
+        <p>对面什么都没说，主动把电话挂断了。</p>
+        <p>周天恩起床，家里没人。</p>
+        <p>他扒了两口桌上的剩饭，骑上小电驴，又从门口退回院子，下车走了出去。</p>
+        <p>第二次来到隐蔽的工作室，屋里还是那三个人。</p>
+        <p>中年人看到周天恩，笑了笑，「还算准时。」说完，伸出手。</p>
+        <p>周天恩从外套内兜拿出一万三，放在桌子上，「你点一点。」</p>
+        <p>中年人拿起来掂了掂，放进一旁的验钞机。</p>
+        <p>机器哗啦哗啦响一通，报出数字：「一百三十张。」</p>
+        <p>中年人在周天恩签过的文件上，画下一笔，脸上堆起笑容，「周哥，做什么买卖的，回款这么快？也带带咱们赚钱。」</p>
+        <p>周天恩走出工作室，仰头深深吸一口空气，吸到胸腔被顶得难受，缓缓吐出来。</p>
+        <p>他活动活动肩颈，仿佛刚从身上卸下一座大山。</p>
+        <p>周天恩在街边找了个脏凳子，蹲在上面，给李秋瑾打电话，一口气打了十几个，没人接。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./005.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./007.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

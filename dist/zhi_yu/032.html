@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 032 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 032 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 032 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,078 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>沈知遇翻了不少帖子，做了很多笔记，当她与何音琪聊起来，才知道自身临时看到那点，不过是九牛一毛。</p>
+        <p>何音琪再三邀请，她其实想答应，但是……</p>
+        <p>「有人喊我。你们聊吧。」何音琼站起来，拿起一个橙子，朝后面走。</p>
+        <p>何音琪换到对面，和潘小雷靠在一起低声聊天。</p>
+        <p>沈知遇有意避开，看看窗外，看看手机。</p>
+        <p>到了晚上，她发觉有点不舒服，想起老板娘的话，怀疑自己出现高原反应。</p>
+        <p>火车在这一大站停了一会儿，沈知遇拿上所有东西。</p>
+        <p>下车就感觉头重脚轻，她赶紧找个最近的青旅。</p>
+        <p>这是个民宿性质的青旅，现在淡季，一张床三十。这里住的人不多，看起来似乎都是准备进藏的。</p>
+        <p>从几人的聊天中，沈知遇听到论坛的名字，也听到何音琼的名字。</p>
+        <p>她没听清内容，就迷迷糊糊地睡着了。</p>
+        <p>一觉醒来，沈知遇的脑子清醒不少。</p>
+        <p>虽然没有想清楚为什么，但她很清楚，她不是来找死的。以她现在的状态，无论是否跟队，根本不能进藏。</p>
+        <p>可是，她绝对不允许自己走回头路，她受够了那些都市繁华，尔虞我诈，生存高压，家不成家。</p>
+        <p>她走出民宿，沿街慢慢逛。</p>
+        <p>入眼是一排白墙紫檐的藏式联排小院，院墙绘着简易藏纹，不少屋顶飘着小小的经幡。巷口开着藏式杂货铺，门口堆着风干牦牛肉，空气里飘着淡淡的酥油香气。裹着藏袍、扎着红头绳的本地人慢悠悠走路，到处可见带着雕花藏式纹样，远处村落广场隐约传来人声。</p>
+        <p>沈知遇逛到下午，拎着一份正宗风干牦牛肉回去，心里忽然生出念头，既然天意卡在这里，不如就在这里找间便宜小屋，暂且停下脚步。</p>
+        <p>她拿出电脑，打开论坛首页，搜索租房相关的信息，又加上位置限制。还真有人和她情况类似，一时冲动，或者突发状况，选择在这里暂住。</p>
+        <p>热心的网友们分享了哪几个地方适合长期租，哪里的集市好逛，哪些地点最适合看景，哪些店铺价格亲民等等。</p>
+        <p>沈知遇用三天时间整理，每天白天坐公交去看、去感受，最终选出一个她满意的村落。</p>
+        <p>这里距离市区一个半小时车程，每日晨曦，第一趟车从村口开往市区，随时停靠，拉上早起站在路边等着去市区的人们，在市区车站停留半小时，再拉上一车人返回。而下午，这趟车会再一次往返。</p>
+        <p>她在网上查过，整村都是从唐古拉山、沱沱河搬迁下来的藏族牧民，统一藏式联排民居，村里绝大多数是藏民。</p>
+        <p>事实比网络上说的更好。亲身踏入，村道挂满经幡，家家户户院墙上有藏式彩绘，村口有民族手作铺、藏餐小店。</p>
+        <p>沈知遇主动和开藏餐店的藏族阿妈搭话，坦诚说自己是背包客、短期落脚，想租一间房，不需要很大，够她一个人住就行。</p>
+        <p>阿妈一脸茫然，汉语夹杂着藏语说了一长串。</p>
+        <p>轮到沈知遇一脸茫然。</p>
+        <p>她把阿妈的所有汉语字词拼凑起来，揣测阿妈是在和她解释，没听懂。</p>
+        <p>正当她准备离开时，阿妈冲着街边喊了一句藏语。</p>
+        <p>一个小伙子停步，小跑过来。</p>
+        <p>阿妈指着沈知遇说了几句。</p>
+        <p>小伙子点点头，笑着说：「你是不是想要找地方住？」</p>
+        <p>沈知遇听着熟悉的汉语，使劲儿点点头。</p>
+        <p>小伙子又和阿妈聊几句，示意沈知遇跟他走。</p>
+        <p>「我叫唐杰。你对租房，有什么条件？」</p>
+        <p>沈知遇报了名字，把租房要求又说一遍。</p>
+        <p>「有一个闲置偏房改造的房间，适合独行背包客。」唐杰说，「其实，我们这里不常有游客来。能找到这里，要么是资深进藏爱好者，要么是撞上的。你怎么会想来这里？」</p>
+        <p>「我最近去过几个村落，对这里最有感觉。」</p>
+        <p>「难怪。」唐杰一副了然地的模样，「我第一眼见你，就觉得你不像背包客。」</p>
+        <p>又被看出来不像？</p>
+        <p>沈知遇没有追问为什么，反而问唐杰，「这里的年轻人都说汉语吗？」</p>
+        <p>「这里没几个年轻人，比我小的平时去上学，比我大的出外闯荡。留下的大多数是长辈，他们只会一点点汉语。」</p>
+        <p>唐杰抬手指着前方，「就是那间。你看怎么样？」</p>
+        <p>沈知遇的眼睛跟着手势扫过去，动作一顿，目光停在唐杰的手腕处。</p>
+        <p>唐杰的腕上戴着一只手表，运动款，军绿色，与他身上的服饰有些不衬。</p>
+        <p>沈知遇的心突突乱跳，她清楚记得，邵骏邕戴的手表，与唐杰这只一模一样，她在给邵骏邕画像时，特意画上这只腕表。</p>
+        <p>唐杰的手在沈知遇面前晃一晃，「你怎么在发呆？」</p>
+        <p>沈知遇看得更清晰了，的的确确是一模一样。</p>
+        <p>她回过神，「啊？你说什么？」</p>
+        <p>唐杰稍稍皱眉，很快恢复笑容，「一个月租金六百元，包含水费和电费。」</p>
+        <p>他引着沈知遇到门口，继续说：「这间房的位置非常好，而且两面都有窗，一侧面向街道，一侧面向远山。里面还有张书桌，其他东西你看看，缺什么就和我说，我想办法给你添置。」</p>
+        <p>沈知遇分别推开两扇窗，试了试床铺，对屋子比较满意，「押几付几？短租可以吗？」</p>
+        <p>「房东很好说话，租金按月给就行，也不需要交押金。」</p>
+        <p>沈知遇跟着唐杰去见房东，在唐杰这个翻译的帮助下，完成租房事宜。</p>
+        <p>次日清早，她退了青旅，带上她的所有家当，坐车前往新租的小屋。</p>
+        <p>唐杰看到沈知遇就笑了笑，「看你这个装备，你不但没有进藏经验，这是你第一次旅居吧？」</p>
+        <p>沈知遇放弃解释，就像她已经放弃了「进藏」，倒是这个「旅居」，也算是她梦想的生活方式，她不能像有钱人那样，各个国家旅居，但是可以随缘找地方居，无拘无束。</p>
+        <p>晨光，从远山那边一寸一寸漫过来的。</p>
+        <p>沈知遇被一道光晃醒时，窗户还半开着，昨夜的凉气没散干净，但日光已经铺了满桌。</p>
+        <p>她起身推开另一扇窗，街道的气息一下子涌了进来。</p>
+        <p>酥油的醇厚里裹着青草晒透后微焦的甜，还有一丝说不清的、从远处牧场上飘来的牲口味道。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./031.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./033.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 001 章 天下苍生－帝如来 · 大霹雳世界 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">大霹雳世界</a>
+          <span class="sep">/</span>
+          <span>第 001 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 001 章</span>
+          <span class="chapter-name">天下苍生－帝如来</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Nov 2556 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 1,478 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 4 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p>三身果报自凡根，六界因缘无了痕；善逝从来非本相，枯荣生灭尽空门。</p>
+      </div>
+
+      <article class="chapter-content">
+        <p>天下苍生，这个标题放在别处或许大了点，但放在一个僧者身上，应该是不为过。</p>
+        <p>一个角色，编剧怎样执笔是一回事儿，看客有怎样的感悟又是另一回事儿。</p>
+        <p>第一次写人物评价，其实并不知道要怎样著手，帝如来又是个人非常喜欢的角色之一。</p>
+        <p>翻了翻各方资料，发现能写的基本已经被挖空，这边也只能尽量发挥著来了。</p>
+        <p>当你越重视一件事情的时候，就会发现这件事情很难；越喜欢一个角色时候，滤镜估计有大气层那么厚……</p>
+        <p>帝如来这个角色从《霹雳经武纪之枭皇论战》到《霹雳战元史之动机风云》，跨越了五部剧，作为一个出场就昭示著必死的佛门角色，其存活集数，大出意料之外。</p>
+        <p>在这期间经历了数次生死，显现诸种法相，回看剧情，终其究竟，无非一个“执”。</p>
+        <p>僧者修行路上的一大障碍便是有了“我执”的念，有了“我”的许多烦恼，也就是入了魔。</p>
+        <p>只有透过不断地修行戒定慧三学来破除“我执”，方能具有般若心，证得菩提道。</p>
+        <p>然而，帝如来在各种因缘之下，最终没能除“我执”。</p>
+        <p>“烦恼障品类众多，我执为根，生诸烦恼，若不执我，无烦恼故。”－《唯识述记》</p>
+        <p>久远以前，帝如来还是一名普通的僧者，遵循著大觉者的菩提之道，以悲悯众生之心，度脱世间种种罪恶。</p>
+        <p>这其中不乏受其教化，弃恶从善之人，玉横雪便是其一。</p>
+        <p>然，僧者对“恶”的执，被有心者加以利用，一柄来自天阎魔城的“涤罪犀角”，蛊惑僧者意志，放大善恶两极化。</p>
+        <p>致使僧者在冥冥之中因“执恶”过重，逐渐偏离佛道，转为“以杀证道”行至极端，修成鬼如来之相。</p>
+        <p>僧者虽具足般若心，但在“我执”蒙蔽之下，又岂能堪破实相？此时，过往种下的因缘，玉横雪以命相殉，破除了鬼如来的魔障。</p>
+        <p>到此，僧者的因果已了，同时开启了鬼如来的因缘。从善之血祭刀，罪恶之都最后一人免于劫难，为鬼如来，亦或是帝如来埋下了不稳定的因子。</p>
+        <p>当鬼如来茫然无措的时候，一名自称招提的僧者，给予他一把拥有充沛灵力，足以抗衡涤罪犀角的空刀，怎样的选择，全在他一念之间。</p>
+        <p>僧者将一柄空刀修成“佛刑禅那”，自身亦修成帝如来法相。由昔日的佛愆，到四境佛宗三大源流之中的佛首，创立下佛宗组织所有“法”为代表的云鼓雷峰。</p>
+        <p>“欲知前世因，今生受者是；欲知来世果，今生作者是。”－《三世因果经》</p>
+        <p>才扫又落叶，扫禅堪得机。山门迎清客，深钟三十年。</p>
+        <p>招提者，四方也；招提僧，四方僧也。</p>
+        <p>帝如来化身招提僧，是为了赎罪业，亦是为了回向当初指点他的那名僧伽。</p>
+        <p>从剧中不难看出，无论是僧者，是鬼如来，亦或是帝如来，“我执”从来都未能破除。</p>
+        <p>身为帝如来，执著于赎过去佛愆所造的罪业，所以在扫禅山门外，负业修行；执著于点化过自己的那名僧者，所以曾委派弟子寻找；执著于好友梵天入魔，这也是帝如来带著云鼓雷峰入世的主因；更执著于天下苍生，以至于帝如来不惜牺牲自我，在罪身鬼如来的法相之中，锁入佛脉，为圣方卧底找到魔皇陵，黑手了他化阐提。</p>
+        <p>知晓了所有真相之后，鬼如来后续的路，就如他化阐提所言，“一个悲哀的人，一条艰难的路。”</p>
+        <p>在经过了鬼如来的两生两死，到逆转识中佛脉，显现帝如来法相，一战厉族，再到佛剑分说的斩业，涤罪犀角与佛刑禅那的齐断。</p>
+        <p>以及血刹如来的半边法相，到最后与天之佛在如来之巅的决战中，鬼如来的法相形散，回归到帝如来的法相。</p>
+        <p>佛道七旬安心，最终，仍是帝相鬼相尽此身，不曾分别，此生徒劳。</p>
+        <p>人生最大的敌人就是自己，一个“我执”，几次的因缘亦未能走出。帝如来是一名僧者，一个终其一生没有破除“我执”的僧者。</p>
+        <p>在这种情况下，还要坚持著自己的初心，就难免会被有心人利用。</p>
+        <p>无论是帝如来，鬼如来，或是血刹如来，若是能够舍弃“执”，便得自在。</p>
+        <p>“三身果报自凡根，六界因缘无了痕；善逝从来非本相，枯荣生灭尽空门。” －帝如来</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <span class="nav-btn disabled">
+          <span class="arrow">←</span> 上一章
+        </span>
+        <a href="./002.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

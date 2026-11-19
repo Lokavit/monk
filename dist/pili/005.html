@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 005 章 奇人密码——霹雳大电影 · 大霹雳世界 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">大霹雳世界</a>
+          <span class="sep">/</span>
+          <span>第 005 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 005 章</span>
+          <span class="chapter-name">奇人密码——霹雳大电影</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Apr 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 1,045 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 3 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p>支援官家，等待下一部。</p>
+      </div>
+
+      <article class="chapter-content">
+        <p>在看到正片之前，曾被刷到过很多关于此电影的负面讯息。</p>
+        <p>和尚建议，在正片出来之前，最好看一下官方出来的相关，免得不明所以还道官家问题。</p>
+        <p>和尚看的是道友压制版本，道友说过，由于是外嵌字幕，所以还没有来得及做，但是“热心的道友们”早已很积极的上传到各个影片网站去了。</p>
+        <p>由于没有字幕也仅能分辨出几种【国语、闽语、和官家自创的罗布语……有没有其他和尚也听不出来了。】</p>
+        <p>【注：由于没有字幕，听个什么就是个什么…………错字请无视】</p>
+        <p>具体来说说观后感，电影讲述奇人阿西不被众人接受，而驱动的能源万鹊又在衰老，张墨与其妹妹张彤，为了寻找新的万鹊而踏上去往楼兰的路。</p>
+        <p>为了让世人接受阿西，张墨带著阿西参加武道会，最终夺魁。此事吸引了楼兰王子安罗伽。</p>
+        <p>【个人体悟：当看到张墨说“阿西终于得到大家的认可了。”和尚瞬间想到了“布袋戏”，在非布袋戏道友的眼中，很多人会有一个潜意识的概念“布袋戏？木头雕刻的？那不就是木偶戏嘛！”而接受它的人群确实很少……】</p>
+        <p>安罗伽利用张墨像楼兰王索要五百精兵，攻打沙虫。而真是目标则是古罗布的罗布族人，抢夺万鹊母源。</p>
+        <p>罗布族长之子儿道兹悄悄将张彤带到罗布族，并且由罗布神女治好她的脚伤。张彤康复之后，儿道兹带著她在古罗布游玩。</p>
+        <p>一边是阿西的万鹊已经无法驱动它；另一边是张彤所说的事实，张墨陷入了两难。安罗伽驱使著他那只大号【不记得有没有名字】武士杀来了。</p>
+        <p>一直与他们同行的卡蜜妲也暴露了她的真实身份“猎艳？”【没听清】，掳劫了罗布神女。</p>
+        <p>安罗伽抢走万鹊的母源，使其武士发挥更大的威力。而为护母源的罗布族人几乎全军覆没。</p>
+        <p>阿西在没有万鹊的情况下，再次能战斗。和尚起先没看懂，后来发现，是张墨身上有一点万鹊，当年张墨为护阿西而挨了一刀的时候，万鹊有一部分嵌入到张墨体内。</p>
+        <p>才过两天，居然不记得张彤是在哪一段死的，只记得是替他哥哥还是阿西挡刀子。打败安罗伽之后，张墨以自己的命换回了张彤的命，并且将操控阿西的机关传给了张彤。张墨死的时候，消散与古罗布上空的大概是体内残余的万鹊吧？</p>
+        <p>影片最后的最后，猎艳将一小袋万鹊扔在一个研究机关的人桌前，所以是有下一部的吧？！</p>
+        <p>结束语：</p>
+        <p>非常感谢压制的道友，让和尚有机会看到奇人密码的正片，现已入手光碟。对于大陆没有上映还是有些小小的遗憾。很高兴自己静下心来看了这部电影，并且有一定的感悟。</p>
+        <p>在看这部电影时，和尚总是不由自主的联想到“布袋戏”，诸如“阿西终于得到世人的认可了”，“阿西是我的兄弟”等。也许因为阿西是个木头机关人，也许是因为官家，让和尚觉得它的内容中照写著布袋戏的过去与前景。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./004.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./006.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

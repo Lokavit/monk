@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 119 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 119 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 119 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：29 Apr 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,081 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>正极看上去也是一肚子恼火，「你问我有什么用？问师父去，为什么一众弟子，偏偏对正元宠爱有加。」他说著，随手丢了长剑，往地上一坐，「正余，你也坐下，咱们在这儿等他回来。」</p>
+        <p>正余眼珠儿一转，「正极师兄，说真的。我看的出刚才那只妖有意留手，现在正元追上去，他若是回不来了……」</p>
+        <p>「死心吧。」正极露出个皮笑肉不笑的表情，「你可知师父临行前，将锁魂珠交到了正元手里？那东西在身，正元准保一会儿就活跳跳的回来了。」</p>
+        <p>「锁魂珠？！」无为大惊失色，拉上有涯，直奔剑玉宸离开的方向。</p>
+        <p>本以为，凭小道士那点儿修行，绝对拿剑玉宸没辙。但若那小道士动用了道门法宝锁魂珠，剑玉宸一定难逃魂飞魄散。</p>
+        <p>两人奔出林间，发现眼前两条不同小径，一时没了方向。</p>
+        <p>「分头去找，别被他们发现，也别让剑玉宸死了！」无为说罢，推了有涯一把，他自己则奔向另一路。</p>
+        <p>有涯不情不愿地磨蹭几步，偷偷回首瞄一眼。他见无为已经没了踪影，一个闪身，竟是调转方向，奔回林中。</p>
+        <p>无为追踪良久，不见任何人影。他静下心来，仔细聆听周围万物之声，试图由风中捕捉到蛛丝马迹。他相信，如果方向没错，那么待到小道士动用锁魂珠，一定能够找到剑玉宸，两人必定会再次打起来。</p>
+        <p>剑玉宸甩开三名道士，逐渐缓了脚步。暗自揣测，对方应该是不至于紧追不放。眼前大好湖光山色，他却无暇欣赏，只望著波光粼粼地湖面出神。水中的倒影被一阵阵涟漪打乱，扭曲成另一副形象。</p>
+        <p>「妖物！看你还要走到哪里去？！」</p>
+        <p>「妖物？！」剑玉宸面色不善，喃喃低语一句。斜视著眼前明显气息不稳的小道士，「我几番留手，你却一定要来送死，何必呢？」</p>
+        <p>正元闻言，垂了长剑，似乎有那么一丝犹豫。可他猛然摇摇头，又擎起手中长剑，「降妖为道，修者本分。留神来！」说罢，手挽剑花，攻向剑玉宸。</p>
+        <p>剑玉宸持剑格挡，有意避而不迎其锋。</p>
+        <p>小道士步步紧逼，剑锋不留情，誓死为道。</p>
+        <p>眨眼的功夫，已是数十招来往交锋。剑玉宸留意手上长剑，发现剑刃已有几处豁口，如此僵持下去，对自身不利。既然小道士锋芒毕露，他也只好尽量逼退对手。</p>
+        <p>当无为循著打斗声找来的时候，只见剑玉宸手中长剑正燃著烈火，小道士被打地频频后腿，手上长剑毫无章法的胡乱挥动，却难躲避对手剑身的火焰，道袍不慎被燎出几个黑窟窿。</p>
+        <p>「木剑？！」无为恍然大悟。难怪剑玉宸方才躲躲闪闪，不肯直面进攻。</p>
+        <p>小道士好歹也是修行人，被对手逼至湖边，一脚踏进水里。他急中生智，一剑探入水中，继而手腕向上一挑。</p>
+        <p>水柱有如龙腾九霄之势，由半空袭来，直奔剑玉宸手上长剑而去。只闻得「呲啦」一声，剑身上的火焰被浇灭，留下明显被灼烧的痕迹。他尚未来得及变招，又一条水柱直击而来。剑玉宸难敌道门罡气，摔在地上，动弹不得。</p>
+        <p>小道士当机立断，反手从怀中掏出一颗掌心大小，泛著流光溢彩的珠子，正欲掷向对手。</p>
+        <p>就在这千钧一发之际，凭空飘来一阵白雾，遮蔽了小道士的视线。</p>
+        <p>剑玉宸察觉肩头一沉，回首看清楚来援手的是谁，又惊又喜，「无为！」</p>
+        <p>待到小道士拨开白雾，哪里还有剑玉宸的影子。是谁？能够在眨眼之间操纵术法，带走那只妖。他看了看四周，忽地想起来刚才好像听到一个名字，「无为？」</p>
+        <p>无为？！自在天第一龙象！小道士一脸惊愕，「赶快回去，将此事告知两位师兄。」他自语一句，飞速朝著来时的方向奔跑。</p>
+        <p>把剑玉宸提溜回客栈，两人各坐一处，皆是不言不语。无为暗自揣测，那小道士是否听见了他的名字？即便听见了，他心中也希望那只是个刚入门的小道士，对三乘界的事情不熟悉。或者，只要对他的事情不熟悉就好。</p>
+        <p>可是，连无为自己都很清楚，这种假设很自欺欺人。他越想越烦，手指无意识地一下下敲著桌子。</p>
+        <p>声音传到剑玉宸耳中，就仿佛砸在了自己心上似的。他数次偷偷觑无为一眼，对方表情却从未变化过，敲击也没停止过。</p>
+        <p>「无为，我有事情告诉你。」剑玉宸终于受不了这诡异的气氛，他率先打破沉寂，郑重强调，「就现在！」</p>
+        <p>过了好一会儿，无为才把目光从窗外移回，缓缓转首看一眼剑玉宸，面无表情地问道：「你所言的时机到了？」</p>
+        <p>剑玉宸摇摇头，「事情发展成如斯田地，时机已经不重要。」他说罢。</p>
+        <p>又是一阵寂静，才听到无为口中吐出一个字，「曰！」</p>
+        <p>「事情起因于一名初入江湖的少年，一次路见不平，招致杀身灾祸。而在那之后……」</p>
+        <p>有涯悄然回转，躲在暗处，已经观察两名道士好一会儿。此刻二人衣衫不整，搂作一团，光天化日之下，行苟且之事。笃定这两个道士身上无甚法器，不难搞定。</p>
+        <p>正极一边推拒，一边说道：「正余师弟，快放我起来。万一正元回来看到，事情恐难收拾。」可身上那个却是不依不饶。</p>
+        <p>当有涯运功准备发招时，脑中突然莫名升起犹豫。对他来说，这是一个非常奇异的现象，令他不由得面上一阵愕然。</p>
+        <p>「正极师兄，师父嘱托的这个乾坤卦盘，有传说中的那么厉害吗？」正余压著正极，一边把个罗盘拿在手里翻看，一边询问。</p>
+        <p>正极看他把宝贝拿出来招摇，吓得连忙一手用布包捂住，眼角谨慎扫视一周，低声怒斥道：「你干啥呢？快收起来！忘了师父怎么交代的？！此物能感知一切生灵，令其显形。但是，在我们赶去汇合三乘界同门之前，乾坤卦盘不能暴露出来！它必需和锁魂珠同用，才能发挥最高效果，擒下那只大妖。」</p>
+        <p>正余嘿嘿一笑，「师兄，现在没外人，也没妖异你让我欣赏欣赏这宝贝。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./118.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./120.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

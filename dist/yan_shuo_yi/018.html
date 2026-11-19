@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 018 章 · 给总裁当爹 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">给总裁当爹</a>
+          <span class="sep">/</span>
+          <span>第 018 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 018 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：18 Sep 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,094 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「晏总，我听说，你和狄总裁之间的关系……」</p>
+        <p>「互为男友。」晏朔一截断对方的话，「这不是什么秘密。你们随便问一个集团的人，大家都知道。」</p>
+        <p>这个关系，他早就在朔一集团当众宣布。几个月都没人提。现在却被人捅了出来，这个背后搞鬼的人，很会把握时机。</p>
+        <p>他这样一次次直白回答，甚至抢答，使得小媒体们不知道从哪儿做文章，一个个脸上露出没有深料的失望。</p>
+        <p>「爸爸？」狄恒炀从车里探出头。</p>
+        <p>这一声，好似一颗氢弹，瞬间点炸了所有媒体看到八卦的目光，无数摄像机怼到了狄恒炀脸上。</p>
+        <p>堂堂朔一集团的高级总裁，对着暂代人叫爸爸？！</p>
+        <p>晏朔一退后一步，靠着车门，面对一台台摄像机，「既然大家如此关系朔一集团，关心我和狄恒炀。在这里，我有一件事情，请求大家。」</p>
+        <p>他顿了顿，留给媒体人反应的时间。等到人群安静下来，才继续说话。</p>
+        <p>这一次，他的脸上不再是平和的笑容，他的眼神中，透着难以掩饰的忧伤。</p>
+        <p>「纵所周知，狄恒炀车祸，在医院昏迷数月，最近刚刚醒来。但是，由于长久昏迷，导致狄恒炀的心智目前处于幼儿时期。医院方面，暂时没有前例，也没有解决方案。」</p>
+        <p>他沉下一口气，注视着面前的摄像机，「在此，我希望通过网络力量，寻找类似前例，寻找能够治疗这个问题的医院，寻找更专业的医生。以上，但凡提供任何可靠线索，朔一集团必有重谢。感谢大家。」</p>
+        <p>晏朔一双手合十，深深鞠躬，「谢谢大家。」</p>
+        <p>他回到车上，叫向阳把车开到楼下，在无数摄像机面前，把狄恒炀扶下车，一同进入集团大厦。</p>
+        <p>大厦一楼聚集着很多员工，有的在低声议论，有的偷偷拍摄。</p>
+        <p>晏朔一看了一圈儿，语气轻松，「今天放假没人通知我吗？」</p>
+        <p>人群迅速散开。</p>
+        <p>晏朔一到了十九楼，叫来了章律师。</p>
+        <p>「什么结果？」</p>
+        <p>「晏总，我亲自去了监控室，调取昨晚的录像。从向阳把车开到门口，到你们离开之后的一段时间里，没有人出入。」</p>
+        <p>「车呢？有谁的车进出吗？」</p>
+        <p>章律师摇摇头，「也没有。」</p>
+        <p>晏朔一微微皱起眉头，「叫监控室的把录像给我一份，昨晚到今早的。」</p>
+        <p>章律师点点头。</p>
+        <p>「关于网络上……」章律师顿了顿，「是否需要追究？」</p>
+        <p>晏朔一摆摆手，语气里尽是无奈，「根本追究不完，别浪费你们团队的精力了。」</p>
+        <p>「不过，」他点开手机，给章律师转发一个视频，「这个发布者，值得找一找。我感觉，他手里似乎有更完整的视频。」</p>
+        <p>「好。我这就去。」</p>
+        <p>「昨天发给你的鲁运杰，查了吗？」晏朔一问。</p>
+        <p>「资料还在收集中。目前能够掌握的是，他曾经去三六九医院神经科大楼，打听过狄总的情况。」</p>
+        <p>「谁告诉他的？」晏朔一追问。</p>
+        <p>「查不到具体人，但可以确定是当时同在医院的病患。」</p>
+        <p>「你查监控的时候，看到鲁运杰了吗？」</p>
+        <p>章律师回答：「没有。据调查，他不开车。」</p>
+        <p>「他不开车，但他有权限进入停车场。你再查查。」</p>
+        <p>章律师离开不一会儿，晏朔一收到消息。</p>
+        <p>他打开邮箱，看了几小时的监控录像，尤其是被拍的那一段。他反复地看，逐帧地看，没有在画面里找到任何异样，无论是车身倒影，还是地上灯影，只有他和狄恒炀两人。</p>
+        <p>事情过去几个小时，网络舆情改变方向。</p>
+        <p>铺天盖地都是晏朔一面对镜头说的话，以及少量狄恒炀的画面。几个爆火话题依旧围绕着朔一集团，但内容发生了改变，围绕着「朔一集团重酬寻名医」。</p>
+        <p>随着舆情正面上升的，还有朔一集团的股价。</p>
+        <p>晏朔一点开董事会的群，消息停留在那一句通知，之后再也没有人说话。</p>
+        <p>下午，狄恒炀睡着后，晏朔一坐电梯到地下停车场。</p>
+        <p>从电梯口出来，他站在玻璃门内，观察周围，打了个电话。</p>
+        <p>一辆黑色商务车停在玻璃门外。</p>
+        <p>晏朔一没上车，走到主驾驶门边，「尽量与昨夜的位置一致。」</p>
+        <p>向阳微微调整车子，熄火下车，「晏总。」</p>
+        <p>「你回主驾驶坐着。」</p>
+        <p>晏朔一拿出手机，找到具体的角度，一边看视频，一边倒着走，直到视野与网络视频画面基本重合。</p>
+        <p>他看了好一会儿，注意到玻璃门斜上方有一台摄像头。从角度来说，如果有人偷拍，极有可能被这个探头录下来。</p>
+        <p>晏朔一转身，猛地后退一步，避开身后的柱子。</p>
+        <p>他站的位置是一区停车位，董事会成员的专用车位。在柱子后上方，有一台摄像头，正对着玻璃门。</p>
+        <p>晏朔一反复看两台摄像头，孤身去了监控室。</p>
+        <p>里面几个聊天的员工，立刻起身列队。</p>
+        <p>「谁是队长？」晏朔一问。</p>
+        <p>其中一人上前一步，「是我。」</p>
+        <p>「调出昨夜十一点开始，玻璃门上摄像头录像。」</p>
+        <p>队长在电脑里找到对应摄像头，按下回放。画面里，正是一区的三辆车，全程没有动过，也没有人经过。</p>
+        <p>「再帮我调出……」</p>
+        <p>晏朔一住声，盯着监控大屏右上角。他的车，就在画面中央。这个摄像头，对准的正是玻璃门。</p>
+        <p>「这个，我要看晚上十一点之后的监控回放。」</p>
+        <p>将近十一点半，他的车出现在门口。向阳放下车窗，从车里下来，舒展筋骨，回到车上，打了一个电话。</p>
+        <p>约莫半小时左右，电梯门开了。晏朔一领着狄恒炀出来，走向商务车。刚出玻璃门，狄恒炀挣脱，跑了出去，晏朔一在后面追，内容与网络视频几乎重合。</p>
+        <p>「停！倒回去！」</p>
+        <p>晏朔一又看一遍，问：「昨晚夜班是谁？给我找出来！」</p>
+        <p>队长低声问旁边的人，「昨晚都谁在？」</p>
+        <p>晏朔一扫了一眼，「你是队长，不知道手底下人什么班？」</p>
+        <p>队长拿着手机，「晏总，我给夜班打个电话。」说着，往外走。</p>
+        <p>「就在这里打！」</p>
+        <p>晏朔一一边听着，一边操作鼠标，调慢播放速度，按下播放键。同时，与手机里的视频相比。</p>
+        <p>一模一样。</p>
+        <p>只是，流出去的视频，镜头似乎更近，画面更模糊。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./017.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./019.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

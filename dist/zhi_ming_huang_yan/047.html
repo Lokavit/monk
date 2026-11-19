@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 047 章 · 致命谎言 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">致命谎言</a>
+          <span class="sep">/</span>
+          <span>第 047 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 047 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：16 Aug 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,094 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「你的名字已经上了保安圈的黑名单了。你也知道现在不仅是口口相传，网络发散力量很大。说你不服管教，直接旷工走人之类的……」</p>
+        <p>顾文宗深吸一口气，「我……」</p>
+        <p>他硬生生把话憋回肚子里。</p>
+        <p>此时此地，争辩又有什么意义呢？</p>
+        <p>谁会在乎真相？</p>
+        <p>一个被在网络上造谣发散的人，需要何其大的力量，才能够证明自己，才能够揭开真相？</p>
+        <p>离开最后一个面试的保安公司，顾文宗把手里的保安证展开。</p>
+        <p>他看了好一会儿，揭下上面的照片，把那单薄的一页纸撕得粉碎，扔进路边垃圾桶。</p>
+        <p>现在不是他给保安这个职位第二次机会，而是保安这个职位，根本不给他第二次机会。</p>
+        <p>虽然，从头至尾他没有任何地方做错。</p>
+        <p>回到家之后，顾文宗拿出行李箱，一件件收拾自己的东西。</p>
+        <p>他挑那些重要的，必须带走的，优先叠好，放进行李箱。</p>
+        <p>「叮！叮！叮……」</p>
+        <p>几个游戏币从一条裤子的裤兜里掉出来。</p>
+        <p>顾文宗一枚一枚捡起来，掂量着手里的游戏币。</p>
+        <p>九枚。</p>
+        <p>说多不多，说少也不少。</p>
+        <p>这玩意儿，在其他地方又不流通。</p>
+        <p>顾文宗坐着公交车，一路晃悠到商场。</p>
+        <p>年早就过完了，商场里倒是还有点儿过年的余热。</p>
+        <p>只是，上班的返岗了，上学的也返校了。</p>
+        <p>剩下的，来商场的，不是有钱的，就是有闲的。</p>
+        <p>顾文宗直接去了电玩城，坐在上次玩过的光枪射击游戏跟前。</p>
+        <p>他投进去五枚游戏币，端起仿真枪，开启一局游戏。</p>
+        <p>时隔几个月，脑海里还残留着对这款游戏的记忆。</p>
+        <p>他就凭着这点儿记忆，毫发无损地通过了第一关。</p>
+        <p>来到了第二关，血条开始阶段性往下掉。</p>
+        <p>要是有个二把在就好了。</p>
+        <p>这个念头一冒出来，顾文宗愣了一瞬。</p>
+        <p>与此同时，屏幕一片血红，玩家被乱枪扫成蜂窝。</p>
+        <p>拿着手里仅剩的四枚游戏币，顾文宗在电玩城里转了两圈儿。</p>
+        <p>最终，他在一台推币机前面坐下。</p>
+        <p>对他来说，就这点儿游戏币了。</p>
+        <p>推赢了，可以再玩点别的；推输了，也没什么。</p>
+        <p>他第一次玩推币机，信手胡乱往里扔。</p>
+        <p>就看见四枚游戏币一次由顶端向下，蹦蹦跳跳，遇到障碍物就偏离原有轨道。</p>
+        <p>当最后一枚硬币落下后，推币机突然闪烁彩色氛围灯，落下来一大堆游戏币。</p>
+        <p>顾文宗愣愣看着，暗自叹气，「又不能退了返钱。」</p>
+        <p>他找了一圈儿，没发现出币口，倒是出票口唏哩哗啦吐出来一大堆的票。</p>
+        <p>顾文宗拿着一大把票，到前台。</p>
+        <p>「上面那一排都能换，你想要哪个？」</p>
+        <p>顾文宗略微抬头，扫视最顶上的一排架子。</p>
+        <p>手环、杯子、大玩偶、多种热兵器模型、拼图、桌游……</p>
+        <p>他看来看去，选了手环。</p>
+        <p>手环是黑色的，硅胶带子，长方形的屏幕，显示着心率、步数、日期、星期等。</p>
+        <p>忽然，他看到前台贴着一张招聘启事。</p>
+        <p>「本店招聘店员若干。底薪五千，办卡、储值有提成。」</p>
+        <p>「你们这里在招店员？」他问。</p>
+        <p>前台小姑娘抬头看了看顾文宗，「嗯。」</p>
+        <p>「可以详细说说吗？」</p>
+        <p>「男生的话，就像他们几个一样，巡视、轻度打扫，如果玩家有问题，需要积极解答、指导，帮忙跑腿等。」</p>
+        <p>小姑娘顿了顿，「其实，主要是看办卡和客户储值，拿提成。法定假日有三倍工资。两班倒，跟着商场的时间走。每月加上倒班可以休四天。」</p>
+        <p>顾文宗点点头。</p>
+        <p>「你如果想干，可以给店长打电话。」</p>
+        <p>小姑娘指了指台子，「就是那张纸上的电话。」</p>
+        <p>顾文宗把电话记下来，拨出去。</p>
+        <p>「对了。」小姑娘说，「不包吃住喔。」</p>
+        <p>顾文宗立即按下挂断。</p>
+        <p>不包吃，他不介意。</p>
+        <p>不包住，他不接受。</p>
+        <p>他就是为了找到包住的工作，离开那所他住了十八年的房子。</p>
+        <p>其实，母亲几乎没有在房子里住过，因为工作性质，常年住在医院，后来就住在苏老太太家。</p>
+        <p>可是，当母亲不在了，顾文宗每次回家，哪儿哪儿都是母亲的影子。</p>
+        <p>他无数次从梦里惊醒，恍惚像是看到了母亲坐在床边的身影。</p>
+        <p>然后，睁着眼睛，至到天亮。</p>
+        <p>顾文宗坐在回去的公交车，一路都在摆弄手腕上的手环。</p>
+        <p>这是一款贴牌手环，无法与他的手机互通。</p>
+        <p>手环里有简单的跑步、走路、游泳……</p>
+        <p>游泳？</p>
+        <p>顾文宗再次阅读说明书，上面清清楚楚写着：「本款产品不防水」。</p>
+        <p>他不由得笑了。</p>
+        <p>不管怎么样，算是个装饰吧。</p>
+        <p>回到空荡荡的家。</p>
+        <p>顾文宗的心情瞬间低落到谷底。</p>
+        <p>他必须尽快找到一份包住的工作，离开这里。</p>
+        <p>他打开招聘网站，什么都没有输入，只勾选了包吃住。</p>
+        <p>页面上立刻少了一大堆信息。</p>
+        <p>剩下的，多数是极其偏远的几个工厂在招普工，几家餐饮、酒店在招服务员，几个小区招安保、物业和消控，以及他再熟悉不过的养老、护理……</p>
+        <p>顾文宗心中清楚，他没时间挑拣，也轮不到他挑拣。</p>
+        <p>他排除了安保，排除了需要考证的消控，把工厂普工和养老、护理拍在后面。</p>
+        <p>最后，他捡着顺眼的，给餐饮和酒店打电话。</p>
+        <p>一连几个，都没有谈成。</p>
+        <p>不是嫌他年龄太小一定吃不了苦，就是嫌他没有任何经验。</p>
+        <p>好不容易问到一个，却又包吃不包住。</p>
+        <p>顾文宗打了一下午的电话，脑瓜子嗡嗡响。</p>
+        <p>他把养老和护理类的工作筛选出来。</p>
+        <p>想着，这个总可以了吧。</p>
+        <p>他可是有照顾九十九岁老人数个月的经验。</p>
+        <p>然而，招聘方一听到他的年龄，直接就把电话挂断了。</p>
+        <p>顾文宗根本没有机会介绍自己的经历。</p>
+        <p>退房日期就在眼前，他只剩下一条路。</p>
+        <p>先随便找一家工厂，过渡一下吧。</p>
+        <p>当夜，顾文宗侧躺在床上，怔怔盯着前方。</p>
+        <p>墙边，是他收拾妥善的行李箱、旧书包。</p>
+        <p>是他明早起床，全部带走的东西。</p>
+        <p>脑子里胡思乱想，怎么都睡不着。</p>
+        <p>他甚至想到，厚着脸皮，要求房东阿姨按天租给他几天。</p>
+        <p>但是，房东阿姨已经和新房客签完了合同。</p>
+        <p>新房客是一家三口，孩子刚好可以在附近上小学。</p>
+        <p>当时，还是顾文宗带着他们看了房子，介绍房子的一切。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./046.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./048.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

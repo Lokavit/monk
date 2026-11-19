@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 027 章 · 小菜一碟 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">小菜一碟</a>
+          <span class="sep">/</span>
+          <span>第 027 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 027 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：27 Jan 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,092 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>陆崇远拎上倒空的衣篓，一手拉着菜小弟，跟在菜小妹身后。</p>
+        <p>菜小妹停在一排各式各样的短袖前，一件一件看过去，拿起一件浅色的。</p>
+        <p>她看了看，又放回去。</p>
+        <p>「这件怎么样？」陆崇远拎着一件女装。</p>
+        <p>是一件浅色的印花短袖，简单、素气，没有任何多余的装饰。</p>
+        <p>菜小妹眼前一亮，「很好看诶。」</p>
+        <p>「那就试试。」陆崇远把短袖放进衣篓里。</p>
+        <p>「接下来，我们给它搭配一件下装。」陆崇远说着，四下张望，指了不远处，「那儿！」</p>
+        <p>下装的种类很多。</p>
+        <p>菜小妹光是纠结选择裤子还是裙子，就犹豫了好半天。</p>
+        <p>直到，陆崇远指着模特身上的裤裙，「满足你在裤子和裙子之间反复纠结。」</p>
+        <p>模特身上是一条高腰浅色裤裙，露着半截大腿，腰上还带着一条深色宽腰带。</p>
+        <p>菜小妹看着模特，想象着自己穿上它，再换上陆崇远选的那件印花短袖，会是什么样子？</p>
+        <p>等她回过神，陆崇远已经叫导购找到合适的尺码，放进衣篓了。</p>
+        <p>「要不要去换上看看？」陆崇远说。</p>
+        <p>「好！」菜小妹没有丝毫迟疑，拿着衣篓，进入试衣间。</p>
+        <p>她换好短袖和裤裙，学着模特的样子，把短袖的底部，扎进裤裙，再扯出一点点。</p>
+        <p>看到镜子里的自己，她笑了。</p>
+        <p>当她从镜子里看到自己脚上的鞋子，脸上的笑容消失了。</p>
+        <p>「咚咚咚！」</p>
+        <p>「帮你找了双鞋，你穿上看看搭不搭。」</p>
+        <p>是陆崇远。</p>
+        <p>菜小妹打开试衣间的门，看到陆崇远和菜小弟坐在不远处的沙发上。</p>
+        <p>她把盒子拿进去，掀开盒盖。</p>
+        <p>是一双带有浅蓝色装饰边的休闲小白鞋。</p>
+        <p>里面还有一副鞋套。</p>
+        <p>菜小妹穿好小白鞋，再次看着镜子里的自己。</p>
+        <p>这一次，她笑得更自信了。</p>
+        <p>她打开试衣间的门，走出来，脸上带着笑。</p>
+        <p>她看到陆崇远直愣愣的目光。</p>
+        <p>她看到菜小弟嘴巴张大成圆形。</p>
+        <p>她看到导购忽然睁大的双眼。</p>
+        <p>她坚定地买下这一身。</p>
+        <p>陆崇远替她付了钱。</p>
+        <p>菜小妹仔细地收好小票。</p>
+        <p>等到上班赚钱，就一点点还给陆崇远。</p>
+        <p>从女装店出来，天色有些晚了。</p>
+        <p>好在出租司机驾车技术水平高，一路加塞带超车。</p>
+        <p>赶在七点半前，到达了鹿垣老车站。</p>
+        <p>回去的车上，菜小弟很快睡着了。</p>
+        <p>菜小妹望着黑乎乎的窗外，抱紧了怀里的袋子。</p>
+        <p>这一身衣服，应该用不了几天就会穿上吧。</p>
+        <p>穿着这样的衣服面试，应该可以吧？</p>
+        <p>「过几天，我就该去找工厂上班了。你在网吧人来人往，知道哪间工厂效益好，工资高吗？」</p>
+        <p>「你真的决定要去工厂？」陆崇远问。</p>
+        <p>「嗯。市场摊子摆下去没什么意义。我也十八了，可以进工厂了。」</p>
+        <p>陆崇远沉默了几秒钟，「我不建议你去工厂。」</p>
+        <p>「我也不是很想去。但梧桐镇只有工厂，没别的了。」</p>
+        <p>陆崇远皱了眉头，「可是，你才刚刚十八岁，人生才刚刚开始。不应该浪费在工厂那种地方。你要知道，工厂里，尤其是普工，一辈子都在流水线上的那一个岗位上。这也就是所谓的『螺丝钉』。而一旦工厂倒闭了，『螺丝钉』只能继续找下一个适配的岗位。」</p>
+        <p>菜小妹沉下一口气，「那你觉得，我还有别的路可走吗？我连初中都没念完！」</p>
+        <p>说到后面，态度有点儿恼了。</p>
+        <p>「有。」陆崇远语气平静，态度坚定，「我问你一个问题。假设，不需要考虑任何外在因素，让你重新学习，你愿意吗？」</p>
+        <p>菜小妹忍不住甩给陆崇远一个白眼，「你这个假设就很没有……」</p>
+        <p>陆崇远没等她说完。</p>
+        <p>「即使这个过程会非常辛苦，你需要比其他人付出更多倍的努力。但你也会因此为自己打开一条新的人生出路。」</p>
+        <p>菜小妹把陆崇远的话听完，目光转向窗外。</p>
+        <p>「假设吗？」她喃喃重复。</p>
+        <p>「你就先当它是假设。」</p>
+        <p>「其实，如果我早知道政策上对残疾家庭有子女教育资助，当初就不会选择辍学。」她说得很轻。</p>
+        <p>「那你听我一句，先不要进工厂。」陆崇远说，「工厂并不会因为你现在没有去就倒闭，也不会因为你早去一天就不会倒闭。」</p>
+        <p>菜小妹狐疑盯着陆崇远的眼睛，「你到底想说什么？你是有什么解决办法吗？」</p>
+        <p>「我还在想，你等我几天。」</p>
+        <p>菜小妹心里莫名一种失落情绪，像是刚刚以为能抓住什么，下一瞬间就没了。</p>
+        <p>「答应我，先别着急进工厂。」陆崇远补充道。</p>
+        <p>菜小妹迟疑着点点头，「好。」</p>
+        <p>她并没有完全把陆崇远的话放在心上。</p>
+        <p>毕竟，陆崇远说的是「假设」。</p>
+        <p>这世上，没有那么多假设，眼前的现实才是最重要的。</p>
+        <p>况且，他陆崇远也不过是梧桐镇唯一网吧的小网管。</p>
+        <p>一个连住处都没有，天天睡网吧的流浪汉。</p>
+        <p>到了菜小妹家大门口，她把小弟从陆崇远的背上接过来。</p>
+        <p>「今天，谢谢你。」她说。</p>
+        <p>「累了一天了，回去好好休息。」陆崇远说。</p>
+        <p>「你……」</p>
+        <p>「咳咳！」是菜老爹的声音。</p>
+        <p>下一秒，门已经被打开了。</p>
+        <p>菜老爹滑着木板车出来，朝巷口张望，「小兔崽子，跑得还挺快。」</p>
+        <p>菜小妹偷偷看一眼。</p>
+        <p>陆崇远迈着大长腿，消失在巷子口。</p>
+        <p>「野了一天才回来！放出去就不知道回家……」菜老爹边滑车，边念叨。</p>
+        <p>「爸，你还没吃晚饭吧。」</p>
+        <p>菜小妹先把小弟放在大屋的床上，「爸，我这就去做饭。」</p>
+        <p>「甭做了。灶上还有点儿，给你留的。」</p>
+        <p>菜小妹动作一顿，透过大屋窗户，看到厨房灶上，有几个被碟子扣着的碗。</p>
+        <p>「你这手里提的啥？」菜老爹问。</p>
+        <p>菜小妹脑子转了半天。</p>
+        <p>说实话吗？老爹一定骂她败家。</p>
+        <p>说假话吗？早晚要穿，躲不开的。</p>
+        <p>「顺路买了一身衣服，过几天找工作穿，给人一个好印象。」她说。</p>
+        <p>「哦。想得还挺周全。」</p>
+        <p>菜小妹拿出残疾证，「爸，证拿到了。从下个月开始，咱们申请的医疗补助，每月都会打进你的银行卡。小弟的学前资助，等我拿着残疾证，再去那间幼儿园确认一遍。」</p>
+        <p>「嗯。好。」</p>
+        <p>菜老爹翻着残疾证，「你说说，早知道可以办这个，能省下多少钱？」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./026.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./028.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

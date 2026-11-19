@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 063 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 063 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 063 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Mar 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,079 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>饶天泽根本不知道为什么全身无法动弹，他眼睁睁看著六马辇车直奔自己而来，等待著被乱蹄踩死。一瞬间，不禁红了眼眶，有委屈，有不甘，有尚未对父母尽孝的后悔……</p>
+        <p>与此同时，在人群中，再次出现那名年轻武者。他纵身上前，一把拉住饶天泽，「走！」</p>
+        <p>说时迟，那时快，马蹄子擦著饶天泽的衣角落了地。年轻武者冷言问道：「为什么不躲？！」</p>
+        <p>「我……我刚才动不了……」饶天泽惊魂未定地言道。</p>
+        <p>六马辇车被控制住，赤膊少年在默默退回车内。耳闻外头百姓们一阵阵谩骂声，车里面走出来一名十七八岁的少年人，穿的绫罗绸缎，极为讲究，一看就是富家子弟。</p>
+        <p>「喂！」少年人瞥一眼饶天泽，懒洋洋地开口质问，「是你惊了我的马？」</p>
+        <p>饶天泽本就压著一肚子火无处发，此刻霎时被点燃。他指著少年人，冷眼怒道：「是你家的畜生吓著了本公子！」</p>
+        <p>少年人叉著腰，一副趾高气昂地神情，「我家马儿从未出现过失控现象，而你刚刚站在大街正中间不闪不避。本少怀疑，是你对我的马做了什么，才导致它们不受控制！」</p>
+        <p>「笑话！」饶天泽怒言，「这么懂它们，莫非你和它们是同类？！还是个嚣张跋扈的畜生！」</p>
+        <p>此话一出口，引得围观百姓哄堂大笑。</p>
+        <p>少年人脸上瞬间挂不住了，对身边人下令道：「来呀，把他给我打得做狗爬！看到到底谁才是畜生！」</p>
+        <p>「遵命！」左右护卫立即应声抽刀。可这刀刃儿还没亮出三分之一来，已是被人一肘一膝全部撞回去。少年人拧著一双眉毛，瞪著插手的年轻武者，「你……多管闲事！一起打！」</p>
+        <p>无为仔细瞧一眼身法如闪电的人，低声赞叹道：「好俊地身手嘿！难怪饶天泽大侠长大侠短的缠著此人。」</p>
+        <p>「这纨绔子弟，再不收收脾气，怕是要皮肉受苦咯。」有涯幸灾乐祸地言道。</p>
+        <p>「都让开！让开，让开！」三名衙役一边嚷嚷著，一边拨开看热闹的人群，来到中间。最前面的捕快，看一眼六马辇车，又将三人打量一番，对少年人问道：「这座驾是你的？」</p>
+        <p>「废话！」少年人不屑地言道，「你看在场还有谁置办得起六马辇车吗？」</p>
+        <p>「很好，很好！」捕快笑眯眯地点点头，「驾著六马辇车，在息丹城里横冲直撞，整条主街道因你造成恐慌。看看这一地狼藉，看看这些受伤的百姓们！」他说到此处，已是怒不可遏，高声对身后两人吩咐道，「把他押回去受审！」两名衙役得令，扯出绳索，不由分说地拘人。</p>
+        <p>少年人大喝一声，「慢著！睁开你的狗眼看清楚，这是什么？！」他说著拿出一个巴掌大小的金牌，送到对方面门前。</p>
+        <p>捕快一眼看到上面硕大一个字，登时吓得面如土色，「是……原来是……」</p>
+        <p>「敢拘我去府衙，你们一家老小怕是不想活命了？！」少年人扬手洒落一地银元宝，冷眼斜视著捕快，「这些钱足可以买下整条街，现在我可以走了吗？」</p>
+        <p>「呃……」捕快一咬牙，点头哈腰地赔罪，「请，您请。」</p>
+        <p>「哈哈哈哈！哈哈哈哈！」六马辇车中传出一阵阵狂妄得笑声，将人们的埋怨，咒骂统统淹没。</p>
+        <p>有涯双手一摊，一脸无奈，「不但没敢动他，还礼貌的恭送他离开，这富家子是什么大人物？」</p>
+        <p>「官家人咯！」无为一副不以为然的神情，凝视著远去的六马辇车，想起方才那个打扮奇特的控马者，他不由得皱眉，「不过，光膀子那个，好惊人的雄劲，是什么来头？又为什么蒙住双眼？」</p>
+        <p>有涯手搭凉棚，尽力张望一瞬，提醒道，「无为，那六马辇车去的方向，好像是少师府吧？」</p>
+        <p>所言无差。当无为拐回少师府外墙，果然看到六马辇车停在大门口。他大摇大摆晃进府里，随即做贼似的四处寻找。在正厅瞧见那个纨绔子弟。少师老爷在旁落座，两人正相谈甚欢的样子。</p>
+        <p>「少爷，您在这儿做什么呢？」</p>
+        <p>无为猛然转身，看到管叔地一脸狐疑。他连忙示意管叔噤声，指著里头问道，「那个阔少是什么人？」经管叔的言说，他才知道。这位梁少身份非同小可，乃是三朝元老梁公的嫡孙，镇国梁大将军唯一爱子。因家中人丁单薄，对唯一血脉十分溺爱。梁少得知少师一门隐于息丹城，故此前来例行走动。」</p>
+        <p>「原来如此。」无为了然地点点头，心中暗自嘀咕，难怪一副欠揍的模样，赶情是打小儿就养歪了！再说，少师一门多少年没人做官，有什么好走动的？还不就是单纯显摆他们家的身份来了？！</p>
+        <p>管叔问道：「少爷。梁少和您年纪相仿，要不也进去一起认识认识？」</p>
+        <p>少师老爷看到官家身后跟著的人，大感惊愕，暗自思忖，「无为天天野地抓不到人影，这会儿怎么倒是跑来了？」</p>
+        <p>「爹！」无为目不斜视地向少师老爷作礼。后者略微颔首，「你来的正好。」说著，抬手指向旁边客座的人，介绍道，「梁世侄是京都梁公的嫡孙，此番出来游玩，路过息丹城，逗留数日。」</p>
+        <p>无为立即热情地朝梁少打招呼，「既然如此，梁公子可是要好好感受一下，息丹城的风土人情，包你后半生回味无穷，终身难忘。」</p>
+        <p>「哦？」梁少顿时来了兴趣，「不知此地都有些什么耍头？」</p>
+        <p>「多著嘞！一时半刻讲不完。」无为笑吟吟地言道。</p>
+        <p>少师老爷嘱咐道：「无为啊，梁世侄初来乍到，你应该略尽地主之谊，千万不可怠慢。」见无为一脸严肃认真地听著，点头答应著。他满意地点点头，放心把贵客交给儿子招待。</p>
+        <p>无为领著人在少师府里兜兜转转，偷偷斜过梁少一眼，暗自筹划，「小子，看我不整得你哭著离开息丹城。」他抬首扫视四周，发现拱门后面就是武场，忽地计上心头。他故意将人带入武场内，面上笑吟吟地问道，「梁少身为镇国大将军之后，想必武功定然不凡。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./062.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./064.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

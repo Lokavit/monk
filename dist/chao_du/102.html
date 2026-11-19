@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 102 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 102 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 102 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：12 Apr 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,032 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>红灯亮起，宿业得空觑一眼后视镜，不经意与内中礼谌的目光交汇。他慌乱地掩饰，假装专心地盯著红绿灯。自以为伪装地很好，却是在后座两人的提醒下，再次起步。</p>
+        <p>小鬼的一身伤痛还没好，就被其他几个生拉硬拽地拖到车行里。他脸上挂著极度违和的笑容，一手拎起水管，转著圈儿，清洗车身。</p>
+        <p>兜里的手机震动，他掏出来看一眼，脸上笑意霎时不见。只一瞬间，又咧嘴笑起来，哼著歌，擦著车。</p>
+        <p>就是这一眨眼的表情变化，被坐在二楼办公室里品茗的吴总，看在眼里。</p>
+        <p>他坐在奢华的老板椅上，一手端著茶杯，饶有兴致的盯著楼下的小鬼：「老张，这小子来多久了？」</p>
+        <p>身为车行老板的老张，注意到吴总的目光，起身顺著看过去，同样落在楼下洗车的小鬼身上。擅于溜须拍马，阿谀奉承的他，眼珠一转，试探著说：「仨月了。有点儿莽实，还在观察期。」</p>
+        <p>「嗯？」吴总看向老张，露出个奸笑，「你如果留心观察，就会发现，这小子是个真正的笑面虎。」他又看了一会儿，直到小鬼不在视线内，转头对老张说，「我让你找人仿一批货，事情办得怎么样了？」</p>
+        <p>老张满脸堆笑：「他们已经在做了。对方倒也算坦诚，明说了只能高仿，没有精仿的技术。」</p>
+        <p>「不要紧。」吴总手肘往桌上一擎，伸出两指，「既然他们技术不行，就把价格再往下压。钱都是这么一点点赚出来的。」</p>
+        <p>老张一边答应著，一边在吴总两指之间放根雪茄，小心点燃，谄媚地笑著：「你放心，这种事儿，我有经验。」他顿了顿，提出建议，「哥，今晚没什么事情，去金色大地放松放松？」</p>
+        <p>老板前脚离开，车行里的人各自找地方偷懒。</p>
+        <p>小鬼坐在大门口的地上，摆弄著滑板，调整一会儿，起身滑几下试试。折腾了好半晌，自觉满意地点点头。他冷眼瞧著里面几个人，趁著不注意，一溜烟儿地滑走。</p>
+        <p>站在路灯下，看一眼「雇主」发来的地图标注，按照路线滑过去。他把兜帽往头上一扣，找个暗处，坐在滑板上。一双眼睛，紧紧盯著偶尔来往的人。</p>
+        <p>此时，一个身形修长挺拔的年轻人，进入他的视野。他起身环顾四周，目光锐利地盯著对方。距离越来越近，他抬起一只脚，正欲重重踩下，脑海中闪过一句话：「耽误了我参加比赛，我肯定不会饶过你。」</p>
+        <p>片刻迟疑，错过最佳时机。他使劲儿摇摇头，猛地一脚踩下板尾，趁著滑板弹起时，飞起一脚，踢出老远。</p>
+        <p>「啊！」不幸中招的年轻人，痛呼一声，跪坐在地上，双手抱著小腿，疼到全身打颤。他满眼惊慌，东张西望。滑板在撞到他之后，受反弹作用力影响，距离他越来越远，被一只脚踩住。</p>
+        <p>兜帽下的小鬼，挑衅地吹著口哨，拍下对方的狼狈相，发给雇主，蹬著滑板远去。</p>
+        <p>他没有直接回到车行，而是到处转悠。在一条车辆稀少的路上，稍微减缓速度，低头对著滑板自言自语：「为了不惹麻烦，我必须毁掉你。」说完，他加速冲刺，利索地从板上跳下来。</p>
+        <p>失控的滑板，冲上机动车道，被一辆私家车碾过，碎尸万段。肇事者在喧嚣谩骂中，扬长而去。</p>
+        <p>距离比赛越来越近，礼乐在等了三不见练舞搭档之后，怒而给蒋帅发过去一条资讯：「你人呢？来排练！」文字后面，附带著一连串怒火中烧的表情，以示愤怒。然而，休息结束，也没有等到对方回讯息，她气鼓鼓地把手机塞进包里，跟著同学们练舞。</p>
+        <p>宿业今天格外紧张，手心冒汗。因为车上坐著的，不止是太子爷，还有董事长。他看到礼谌带著董事长，坐到车里，整个人万分震惊。当听到礼谌说出目的地，他忍不住觑向后视镜一眼。</p>
+        <p>没有想到，礼谌会采取他随口一说的建议。他暗自嘀咕：「太子爷该不会是，诓骗董事长上车吧？可怜一片孝心。为此说不定犯了妄语戒。」</p>
+        <p>「宿业啊，开车几年了？」</p>
+        <p>他心中一慌，强作镇定，诚实回答：「一个多月。」</p>
+        <p>礼靖哈哈一笑，毫不吝啬地夸赞起来：「有天赋啊。车子开得很稳，和老司机不相上下。」</p>
+        <p>他礼貌地道谢。只有坐过这辆车的人知道，车子开成什么样，完全取决于，后面坐著谁。眼下天地集团的一二把手，都在这车里坐著。他就是有天大的胆子，也不敢在路上飙车技。</p>
+        <p>他把车子开进医院大楼前，谨慎停稳，目送两人离开。又开出大楼，在停车场寻找车位。纠结著，到底要不要陪著一起过去？转念一想，人家父子俩呢，不用外人掺合，还是在车里待命吧。</p>
+        <p>他躺在椅子上，悠哉哉刷著手机，眼角瞥见一个熟悉的人影走过，连忙开启车窗：「乐乐？！」</p>
+        <p>礼乐迎著太阳，手搭凉棚，小跑过去：「业哥？！你怎么在这儿？我哥怎么了？！」</p>
+        <p>「没事儿，没事儿。你哥好著呢。正带著董事长在里面检查身体。」他端量著礼乐，「你不是去练舞了吗？来医院做什么？受伤了？」说完，立马下车，把人再次打量一番。</p>
+        <p>「不是我。我同学受伤了。我来看看他。」礼乐一边说著，一边往里走，「就是上次送我回家那个同学。」</p>
+        <p>「噢～」宿业有意拉长音调，提醒道，「既然是看望，你就这样空著手进去吗？」他含笑看著俏皮吐舌地礼乐，陪著她到医院外面买了一个豪华金装大果篮。</p>
+        <p>「再来束花吧。」他建议著，「你同学喜欢什么花？」</p>
+        <p>「业哥，不用了吧？」礼乐略微皱眉，「我给他送花，感觉怪怪的。」</p>
+        <p>他见礼乐莫名的拘谨起来，忍俊不禁：「花算我的，你帮我挑挑。」一边挑著，一边说道，「医院那种地方啊，放点儿新鲜的花花草草，既能赏心悦目，又能给予希望。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./101.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./103.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

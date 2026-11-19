@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 062 章 · 一页江湖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">一页江湖</a>
+          <span class="sep">/</span>
+          <span>第 062 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 062 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：02 Mar 2559 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,074 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>子吾吊著一只手，另一手抽出雪里鸿，警惕地注意著阿兰嫂的动作，就怕对方再一次扑过来。这一次，是他执了剑，站在原本属于自己的保护伞之前，无论是否守得住，都必须挺身而出，全力以赴。</p>
+        <p>「啊……」阿兰嫂红了眼地挣扎，终于在小宝发出一个音节之后停止，她不顾一切地扑上去，抱起自家的孩子。</p>
+        <p>忽然感到受伤的手掌传来一丝凉爽，子吾惊愕回身，玄影已经把那个斗笠上的薄纱扯下来，小心仔细地帮他包扎手掌。虽然其尽量不碰到他，子吾还是看到了玄影逐渐煞白的双手，他心口一滞，手臂略微一缩：「我自己来。」</p>
+        <p>小孩童从阿兰嫂的怀里探出头，眨著大眼睛，好奇地望了这一众人。最后将目光落在玄影身上，又一次发出清脆地笑声，之后，他一只小手怯怯伸出来，去抓子吾的衣衫。</p>
+        <p>玄影回以微笑，一手温柔地抚摸了小宝的脑袋。</p>
+        <p>阿兰嫂立即抱著小宝躲开，怒瞪著子吾两人，也不言语。</p>
+        <p>「这到底是怎样一回事啊？」阿东此时赶来，看了现场的状况，询问道。</p>
+        <p>子吾踌躇了片刻，坦诚说道：「实言相告诸位，在下并非是你们口中那名少年剑客。只因得知与其模样生得相似，所以冒名混充。」</p>
+        <p>望著一张张所料无差的神情，他心底里反而有些轻松，既然承认，就做好了接受任何结果的准备。直到目光落在那一脸微笑，那一下赞许地颔首，他觉得，值了！</p>
+        <p>阿东沉思了良久，笑脸言道：「恩公不要和大伙儿开玩笑了。事情只过去短短一年，我们不会认错人的。」</p>
+        <p>这些人始终报持著对他的完全信任，子吾心中升起一丝罪恶感。他看向这里唯一一个怨恨他的老妇人。</p>
+        <p>阿兰嫂听了子吾的说辞，面上地疑虑不减反增，她不敢置信地说道：「怎么可能？！你和他简直是生得一模一样！」顿了顿又道：「小宝见到你就发病，我不信！就是你！」</p>
+        <p>子吾无可奈何地摇首：「如果我是他，那三人岂会有命来送还佣金？」</p>
+        <p>阿东震惊地问道：「阿兰嫂，你找人杀恩公？这是为什么呀？你们有什么过节？」</p>
+        <p>阿兰嫂面上一阵青一阵白，矢口否认道：「老妇人不懂你在说什么。」</p>
+        <p>子吾叹道：「阿兰嫂何必过虑？在下根本不欲追究。将此事言明，只是为给我自己正名。」</p>
+        <p>众人皆是面面相觑，不知道如何是好。阿兰嫂突然高声叫道：「你说不是就不是吗？你拿什么来证明？」</p>
+        <p>所有人的目光一致投向子吾。</p>
+        <p>现在摆在他眼前一个棘手的问题，要如何证明「他不是他」？或者说「他是他，但不是他」。面对一名完全不信任你的妇人，解释，只是多费唇舌而已。子吾仰天一声叹息，深刻感觉到自己到底是怎样‘搬了石头自砸脚’。他双手一摊，坦言道：「我，无法证明。」话风一转，言道：「所以，我想听阿兰嫂对在下的指控，还望成全。」子吾说著，双手略微一搭，恭敬做了个书生礼。</p>
+        <p>在场的其他人，无不好奇，有的人出言催促道：「阿兰嫂，到底发生过什么事情？你就根大伙儿说说吧。」</p>
+        <p>阿兰嫂抱紧了小宝，犹豫了许久，才说道：「好吧，我就告诉你们真相。去年在龙竹林的那场约战，其实老妇人当时目睹了结果。」</p>
+        <p>阿东一脸惊愕地问道：「啊？你怎么没和大伙儿说起过？」</p>
+        <p>阿兰嫂一双布满血丝的眼睛，怒视著子吾：「那天小宝偷偷爬上山，老妇人去寻他，就看到一个挺壮实的中年人，被他杀了！」妇人的一只手直指子吾，激动地继续说道：「他杀了人还不算完，居然用剑把那个死人全身的血肉剔了个干净。」</p>
+        <p>忆起龙竹林中的那件暗红色的斗篷，斗帽下那张明显是伤后拼凑起来的脸皮，以及那只是枯骨架子的手爪。子吾不由得打了个寒颤，他问道：「那个死去的人，武器是不是一支月牙钩？」</p>
+        <p>阿兰嫂略微点头，厉声质问：「知道这么清楚，还敢说不是你？」</p>
+        <p>子吾解释道：「那个人，就是你们看到的‘鬼相’，我在龙竹林那晚，遇见了。」他开始后悔自己没把那‘鬼’扛到青田庄，证明自己的清白。转念一想，扛了也白搭，鬼话估计更没人肯信。</p>
+        <p>听得子吾一说，众人面上露出惊讶之色。有人道：「原来真的是冤鬼啊。是要找恩公讨命吗？」</p>
+        <p>子吾轻轻摇首，又言：「你们所见到的我，是不是身手了得，与人约战南夙山顶？」</p>
+        <p>阿东道：「是啊。当时恩公所言，正是与那人在龙竹林定生死。大伙儿都认为您肯定毫发无伤的回来。」</p>
+        <p>子吾举起被菜刀划伤的手掌，对众人问道：「既然是个高手，会接不下一柄菜刀吗？」</p>
+        <p>「这……」大伙儿也都不得不疑惑起来。确实如此，别说是江湖高手了，就算一般的壮年汉子，想要夺下妇人手中一柄菜刀，也不是什么难事儿，根本没必要这样狼狈。</p>
+        <p>子吾亦看得出众人面上的疑惑逐渐增加，他道：「实不相瞒，正因在下与那人生得相似，所以千辛万苦找寻他。还望诸位告知，当初约战的人，是何身份？那少年剑客可有说战后去了何处？」</p>
+        <p>众人互相看了看，皆是摇首表示不知道。</p>
+        <p>阿东犹豫著说道：「那个……恩……这位少侠，我们只知道恩公是与人约战龙竹林，才会来青田庄暂时落脚。当时大伙儿正遭受一队贼匪欺压，恩公帮我们赶走了那伙强盗。至于其他的，就不清楚了。」又问一旁的妇人：「阿兰嫂，既然你在龙竹林目睹了结果，可知道什么吗？」</p>
+        <p>阿兰嫂看了看大伙儿，最后把目光落在一脸期待的子吾面上，犹豫了好久，才说道：「老妇人只听他最后对著那尸骸自言自语了什么‘游龙寨’。」</p>
+        <p>子吾原本黯淡的眼中瞬间浮现希冀，有线索了！只要找到死者的背景，就能够知道其生前有哪些仇家，也就可以推断出来那少年剑客到底是何人。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./061.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./063.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

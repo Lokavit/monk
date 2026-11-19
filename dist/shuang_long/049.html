@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 049 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 049 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 049 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：18 Feb 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,095 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>回到鬼屋的第一件事，他给自己洗个透心凉的冷水澡。然后擦干净板底，坐在床上写作业。待到他写完作业，预习完功课，看到笑笑在啃狗粮，才意识到，他只顾赶回来，忘了在玄武广场吃晚饭。这个破屋子里，连一瓶矿泉水都没存。</p>
+        <p>少龙狠狠一脚踹在卧室门上。</p>
+        <p>「嘭！」门在撞上门框之后，发出巨大声响，又藉著阻力，慢慢反弹回去，产生「吱嘎～吱嘎～」地慢长音，听起来，极其诡异。</p>
+        <p>少龙一个鞭腿上去。</p>
+        <p>「嘭！」门板撞在墙面上。巧在力道刚好，没有形成反弹。</p>
+        <p>他越想越恼火，生活也好，学习也罢，通通一团乱麻，应接不暇，内中藏著荆棘，一不溜神，就扎地他浑身难受。</p>
+        <p>坐回床上，他重新开启笔记本，直面「计划」两字，一边在脑子里规划，一边落于纸上。</p>
+        <p>不一会儿，他闻到一股怪异的味道，像是有什么食物放到变质。</p>
+        <p>他猛地起身，在正厅桌子前站定。</p>
+        <p>桌上放著三四天前的蔬菜，堆著几样那晚生命投资人没吃完的菜，还有半瓶啤酒，俩空酒瓶。</p>
+        <p>少龙攥著拳头，扼制自己想要一拳砸碎对面门上玻璃，把这一桌子垃圾倒进生命投资人屋子的冲动。</p>
+        <p>他把桌上所有东西收进垃圾袋，提著仨酒瓶。走出院子，看哪儿都像垃圾场，他绕到房后，随意选择方向，多走几步，扔掉垃圾，倒干净瓶子里的酒。把瓶子抛起，一脚踢上去。</p>
+        <p>漆黑的夜晚，「啪」地一声脆响。少龙唇边勾起一抹微笑，又丢一个，踢向远处。</p>
+        <p>这一次，没有听到玻璃爆碎的声音，他露出失望的表情，将最后一个瓶子，换一个方向踢出。随著脆响声，他潇洒地，慢悠悠地回到屋子。</p>
+        <p>正厅没窗户，只有一扇大门。少龙用脚把大门完全推开，希望屋里的怪味道能够散去。</p>
+        <p>忽然，他留意到被清理干净的桌面，上面有一道很深的旧凹痕，好像不知是被什么砍过，所留下的痕迹。</p>
+        <p>少龙的目光移到灶台，台面上放著一把非常厚实的刀，是龙辰上次用来砍塑胶管，顺手放在那里。</p>
+        <p>他看看刀刃，再看看桌面的凹痕，脑海里浮现龙辰讲的鬼故事，以及几个人围绕鬼屋的交流。</p>
+        <p>他壮著胆子，拿起剁骨刀，从刀尖开始，沿著凹痕往里面插，感到阻力之后，停下手，放开手。</p>
+        <p>剁骨刀的相当一部分刀刃嵌入凹痕，直立在桌子上。</p>
+        <p>少龙霎时头皮发麻，汗毛倒竖，不由得后退几步，呼吸加重几分。</p>
+        <p>明明已经吓到心跳加速，他偏偏不信邪。凭著从小练武的直觉，隐隐觉得还有哪里不太对。</p>
+        <p>一般人站在桌子前，用剁骨刀重重砍桌面，很难留下如此深的凹痕。</p>
+        <p>他一手托腮，仔细观察桌子，俯身看看桌下，抬腿一脚踩著桌沿，缓缓用力向下压，桌面慢慢竖起。直至完全竖起，成为立面，剁骨刀依旧稳稳地嵌在凹痕里。</p>
+        <p>这，就对了！</p>
+        <p>造成这个凹痕，是有人提著剁骨刀，站在一定距离之外，用特别大的力气，丢向桌子的方向。根据凹痕深度，可以断定，必然是成年男性。又因整体位置偏上，可以推断，当时在桌子后面，很大可能躲著人！</p>
+        <p>少龙想挪开桌子，察觉自己两腿酸痛地难受。他深深看一眼嵌在凹痕的剁骨刀，回到卧室，拉上门闩。</p>
+        <p>他躺在床上，紧紧搂著笑笑，长舒一口气，喃喃地说：「看到什么奇怪的东西，一定要提醒我。靠你了。」</p>
+        <p>整个晚上，少龙无数次睡睡醒醒，频繁做噩梦。梦里全是怪力乱神，血肉模糊。卧室里的灯亮一整晚，直到外面天亮，光线投入窗户，灯光逐渐黯淡下去。</p>
+        <p>他揉著酸肿的眼睛起床，稍微收拾收拾，背起书包，一手拎著滑板，想了想，又放下。</p>
+        <p>学校附近的门市房，有不少早餐摊位，一些像他一样揹著书包的学生，三两个凑在一桌，吃著早饭。</p>
+        <p>少龙随意找一家，买一屉灌汤包和一碗瘦肉粥，选个干净的桌位。</p>
+        <p>「哟～龙少爷，早哟～」龙辰搁下手里的包子和豆浆，一屁股坐在少龙对面，「他家的包子还可以吧？」</p>
+        <p>少龙从看到龙辰，就停下动作，擎著筷子，盯著对方的一举一动，脑子里全是昨晚的噩梦场景。</p>
+        <p>龙辰后知后觉，显得有些不自在：「你这么望著我，好像要把我当包子给吃了。」他忽地注意到细节，「诶！你眼睛怎么了？昨晚没睡好吗？」</p>
+        <p>少龙目不转睛地盯著龙辰：「我昨晚一宿都在做梦，梦里全是你……」</p>
+        <p>「噗！」龙辰一口豆浆全喷出去，扶著桌子，拼命咳嗽，不敢置信地看著少龙，「咳咳……啥？你……咳咳……说啥？」</p>
+        <p>「你！上次讲的那个鬼故事！」少龙加重音量，但又不敢太大声，「还有，追你的那几个人，说的‘鬼屋’什么的！」</p>
+        <p>「呼～」龙辰松了一口气，「这事儿啊。你怎么又想起来了？」</p>
+        <p>「那间房子，是不是死过人？」少龙声音有一点儿打颤，目光还在紧紧盯著龙辰。</p>
+        <p>「啊？」龙辰动作一顿，扯著嘴角，笑了笑，「没有吧？小地方总会有一些鬼怪传说。我那晚无聊，特地编个故事吓唬你的。」</p>
+        <p>「你还记得屋里那把剁骨刀吗？」</p>
+        <p>龙辰咳嗽两声，假装不经意地说：「昂。上次不是还拿它砍塑胶管了吗？怎么了？」</p>
+        <p>「你那晚的故事说，一把刀嵌在桌板里。我昨晚收拾桌子，看到上面有一个很深的凹痕，就把剁骨刀放进去试一试，」少龙有意停顿，「严丝合缝。」说到最后，声音低下去。</p>
+        <p>「啪！啪～」细微不同的声响，两人手里的筷子，先后断裂。</p>
+        <p>龙辰扔了手里的筷子，面上故作轻松：「昂。我早就知道。所以才编了那么个鬼故事。」他从盒子里拿出两双筷子，将其中一双往少龙手里塞了塞，「断了。扔掉。」</p>
+        <p>少龙拿在手里：「你怎么会知道？」他像个侦探似的，眼神锐利地端量著龙辰，不放过其脸上任何一丝变化。</p>
+        <p>「探险咯～」龙辰轻描淡写地说，「从小就听说那是鬼屋，好奇心作祟，曾经进去看了看。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./048.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./050.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

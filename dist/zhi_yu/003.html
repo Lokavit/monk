@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 003 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 003 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 003 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：03 May 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,083 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>大学期间，她就在规划未来的人生，其中包含养狗。</p>
+        <p>因此，她看了四年不同品种的狗，做了四年的养狗攻略，唯一缺少的就是实践。</p>
+        <p>现在，实践部分也算是补上了。</p>
+        <p>饭团就这样成为了两人的话题核心。</p>
+        <p>沈知遇学到很多与理论不同的养狗经验，得知曲星汉嘴里的「祖宗」实际是对邵骏邕的调侃，她没有继续追问。</p>
+        <p>因为饭团的过分热情，沈知遇脑子一热，牵着饭团走在落日余晖的沙滩上，邵骏邕在她身后，保持着三步左右的距离。</p>
+        <p>沈知遇从第一次遛狗的兴奋情绪里冷静下来，意识到自己竟然在和刚认识一天的男室友一起遛狗！狗还是男室友的。</p>
+        <p>她有点局促，任由饭团带着她走，满脑子都是怎么开启新话题，是不是该把狗还给邵骏邕，还是就这样遛完回家。</p>
+        <p>「饭团！回来！」邵骏邕大喊一声。</p>
+        <p>沈知遇回过神，感受到海水的冰凉。这才发现，她已经被饭团带着走到了过膝深的海中。</p>
+        <p>罪魁祸首正舒服地畅游，对邵骏邕地呼喊充耳不闻。</p>
+        <p>邵骏邕小跑过来，抓着饭团的后脖子，用力拽着饭团上岸。</p>
+        <p>饭团甩动全身，海水混着海沙甩了两人一身。</p>
+        <p>看着对方有些狼狈的模样，不约而同的笑出声。</p>
+        <p>回家的路上，邵骏邕跑进一家甜品店，拎着一个小盒子出来，表达感谢和歉意。</p>
+        <p>晚上，沈知遇照例冲一杯咖啡，窝在懒人沙发里，打开盒子。</p>
+        <p>她最终吃到了这款抹茶味蛋糕，无怪乎邵骏邕坚持买，味道确实不错。</p>
+        <p>周一早上，沈知遇睡到八点，不紧不慢地起床，习惯性去开冰箱，发现餐桌上已经放着一盒牛奶。</p>
+        <p>她看一眼主卧虚掩的房门，耸耸肩，进厨房给自己准备早餐。</p>
+        <p>邵骏邕从外面回来，饭团呼哧呼哧喘气，瘫在客厅的垫子上。</p>
+        <p>「咦？你还没出门。」邵骏邕喘得比饭团更厉害。</p>
+        <p>「嗯。公司就在附近，我们九点打卡。」沈知遇端着盘子出来，只看到邵骏邕浑身冒汗冲进洗手间。</p>
+        <p>她还没吃完一个三明治，邵骏邕已经神清气爽的出来了。</p>
+        <p>「我们公司也在附近，我租这里，就是图他上下班走路十分钟。」</p>
+        <p>邵骏邕拿出一盒牛奶，冲杯蛋白粉，打入两个生鸡蛋，快速摇晃，「看来，你也是不喜欢把时间花在路上的人。」</p>
+        <p>沈知遇使劲儿点点头。</p>
+        <p>桌上的手机震动，沈知遇扫一眼屏幕，草草吃完最后两口，把盘子放进水池，抄起沙发上的外套，匆匆到门口换鞋。</p>
+        <p>「你的牛奶！」邵骏邕追到玄关，递给她。</p>
+        <p>「谢谢！」沈知遇抓着牛奶，快步走到电梯门，疯狂按键。</p>
+        <p>她属于卡点进办公室的那类社畜，所以，她只不过稍微看邵骏邕两眼，搭了两句话，她的出门时间就晚了几分钟，加上电梯的每层楼一停。等她走出小区距离九点不到十五分钟。</p>
+        <p>沈知遇不得不顶着七月的太阳在路上竞走，赶在九点整，进入打卡范围，成功打卡。</p>
+        <p>她坐到自己的工位，有一点喘，打开牛奶喝了两口。</p>
+        <p>隔壁同事蹬着椅子滑过来，「小沈，听说了吗？我们组要被拆解重组。」</p>
+        <p>沈知遇心里一沉，追问：「什么原因？我们组的项目不是才开始没多久？」</p>
+        <p>「据说是和甲方没谈妥，项目砍了。」同事顿了顿，一脸神秘，凑近沈知遇，「据我推断，这种情况，可能会裁员。」</p>
+        <p>沈知遇一惊，不小心把牛奶盒子捏大劲儿，牛奶洒一手，连忙抽纸巾擦一擦。</p>
+        <p>她只是组里一个刚刚转正的初级UI设计，如果解组有人多余，她沈知遇绝对排第一个。</p>
+        <p>「开大会了。」</p>
+        <p>同事拍了拍她的肩头。</p>
+        <p>沈知遇慌乱起身，拿上本和笔，跟在同事们身后。</p>
+        <p>进入会议室，她偷偷扫视一圈，发现多了几个生面孔。</p>
+        <p>她依旧选择在不起眼的角落坐下。</p>
+        <p>「喂！听说你们组那个出名难搞的被调回来了。不知道这次会被分到哪组。」 「爱去哪组去哪组，反正别留在我们组，我可不想有人天天找我毛病。」 「唉？你们说的是不是那个谁。」</p>
+        <p>沈知遇竖着耳朵听旁边同事在八卦，正说到关键地方，她一抬头，看到一个熟悉的人影————她的男室友。</p>
+        <p>与此同时，耳边飘进一个名字————邵骏邕。</p>
+        <p>沈知遇连忙低下头，嘀咕一句：「不是这么巧吧。」</p>
+        <p>她的头再也没抬起来，认真听着每组的负责人轮番发言。</p>
+        <p>约莫过去一个小时，她的脖子酸痛，不得不稍微抬了抬头，正撞见对面邵骏邕往这边看，和她目光接触，又不着痕迹的移向别处。</p>
+        <p>领导清了清嗓子：「最近，我们技术部门有几个事件，一个是C组的项目临时叫停……」</p>
+        <p>会议室里一阵唏嘘。</p>
+        <p>沈知遇记录的动作停下，抬头看一眼领导，又迅速低下头，攥紧手里的笔，指尖微微发颤，像是在等待宣判。</p>
+        <p>「还有一个事儿是外派的所有人员全部归岗；第三个事情是技术部新增一个重点项目。因此，会将C组的人员暂时解散，配备到其他项目组……」</p>
+        <p>沈知遇一颗心悬到会议结束，忐忑地走出会议室。</p>
+        <p>回到自己的工位，她叹了口气，打开电脑，看着已经修改了七八版的设计稿，又是重重一声叹气。</p>
+        <p>「别叹了。」同事靠着桌沿，「不知道会被分去其他组还是新项目组。你想分到哪儿？」</p>
+        <p>沈知遇摇摇头。这哪轮得到她挑拣？</p>
+        <p>其实在哪儿都无所谓，在哪儿她都是一个新人，只要不是分着分着觉得多余一个初级UI。</p>
+        <p>她已经把所有积蓄拿去租房了，无论如何不能丢了这份工作。</p>
+        <p>「沈知遇！第三会议室！」</p>
+        <p>沈知遇答应一声，喊她的人她见过，不认识。</p>
+        <p>身边的同事拍拍她的肩头，露出同情的目光，「祝你好运。」</p>
+        <p>沈知遇一路听着自己的心跳，脑子里在计算，丢了工作，加上这月工资，她还剩下多少余额，怎么撑过去，怎么应付月底要钱的老妈。刚毕业就失业，怎么找下一份工作？</p>
+        <p>从实习就在这家公司，她第一来第三会议室，站在玻璃门外，看到里面几人相互聊着什么。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./002.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./004.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

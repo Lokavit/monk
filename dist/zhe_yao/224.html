@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 224 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 224 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 224 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：12 Aug 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 3,316 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 9 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>少羽无畏转首望去，看到对方的面容，眼中倏然杀意尽显。</p>
+        <p>这个声音，这副面容。造成妖界一切劫厄的开始，本就不该存在世上的妖孽。</p>
+        <p>「小徒儿，许久不见，可有想念为师？」自在君一袭白袍著身，目光中带著笑意。他双手负于身后，脚步不疾不徐，渐渐拉近双方距离。</p>
+        <p>再见曾经妖孽。无畏脑海中立即想起往事，那一段不愿提及又无法忘记的过去。他握紧手上的无舍，努力克制自己想要一枪贯穿对方的冲动。随著对方的逼近，小心翼翼地后退。</p>
+        <p>无畏心中害怕，并非为自己。而是害怕他又一次杀死这只妖孽，那样的话，妖界的劫厄会再度重演。可他转念一想，如今御龙生死成迷，妖界渐渐显出坏相，覆灭已是迟早的事情。既然如此，又何须再顾忌那么多？</p>
+        <p>原本是慢慢悠悠地走著，双方一进一退，步调一致。待到远处一道海浪缓缓推上岸边。自在君突然身形一闪，如鬼似魅，下一瞬就出现在无畏面前。</p>
+        <p>无畏不由得一惊，倏然向后跳开，猛一顿足，长|枪上挑。他不想看到这张脸，但是现在他非看不可；他不屑与对方说话，但是他现在必须出声儿。于是，他怒喝一句，「站住！」</p>
+        <p>自在君面上笑意更浓了，佯装不悦，「小徒儿，许久不见，怎么这样和为师说话？」</p>
+        <p>无舍在轻微抖动，因为现在提著它的那只手在抖，手的原主也在抖。无畏再也抑制不住怒火，手腕一转，长|枪直击自在君。后者不闪不避，不动不移。</p>
+        <p>只闻一声脆响，无舍被一道不明气劲弹开。无畏暗自咬牙，虎口被震地发麻。暗自思忖，这妖孽又练了什么邪功？难怪敢堂而皇之地找上来。</p>
+        <p>自在君一脸得意之色，笑道：「小徒儿，你现在一定是手掌疼痛难忍吧？想知道那是为什么吗？」</p>
+        <p>无畏不肯言语，双手握紧无舍，长|枪一挑，再次袭上自在君。然而，后者仍是一动不动。任由他招式如何变换，攻速是快是慢，丝毫不能近身对手。</p>
+        <p>只有仿佛兵刃的交击声，断断续续，毫无章法。无畏并未察觉，自在君离他越来越近。他一心只想破防，破开对方功体。</p>
+        <p>突然间，自在君得到机会，闪电般地出手，剑指夹住寒光闪闪的枪头。</p>
+        <p>无畏面上霎时一阵惊愕，双手紧紧握住无舍，与对方暗中较劲。两相拉扯，他此时才意外发现，方才只顾抢攻，不曾注意，现在两只手掌传来钻心的疼。</p>
+        <p>令无畏大感惊讶的是，对方只用了两根手指。无舍本就属于御龙皇。他虽然也能够使用，但却不能催动无舍自身的力量，更甚无法点醒上面的盘龙。</p>
+        <p>自在君剑指夹住枪头，手臂一点点向身前移动。他敏锐发现，无畏足下的海砂已被拖出印记。</p>
+        <p>无畏想过放手，但这支无舍是御龙的。被他带出来，就一定要带回去。倏然，无舍凭空消失了！</p>
+        <p>与此同时，天际飞下来一道黑影。一戟挑开双方，翩然落在地上，亦挡在无畏身前。正是一身黑色战甲的仲羿首罗，以及其后跟著五只身著护身战甲的小妖，各自手持武器。</p>
+        <p>而在另一方，海中突然蹿出一道金光，直冲九霄，随即一声龙吟，响彻天地。</p>
+        <p>金光伴随龙吟，实在太熟悉不过了。是御龙有涯！无畏满眼惊喜，看著金龙在半空飞舞数周，身形一转，落在他的面前。他猛地惊觉，心中竟然有一种想要拥抱御龙的冲动。连忙极力抑制自己，足下不由得挪开一步。</p>
+        <p>仲羿神情激动，一巴掌拍在御龙肩头，粗声粗气地喊道：「我就知道，你没那么容易死！」</p>
+        <p>御龙将目光从无畏面上收回，对仲羿笑了笑，「我是妖界龙守，要守护妖界。」他双手搭在无畏和仲羿的肩头，又看一眼另外五个小妖，「还有你们。」</p>
+        <p>从看到御龙有涯出现的瞬间，自在君面上终于不再笑了，取而代之的是，越来越白的面色。这是一个计划之外的变数，他唯一忌惮的金龙，明明已经失去两魂，居然没有死？！</p>
+        <p>「你一定没有算到，我被碎了生魂，还能够活著归来吧？」御龙皇转首看向自在君，非常满意对方面上现在的表情。他悠悠言道，「你不该拿我的生魂来用，也不该把它吸收进你的功体，更不该用所有三乘界弟子之血，为你铸炼九华映曜！」</p>
+        <p>九华映曜？仲羿想起在人间界时候，那个儒生所言。只可惜回到妖界，就逢巨变，没来得及说。他颇为震惊地看著御龙，「怎么？你知道这白眼狼练得那个是什么名堂？」</p>
+        <p>御龙点点头，「他当年只练出来一个灵曜，便将妖界罩住，死伤泰半。」他略微提高音调，对自在君言道：「从你来到这个世间，就为一己之私，不惜一切代价。但你可曾想过，自己最终会落得怎样的下场？」</p>
+        <p>自在君突然放声大笑，「我只知道，你们会死在九华映曜之下。」他倏然将目光投向被护在后方的无畏，「你不会死，我会留下你的一部分魂魄，再把你带回去，就像当初妖界崩塌，你魂魄离体时一样。」</p>
+        <p>无畏手上化出武器，还不待他上前，已经被五只小妖拉住。他怒道，「你们别拦著我！是我造的这妖孽，由我亲手了结！」</p>
+        <p>钰鑫口快，「你可别动手！我们不想再经历一次劫难！」他手脚并用地抓著无畏，就差没直接使出金棺，把对方扣进去关起来了。不过，现在的殊胜尊，可不是一个小小金棺能困住的。</p>
+        <p>「生主执杀，妖界大忌。」御龙淡淡言道，「你不可越权。将事情交给仲羿处理吧。」他顿了顿，有意看一眼自在君，「反正，也不需要花费什么力气。」</p>
+        <p>这话恰巧被仲羿听到，甩了御龙一个白眼儿，「废话！你们可不是不用花力气吗？！」话虽如此，他挑起无生，指向自在君，「这白眼狼交给我了！」</p>
+        <p>御龙此时却朝著仲羿暗中递个眼神，后者面上一副了然，更添几分胸有成竹的神情。</p>
+        <p>自在君留意了御龙的小动作，不由得心中直犯嘀咕，暗自揣测，莫非九华映曜，有什么弊端？他眼见仲羿首罗一戟挥过来，立马运起功法。本以为会像挡住无舍一样，将对方的无生弹开。</p>
+        <p>可是，事实上。无生一戟劈下，轻而易举地破开防守，利刃削过自在君肩头。他霎时瞪大眼睛，一脸不敢置信。快速反应过来，慌忙再次催动内元，运起九华映曜。然而，情况依旧同样。</p>
+        <p>自在君登时吓得面色煞白，眼角瞥见无生迎头落下，他就地一个抢背，滚到一旁。可惜还没等站起身，就感觉到腮边儿划过一道冰凉，上面还带著点儿黏稠。下一瞬，眼前已是无生戟的利刃，映照著他毫无血色的脸。</p>
+        <p>「我有御龙皇的一缕魂，还有龙血在身，你们杀不了我！」自在君强作镇定，「我的生身是不会死的！」</p>
+        <p>「那我试试！」仲羿首罗一副实践出真知的模样，毫不迟疑地一戟穿过对方心口。这才慢条斯理地言道，「白眼狼，你一定不知道，御龙当初复活你的时候，就已经留下后手。」</p>
+        <p>自在君目光投向御龙有涯，见对方双手交叠数次，剑指朝他一指。随即，他眼睁睁看著一尾金龙蹿出自己的生身，进入御龙皇眉心。他感觉自己下腹一痛，不禁一声痛呼，好似被割掉了什么？</p>
+        <p>紧接著，自在君又感觉好似被砍断双腿，然后是双臂，随之被拦腰截断。继而，他喊不出来了，他听不到声音了，他看不见那三个妖界上主了，它终于消散于天地间了。</p>
+        <p>劫厄退去，妖界回归太平。</p>
+        <p>无畏坐在一处石台，垂首捣鼓著什么，偶尔举起来，对著半空，反复瞧瞧。</p>
+        <p>御龙轻手轻脚地来到，一眼看到无畏手里好似拿著块儿石头。他一个闪身，冲到对方面前，一手夺过来，捏个粉碎，郑重言道：「以后没我在，你不许擅自创造妖界生灵。」</p>
+        <p>「哈？」无畏一脸茫然。小心翼翼从身后拿出一物，低声言道，「这里还有一个。」</p>
+        <p>御龙面色瞬变，也顾不得看清楚到底是什么东西，立马扑上去抢，「快拿给我！」他可不想这种劫厄再来一次，真的承受不住了。</p>
+        <p>「不给！」无畏连忙换到另一只手。眼见御龙换个方向，又扑上来。他再次换手，轻松躲过去。来往数次，他突然停住动作，任由御龙抓著手腕。慢慢把手送到对方面前，摊开手掌，「送给你。」</p>
+        <p>御龙呆愣一瞬，看著手里的饰物。乃是一尾小金龙卧在莲华之心，安详的憩息。他猛然反应过来无畏的话，不确定地问道，「你这句话，我可不可以延展性的解读一下？」眼中掩饰不住期待。</p>
+        <p>无畏面上不苟言笑，看了看四周。他上前一步，凑近御龙，飞速在对方唇边落下个蜻蜓点水般的吻，一本正经地问道：「你解读的对吗？」</p>
+        <p>御龙眼角带著笑意，可偏偏故作茫然地摇头，「昙花一现，我没理解清楚。」话才说完，腰间一紧，无畏拥著他，再一次亲身解释一番。这回正如他所想，无尽绵延，令其沉醉。</p>
+        <p>仲羿暗自疑惑，今儿的妖界怎么如此安静？几只小妖都不吵闹了。倒是远处的鳯凰双禽鸣叫地欢腾，仿佛有什么喜事儿似的。他眼角瞥见躲在一块大石后方的五只小妖，瞅著他们的后脑勺，狐疑问道，「喂！你们几个，看什么呢？」</p>
+        <p>「看生主和龙守在进行‘口舌之争’！」钰鑫全身一僵，明了身后来的是谁。五只小妖相互递个眼色，一起转身，手脚并用地把摩赦帝拉住，同心协力地抓著仲羿首罗，一道化光远去。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./223.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <span class="nav-btn disabled">
+          下一章 <span class="arrow">→</span>
+        </span>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 162 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 162 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 162 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：11 Jun 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,096 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>这不是鬼身也就罢了，无为著实没想到，会是一只大白蛇。看这蛇的体型，少说活了数千年，怎么会被困在这里？他低声和有涯言道，「看上去颇具灵性，这帮村民是如何抓到它的？」</p>
+        <p>「不要小觑了人的智慧。」有涯看著笼子里的大白蛇，「这家伙呆头呆脑，根本不知道危险临身。」</p>
+        <p>这一会儿功夫，围观人们已经达成一致，把它做成蛇羹，见者有份。两名大汉也已经在磨刀霍霍，随时准备动手。</p>
+        <p>就在此时，笼子里的大白蛇，突然拔高脖颈，「砰」地一声撞在铁笼顶端。一群人吓得哇哇大叫，相互推搡著向后跑去。两名大汉也连忙搀起老者，离开石台一些距离，哪里还有刚才嚷著要吃蛇羹地气势？所有人皆是一脸惊恐地盯著大铁笼。</p>
+        <p>白蛇缓缓垂下头，上面站著名三尺童子，光头赤膊，下身著一条火红色的扩腿儿裤子。远远看过去，像是一团在燃烧的火焰。他居高临下，双手叉腰，一双与白蛇同赤红的眼瞳，冷冷看著地上的一大群人。</p>
+        <p>这娃儿方一出现，无为便敏锐察觉出妖氛凝重。再看白蛇眼中温顺几分，已不难猜出两者关系。他低声对有涯言道：「好嘛，把白蛇主子招来了，这下难收拾咯。」并未察觉自己有些幸灾乐祸的意思。</p>
+        <p>一众凡人可不认得童子是妖。老村仰著头，长手搭凉棚，提高声调，「那是谁家的孩子？快快下来！太危险了！」言语中几许担心。</p>
+        <p>然而，大伙儿窃窃私语，皆是摇头摆手。没人知道，那是谁家孩子。</p>
+        <p>童子俯视著人们，在白蛇头上跳跃几下，露出个可爱地笑容，「你们看，我站在它的头上，也没有被吃掉，你们放了它吧。」</p>
+        <p>「小毛孩子懂什么？！」老村长厉声言道，「这妖物不知生吃了多少如你一般的娃儿，又烧毁了多少村落！如今好不容易抓到，绝对不可能放跑，一定要杀掉！」</p>
+        <p>童子先是蹲下身，拍拍白蛇的头，像是在交流著什么。继而他站起身，笑嘻嘻问道：「老伯伯，你说它吃了人，又说它烧毁村落，可都是你亲眼看到的？！」</p>
+        <p>「这事儿闹得沸沸扬扬，大伙儿都知道！」老村长转身看一圈儿其他人，「既然不是你们任何一家的孩子，那肯定就是这蛇妖故意变化出来的，不必再理会。」他对两名大汉吩咐道，「你们两个都把刀磨锋利点儿，准备动手！」</p>
+        <p>无为目光紧紧盯著白蛇头顶的小妖童，一手拉著有涯悄然后退，同时言道：「小妖怒了，小心点儿。」</p>
+        <p>「这些人一心想死，是拦不住的。」有涯一时口快，忽地惊觉话不对，想收回已经晚了。</p>
+        <p>无为手上用力一攥，「说什么呢？！小妖童如果动手，咱们便上去阻止！」</p>
+        <p>「众目睽睽之下，你准备怎么阻止？」有涯不紧不慢地提醒著。</p>
+        <p>闻言，无为面上一怔，看了看四周人们，一时犯难。眼角瞥见石台下的破布罩子，心中有了主意。</p>
+        <p>小妖童居高临下，怒视著围绕在铁笼外面的数百人们。双拳紧握，身上皮肤渐渐透著异样的赤色，狠狠言道，「无知凡人，不识好歹！那便感受业火焚身的滋味吧！」他双手合十，张口吐出火焰。</p>
+        <p>一看娃儿能够吐出火燄，人们顿时慌了神儿。老村长高声喊道，「这也是个妖物，快打死它，把它打死！」</p>
+        <p>有几个胆子大的，抄起各种乱七八糟的家伙事儿，统统丢向铁笼。然而，遇到火，便全部被烧成灰烬。</p>
+        <p>烈燄所过之处，融化铁笼，小妖童一只手掌从左向右一划，铁棍噼里啪啦掉在地上。他大喝一声，「刹迦！出来！」白蛇猛然向上一蹿，身形一展，撞碎了铁笼，尾端用力一甩，又将地上石台拍得粉碎。</p>
+        <p>这可吓坏了围观的人们，一个个不管不顾，争先恐后地四处逃窜。两名大汉也早已丢了手上的刀，跟著人群跑远。唯有年迈的老村长，脚步颤颤抖抖，一边走，一边喊，「妖怪！妖怪吃人啦！你们等等我啊，等等我啊！」</p>
+        <p>白蛇脱困，扭动著巨大的身形，说过之处，一片狼藉。小妖童立在白蛇头上，全身被熊熊火燄包围著，眼中赤瞳透亮，盯著仓惶奔逃的人们。他一手拍拍蛇头，「刹迦，烧死他们！」</p>
+        <p>无为和有涯已经趁著人群一阵躁动的时候，分路摸到破布罩子两边。两人相互打个手势，各自拉著破布罩子的一角，同时施展身法，掠上半空。</p>
+        <p>妖童正专注著逃窜的人们，抬首看到一个巨大的黑影。他双手交叉在身前，口中再次吐出火燄。</p>
+        <p>破布罩子还没落下，已经被烧出个大窟窿，不一会儿，便成了灰烬。</p>
+        <p>无为狠狠一甩手，化出施无畏。一招失利不说，反倒成功引起小妖童的注意。</p>
+        <p>只见小妖俯首看著地上两个，露出个可爱的笑脸儿，笑嘻嘻地下令，「刹迦，烤熟他俩，你就有晚饭吃了！」大白蛇轻轻晃动一下脑袋，找到目标，口中芯子一吐，带出一道火焰。</p>
+        <p>两人纵身一跃，灵巧地避开。无为昂首看上去，对方有蛇，又站那么高。若想打，就必须跃上半空。即便跳上半空，打起来，也是束手束脚，施展不开。</p>
+        <p>小妖嘿嘿一笑，「身手不错嘛！那就再接我一招！」说罢，白蛇口中又吐出一道火燄。</p>
+        <p>无为就地一个滚翻，提起施无畏，纵身一跃，凌空两个翻身，立在白蛇身上。他正疾步往上冲，却忽视身后。腰间一紧，已是被蛇尾缠住。一个天旋地转，被甩出三丈开外。</p>
+        <p>有涯一个箭步，冲到无为身边，「你怎么样了？」</p>
+        <p>「没事儿！」无为咬著牙站起来，提棍指著半空，「小崽子！有本事你下来！」</p>
+        <p>小妖玩心大起，冲著无为做个鬼脸儿，「有本事你上来啊！你上来抓我啊！」</p>
+        <p>无为登时气结，回首看到远处人们已经逃得差不多了。他一手握紧施无畏，暗自运劲。就在小妖一脸得意的时候，他抓准时机，猛然向上一冲，直奔白蛇头顶而去。</p>
+        <p>「刹迦！」小妖大喝一声。白蛇闻声，倏然拔高身形，向旁边一扭。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./161.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./163.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 001 章 醉后爱上竹马 · 短篇合集 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">短篇合集</a>
+          <span class="sep">/</span>
+          <span>第 001 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 001 章</span>
+          <span class="chapter-name">醉后爱上竹马</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：11 Nov 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 1,511 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 4 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p>周明杰被优化了，一个电话叫来竹马吴宗翰，两人喝得五迷三道……</p>
+      </div>
+
+      <article class="chapter-content">
+        <p>周明杰宿醉醒来，一手揉着睁不开的眼睛，一手去摸手机，摸到一个软乎乎的东西。</p>
+        <p>他勉强把左眼睁开一条缝，继而猛地睁大眼睛，缓缓转头，一脸不可置信。</p>
+        <p>他的身边躺着个人，他的二十年好友，吴宗翰。</p>
+        <p>他摸到的正是吴宗翰的手。</p>
+        <p>吴宗翰没穿衣服，半个肩背露在薄被外面，白皙的皮肤，有几处红印。</p>
+        <p>周明杰低头看了一眼自己，情况好不到哪里去。</p>
+        <p>他悄悄掀开被角，感受到一丝凉意，下一秒盖了回去。</p>
+        <p>两人的衣裤全扔在地上，远处是矮桌，桌上桌下七八个酒瓶子。</p>
+        <p>周明杰伸手试了几次，摸不到地上的裤子。他拽着被角遮住腰身，一点一点往外挪。</p>
+        <p>一米五宽的床，挤着两个大男人，两米宽的薄被，正随着他的拽动，逐渐偏移。</p>
+        <p>周明杰听到一点动静，连忙转头看向吴宗翰，腾地一下红了脸。</p>
+        <p>他只顾着往外拽，吴宗翰的屁股蛋子暴露在空气中。</p>
+        <p>他赶忙把被子拉回去，正在给吴宗翰盖。</p>
+        <p>吴宗翰睁开眼睛，看着他，「嗯？」</p>
+        <p>周明杰的手跟着一抖，薄被一角落在了吴宗翰身上。</p>
+        <p>两人盯着对方几秒钟，不约而同地避开对方视线。</p>
+        <p>屋子里没有一丁点儿声音。</p>
+        <p>周明杰努力的回想，昨晚到底对吴宗翰做了什么？做到了什么程度？暗自懊悔不该喝酒，既然喝了酒，就该把吴宗翰赶走，而不是同意留宿。</p>
+        <p>吴宗翰翻了个身，掀开被子，光溜溜地下床。</p>
+        <p>周明杰的视线落在吴宗翰臀部，立马移开，干咳了两声。</p>
+        <p>「你的。」吴宗翰拎着条平角裤，站在他面前。</p>
+        <p>周明杰感觉脸上比发烧还热得厉害，一把抓过去，依旧没敢看吴宗翰，「咳咳……你先把裤子穿上。」</p>
+        <p>吴宗翰吹了个口哨，「啧，我倒是想穿。」他拎起散开的布条，「这还能穿吗？」</p>
+        <p>周明杰穿上裤子，瞟了一眼吴宗翰手里，难掩尴尬，「那个……我有新的，给你拿一条。」</p>
+        <p>说着，匆匆走到衣柜前。</p>
+        <p>「还有外裤和背心。」吴宗翰语气轻飘飘，像是在指挥家里佣人。</p>
+        <p>周明杰闻言，眼睛瞟向地上，倒吸一口凉气。</p>
+        <p>他把衣裤放在床边，一巴掌拍在脑门儿上，「我昨晚喝多了。我们……」</p>
+        <p>「嗯。」吴宗翰只穿了短裤，躺回床上，翘着二郎腿刷手机，仿佛什么都没发生过。</p>
+        <p>「我先去洗个澡。」</p>
+        <p>周明杰一头扎进了洗手间。</p>
+        <p>温水从头上淋下来，冲散了他脑子里最后的酒意。随之，昨夜的记忆清晰浮现于脑海。</p>
+        <p>他对吴宗翰做过的一言一行，一举一动。吴宗翰好像躲了，又好像没躲，好像推拒了，又好像是迎合了……</p>
+        <p>周明杰使劲儿拍打着脑袋。他更想给自己一巴掌，却又怕吴宗翰看到他脸上莫名多个巴掌印子。</p>
+        <p>印子……</p>
+        <p>他不禁想起吴宗翰身上没有消散的红印痕迹。</p>
+        <p>「咔！」洗手间的门被打开了。</p>
+        <p>吴宗翰一步一晃地走进来，冲他吹了个口哨。</p>
+        <p>周明杰早已背过身，「你进来干什么？」</p>
+        <p>「你看不到？我在上厕所。」</p>
+        <p>吴宗翰按下水闸，却没有出去，反而拉开了玻璃门，走了进去。</p>
+        <p>「喂！你又进这浴室干什么？」周明杰退到了墙边，两手捂着重要部位，「我还没洗完。你先出去。」</p>
+        <p>吴宗翰置若罔闻，走到周明杰面前，伸出一只手，擦着周明杰的皮肤，打开了水阀。</p>
+        <p>温水从四面八方喷涌而出，两人瞬间全身湿透。</p>
+        <p>「哇哦！还是你这个自带水压按摩的给劲儿，我考虑给我家也改成这个。」</p>
+        <p>吴宗翰仰着头，张来双臂，一副舒服得不得了的模样。</p>
+        <p>周明杰的视线下移，落在吴宗翰的腰间。</p>
+        <p>唉，这小子又把裤子弄湿了，一会还要再给他找一条新的。</p>
+        <p>「嗯？」吴宗翰忽然凑到周明杰耳边，轻声低语，「你看什么呢？」</p>
+        <p>周明杰嗖地抬头，目光撞上吴宗翰上扬的嘴角。</p>
+        <p>他定了定心神，「那就给你先洗，我出去了。」</p>
+        <p>话音刚落，吴宗翰抬起两只胳膊，把他禁锢在跟前，「做都做了，你躲什么？」</p>
+        <p>水幕之中，吴宗翰极具魅惑的声音，再次撩动了周明杰的心神。</p>
+        <p>吴宗翰那张令人疯狂的脸，在他面前渐渐放大，那张薄唇几乎要贴到他的鼻尖，却硬生生地停住了。</p>
+        <p>下一瞬，吴宗翰的嘴角勾起一抹笑意，挪到他的唇边，吻了上去。</p>
+        <p>周明杰抬了抬手，拥住了吴宗翰。</p>
+        <p>唇上的触感，与昨夜相比，带有无尽的温柔。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <span class="nav-btn disabled">
+          <span class="arrow">←</span> 上一章
+        </span>
+        <a href="./002.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 046 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 046 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 046 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：15 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,083 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>画面一开始，就是饭团的惨叫，三只狼围着它，狼爪、狼嘴、狼头都沾着些血迹。下一秒，一只狼扑上来，画面开始摇晃，是一狼一狗打起来了，很快，另外两只也凑上来。</p>
+        <p>沈知遇看得揪心，脑子里立刻想到，按照少年的说法，大概就是在这里把饭团救下了，是什么时候救的？怎么还没又出现？</p>
+        <p>就在这时，一只体型健硕的藏獒扑近画面，一口咬住其中一只狼，用力一摔。</p>
+        <p>画面方向又变了，是饭团倒下了。</p>
+        <p>沈知遇不再往前看了。</p>
+        <p>第二天清早，她刚刚睁开眼，目光就被桌上的记录仪吸引。</p>
+        <p>她昨晚逃离似地钻进被窝，没关电脑，也没拔数据线。</p>
+        <p>上午，她重新坐在电脑前，点开设备，输入密码。</p>
+        <p>这一次，她没有再进入「event」文件夹，而是在外层，点开日期最早的视频。</p>
+        <p>画面一开始，是她熟悉的客厅，熟悉的沙发，然后是一张熟悉的脸。</p>
+        <p>邵骏邕抱起饭团，坐在沙发上，盯着摄像头，「我们来试试你的新玩具。」</p>
+        <p>说完，他拿起一本厚厚的小尺寸说明书，看看说明书，摆弄摆弄镜头。</p>
+        <p>饭团不太配合，可能是因为戴上新东西，不习惯，脑袋摇来摇去。</p>
+        <p>「摇吧，摇吧。你使劲儿摇，我正好试试稳定性怎么样。」</p>
+        <p>邵骏邕拿起手机，点开配套APP，查看录制的视频，「效果不错！摘下来吧，过几天带你进藏。」</p>
+        <p>记录仪被放在茶几上。</p>
+        <p>沈知遇看到饭团身上还穿着那件小衣服，不由得笑了。</p>
+        <p>她想起邵骏邕的话，也想起那天不但给饭团画了，也给饭团主人画了一张。</p>
+        <p>播放器自动切到下一个视频。</p>
+        <p>记录仪还在那个位置，还是那个角度。</p>
+        <p>画面里，邵骏邕抓着饭团，「过来，脱下来，洗洗！这衣服被你蹭太脏了！」</p>
+        <p>饭团又是扭又是跑，又是啃咬，又是打滚儿，死活不肯让邵骏邕脱，冲着邵骏邕叫了起来。</p>
+        <p>「对对对。」邵骏邕无奈地按着饭团，「这是沈大设计师给你的，那也该洗了，要生虫子了！」</p>
+        <p>沈知遇噗哧笑出声。</p>
+        <p>邵骏邕拿起记录仪。</p>
+        <p>下一秒，画面一黑。</p>
+        <p>沈知遇的心跟着一瞬间失落。</p>
+        <p>视频换到下一个。</p>
+        <p>这次是饭团在车里，在副驾驶的视角，旁边驾驶位的邵骏邕正在开车。</p>
+        <p>这是一辆黑色越野车，车内简约大气，中控大屏上面，有一个支架，固定着一个运动相机。</p>
+        <p>车里音响放着舒缓的音乐，邵骏邕跟着哼起来。</p>
+        <p>这时候的位置，还在普通的高速路段，偶尔一个车超过，偶尔他超过别的车。</p>
+        <p>一连十几个视频都是这样的情况，高速、开车、音乐、人与狗的对话。</p>
+        <p>沈知遇嘀咕一句，「难怪他会带狗去，孤零零一个人，三千多公里没人说话，想想就凄惨。」</p>
+        <p>沈知遇关掉播放器，按照文件名，寻找时间跨度比较大的视频点开。</p>
+        <p>这个视频还是在车里，但是车没动，邵骏邕抱着笔记本，饭团的前爪偶尔抢占镜头。</p>
+        <p>邵骏邕在噼里啪啦敲键盘，屏幕里是暗黑风格的编辑器。</p>
+        <p>沈知遇冒出一个想法，他居然一边自驾，一边接私活？</p>
+        <p>她仔细观察画面里的屏幕，原来是是邵骏邕做出来的那个AI工具。</p>
+        <p>邵骏邕正在频繁切换，一会儿又拿出手机，输入验证码。</p>
+        <p>饭团突然叫了一声，表达被冷落许久的不满。</p>
+        <p>「别闹，我整完这个。」</p>
+        <p>「没想到消耗这么快，看开沈大设计师最近活儿挺多，收入应该不错。等找到她，叫她请咱俩吃饭。」</p>
+        <p>饭团叫了一声，里笔记本屏幕更近了。</p>
+        <p>沈知遇看清楚，是一个后台，有充值、有消费、还有详细的订单信息，基本上都是哪年哪月哪日，几时几分几秒，用户谁谁谁，做了什么什么操作，消耗多少多少代币。</p>
+        <p>她看着那些日期，恍然大悟。</p>
+        <p>那段时间，正是她一边给老章打着白工，一边在网上拼命接私单，无论大小，给钱就干。</p>
+        <p>那是她的想法很简单，反正都是AI工具跑出来的，纯纯零成本高回报，不干是傻子。</p>
+        <p>「余额不多了。咱们给沈大设计师续上，免得过两天深入藏区没有信号。」</p>
+        <p>此时，沈知遇才知道，邵骏邕的这个AI工具也是接入了多个大模型，是需要消耗代币的，而邵骏邕从未提过，即使曾经被她跑光代币，邵骏邕也是默默的补上，没有说过一个字。</p>
+        <p>几个视频之后，车窗外的景色是她见过的藏区模样，随处可见的五色经幡，稀稀拉拉的小佛寺。中控大屏的地图显示，天气状况恶劣，而车还在往更深出开。</p>
+        <p>饭团叼着那幅一人一狗海边跑步的画，朝向邵骏邕。</p>
+        <p>邵骏邕一脸得意，「怎么样，裱进去了，你总不至于把玻璃咬碎吧？」</p>
+        <p>饭团叼着画甩甩头。</p>
+        <p>「找她？你想去找沈大设计师？」</p>
+        <p>饭团哼唧一声。</p>
+        <p>「别想了。哪儿找去？你连她家地址都不知道。」</p>
+        <p>邵骏邕顿了顿，看一眼饭团，「嘿！你别说。我怎么忘了，你是边牧，是狗中智商霸主。说不定你还真能找到她。」</p>
+        <p>饭团叫了两声。</p>
+        <p>「我怎么没想到呢？等回去，我好好利用利用你的天性。我们去找沈大设计师，给她一个惊喜。」</p>
+        <p>饭团又叫了一声，一只前爪按在玻璃上。</p>
+        <p>邵骏邕没再说话，专心致志开车。</p>
+        <p>车窗外，雪不大，但是风吹着雪满天席卷，根本看不清前路。</p>
+        <p>沈知遇紧张地握拳，对着视频嘀咕，「别开了啊！找地方呆着！这种天气怎么能走？!」</p>
+        <p>她用三天时间，看完所有视频，又用了三天时间，平复了心情。</p>
+        <p>她把所有视频上传到云盘，设置访问密码为「1024」，再小心地收好记录仪，装进背包的内部防撞小袋里。</p>
+        <p>看完这些视频，她对邵骏邕算是多了一些了解，更是从这些视频里找回一点儿初心和情怀。</p>
+        <p>拉开许久没有有拉开的窗帘，打开许久没有开过的窗户。</p>
+        <p>今日是个大晴天，凉风徐徐。</p>
+        <p>屋外，施工队紧锣密鼓，不分白天黑夜的赶工，最早被推翻的几处已经盖起商业化模板房，充满了工业流水线感，丝毫没有了原本藏族特点。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./045.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./047.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

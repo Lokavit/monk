@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 001 章 古刹 · 普渡寺冒险 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">普渡寺冒险</a>
+          <span class="sep">/</span>
+          <span>第 001 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 001 章</span>
+          <span class="chapter-name">古刹</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Oct 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,039 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>清晨，阴雨朦朦，万籁俱寂。</p>
+        <p>班朝辰一身背心搭短裤，躺在老和尚的破摇椅中，翘着二郎腿，右手拿着一把芭蕉扇，有一下没一下地呼嗒。</p>
+        <p>偶尔重重拍自己一下，捏起身上沾血的蚊子尸体，弹到地上。</p>
+        <p>远处传来急促的脚步声，他微微偏头。</p>
+        <p>宗静尘一身早被淋透的灰布僧袍，两手各提一只木桶，桶里的水很满，随着步伐晃动，一下一下往外溢。</p>
+        <p>见宗静尘走近，班朝辰开口唱道： 「一个呀和尚挑呀么挑水喝 「嘿嘿 挑呀么挑水喝 「咿咿 挑呀么挑水喝……」</p>
+        <p>宗静尘提着水，从班朝辰身边走过，沿着回廊一直走，拐进了斋堂。</p>
+        <p>「啪！」</p>
+        <p>「哎呀！谁打我？！」</p>
+        <p>班朝辰捂着脑袋跳起来。</p>
+        <p>老和尚就站在他身后，手里拿着一把戒尺。</p>
+        <p>「秃驴！你怎么还打人？！」</p>
+        <p>「啪！」班朝辰脑袋上又挨了一下。</p>
+        <p>「嘶……」他捂着头躲开几米远，呲牙咧嘴地揉着后脑勺，「我这是要考清北的脑子，你给我打坏了，我爸跟你没完！」</p>
+        <p>老和尚没说话，躺在了摇椅上，闭目养神。</p>
+        <p>「你要椅子你就说，打人算怎么回事？」班朝辰靠着廊柱，「看你这样，一定是那种声称『放下屠刀立地成佛』，实则在寺里躲债的假和尚。」</p>
+        <p>老和尚一副老僧入定的模样，眼皮都没抬。</p>
+        <p>班朝辰揉了柔生疼的后脑勺，找了个避雨的地方坐下，拿出手机，启动游戏。</p>
+        <p>三天前，他被亲爹丢在这深山老林的古刹，见到这一老一小两个和尚。</p>
+        <p>小的像个木头，连句话都没有。</p>
+        <p>老的面目可憎，右腿瘸着，还没了一只左胳膊。</p>
+        <p>班朝辰当晚就收拾东西逃跑，刚出大门，听到山里狼嚎，他缩回了被窝。</p>
+        <p>第二晚又溜出山门，导航失灵，他被小和尚宗静尘捡回去了。</p>
+        <p>今晚，是他第三次下山计划。</p>
+        <p>他把从斋堂里打包的饭菜塞进背包，对宗静尘摆摆手，「小和尚，再见……哦，是拜拜，再也不见。」</p>
+        <p>班朝辰蹑手蹑脚沿着回廊走，路过转轮堂时，脚步放得更轻，朝里面看了一眼。</p>
+        <p>转轮堂里，烛火通明，一尊硕大的地藏佛像，下面是九层莲座，每一层都放着一排无名牌位，牌位前皆有一盏长明灯。</p>
+        <p>老和尚背对殿门，手里拿着个器物，一边沿着莲座走，一边给灯添油，嘴里念念有词。</p>
+        <p>班朝辰缩了缩脖子，猫腰快步离开。</p>
+        <p>有了前面两次的经验，他这次不但带了吃的，还带了一根棍子，既能拨开草丛，又能关键时候驱狼。</p>
+        <p>他沿着踩夯实的细长土路一直走，挥舞着手里的棍子，回头看一眼，古寺若隐若现，哼起了歌： 「一个呀和尚挑呀么挑水喝 「嘿嘿 挑呀么挑水喝 「咿咿 挑呀么挑水喝……」</p>
+        <p>「诶？！我为什么唱这首？木头宗静尘又不在这里……」</p>
+        <p>班朝辰嘀嘀咕咕，抬头远望，僵在原地。</p>
+        <p>前方，白雾蒙蒙，什么都看不见。</p>
+        <p>耳边，有阵阵风声，夹杂着奇怪的声音。</p>
+        <p>班朝辰攥紧手里的棍子，秉着呼吸，四下张望。</p>
+        <p>奇怪的声音越来越近，像是什么东西在半人高的草丛里穿梭。</p>
+        <p>一瞬间，班朝辰脑子里闪过寄居深山的动物，从狮子老虎到豹子黑熊……</p>
+        <p>他完全憋住呼吸，两只手抓着棍子，斜在身前，调整到最顺手的挥动位置，轻微沉腰，继续搜寻声音的来源。</p>
+        <p>声音更近了，像脚步声，但不太像人走路。</p>
+        <p>白雾之中，一个暗色影子，逐渐放大。</p>
+        <p>班朝辰定睛看去，全身汗毛都竖起来了，转身就往相反方向跑。</p>
+        <p>还没跑出去几步，踉跄一个跟头，重重摔在地上。</p>
+        <p>「啊！疼疼疼……疼死我了……」班朝辰就地翻了个身。</p>
+        <p>一束光芒，越来越亮，照在他身上，继而挪到他的脸上。</p>
+        <p>班朝辰用手挡了挡，看清楚来的人，松了一口气。</p>
+        <p>他站起身，拍拍身上泥土，跟在老和尚身后。</p>
+        <p>老和尚什么都没说，一只手拿着手电筒，一瘸一拐地走在前面，左边袖子空空，夜风一吹，呼呼哒哒。</p>
+        <p>班朝辰一会儿冲着老和尚做鬼脸，一会儿学老和尚的走路姿势，他一瘸一拐走了一会儿，甩了甩发酸的右腿，换回正常走路。</p>
+        <p>「喂！你怎么找到我的？」他问。</p>
+        <p>老和尚没回答，步频都没变。</p>
+        <p>「你跟我爸怎么认识的？ 「你们关系很铁吗？ 「宗静尘是你孙子吗？ 「你……」</p>
+        <p>老和尚停下脚步，手电筒的光束打在班朝辰脸上。</p>
+        <p>班朝辰被晃得睁不开眼，「干什么？晃瞎我了！」</p>
+        <p>「你爸把你送上来，是我的主意。」老和尚说。</p>
+        <p>班朝辰放下手，上前两步，躲开光束，「好哇！原来是你打乱了我的暑假计划。你叫我来干什么？我爸又凭什么听你的？」</p>
+        <p>「你爸送你来体验生活，暑假结束就接你回去。」</p>
+        <p>「体验生活？」班朝辰抬手指着古刹，「这儿？深山老林、穷山僻壤、前不着村后不着店，体验当和尚吗？我爸还等我传宗接代呢。」</p>
+        <p>「静尘去找你一次，我去找你一次。再有下次，」老和尚顿了顿，语气淡漠，「你等着在山里喂狼吧。」</p>
+        <p>班朝辰站在古寺门外，瞪着老和尚的背影，听到风中送来的狼嚎声，身体打了个寒颤，立马跑进寺里。</p>
+        <p>刚走到大殿，他就忍不住乐了。</p>
+        <p>宗静尘在菩提树下站着，还不是普通的站立，而是单脚站立，两手五指并拢，合十立在胸前，另一条腿沿着身体一侧上托，脚底板朝天，上面托着一个小香炉，里面一根缓缓燃烧的檀香。</p>
+        <p>「老和尚，」班朝辰笑着问，「他这大半夜的，练什么功呢？」</p>
+        <p>「静尘作为师兄，放任你出寺，必须站满三炷香。」</p>
+        <p>班朝辰脸上没了笑容，看向站成桩子的宗静尘，对方一贯地面无表情，两眼注视着前方，像是看他，又像是没看见他。</p>
+        <p>「他拦了，没拦住我。」班朝辰说，「跟他没关系。」</p>
+        <p>「没尽到作师兄的责任，就该挨罚。」老和尚冷冷地说。</p>
+        <p>「我都说了，跟他没关系！你要罚，罚我好了！」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <span class="nav-btn disabled">
+          <span class="arrow">←</span> 上一章
+        </span>
+        <a href="./002.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

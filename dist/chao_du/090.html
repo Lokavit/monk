@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 090 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 090 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 090 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：31 Mar 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,091 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>宿业关了网站，向车外张望。看到礼乐从商场里走出来，高高兴兴地和同学们挥手暂别。他正准备下车去帮忙拿包，后排车门开启，礼谌以及先一步下车，自然的接过礼乐手里的包，宠溺地拍拍对方，一同回到车上。</p>
+        <p>「哥，你们怎么也在这儿？」礼乐挨著礼谌，「等很久了吗？」</p>
+        <p>「凑巧。宿业把车停在这儿了。」礼谌关切地问，「今天的比赛顺利吗？」</p>
+        <p>礼乐点点头，翻著揹包：「小场面，成功晋级。接下来，就等著参加决赛了！」她拿出一个盒子，对主驾驶说，「业哥，手机呢？」</p>
+        <p>宿业讶异地看一眼后视镜，右手去摸手机。</p>
+        <p>「小妹，你不要打扰宿业开车。」礼谌的语气中，丝毫没有不悦。</p>
+        <p>「我知道啦。」礼乐随口答应著。一边拆开手里的盒子，一边身体前倾，拿到少女粉的折叠手机。然后把崭新的手机壳，扣在机身，满意地笑著，送到礼谌面前献宝，「哥，你看。挺合适的吧？你看这图，像不像你们做和尚的时候，念经的样子？」</p>
+        <p>宿业忍不住好奇，趁著等红绿灯的间隙，透过后视镜瞧一眼。少女粉的机身被全部包裹，手机壳上，一个脑袋圆圆，肉乎乎的小沙弥，一手拨著念珠，一手敲著木鱼。他不由得想到，礼谌在白鹿寺时，坐禅念经的模样。虽说没有敲著木鱼，但数珠的姿势，可谓是一模一样。</p>
+        <p>礼谌对小妹是一脸的无可奈何。他觑一眼主驾驶的宿业，出声提醒著：「绿灯了。」</p>
+        <p>礼乐靠在礼谌身上，刷著手机：「哥，咱爸就快回来了。出差这么久，等他回来，一定要先带他去医院做检查。」</p>
+        <p>宿业听著，莫名心慌起来。想起礼谌家主卧墙上的全家福，看起来还很年轻的男士，对著镜头，笑容和善。他在天地集团有些时日，没有见过董事长。只在跟随礼谌出去的时候，偶尔听人说起。</p>
+        <p>怎么办？要怎么面对董事长？要准备礼物吗？还是躲起来不见面？又或是，开蹓搬去沈泽那儿？！</p>
+        <p>他为此事纠结了几天，想要询问礼谌的意见，支支吾吾半晌：「那个……我……」</p>
+        <p>自从婉转拒绝了技术社群那位「合作伙伴」的屡次热切推荐工单，宿业的空闲时间明显增多。不必再为一个几千块的专案，忙碌到三更半夜。工作之余，有了更多时间，泡在技术社群，或者天地的书屋，学习新的技术，吸收新的知识。</p>
+        <p>回首看来，他才发觉，没有任何提升是小，忽略了作为一个私人助理的职责是大。而礼谌，除了提醒他注意休息之外，从未对此说过一字半句。</p>
+        <p>路过佛堂，看到里面的人，坐禅数珠，双目微阖。即使汗水从脸颊滴落到僧服上，亦能不移不动。他担心对方这样下去会中暑，忍不住劝道：「谌少，佛祖慈悯，不会看著他的弟子被热死。你不如先洗个澡，再来坐禅？」</p>
+        <p>礼谌似乎没听到，眼皮都没动一下。</p>
+        <p>他心道：「好吧，佛祖大概还没睁眼。我心慈悯，不会看著我佛被热死。」转身去拿来一条浸过水的毛巾，双膝跪在对方面前，小心翼翼地帮对方把汗擦掉。</p>
+        <p>才一触碰，礼谌赫然睁开眼睛，看清楚眼前的情况，伸手向他：「我自己来。」</p>
+        <p>「抱歉。我没想到会打断你。」话是这样说，心里却道，「唉。我还以为你已经神游太虚，不会受到外界影响呢？」他接过礼谌手里的毛巾，「你继续，我不打扰你了。」</p>
+        <p>对方重新做好，低声念著经文。</p>
+        <p>宿业站在佛堂门口，一手把著门框，悄悄向内望去。想了又想，还是不忍心礼谌这样闷著自己。他回房找出一把折扇，坐在对方身旁，手动为他的佛降降温。</p>
+        <p>炎热的下午，本就容易犯困。他一手托腮，一手匀速挥动。耳边是礼谌若有若无地念诵声，著实有些催眠。不知不觉，晃晃悠悠地打起盹儿来。</p>
+        <p>礼谌缓缓睁开眼睛，看著迷迷糊糊，还坚持摇著扇子的宿业，轻声说道：「困了就回房去睡吧。太热的话，就把你屋子里的空调开启。」</p>
+        <p>「没！」宿业使劲儿摇摇头，「年纪轻轻，哪来那么觉？！我……」他硬是把一个哈欠憋下去，掷地有声，「不困！」</p>
+        <p>「你最近好像回到正轨了。」礼谌起身收拾供养具。</p>
+        <p>「我不想给二手外包压榨。累死累活，做许多无意义，无积累的专案。那些，不是我想要的。」</p>
+        <p>礼谌换衣服的手，稍微一顿：「你知道自己想要什么了？」</p>
+        <p>「或许吧。」宿业挥著扇子，注意到对方一身的汗，想起沈泽说过，天地集团的健身厅里，有个泳池。他道，「去天地吗？我教你游泳。这种天气，就适合浸在水里。」</p>
+        <p>在一番软磨硬泡之下，礼谌终于点头同意，翻出两条新泳裤，递给他一条：「游泳不一定要去天地。我带你去天台。」</p>
+        <p>做为寄人篱下的私人助理，宿业谨守本分，从来不在别墅里乱闯。是以除了礼谌这边的二层楼之外，只有之前在裕阳的带领下，去过主楼一次。当时没来得及细看，就一头钻进娱乐室，打了半宿游戏。</p>
+        <p>这一次，他跟著礼谌，穿过浮桥，进入主楼二层，顺著扶梯上三层。仍旧没能有机会窥得全貌，被对方一拽，绕到扶梯后面，开启一扇门，直梯缓缓上升。</p>
+        <p>映入眼帘的是，湛蓝的天空与流云，偏西的太阳，阵阵的海浪，远处数只海鸥盘旋在海平线，发出好听的鸣叫。</p>
+        <p>偌大的天台，四周用栏杆围绕，全部用防爆玻璃间隔。向南区域，修葺地有瓦遮头；向东区域，几个落地遮阳伞，罩住每个休闲圆桌，和几把椅子；向西区域，则是几架沙滩躺椅。另外，在面向大海的两个角落，各自矗著几个望远镜。</p>
+        <p>最中间，是一个超大的私家泳池，水质清澈。一名身材修长，皮肤白皙的姑娘，穿著浅蓝色的泳衣，戴著遮阳镜，躺在浮板上，享受著日光浴。</p>
+        <p>没想到礼乐会在泳池里，宿业闪电般地转身，面上略有尴尬，低声说道：「我们还是换个时间再……」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./089.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./091.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

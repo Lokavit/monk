@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 043 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 043 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 043 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：12 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,039 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>羊群中，一头壮硕的原生藏獒沉稳踱步，眼神锐利，时不时冲刺跑动，驱赶乱跑的羊，动作迅猛有力，是这片草场真正的守护者。</p>
+        <p>而在少年的身侧，慢吞吞跟着一道黑白相间的身影，一跛一跛。</p>
+        <p>那只边牧体态消瘦，右眼睛彻底浑浊闭合，只剩下左眼孤零零睁着，后腿带着永久的旧疾，走路一颠一跛，步伐沉重又迟缓。</p>
+        <p>这里不属于它的天地，这里不是平原，也不是都市，它跟不上藏獒的矫健，只能安安静静跟在少年脚边，漫无目的地低头嗅着草地，温顺、稳健。</p>
+        <p>沈知遇的脚步骤然钉在原地，呼吸一瞬停滞。</p>
+        <p>视频截图中的模糊变得清晰，她盯着那道熟悉又残缺的身影，喉咙发紧，克制了无数遍颤抖，「饭团。」</p>
+        <p>她大声喊出来，短短两个字，落在空旷河谷里不算响亮。</p>
+        <p>放牧的少年看过来，牧羊的藏獒看过来，就连那些吃草的羊也纷纷抬头看向沈知遇。</p>
+        <p>只有那只边牧，像是失去了一只狗该有的敏锐，失去了一只狗该有的警觉。</p>
+        <p>「饭团！」</p>
+        <p>沈知遇又喊一声，声音里是压抑不住地颤抖。</p>
+        <p>她不相信，不相信饭团会忘了她！号称最聪明的狗，互相陪伴了半年多，怎么会不认得她！</p>
+        <p>唐杰见状，用清亮声音，喊出一句藏语。</p>
+        <p>少年高声应了一声。</p>
+        <p>「我们过去。」</p>
+        <p>沈知遇迟疑着点点头，跟着唐杰走过去。</p>
+        <p>脚下一步一步接近，目光根本离不开那只边牧，越是走近，看得越是清晰。</p>
+        <p>她百分百笃定，这就是饭团。</p>
+        <p>唐杰为两人翻译。</p>
+        <p>少年狐疑盯着沈知遇。</p>
+        <p>唐杰说：「他不相信，你有没有证据？」</p>
+        <p>沈知遇从手机点开一个文件夹，给少年看。</p>
+        <p>里面全是关于饭团的照片，夹杂着她和邵骏邕，包含她给饭团买的小衣服、给饭团的自画像，以及那张一人一狗海边跑步的手绘。</p>
+        <p>沈知遇说：「你帮我告诉他，我只是想知道，当初发生了什么事情？饭团在这里，它的主人……」</p>
+        <p>她突然顿住，大口吸几口凉气，「它的主人没了，它知不知道？」</p>
+        <p>少年索性坐下，搂着边牧，对唐杰说了一大堆。</p>
+        <p>沈知遇等得心焦。</p>
+        <p>唐杰给她翻译，「他说，不知道狗的主人。这只狗是他两年前捡到的，当时这只狗浑身是血，惨叫连连，被狼围攻了，那只眼睛就是被狼挠瞎了。是这个少年的藏獒赶走了狼，把这奄奄一息的狗给抱回家了。」</p>
+        <p>少年看唐杰不说了，又说了一堆藏语。</p>
+        <p>唐杰继续翻译给沈知遇听，「这狗养了大半年才勉强保住命，只是瞎一只眼，腿也好不了了。」</p>
+        <p>沈知遇没忍住眼泪，只有她知道，饭团不仅是身上伤痕累累，它已经不知道自己叫「饭团」了。</p>
+        <p>那个被从小喊到大的可爱名字，已经不再它的记忆中了。</p>
+        <p>如果，邵骏邕在这里的话，不知道能否唤起饭团深处的记忆。</p>
+        <p>如果……</p>
+        <p>没有了，没有什么如果了。</p>
+        <p>时至傍晚，天光变灰，河谷起了冷风，沈知遇失魂落魄地走着。</p>
+        <p>前面是吃饱归家的羊群，是尽职尽责的藏獒，是慢悠悠挥鞭的少年，是一瘸一拐的边牧，是一路沉默的唐杰。</p>
+        <p>少年回到家，给两人倒了奶茶招呼，然后走到小屋子。</p>
+        <p>他打开一个布包，里面是一堆破旧的东西。</p>
+        <p>唐杰说：「这些是从这只狗身上拿下来的，他怕哪天狗主人找来，所以没有扔。」</p>
+        <p>沈知遇翻着几样东西。</p>
+        <p>一个GPS项圈，是她亲眼见到邵骏邕给饭团戴过，说是怕野到没影，有这个不怕饭团跑丢。</p>
+        <p>她当时还笑着说：「我感觉应该戴你脖子上，没听说过狗能走丢。你有没有听过一个故事，说是一个人想丢掉自己养的狗，走了很远很远的路，把狗丢下。结果，他迷路了，狗带着他找到了家。」</p>
+        <p>一个很小的记录仪，摄像头没了，外壳几处碎裂，像是遭受过一场惨烈地严刑拷打。</p>
+        <p>这是她第一次见，但她不陌生，在城市养狗，有些人会给自己家的狗带一个，为的是避免有人狗纠纷的时候，说不清楚。有了记录仪，只要回看视频，谁的问题，一清二楚。</p>
+        <p>还有一个不成形的东西，像是固定带。</p>
+        <p>沈知遇打开记录仪的卡仓，里面有一张512G的闪存卡，直觉这张卡里记录着发生的一切。</p>
+        <p>当晚，他们没能走，在少年家里借住一宿。</p>
+        <p>这不是沈知遇计划的，是天从人愿。</p>
+        <p>次日清早，沈知遇准备离开，只拿走了记录仪。</p>
+        <p>她依依不舍地离开，最后深深看一眼趴在院子的饭团。</p>
+        <p>不，已经不是饭团了，是一只边牧。</p>
+        <p>车子发动，她转头看向窗外。</p>
+        <p>院子角落，缓缓站起来的边牧身形猛地一僵。</p>
+        <p>它抬起头，用仅剩的一只眼睛精准锁定远处这辆皮卡，以及皮卡副驾驶的人影，耳朵唰地直立。</p>
+        <p>倏然，像是沉寂麻木的躯体被瞬间被唤醒了沉睡两年的记忆，所有的迟钝、萎靡、漠然尽数褪去。</p>
+        <p>它不顾跛痛的后腿，四爪抓地，一瘸一拐、跌跌撞撞，拼尽全力朝着她的方向狂奔而来。</p>
+        <p>跑两步踉跄一下，却丝毫不停，风声裹挟着它急促的喘息。</p>
+        <p>跨越整片草甸，跨越两年的别离与苦难，直直奔向久违的故人。</p>
+        <p>「停一下！」沈知遇看着那道拼命奔赴自己的小身影，心脏被狠狠攥碎。</p>
+        <p>唐杰停下车，顺着沈知遇的目光看过去，安静望着这一幕，一言不发。</p>
+        <p>「这狗不会跟你走的。」他说。</p>
+        <p>就在唐杰说完这句话的同时，饭团停住了，停在了少年家的大门外，盯着这辆皮卡。</p>
+        <p>她很想骂唐杰一句：「乌鸦嘴！」</p>
+        <p>话出口，变成了，「开车吧。」</p>
+        <p>事实上，她原本就没有想要带走饭团，因为这只边牧已经不是饭团了。</p>
+        <p>它在这里生活了两年，得到少年一家人的照顾。</p>
+        <p>边牧是一只聪明的狗，当初邵骏邕把它从垃圾箱里拣出来，救活它的命。</p>
+        <p>而今，少年将它从狼嘴里夺下来，同样救活它的命。</p>
+        <p>它将会竭尽所能，为少年守护这个家。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./042.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./044.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

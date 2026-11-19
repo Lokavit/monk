@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 078 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 078 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 078 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：19 Mar 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,051 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>宿业从头到尾听完，受益匪浅。这才注意到，礼谌不知道什么时候离席。他连忙起身，在偌大的会场里找人。心道：「只顾听分享，竟然把我侍奉的佛给丢了。」他拿出羞于见人的手机，拨打对方的电话。</p>
+        <p>忽地，肩头搭过来一只手，他警觉地一个闪身，转头正要抡起手刀，看清楚对方是谁，眉头舒展：「你去哪儿了？我找你半天。」他语带抱怨，结束通话电话。</p>
+        <p>礼谌浅笑著：「我看你在专心学习，就过去发展发展集团业务。怎么样，不虚此行吧？」</p>
+        <p>宿业笑著点点头，情不自禁，滔滔不绝地开始讲述。他听了一下午，有一肚子的经验总结想要分享，完全忽略了礼谌并非计算机专业，抓著对方疯狂输出。</p>
+        <p>礼谌听了一路，想起裕阳曾经说过的话，心道：「对技术的沉迷和追求，才是你的人生目标吗？」</p>
+        <p>当晚，宿业开启笔记本，把今天在研讨会吸收到的技术经验，整理成文件。然后，他开启搜寻引擎，查到会上多数人提及的技术论坛，里面好多技术性大佬的文章和作品。他立即注册了一个帐号，一边学习，一边在问答区，帮助技术小白，答疑解惑。</p>
+        <p>「宿业，早点休息。」礼谌站在客卧门口，「明天我们去医院体检。」</p>
+        <p>早已把体检的事情忘到九霄云外的宿业，硬著头皮，跟著礼谌来到医院。他故意与对方隔开几个人，遮遮掩掩地拿出证件，领取体检表。</p>
+        <p>没想到，礼谌站在旁边等著他，说道：「走吧，一起。」</p>
+        <p>宿业心中一惊，看著单子上的几个大专案，心情复杂。如何因为一次检查，让他在沈泽面前暴露隐私的情景，再次浮现于脑海。</p>
+        <p>虽说礼谌应该不懂医学。但是，难保医生见到他身上的离奇状况，不会说点儿什么。更重要的是，有些事情，他并不想让礼谌知道。</p>
+        <p>他大脑高速运转，找出个自以为合理的理由：「我去洗手间。你先走吧。」</p>
+        <p>「我等你。」</p>
+        <p>「不必！」他不假思索地拒绝，察觉礼谌眼中充满疑惑，连忙解释，「我要蹲一会儿，不能耽误你的时间，你就先去检查吧。」</p>
+        <p>礼谌看著宿业，轻叹一声：「那好吧。我先去做检查。你稍后做完检查，就回到这里，等著拿咱俩的体检报告。如果我没回来，就在这里等我一会儿。」</p>
+        <p>宿业冲礼谌点点头：「知道了，你快去吧。」他抱著肚子，走向洗手间。</p>
+        <p>礼谌望著宿业的背影，陷入沉思：「以体检的名义带他来医院，就是想推翻心中的猜测。他却找出这样蹩脚的理由，拒绝一同体检。到底是在欲盖弥彰些什么呢？」</p>
+        <p>他做完全部体检专案，乘电梯上楼，来到精神科。穿过走廊，走到尽头，停步在主任办公室门口。探头瞧一眼里面，确定要找的人在这儿，礼貌叩门，笑著打招呼：「周主任，您好。」</p>
+        <p>周主任闻声抬头，看到门口的礼谌，满面笑容，「谌谌啊，快进来。」他一手拉过凳子，示意对方坐下，关切问道，「你父亲身体还好吗？他可有日子没来复查了。」</p>
+        <p>「我父亲出差去了，还需要一阵子才能回来。」</p>
+        <p>周主任叹气，摘下眼镜：「你父亲这个人啊，就是不肯好好修养身体。他自己什么情况，他不清楚吗？才出院多久，又开始不顾身体的出差。钱再多，能买命吗？」他恨铁不成钢地絮叨几句，话锋转回关切，「他出差，药都带齐了吗？也不说过来，让我给他开个处方，万一路上药不够怎么办？」</p>
+        <p>礼谌淡淡一笑：「我替父亲谢谢您，始终记挂著他的身体。」</p>
+        <p>「我们做医生的，就这么点儿事儿。」周主任给礼谌到一杯水，「你过来有什么事情？」</p>
+        <p>礼谌恭恭敬敬接过来：「我来做个体检，顺道儿过来看看您。」</p>
+        <p>「还有呢？」身为精神科主任的他，只需一眼，就知道对方心里有事儿，「有话就说。大小伙子，吞吞吐吐的。」</p>
+        <p>礼谌一手托著纸杯，一手伸出个手指，在杯身来回滑动，踌躇片刻，仔细描述出在宿业那儿看到的药盒。</p>
+        <p>周主任听完，面色凝重，戴上眼镜，在键盘敲一阵，冲他招招手，说道：「你来看看，是不是这个样子？」</p>
+        <p>他连忙起身，看一眼萤幕上的药品图片，面上一怔，略微点点头：「我查过，这是雄性激素注射剂。」</p>
+        <p>「是的。 」周主任点点头，「你为什么问这个？」</p>
+        <p>良久的沉默。礼谌仿佛陷入内心挣扎，略微低声说：「我有一个朋友，似乎在长期注射这个药。我想问问您，他是我父亲那样的情况吗？」</p>
+        <p>周主任吃惊不小：「 这我可不能空口乱断症。要见过，聊过，才能推断。」他顿了顿，露出讶异神色，「你的朋友，难道是自己买药，自己给自己注射吗？」</p>
+        <p>礼谌迟疑一瞬，点点头。</p>
+        <p>「简直是胡闹！」周主任沉下一口气，面上带著几分不悦之色，「无论是否有什么病症，这样做是很危险的。不是专业人士，怎么能自己给自己注射？这类激素药物，多数是肌肉注射。他自己乱来，万一扎错位置，会有瘫痪的风险！」他越说越激动，一手敲著桌子，沉思一会儿，「这样吧，你让他来找我。不用走挂号，直接过来，我和他聊聊。」</p>
+        <p>礼谌听到后面，已是吓出一个激灵：「您稍等，我这就去把他带过来。」</p>
+        <p>「阿嚏！」宿业揉揉鼻子，靠回椅背，一脚蹬在椅子边缘，悠哉哉地等著领报告。目光偶尔落在来来往往的人们身上，看著这些老幼病弱的人，不由得皱著眉头。他有意避开，转首望向对面墙面，被内容吸引。</p>
+        <p>墙上贴著的，是一张关于志愿者如何登记器官捐献的说明。既有传统的医院登记流程，也有符合科技化时代的网上登记流程。他一边读著上面的内容，一边拿出手机，根据流程，找到人体器官捐献管理中心。直接用手机注册帐号，登记遗体捐献。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./077.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./079.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 048 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 048 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 048 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：17 Feb 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,088 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>难兄难弟的哥俩儿，在家养了三天伤，相互扶持，深刻体会到协作的重要性。宿业靠在床头，抱著笔记本，萤幕停在白鹿寺网站。他有一下没一下的刷著，一礼能去哪儿呢？回家了吗？</p>
+        <p>想到当初录入档案的时候，对于一礼出家前，除了有个名字和年龄之外，其他项皆是空白，连个电话都没留下。他不禁暗自叹气：「我该上哪儿找人呢？」</p>
+        <p>「我去公司一趟。」沈泽说著，匆匆起身穿衣服，「大雇主提前去我们公司了，老板喊我去救火。」</p>
+        <p>「你们公司，没你不转了啊？」宿业嫌弃的瞥一沈泽，明明身上的伤还没好，脸上还贴著纱布呢，偏要去爱岗敬业。</p>
+        <p>「这事儿要是凉了，怕是真的不转了。」沈泽无奈地摊手，「算他良心，派车来接我。」他一手拉开门，「这事儿要是成了，咱们很快就能迈上人生巅峰。」说完，在一阵爽朗笑声中出门。</p>
+        <p>宿业重新躺回床上，看著外面阳光大好。他换了衣服出门，就不信，一个那么虔诚的佛弟子，能忍住不回白鹿寺？找不到人，我就蹲点儿！</p>
+        <p>万万没有想到，他才是被蹲点儿的那个。才走到老地方，迎面走来一手打著石膏的彪子，正被两个小弟搀著。双方不约而同地拉近距离，防备地打量著对方。</p>
+        <p>宿业先发制人，一把抓住彪子的衣襟，抡起拳头，直奔彪子面门：「打我！」说著，抬起胳膊，又是一拳下去，「打我兄弟！」</p>
+        <p>彪子一只胳膊打了石膏，正好用来挡宿业的拳头，借机用另一只手，抓住对方的拳头，使劲儿拉扯。</p>
+        <p>两人身上本来就有伤，不管不顾地扭打在一起。旁边俩小弟，伸了伸手，默契地后退几步。</p>
+        <p>也不知打了多久，两人气喘吁吁，用尽力气，互相踹了对方一脚。各自瘫在地上，瞪著对方，调整呼吸。</p>
+        <p>「三……三天前，不是给你们转钱了吗？」宿业喘著粗气，「你……你带人堵我干什么？！」</p>
+        <p>「艹！」彪子愤愤瞅著宿业，费力抬了抬自己骨折的胳膊，又指了指自己的鼻青脸肿，「我他妈在这儿蹲你，是有别的事儿，不是为了给你撒气的！你他妈的，上来就动手！」</p>
+        <p>「什么……什么事儿？！」宿业白了对方一眼，「除了要钱，咱们之间能有什么事儿？」</p>
+        <p>「东哥找你去一趟。」彪子冲站在旁边的俩小弟吼，「还不过来扶我一下。」两人立马把人扶起来。他看了一眼还躺在地上的宿业，不情愿地一指，「把他也扶起来。」</p>
+        <p>「不会是你跟东哥告状，想让他帮你找补一身的伤吧？」宿业靠著墙。</p>
+        <p>彪子不耐烦地挥挥手：「你觉得东哥会管我这点儿破事儿？」他顿了顿，「我不知道什么事儿，也不敢问。不过，我建议你去一趟。」他真诚地劝说。</p>
+        <p>礼谌已经全身心投入集团，在父亲和妹妹的帮助下，很快了解公司主要的大方向，主要的业务，以及主要的合作方。为了保险起见，他选择一个规模很小的公司，作为检验自己学习成果的合作方。</p>
+        <p>对方找来一名员工，带他熟悉整套流程，介绍每个环节。他起先专心听著，脑中回想著看过的有关资料。可听到后面，他不由得皱眉，对方说的，与提交的资料，相差甚远。</p>
+        <p>半小时的休息，他准备一套说辞，打好腹稿。回到会议室，众人入座之后，他起身，诚恳说：「关于贵公司这个专案，我想……」</p>
+        <p>就在这时，会议室的门被人推开，一个瘦高的年轻人走进来，对众人报以歉意地微笑，走到主讲台：「抱歉，让大家久等了。我叫沈泽，是这个专案的主要负责人，下面由我为大家……」他一边说著，一边开启笔记本，接上投影仪。</p>
+        <p>礼谌觉得这人有些面熟，打量对方片刻，猛地想起来，是宿业的朋友。对方脸上有些乌青和擦伤的痕迹，看起来才伤不久。真是什么样的人，交什么样的朋友。</p>
+        <p>在之后短短的几分钟里，沈泽凭著实力，扭转自己给礼谌的第一印象，令在场所有人满意。老板暗自捏了把汗，这一趟专车钱，花得值！</p>
+        <p>会议结束，礼谌向对方递上赞许地笑容：「感谢你的介绍，我们会进一步评估。」对方客客气气地与他握手，谦虚地感谢。他在心中再一次做下评价，果然是什么样的人，交什么样的朋友。</p>
+        <p>除了当时借钱，这是宿业第二次见到东哥。</p>
+        <p>对方穿的人模人样，坐在一个偌大的办公桌前，双脚搭在桌沿，舒服靠著老板椅。在看到他之后：「你还挺难请啊？」</p>
+        <p>「东哥。」宿业嬉皮笑脸，「咱们就是简单地金钱关系，哪敢劳您来请。」</p>
+        <p>「别跟我来这套。」东哥扫了宿业一眼，「你小子怎么还的钱，我都听彪子说了。」他点上一支雪茄，吸上一口，品著滋味，「你小子打架很厉害啊？！」</p>
+        <p>宿业心中一凛，这真是要替彪子找补了？他赶紧矢口否认：「自保而已。」</p>
+        <p>「放屁！」东哥一手指著站在一边儿的彪子，「你看他这样儿，你管这叫自保？！」他见对方不接话，不紧不慢地说著，「我看你小子也挺难。这样吧，给我干活儿，抵消欠我的钱。你看怎么样？」</p>
+        <p>宿业觑一眼彪子，暗自思忖，难道因为彪子总在他这儿碰壁，现在要被东哥开了？想找个人接替彪子去收账？他一手拨动著手腕上的念珠，犹豫再三：「我不做替人催债的事情。」</p>
+        <p>「那是彪子干得事儿！」东哥掐灭雪茄，「有个店缺人手，你去帮忙看场子。」</p>
+        <p>「什么店？」</p>
+        <p>金色大地。虽然早就猜到东哥说的「场子」八成不是什么正经地方，但却没有想到，会是曾经短暂工作过的那家夜店。一时不知道是该佩服东哥买卖做得大，还是该说人生是个圈儿，兜兜转转，回到起点。</p>
+        <p>东哥开出月薪一万的诱人价格。叫他去的原因也很简单，相中他打架的能耐，所以让他帮著在夜店里巡场。主要是防止别人在里面，进行什么违法交易。简而言之，给别人做免费打手。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./047.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./049.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

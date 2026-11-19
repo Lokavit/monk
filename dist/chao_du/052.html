@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 052 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 052 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 052 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：21 Feb 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,041 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「为了你的小命儿，我劝你最好不要现在出去送死。」</p>
+        <p>「他很生气？」慕璟语气里透著心虚。</p>
+        <p>小菁把手里的东西交给他：「你觉得呢？璟少，好玩儿吗？」</p>
+        <p>慕璟看看手里的酒精喷雾，不服气地辩驳：「谁说我玩儿了？我认真的！」</p>
+        <p>小菁不耐烦地把慕璟拉到舞台上，暂停音乐，拿起话筒，高声喊道：「璟少想蹓！朋友们，能放过他吗？！」</p>
+        <p>「不能！」台下众人起哄。</p>
+        <p>小菁一手按下音乐播放，另一手推了慕璟一把，低声说：「上去，那么大的人，一会儿就回来了。」</p>
+        <p>然而，她猜错了。</p>
+        <p>就在宿业望月出神的时候，不远处的一扇玻璃门开启，走出来一名醉汉，手里搂著一个身材苗条，穿著艳丽的女士，摇摇晃晃地远去。在金色大地工作也算有些日子了，他现在才发现，在距离员工通道后门不远处，还有一扇可以通行的门。</p>
+        <p>他小心翼翼地靠过去，轻手轻脚地开启玻璃门，顺著进去，是一段不太宽敞的走廊。走廊尽头的拐角，有一部电梯。此时正停在一楼，他按下向上，走进电梯，惊讶看著操作面板。上面孤零零地只有一个红色的，报警示意的按键。</p>
+        <p>刚回过神儿，电梯门已经自动关闭，缓缓向上。他紧张地握起双拳，仔细聆听外面的动静。电梯短暂上行后停止，随著电梯门开启，一个好听的男声：「欢迎光临。」他诧异看著门童，随著对方指引向里走。</p>
+        <p>眼前，一个装修大气的门脸儿。推开门，里面是一个金碧辉煌的大堂。一群俊男美女，穿著衬衣西裤，戴著耳机，上衣口袋别著小话筒，身后挂著收声器，热情地招呼著客人。其中一个帅气的小伙子，面带笑容地朝他走来，礼貌问道：「先生几位？」</p>
+        <p>宿业瞪大眼睛，伸出一个手指头，又嗖地放下，做出一副常来的架势：「有约。」然后，趁著对方没反应过来，人模人样地往里走。</p>
+        <p>穿过大堂，冗长弯绕地走廊，两边诸多的房间里，有的传出跑调地歌声，有的传出吆五喝六地划拳，有的传出哗啦哗啦摇骰子声音，还有的传出女生娇嗔地说话声。</p>
+        <p>走了大半圈儿，宿业暗自嘀咕：「这里才可以算作「金色大地」嘛。」他停步在一部电梯跟前，踌躇一瞬，按下向上，进入电梯，这次操作面板很全。他随便按亮一层，静等自己会再发现什么新奇。</p>
+        <p>出了电梯，还没走多远，迎面走来一群女生，个个打扮的十分靓丽，风格也各有不同。她们有说有笑，先后进入同一间屋子，用甜腻地声音说著：「老板好。」</p>
+        <p>在外的宿业，忍不住打个激灵，心中更加笃定，这才是真正的金色大地，楼下那些，只是为了给这个夜总会打掩护。难怪，明明是一栋高楼，他却从没在一二楼发现，可以上更高层的电梯，连扶梯都没有。</p>
+        <p>他把情况摸个差不多，原路返回。刚从电梯出来，就撞见一个人。一个他此刻，并不愿意看见的人。</p>
+        <p>「你怎么从这儿出来了？」慕璟狐疑看著他，「谁让你到这儿来的？！」</p>
+        <p>「怎么？被人发现老巢了，恼羞成怒啊？！」</p>
+        <p>晚霞透过落地窗，投射在偌大房间内。手机上的闹钟在奋力唱著歌，尽职尽责地叫醒它的主人。主人不情愿地睁开眼睛，烦躁地关闭闹钟，在被窝里翻来覆去。</p>
+        <p>手边的床头柜上，放著一沓用纸胶带捆起来地钱，有新有旧，整整齐齐。宿业拿在手里，掂量掂量，坐起来数了数：「唉，距离给自己赎身还差好几倍。」</p>
+        <p>他搁下钱，使劲儿揉搓几下脸颊，看著手背上的结痂，自言自语：「璟少？小老板？既然你乐意给机会，就别怪我不客气了。」</p>
+        <p>慕璟没想到，经过昨天的事情，宿业依然按时按点儿的来金色大地。更加没想到，对方来了之后，不是去工作，而是直奔二楼，来到他的跟前，一言不发，把他拉起来，向后门走去。</p>
+        <p>宿业拉著慕璟，出了后门，开启玻璃门，走进去。他停步放手，转身看著对方嘴角的伤，做出一副悔不当初地模样：「抱歉，我下手有点儿重。」</p>
+        <p>「没事儿。」慕璟扯出个笑容，却因伤痛变成苦笑。他拉著对方的手，关切询问，「手上的伤怎么样了？」</p>
+        <p>宿业毫不犹豫地抽回手：「离心脏远著呢，死不了。」他踌躇一瞬，「璟少，我想申请调岗。」</p>
+        <p>慕璟惊讶看著宿业：「你拉我出来，就是说这个？」他顿了顿问道，「你想调到哪儿去？没有比巡场再轻松的工作了。」</p>
+        <p>宿业一手向上指了指。</p>
+        <p>「你想去……」慕璟果断拒绝，「不行。那儿不适合你。」</p>
+        <p>「你知道我为什么在这里工作吗？」</p>
+        <p>慕璟迟疑著点点头：「听豪子说，你欠了高利贷。在这儿打工还债。」</p>
+        <p>宿业心中一阵冷笑，面上不动声色：「对！所以我需要赚钱，一二楼不能满足我对钱的欲望。所以，我想到楼上去赚钱。反正都是你家的地方，这算是调岗吧？」</p>
+        <p>慕璟盯著他看了半晌，再三确认：「你真的要上去？」</p>
+        <p>他坚定的点头，一副可怜巴巴地样子：「璟少能成全我吗？」</p>
+        <p>慕璟一手狠狠拍在电梯旁边的面板上。电梯门缓缓开启，他率先走进去，转身看著宿业。对方紧跟著他进入电梯。</p>
+        <p>来到三楼，门童热情指引。慕璟带著宿业，径自往里走，对迎上来的服务生说：「叫丁经理过来一趟。」说著，在大堂找个沙发，一屁股坐下，对宿业说，「你也坐吧。」</p>
+        <p>服务生很快带来一个三十多岁的男士，穿著一身板正的西服，笑脸走过来：「璟少，您找我什么事情？」</p>
+        <p>慕璟起身，顺手把同样要起身的宿业按下：「你坐在这里，稍等一会儿。」他领著丁经理，换了一个较远的位置，「我带了个人过来，放在你这儿。」</p>
+        <p>丁经理看一眼宿业，对慕璟谦卑地说：「璟少，您吩咐。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./051.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./053.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

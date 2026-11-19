@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 018 章 · 致命谎言 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">致命谎言</a>
+          <span class="sep">/</span>
+          <span>第 018 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 018 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：18 Jul 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,055 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>顾文宗站起身，「苏太奶奶，我先给你用冷毛巾敷一敷眼周。您等等。」</p>
+        <p>后面几天，苏老太太的眼睛能看到东西了，只剩下白内障的老毛病。</p>
+        <p>顾文宗坚持推着她到医院眼科复查，亲耳听到医生的复诊结果，才放下心。</p>
+        <p>他来医院，还有另外一件事情，去探望母亲，顺便把母亲的手机给她留下。</p>
+        <p>来到病房，还没进门，就听见母亲和人聊天的声音，听起来是轻松的、愉悦的。</p>
+        <p>母亲看到他们更是开心的，拉着苏老太太的手嘘寒问暖。</p>
+        <p>过了好一会儿，顾文宗才插上话。</p>
+        <p>「妈，你的手机，给你留下。」他把手机放在母亲床边的小桌上。</p>
+        <p>「可不是。幸亏你知道在我手机里找你李阿姨的电话。苏老太太拿到铁盒子，是不是老泪纵横？你咋整的？」</p>
+        <p>顾文宗就把苏老太太的真实近况和母亲说了。</p>
+        <p>「所以，我抽时间把你的手机送来了。下次有什么特殊情况，我就给你打电话。」</p>
+        <p>母亲颔首，又低声和苏老太太聊了几句。</p>
+        <p>她看一眼顾文宗，「儿子，我想起来，苏老太太这月该体检了。」</p>
+        <p>「我一号就带她去了。」顾文宗说，「我把你放在那儿的所有护理记录全看了一遍，照着你的记录严格执行的。」</p>
+        <p>母亲赞许地点点头，「苏老太太身体咋样？没啥新问题吧？」</p>
+        <p>「没有。还是那些老人常见问题，所有的单子我都取回来放好了，以后找苏老太太的长孙报销。」</p>
+        <p>「咋还出来『报销』了？我的手包里不是有一张蓝色的卡？那是老太太的长孙专门留给老太太做专项卡用的。老太太的开销都从那张卡里出，那边会收到每一笔支出明细，每年会往卡里转钱。」</p>
+        <p>顾文宗耸耸肩，「这我刚知道。我看你把单据都留着，以为是为了找雇主报销，我就刷了你的银行卡。」</p>
+        <p>母亲忽然抓着顾文宗的胳膊，「这些天，雇主没来电话吗？」</p>
+        <p>顾文宗摇头。</p>
+        <p>「怪了，往常一定会在十号之前打电话，问老太太身体状况。」</p>
+        <p>「幸好没打。不然咱都没办法和他们解释，解释了他们也不一定理解。到时候，这工作一定没了，可能还要被追责。」</p>
+        <p>母亲皱着眉头，思考了一会儿，「不行。我得给雇主打个电话。」</p>
+        <p>顾文宗坐在床尾，说了一句，「也让苏太奶奶跟她儿子说几句呗，她总念叨她大儿子。」</p>
+        <p>母亲先是看了一眼苏老太太，又冲顾文宗挤眉弄眼。</p>
+        <p>顾文宗立刻闭嘴。</p>
+        <p>「啥？我大小子来啦？」苏老太太问。</p>
+        <p>顾文宗冲母亲吐舌，弯下腰对苏老太太说：「您听错了，是别人家的儿子。」</p>
+        <p>「唉……我就说嘛，我家那个大小子啊，一定是气我，不肯回来见我。」</p>
+        <p>母亲瞪了顾文宗两眼，「苏奶奶，没那事儿。他上次说了，这段时间忙，过几天就回来看您。」</p>
+        <p>顾文宗坐在一边，不再出声了，免得说多错多。</p>
+        <p>半小时内，母亲拨过去三次，那边始终是关机。</p>
+        <p>母亲放下手机，「这事儿不太对。先不管了，这么说，你这些天的支出都是我的银行卡里的钱？」</p>
+        <p>「小额用了我自己平时攒的钱，你的卡付了两次医院费用，一次苏老太太的查体费用。」</p>
+        <p>「后面用我的。你的留着上大学用。你上大学，每个月也要生活费。」母亲说着说着叹气，「唉。我这病得真不是时候，得在你大学报到之前好起来。」</p>
+        <p>顾文宗一听到母亲提起「上大学」的事儿，就心里打怵，眼睛都不知道该看哪里。</p>
+        <p>「慧莉啊，」苏老太太说，「你什么时候回去？」</p>
+        <p>母亲的目光转移到苏老太太身上，笑着说，「快啦。我尽早出院，继续到您家照顾您。」</p>
+        <p>「好哇。」</p>
+        <p>「呀，大学生来啦。」李阿姨脸上带着笑。</p>
+        <p>「李阿姨好。」顾文宗站起身，帮忙接过李阿姨手里的饭盒，另一只手顺势拉起来小桌板，放上饭盒。</p>
+        <p>「妈，你怎么这个时间吃饭？」他问。</p>
+        <p>「嗐！你妈她早上……」</p>
+        <p>「我早上不饿，就没吃。」母亲说。</p>
+        <p>顾文宗担忧地说：「妈，你可不能再不好好吃饭了。医生说了，你这身体就是常年熬的，你必须要规律三餐，到点睡觉，不能再熬夜，不能做高压工作，不能做体力劳作。等你出院，就啥也别想，好好在家休息，我赚钱养你。」</p>
+        <p>母亲笑了，「这孩子，满嘴跑火车，你得去上大学！忘啦？！养我也是要等你毕业，找到好工作再养我。妈也不差再等几年。」</p>
+        <p>顾文宗连忙应和一句，把话题跳过去，「妈，快中午了。我先推苏太奶奶回去了，还没做饭呢。」</p>
+        <p>他推着苏老太太走出病房时，听到李阿姨对母亲说，「程姐，你这儿子咋养的，太叫人羡慕了。学习好，又孝顺，还知道帮你照顾老太太。我那儿子……」</p>
+        <p>顾文宗心头仿佛千斤巨石压下来。</p>
+        <p>母亲一生要强，将未来所有希望放在儿子身上，可是她却不知道，儿子只是给她造了个梦，没有能力圆梦。</p>
+        <p>或许是因为在医院和母亲的聊天，苏老太太整个人精神不少，也不再抱着铁盒子抹眼泪了。</p>
+        <p>两人闲暇时间，苏老太太会打开铁盒子，拿着相片给顾文宗讲。</p>
+        <p>这个是她的谁谁谁，那个是她的谁谁谁，她的大儿子自己当老板了，她的大儿子取媳妇了，她的大儿子给她生了大孙子……</p>
+        <p>顾文宗听得津津有味。</p>
+        <p>直到他发现苏老太太说的人，和手里照片的人性别不一致。</p>
+        <p>他恍然，其实苏老太太的眼睛，根本看不清照片，她的故事里有真有假，有清晰的，也有错乱的。</p>
+        <p>顾文宗听故事也不白听，跟母亲学会了给老人按摩的技巧，每次听故事的时候，给苏老太太捏捏肩，锤锤腿，松一松筋骨。</p>
+        <p>若是遇到什么搞不定的特殊情况，他就给母亲打电话，听着母亲的远程指导，顺利解决问题。</p>
+        <p>苏老太太说得最多的就是大儿子，或许是因为年少离家，作为母亲日日牵挂。</p>
+        <p>虽然苏老太太讲得迷糊，顾文宗还是能够大致分清楚。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./017.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./019.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

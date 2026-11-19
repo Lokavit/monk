@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 003 章 惊吓 · 爱上新邻居 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">爱上新邻居</a>
+          <span class="sep">/</span>
+          <span>第 003 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 003 章</span>
+          <span class="chapter-name">惊吓</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：17 Nov 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,068 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>这栋楼因为陷入闹鬼风波，全楼只住了他们两个人。</p>
+        <p>两人成为了互帮互助的好邻居，他给他顺路扔垃圾，他帮他顺利采购，他去他家开灶，他去他家闲聊……</p>
+        <p>邱榆阳发觉，日子一点儿也不无聊了，反而充实了很多，话也说的多了。</p>
+        <p>对于周焕然的直播事业，发表了自己的看法。</p>
+        <p>周焕然看似听进去了，却问了一句：「你知道这里为什么是鬼屋吗？」</p>
+        <p>邱榆阳抬头扫视一圈儿，「这家以前住着一个老太太，神神叨叨的，没有儿女。听说，老太太死家里一个多月，才被发现。有的说看到屋里有鬼影，有的又说听见鬼挠门、鬼打墙。说什么的都有，传来传去，就都搬走了。」</p>
+        <p>两人吃过晚饭，一同出门。</p>
+        <p>夜晚的小河边，柳叶随风飘荡，暗影重重，伴随着阵阵的沙沙声响。</p>
+        <p>月光将两人的身影拉长，投射在石子路。</p>
+        <p>邱榆阳遥望家里的阳台，只有他们这一层的两户人家有灯光。</p>
+        <p>突然，他看到一个黑影闪过，下意识拽了周焕然一下，「哎，你看！」说着指向了家的方向。</p>
+        <p>「看什么？」周焕然问。</p>
+        <p>「你刚才没看到吗？」邱榆阳反问，「有个什么东西从你家的阳台一闪而过。」</p>
+        <p>「真的假的？」</p>
+        <p>两人正在说着，又是一道黑影闪过。</p>
+        <p>这一次他们看得真真切切，相视一眼，同时从对方的眼中，读到了惊疑的神色。</p>
+        <p>「这下你看见了吧？」邱榆阳问。</p>
+        <p>「嗯。」周焕然低声应和。</p>
+        <p>「会是什么东西？」邱榆阳问。</p>
+        <p>「鬼吧。」周焕然说。</p>
+        <p>两人又同时看向家里的阳台方向，并且不约而同的往回走。</p>
+        <p>走到家门口的时候，邱榆阳拿出钥匙打开了自己家的房门，周焕然也跟着进来了。</p>
+        <p>邱榆阳从冰箱里拿了两瓶水，递给周焕然一瓶。</p>
+        <p>「你家里的摄像头开着吗？」他问。</p>
+        <p>「全都开着。」周焕然说。</p>
+        <p>邱榆阳提议，「我们开个回放，看一下刚才那两个是什么东西。」</p>
+        <p>「好。」</p>
+        <p>周焕然喝光瓶里的水，站起身，走向门口。</p>
+        <p>「别从门进。」邱榆阳说，「万一是鬼，你一开门就吓跑了。从我家阳台过去。」</p>
+        <p>他领着周焕然进了卧室，轻手轻脚地推开落地窗，慢慢探出头，看向隔壁的阳台。</p>
+        <p>周焕然爬上去，扶着侧面窗户的防盗网，一跃而过，又朝着邱榆阳伸出手，把人来过来。</p>
+        <p>两人蹲下身，隔着白色纱帘，观察客厅里面的状况。</p>
+        <p>就在两人全神贯注之际，屋子里面忽然发出「啪嗒」一声，像是什么东西掉地上了。</p>
+        <p>邱榆阳被吓了一跳，一手按着心口，看了看身边的周焕然。</p>
+        <p>周焕然看起来比他还要害怕，抓着他的手脖子，一动不动。</p>
+        <p>邱榆阳掀开纱帘，往客厅里走。</p>
+        <p>周焕然在身后跟着。</p>
+        <p>两人走到了客厅，邱榆阳没有看出任何异样，回头用眼神询问周焕然。</p>
+        <p>周焕然轻轻摇头。</p>
+        <p>「哗啦！」</p>
+        <p>两人霎时警觉起来，一同望向声音来源，蹑手蹑脚往餐厅挪动。</p>
+        <p>走着走着，邱榆阳发现身后人没了，再一看，周焕然站在显示器前，指着其中一个窗口。</p>
+        <p>邱榆阳走过去。</p>
+        <p>画面里，地上一个外卖盒子，残渣剩饭被扣了一地，不知从哪儿来的两只小猫崽子，正旁若无人，大吃特吃。</p>
+        <p>两人皆是松了一口气，相视而笑。</p>
+        <p>两只小猫崽听到动静，警觉的退后几步，呲着牙，发出警告似的声音。</p>
+        <p>两人不以为意。</p>
+        <p>「原来是这么两个小东西。」邱榆阳说。</p>
+        <p>周焕然拿了个容器，倒入半瓶矿泉水，放在了食物旁边。</p>
+        <p>两只小花猫崽子不肯再吃了，瑟缩在角落里，全身炸毛，倒像是要吃人。</p>
+        <p>两人找来了纸箱子，费劲巴拉地把两只小猫哄进去。</p>
+        <p>「放阳台吧。明天我们带去宠物医院，检查检查。」邱榆阳说。</p>
+        <p>「看着挺干净地，搁在屋里吧。」</p>
+        <p>周焕然说完之后，把纸箱子端到了客厅的监控器下。</p>
+        <p>这一夜的鬼屋冒险直播间里，多了两名客串嘉宾。</p>
+        <p>邱榆阳躺在自家的床上，看一会儿猫，看一会儿人。</p>
+        <p>直播间里，除了他之外，竟然有人停留，有人发出弹幕，全部围绕着两只小猫，播间的主人反而成了配角。</p>
+        <p>邱榆阳给周焕然发消息：「不如改为直播小猫。」</p>
+        <p>发完，他看着屏幕。</p>
+        <p>周焕然在逗猫，似乎忘了直播主题。</p>
+        <p>过了好一会儿，走回电脑桌，拿起手机。</p>
+        <p>下一秒，邱榆阳收到了回复：「有道理哦。」</p>
+        <p>不知不觉，直播间里蹲了十几号人，围绕着两只猫作为话题，聊得留言区都滚动了起来。</p>
+        <p>邱榆阳也加入其中。</p>
+        <p>相比之下，周焕然则表现的有些冷淡。</p>
+        <p>邱榆阳连游戏都没有开，一直陪到了凌晨三点，比主播更像主播。</p>
+        <p>他给周焕然发消息：「早点睡觉，起来了喊我，咱俩去给猫做检查。」</p>
+        <p>周焕然对着客厅的摄像头，比出来一个收到的手势。</p>
+        <p>随即，直播间的画面一黑，留下一排冰冷的文字：「主播暂时不在」</p>
+        <p>邱榆阳洗了个澡，躺在床上，举着手机，翻看与周焕然的聊天。他忽然反应过来，似乎没有问过周焕然，对养猫是否有兴趣，自顾自的决定把那两只猫崽子养起来，而且养在了周焕然家里。</p>
+        <p>不过，周焕然也没有表示反对。</p>
+        <p>邱榆阳提着午饭和饮料，敲开了周焕然家的大门。</p>
+        <p>周焕然像是被吵醒的，头发乱糟糟，眼还没有完全睁开，光着膀子，只穿了一条短裤。</p>
+        <p>「你随意，我洗把脸。」说完，进了洗手间。</p>
+        <p>邱榆阳熟门熟路地拿出餐具，把买来几样炒菜倒在盘子里，见周焕然还没出来，他顿去客厅一角看猫。</p>
+        <p>经过一夜，两只小猫的防备状态没有昨晚那么厉害，也会对着他喵喵叫了。</p>
+        <p>「你养过吗？」</p>
+        <p>周焕然从洗手间出来，用毛巾擦着还在滴水的头发。</p>
+        <p>「没有。」邱榆阳说。</p>
+        <p>「你养过什么吗？」他问。</p>
+        <p>「以前家里养过狗。没几年就挂了。」周焕然说。</p>
+        <p>「那你对养猫……」邱榆阳没说完。</p>
+        <p>「噢。无所谓，反正还有你。」周焕然顿了顿，「而且，这俩小东西，还能给直播间拉点人气。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./002.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./004.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

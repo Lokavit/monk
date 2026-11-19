@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 157 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 157 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 157 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：06 Jun 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 3,272 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 9 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>宿业想起礼谌曾经告诉他，关于如何来到礼家的复杂情况，以及更为复杂的身世。他略微垂首，看到礼谌的脖颈近在咫尺，双唇轻轻贴上去。离开时，留下痕迹。</p>
+        <p>礼谌伸手到后颈，手指肚摸上那块被他留下来的痕迹。然后，一手抚过他发热的脸颊，托起他的下颌，拥吻著他。搂著他的手稍一用力，把人带到床上，顺势按在怀里。</p>
+        <p>宿业发现，无论多少次，只要是与礼谌的亲密接触，他就会不由自主的脸红。对方若是深入，再把战线拉地长一点儿，他就会从脸颊红到耳垂。</p>
+        <p>「我想问你一个烂问题。」他得空说道，「假如人生剩下最后一天，你想怎么过？」</p>
+        <p>礼谌停下动作，望著他，眼中满是温柔，低声说道：「和你一起过。一秒钟也不分开。你呢？」</p>
+        <p>宿业故意停顿了几秒钟：「就在你回答的基础上加个地点。」</p>
+        <p>「哪里？」</p>
+        <p>「这里。」他冲礼谌笑笑。一手伸到床头柜，拿起靠在仿赛模型旁边的里斯，一番摆弄，换了个姿势，搁在仿赛的车座上。</p>
+        <p>阳光少年，一脚撑地，一脚蹬著脚踏，两手扶著车把，时刻准备著出发。</p>
+        <p>礼谌低头看看怀里的宿业，又观察了一会儿两个模型，眼中更显光采。</p>
+        <p>宿业注视著礼谌的眼睛，低声说道：「你那天对著电脑，是在寻找男生与男生如何进一步的答案吧？」</p>
+        <p>注意到礼谌耳朵瞬间红了。他继续低声问：「你找到答案了吗？」</p>
+        <p>礼谌冲他微笑，轻轻摇摇头：「我还没有来得及看，你就闯进来了。」</p>
+        <p>宿业拉著礼谌压向自己：「那我们一起探索吧。俗话说的好：‘实践出真知’。相信你我都会记忆深刻，此生不忘。」</p>
+        <p>一声「好」，在两人唇间扩散开来，被呼吸打乱。</p>
+        <p>一声「嗯」，似乎有了多种表达意思。</p>
+        <p>一双手，轻颤著，消除两人之间，最后的距离。</p>
+        <p>从此，你中有我，我中有你。</p>
+        <p>礼谌吻了吻宿业：「我也想问你一……」</p>
+        <p>「我同意了。」宿业抢著说道。</p>
+        <p>既然礼谌能够紧紧握著他的手，与他一同面对一切。他就有勇气与礼谌并肩而立，迎接一切。不管是否有太子爷的身份，不管走到天涯海角，不管是善意的，还是恶意的。</p>
+        <p>只要礼谌不放手，他就永远不会放开手。</p>
+        <p>礼谌没再说话，把他按在怀里，深情地亲吻著。</p>
+        <p>宿业沉醉在其中。直到察觉无名指上被套了什么。他惊愕地转头，看著手上的戒指，张了张口，仿佛失去了语言能力。</p>
+        <p>「你……唔……」他好半晌组织起来的一句话，才吐出一个字，就又被礼谌堵住嘴。</p>
+        <p>「你可是已经同意了。」礼谌声音很轻，却带著不容置疑。</p>
+        <p>「可是……」宿业还在挣扎，一手按在礼谌肩头，凝视著对方，喘了好一会儿。</p>
+        <p>「按照流程，应该我也给你戴上吧？」他把手伸向礼谌，「另一枚呢？你藏哪儿了？」</p>
+        <p>他藉著「搜寻」的名义，对礼谌动手动脚起来。两人在床上滚了半天，最终找到另一枚戒指。</p>
+        <p>宿业捞过礼谌的手，给他戴上，托著他的手，在戒指上落下一个亲吻：「礼谌，我爱你。」</p>
+        <p>他几乎是不经大脑的，突然的，下意识的，就这样说出口了。等他反应过来，才意识到，自己说的不是「我喜欢你」，而是「我爱你」。在他看来，爱比喜欢沉重的多，需要承担的也更多。</p>
+        <p>是什么时候，对礼谌的感情，已经如此强烈？是什么时候，非这个人不可呢？</p>
+        <p>礼谌动作一顿，面上闪过震惊，睁著一双丹凤眼，怔怔望著他，嘴唇动了动，但是没有任何声音。</p>
+        <p>宿业将礼谌听到这句话之后的一系列反应，全部捕捉，记在脑海里。他没指望礼谌会先说出来这句话，也没指望礼谌会立即给他反应，更没指望礼谌能顺著他跟一句。</p>
+        <p>他就那样望著礼谌，始终保持著说这句话时候的姿势，身体渐渐有点儿僵。</p>
+        <p>「宿业，我爱你。」礼谌注视著他的眼睛，认认真真地说出来这句话。</p>
+        <p>宿业登时红了脸，仿佛失去力气，趴在礼谌身上，亲了亲他：「我知道。我先说出来，就是为了听你对我说出这句话。」声音细不可闻。</p>
+        <p>彩头在床头柜上摆了三天。宿业把它们装进礼谌的揹包，坐著礼谌的仿赛，一路下山。</p>
+        <p>他在拿到彩头的当天，就已经想好要如何处理这一摞现金，并且将想法告诉了礼谌。拥有慈悯佛心的礼谌，自然非常同意，搂著他大夸特夸，好像钱给他了似的。</p>
+        <p>不过嘛，任谁在此生最爱的人面前，都难免缺少克制，加上年轻人精力旺盛，一不溜神就过火。只好在床上躺了三天，才勉强能出门。</p>
+        <p>仿赛本就不适合带人，即便两人都挤在车座。每遇到一个红灯，宿业都不由得动了动，调整姿势，怎么都不舒服。一想到导致他坐不稳的人和事，他就不轻不重地在礼谌的腰上掐一下。</p>
+        <p>非重大活动日，也非节假日，白鹿寺香客寥寥。宿业拿出两副墨镜，将其中一副戴在礼谌脸上。另一副自己戴上。熟门熟路地朝里面走，东张西望地看著。果然，戴墨镜是对的。他转头看向礼谌，登时吓了一跳。</p>
+        <p>「你怎么把墨镜摘了？」他从礼谌骑行服口袋里拿出墨镜，「快戴回去。不然就被认出来了。」</p>
+        <p>礼谌笑著摇摇头，把墨镜收起来，并且帮宿业摘掉墨镜：「到了寺里，不能戴墨镜。要保持内心清净无染，坦然面对佛陀。」</p>
+        <p>一瞬间，宿业觉得眼前的人，虽已不是僧服在身，但是，正在回到最初认识的模样。他心头一紧，不假思索地拉住礼谌。好像出手慢了，这个人就会被佛陀抢走。</p>
+        <p>礼谌回头望著他，伸出一只手，握著他的手，在两人眼前晃一晃。</p>
+        <p>太阳折射出两人手上戒指的微光，让宿业足以坚信，眼前的一切是真实的。</p>
+        <p>来到大殿外。宿业看到从里面走出来的小司。</p>
+        <p>「我过去打个招呼。」他对礼谌低声说一句，迎向小司。</p>
+        <p>「我才不信这玩意儿。都是我奶奶，非要抓我来。还强迫我拜佛菩萨，保佑以后事业顺利。」小司对著宿业一番吐槽，「你过来干什么？」</p>
+        <p>宿业一时语塞，暗自庆幸，没有拉著礼谌一块儿过来，真是明智之举。</p>
+        <p>他斟酌著说道：「拜一拜也好。你很不错啊，在吴老板把你送进去之后，能够及时醒悟，说出他们的罪行。现在，他和老张一起吃牢饭呢。」</p>
+        <p>「往警局送资料的人不是我。」</p>
+        <p>「那是谁？」宿业问出的同时已然想到。</p>
+        <p>「就是那个和你同姓的小鬼。警察到泰威集团找他那晚，他听到吴总和老张的谈话，就直接跑了。我带著人找他好几天没找到。后来不知道他透过什么法子，从几个人手里弄到了那些资料。」</p>
+        <p>「让你来拜佛，你在这儿和人聊天。这里是寺院，你嗓门儿那么大，是对佛菩萨不敬。」小司的奶奶一边念叨，一边把人拉走。</p>
+        <p>宿业冲著一脸不情愿的小司摆摆手。转身寻找礼谌的身影。</p>
+        <p>他凭著直觉来到地藏阁。礼谌面朝地藏菩萨，诚心跪拜。</p>
+        <p>他轻手轻脚地走进去。阁内一切如从前，就连看守地藏阁的大妈都还是原来那位。她正低著头看经书，没有注意到来往的人。</p>
+        <p>这里留有他和礼谌许多回忆。他攀爬佛像被礼谌揪下来，面上好似怒目金刚，实际下手没有用上几分力道；他企图「借」地藏菩萨的钱，被僧人撞破，礼谌为他解围；他从被迫坐在这里抱著经书打瞌睡，到主动走进来，诵读经书，一点一滴的积攒功德。</p>
+        <p>宿业昂首望向地藏菩萨像，双手合十在身前，双目微阖，在心中默默说道：「感谢地藏菩萨，让我在人生迷途，遇到礼谌。」</p>
+        <p>他侧目看向礼谌。然后解下揹包，拉开拉链，两人把里面的现金，一点一点，全部塞入功德箱。</p>
+        <p>两人又来到另一处大殿。宿业选好一盏长明灯，礼谌将写好的名字搁在灯座下。</p>
+        <p>走出大殿，宿业回头望去，笑著说：「我已经开始想象，有朝一日，慕璟看到他在白鹿寺有一盏长明灯，会是什么样的表情。」</p>
+        <p>「陪我去悟道树下坐一会儿吧。」</p>
+        <p>宿业毫不犹豫地拉住礼谌，在对方不解的目光中低下头，小声说道：「我怕你往那儿一坐，再也不起来了。」</p>
+        <p>礼谌一手抚过他的头，一手握著他的手，低声说：「我已经悟出来我的道，他就在我的身边，在我的手中。」</p>
+        <p>宿业一手抓了抓耳垂，拉著礼谌，直奔后殿。他坐在石碑的一侧，曾经习惯坐著的位置。</p>
+        <p>礼谌先是仰望著树杈，然后冲著宿业笑了笑，照旧坐在另一侧。</p>
+        <p>两人都没有再像从前那样盘膝而坐，而是各自将一只手肘搭在石碑上。不约而同地转头，在彼此的眼中，凝视著彼此。</p>
+        <p>几天之后，天地集团内网的匿名板块，出现新的热帖，可以说是「一图胜万言」。照片中，两只紧紧相握的手，无名指上皆有一枚戒指，手背上的青筋清晰分明。明眼人不难看出，记录下这一瞬间的时候，这两只手的主人，正在同时用力抓住彼此。</p>
+        <p>宿业听著大伙儿的讨论，眉头抖了抖，一句话呼之欲出：「怎么就没人想到，这事儿会是太子爷干的呢？」</p>
+        <p>他稍稍藏一藏手上的戒指，望著萤幕里傻笑的自己，笑得更傻了。</p>
+        <p>「你为什么把那张照片发上去？」宿业缩在礼谌的怀里问。</p>
+        <p>「你不是总想有一个热点盖过那个帖子吗？」礼谌搂著宿业，回答的一本正经。</p>
+        <p>这个解释，非常受用！</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./156.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <span class="nav-btn disabled">
+          下一章 <span class="arrow">→</span>
+        </span>
+      </nav>
+    </div>
+  </body>
+</html>

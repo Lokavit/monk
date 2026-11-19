@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 006 章 · 普渡寺冒险 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">普渡寺冒险</a>
+          <span class="sep">/</span>
+          <span>第 006 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 006 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：06 Oct 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,678 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 7 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>两人兜兜转转，还真找到了镇政府。</p>
+        <p>一座黑乎乎的屋子，屋顶的红旗正随着风向飘扬。</p>
+        <p>门上落了锁。</p>
+        <p>班朝辰顺着缺玻璃的地方往里看，空空荡荡。</p>
+        <p>此时已至半夜，四周除了偶尔的狗吠，没有人，也没有光。</p>
+        <p>「看来，我能只能在这里坐到天亮了。」</p>
+        <p>「不会。有我呢。」班朝辰解下背包，拉开背部的拉链，拽出来一个收纳包，「幸好我带着露营背包。来，我教你搭帐篷。」</p>
+        <p>他擦开收纳包，拿出里面的东西，告诉宗静尘要如何一步一步做。</p>
+        <p>说话的功夫，两人齐心协力，搭好了帐篷。</p>
+        <p>班朝辰率先进去，冲着宗静尘招招手，「进来呢。」</p>
+        <p>等到宗静尘进来，班朝辰把拉链拉上，里面顿时陷入一片黑暗。</p>
+        <p>班朝辰打开手电筒，盖了两张纸遮光。</p>
+        <p>他一脸得意，「怎么样？没睡过帐篷吧？」</p>
+        <p>宗静尘摇摇头，「你怎么出门还带着帐篷？」</p>
+        <p>班朝辰脸上没了得意之色，语气也低落了几分，「原本计划和我爸去露营的。他总是食言，一年又一年。这次，我以为他良心发现了，就带着这个露营包出来。哪知道，他是要把我送进普渡寺。」</p>
+        <p>「会有机会的。」宗静尘说。</p>
+        <p>明知道宗静尘只是笨拙地安慰，班朝辰脸上露出笑容，「嗯。到时候，带上你，咱们三个一起去。哦，还可以带上老秃驴。可能要在买一个帐篷，还可以买露营桌椅……」</p>
+        <p>他沉浸在畅想里，忽然发现宗静尘抱着肚子，缩成了虾球状。</p>
+        <p>「你怎么了？」班朝辰问。</p>
+        <p>「没……没什么……」宗静尘语气透着一丝颤抖。</p>
+        <p>班朝辰又急又恼，「你都这样了，还说没什么？到底咋了？」</p>
+        <p>「肚子……肚子有一点难受。」</p>
+        <p>「很厉害吗？」班朝辰问，「你是不是第一次吃寺外的东西，肠胃姐受不了？」</p>
+        <p>「可能是吧。」宗静尘有气无力地说。</p>
+        <p>班朝辰急得手足无措，「你别逞强。说实话，具体哪个位置疼？是什么样的疼？我们要不要去找医生？」</p>
+        <p>宗静尘指了指腹部一侧，「大概是这里。一抽一抽的，我说不好。」</p>
+        <p>班朝辰怀疑宗静尘是吃坏了肚子，提议道：「你要不然，找个地方蹲一蹲试试？」</p>
+        <p>「哪里蹲？」宗静尘的声音抖得更厉害了。</p>
+        <p>「外面到处都是草丛，哪里不能蹲？」班朝辰塞给宗静尘一包纸巾，「你先去蹲一蹲。如果还不行，咱就找人家求救，去医院。」</p>
+        <p>宗静尘出去后，班朝辰在在背包里翻了半天，找到几样常用药，仔细阅读说明书。</p>
+        <p>半个多小时后，宗静尘回来了。</p>
+        <p>「怎么样了？我找到了胃药、止疼药……」</p>
+        <p>宗静尘摆摆手，「没事了。」</p>
+        <p>班朝辰松了一口气，「吓死我了。带你出来，我要负责把你好好的带回去的。」</p>
+        <p>他把东西收拾好，关了手电筒，「睡觉吧。明天……」</p>
+        <p>班朝辰顿了顿，「明天咱们去找你的父母。」</p>
+        <p>宗静尘没说话。</p>
+        <p>班朝辰轻声唱了起来，「小和尚下山去寻亲，老和尚不知道，山下的饭菜太好吃，小和尚享受不了……」</p>
+        <p>外面传来脚步声，越来越近。</p>
+        <p>帐篷里的两人几乎同时坐了起来，相视一眼。</p>
+        <p>班朝辰一下子想起来老板娘的叮嘱，这个镇子晚上不太平。</p>
+        <p>两人大气不敢出，握住对方的手，两双眼睛死死盯着帐篷门口。</p>
+        <p>「谁在这里支了个帐篷？」</p>
+        <p>一个男人的声音，听起来起码四五十岁。</p>
+        <p>「我打开看看，怎么个情况？」</p>
+        <p>另一个男人的声音则年轻很多。</p>
+        <p>「你小心点儿。」声音老的那个说。</p>
+        <p>班朝辰的目光移到一角。</p>
+        <p>帐篷的拉链提手在里面，外面是难以打开的。</p>
+        <p>「里面是谁？」年轻的问，「出来一下。」</p>
+        <p>帐篷里的两人下意识靠向对方，一动不动。</p>
+        <p>班朝辰脑子里盘算，他和宗静尘只有两人。又想起宗静尘被他打了一顿都没还手，料定宗静尘不会打架。他需要一个人面对至少两个成年男性。</p>
+        <p>「里面有人吗？出来一下，我们是警察。」</p>
+        <p>听到是警察，两人不约而同松了一口气。</p>
+        <p>宗静尘正要起身，被班朝辰按了回去。</p>
+        <p>他指了指一旁，又指了指自己，没有直接去拉门的拉链，而是悄悄拉开了小窗户的一角，朝外看了看。</p>
+        <p>一道光束打在他的脸上。</p>
+        <p>他连忙用手挡住，缩回脑袋。</p>
+        <p>「好像是个小孩儿。」男人说，「刚才拉开窗户了。」</p>
+        <p>另一个清了清嗓子，「小朋友，我们是巡夜的警察，是你自己在里面吗？你家大人呢？怎么放你自己在这里？」</p>
+        <p>「我怎么知道你是不是骗我的？」班朝辰说。</p>
+        <p>外面两人哈哈笑了起来。</p>
+        <p>年老的说：「这样吧，我顺着窗缝把证件给你。」</p>
+        <p>班朝辰看向帐篷的窗户，果然掉进来个东西。他打开手电筒，拿起证件看，又给宗静尘看。</p>
+        <p>宗静尘点点头。</p>
+        <p>班朝辰爬过去，谨慎地拉开一部分，看到外面蹲着一老一少两个人，皆是一身警服，正笑着看他。</p>
+        <p>老警员说：「小家伙，看清楚了吧？」</p>
+        <p>班朝辰完全拉开帐篷，把证件还给他。</p>
+        <p>年轻警察看到里面的宗静尘，「哟。还有一个人。」</p>
+        <p>「孩子，你们的大人呢？怎么放任你俩在这里睡帐篷？」</p>
+        <p>班朝辰这次可不敢信口胡诌了，老老实实地说：「我们俩瞒着大人出来玩，迷路了，就在这里支了帐篷。」</p>
+        <p>「好家伙，闹离家出走？」老警员说，「得了，帐篷收起来，我先带你们回所里。不能在这里睡觉，你们还小，露宿野外，多危险呐。」</p>
+        <p>班朝辰不是第一次面对警察，也不是第一次坐警车。他在被送来普渡寺之前，就是被班永康从派出所里接出来的。</p>
+        <p>起因是他和同学去夜市摆地摊，小流氓吃东西不给钱，还掀翻了他们的摊位。几个孩子和三个小流氓打成一团，全被带去了派出所。</p>
+        <p>眼看着同学都被父母接走了，班朝辰却在派出所等到了第二天下午。为此，在去普渡寺的路上，他还在和班永康吵架。</p>
+        <p>「你俩多大了？」老警员。</p>
+        <p>「十三岁。」班朝辰说。</p>
+        <p>宗静尘跟着点点头。</p>
+        <p>「从哪儿来的？」</p>
+        <p>「花都。」班朝辰抢着说，生怕宗静尘没心眼子乱回答。</p>
+        <p>老警员笑了笑，端量着班朝辰，「小家伙儿，鬼精得很。」</p>
+        <p>班朝辰挠挠头，一脸装乖模样。</p>
+        <p>老警员又看看宗静尘，面色逐渐凝重，「你……」</p>
+        <p>班朝辰留意着老警员的脸色变化，心生疑惑。</p>
+        <p>老警员没往下说，转回了身。</p>
+        <p>这反倒叫班朝辰更加好奇了。</p>
+        <p>警车开了很远很远，外面逐渐有了光亮。</p>
+        <p>班朝辰转头看窗外，瞥见一块醒目的牌子：「沧云古镇」</p>
+        <p>他听说过这个地方，隶属于沧龙关下，是热门的旅游地点之一。</p>
+        <p>此刻虽然已是后半夜，街上不仅人来人往，还有不少小摊贩，有的店铺也仍在开门做生意。</p>
+        <p>「你们俩，饿不饿？」老警员回过头问。</p>
+        <p>班朝辰正想回答，看了看宗静尘，眼神询问。</p>
+        <p>两人晚上那顿饭，早就在小破镇子上绕圈儿的时候消化完了。宗静尘又被那一顿饭干得闹肚子。</p>
+        <p>宗静尘轻轻摇了摇头。</p>
+        <p>班朝辰也跟着摇摇头。</p>
+        <p>不一会儿，车子停在了派出所门口。</p>
+        <p>老警员打开车门，对年轻警员说：「你去买点孩子爱吃的东西。估计这俩小家伙都饿了，不好意思说。」</p>
+        <p>两人跟着老警员进了派出所，里面还有几个警员，各自忙碌着，看到他们，露出疑惑的目光。</p>
+        <p>老警员把他俩带到一间小屋，「你俩在这儿等一会儿。」</p>
+        <p>等到老警员走了，班朝辰长长舒出一口气。</p>
+        <p>宗静尘低声问：「他会不会把我们送回普渡寺？」</p>
+        <p>班朝辰一边观察屋里的东西，一边低声说：「他又不知道我们从普渡寺来。」</p>
+        <p>宗静尘声音更低了，「这个老警员，我在寺里见过他。我怀疑，他认出我了。」</p>
+        <p>班朝辰没有太意外，「那好哇，叫他帮咱们找你亲生父母。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./005.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./007.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

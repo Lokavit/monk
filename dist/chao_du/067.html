@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 067 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 067 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 067 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：08 Mar 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,095 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>行逸一口水喷到甲板上，撑著桌子拼命咳嗽。他抬起头，察觉两人都在看著他：「抱歉，喝急了。」</p>
+        <p>慕璟仔细端量著两人，心道：「三年空白的兄弟感情，怕是一时三刻，不能恢复到当年的样子。」他指示手下人，再送上三杯清水，「一场小误会。既然你们是朋友，那我就放心了。我也是看宿业这人挺有意思，才把他从高利贷那儿解脱出来。」</p>
+        <p>他端起自己眼前那杯，对礼谌说：「咱俩碰一个，这事儿就算揭过去了。」</p>
+        <p>「对不起。」礼谌和慕璟碰杯，「是我误会你了。」</p>
+        <p>两人同时昂首喝干，放下杯子，相视一笑。</p>
+        <p>「听说，你们俩现在都在天地了。」慕璟看著行逸，「你现在是监事之一。」又看看礼谌，「你也做回你的太子爷了。」他顿了顿，「而我，也不得不扛起人子责任。接下我们家老爷子，这一堆破事儿。」</p>
+        <p>「看得出来，你做的很成功。」礼谌毫不吝啬地夸赞。</p>
+        <p>行逸依言附和：「没错。我偶尔路过，看外面没什么变化。上次进去才发现，里面已经是一副新景象。」</p>
+        <p>「哈哈。」慕璟爽朗一笑，「都是一点点儿坐起来的。钱难赚，这么大买卖，想要守住，可不容易啊。」他说著话的时候，深深看一眼礼谌，「你说是不是，谌少，未来的天地集团董事长。」</p>
+        <p>「我的看法与你或许有些不同。」礼谌淡淡地说著，「凡事不过渡强求，以平常心对待。」</p>
+        <p>慕璟咂巴咂巴话里的意思，转头问行逸：「他什么时候变得这么……这么超凡脱俗？」</p>
+        <p>这时，一人走过来，双手把手机递给他，低声说著：「璟少，您父亲让您给他回电话。」他点点头，拿过电话，搁在桌上，「你去叫他们调头，把船靠回去。」</p>
+        <p>「难得相聚，咱们一起看看海。」慕璟向两人发出邀请。</p>
+        <p>三人站在甲板的最前沿，双肘搭在栏杆上，看著一望无际的大海，仿佛回到了当初。</p>
+        <p>「你有事情，我们就不打扰了。」礼谌站起身，「有机会再聚。」</p>
+        <p>慕璟点点头：「过些日子，海上升温，你们没事儿就来玩儿玩儿，给我这里增添一些人气儿。」他望著礼谌，问道，「你把宿业塞进天地集团了吗？」</p>
+        <p>礼谌摇摇头，「我初步接手业务，还没有涉及人事调配。」</p>
+        <p>慕璟把两人送下游轮，对著走到沙滩的礼谌，大声说，「你让宿业给我回个电话。」</p>
+        <p>行逸看一眼置若罔闻的礼谌，心道：「今天这墨镜，功劳真不小。」</p>
+        <p>「行逸，你可以帮忙教宿业开车吗？」</p>
+        <p>「又是我？！」行逸的语气里没有太多意外，反而是吐槽性质更多一些，「你还真准备让他做你的私人助理？他那样的，行吗？」</p>
+        <p>「我相信他。」礼谌沉下一口气，「麻烦你了。这部分酬劳，我单独付给你。」</p>
+        <p>行逸笑道：「教他那样的，没有一个可观数字，我可不干。」他看一眼礼谌，斟酌著问，「你有没有问过宿业，他和慕璟之间怎么回事儿？我看慕璟今天这个架势，感觉不太对。」</p>
+        <p>「没问。」礼谌望向窗外，「宿业也没怎么和我提过，他和慕璟之间的事情。就是那天在夜总会，透露是慕璟把他从高利贷手上买过去。然后，他就在金色大地打工还钱。」</p>
+        <p>「这理由，骗小孩子呢？」行逸冷哼一声，「他慕璟是差钱的人吗？我看啊，他就是找了个由头，想把宿业留在那儿。」说著，他狐疑看了身边的人一眼，心道，「我怎么突然觉得，你礼谌也是这样想的？哦，不对，你是已经在这样做了。」</p>
+        <p>「你让我和行逸学开车？」宿业无比震惊，瞪大眼睛，看著礼谌，反复确认，「我没听错吧？我跟著行逸，学开车？！」</p>
+        <p>对方轻轻点头：「行逸小学毕业就会开车，技术很好，经验也足。他来教你，没有什么问题。」</p>
+        <p>「问题大了！」宿业在心里嘀咕著。一想到在白鹿寺，在礼谌的好意下，行逸心不甘情不愿的教他开发和运维，他脑子就嗡嗡响。现在，对方又要来教他开车。这要是万一惹得对方一个不高兴，还不直接一脚油门，把他甩出去？再一个倒车，把他从车轮下碾死？</p>
+        <p>他猛然想到问题的核心，直接问出口：「大少爷，为什么安排我跟著行逸学开车？」</p>
+        <p>得知礼谌的父亲就是天地集团现任董事长。他个人目前也在集团实习，逐步接手业务。</p>
+        <p>宿业瞠目结舌，竖起大拇指：「你总是能给我更大的震撼。」他两手一摊，「所以，我的任务是，给集团太子爷做司机？」</p>
+        <p>「私人助理。」</p>
+        <p>听到这个职称，宿业差点儿咬到舌头，不敢置信：「你确定？」他一手指了指自己，「我一个堂堂大丈夫，给你做秘书？！」</p>
+        <p>「是助理，不是秘书。」礼谌语气中带著无奈，「两者之间有区别。」</p>
+        <p>「什么区别？」宿业想了想，「噢。是有区别，秘书通常是跟著坐车的。助理则要随时变换角色。比如说，给太子爷做司机。」</p>
+        <p>「那你是拒绝了？」礼谌放弃解释，一声叹息，「当我没说吧。」</p>
+        <p>「不！我荣幸之至！」宿业麻利起身，在对方面前站得笔直，「请问太子爷，我什么时候正式上岗？」</p>
+        <p>礼谌忍俊不禁，靠在沙发上：「你先准备考驾驶证。其他的事情，我会一点点教你。」</p>
+        <p>宿业爽快答应下来，当即拿出手机，搜寻考驾驶证的攻略。并且按照网上自考指南，下载对应的交通部程式，输入自己的证件，提交报名。然后，倒在单人沙发上，进入模拟考试，沉迷刷题。</p>
+        <p>「慕璟，让你给他打个电话。」礼谌在看完两本杂志后，还是准确传达了，昔日好兄弟的话。</p>
+        <p>「哦。嗯？」宿业才反应过来，惊讶看著他，问出心中早有的疑惑：「你和那个金色大地的璟少，以前就认识吗？」</p>
+        <p>「嗯。两家的长辈有一些商业合作，我和他认识也有几年了。」礼谌随手翻著杂志。</p>
+        <p>「原来如此，难怪会受到特殊照顾。」宿业心道。他想了想，又问，「你今天去金色大地了？！」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./066.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./068.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

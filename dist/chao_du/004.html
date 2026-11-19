@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 004 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 004 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 004 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：04 Jan 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,075 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>就在这时，一个人影飞奔过来。一手扔掉揹包，另一手抓住接头人持棍的手腕儿，反手一扣，夺过短棍，向下砸在对方手臂。再将短棍在手上转个棍花儿，转身指向挥拳过来的另一人。趁对方恍神儿，一棍砸在对方手肘上。</p>
+        <p>宿业趁机一个抢背，靠墙站稳，分析战况。</p>
+        <p>这个揹包，这个身形，这个戴帽子的方式，还有这阵檀香味……</p>
+        <p>是那小子！</p>
+        <p>接头两人被三两招制服，连滚带爬地跑远。</p>
+        <p>宿业忘了身上的疼，发出疑问：「有这身手，你刚才为什么报警啊？！」</p>
+        <p>对方没说话，扔了短棍，捡起揹包，拍拍灰。然后从包里拿出药盒，递给他。</p>
+        <p>「哦。掉了。」他手指刚碰到盒子，触电般地收回，「给我干什么？这不是我的。」</p>
+        <p>对方犹豫著把药盒重新装回包里。</p>
+        <p>「喂！一盒垃圾你当宝了？」他刚说完，意识到自己不打自招，又连忙说，「药盒都撕坏了，肯定是垃圾。」</p>
+        <p>对方还是没说话，再次把盒子递上前。</p>
+        <p>宿业迟疑著伸手，做出一副勉为其难的模样：「行吧。看在你刚才帮了我的情份上，我做做好事，帮你扔了。」</p>
+        <p>他把药盒装进自己裤兜。再抬头，对方已经转身离开。</p>
+        <p>看到那个双手捂耳的小沙弥挂件躺在地上，他走过去捡起来，一瘸一拐地跟著对方。几次弯腰，试图看清对方模样，但对方走的太快，匆匆一瞥，也只能看出，这人年纪不大，估摸是个学生。</p>
+        <p>「喂！你把帽子压这么低能看见路吗？难怪会撞到我身上。」</p>
+        <p>对方闷头走路，一声不吭。</p>
+        <p>越是这样，宿业越是好奇：「你难道长得见不得人？喂！小子，给不了眼神儿，你出个声儿也行啊！」他跟在对方身后，一路喋喋不休。</p>
+        <p>对方却像个哑巴似的，一个字都没有说。</p>
+        <p>他想起在公交车上，不小心撞到对方。当时对方是有说话的，而且声音非常好听。以至于，他不知不觉就记在心里。</p>
+        <p>他一边走，一边撩起衣服，擦拭著小沙弥挂件，擦干净小沙弥满头满脸的灰尘，看到挂件底部有一个字：谌。</p>
+        <p>是他的名？还是他的姓？宿业刚想问问，冷不防一头撞在前面人的身上。他握紧手里的挂件，后退了两步：「抱歉。」</p>
+        <p>这一次，对方没有说话，也没有拉他的胳膊，甚至连头都没有回。而是整整衣服和揹包，目不斜视地一脚踏入寺院。</p>
+        <p>宿业看一眼墙上硕大的「阿弥陀佛」四个字，再看寺院门旁一块汉白玉石碑，上面阴文篆刻三个大金字：白鹿寺。</p>
+        <p>他缩回想要跟随的脚步，向里张望一眼，寺内香火鼎盛。</p>
+        <p>都什么年代了，年纪轻轻，还这么迷信？！</p>
+        <p>他把手里的挂件抛上半空又接住，反复几次，一边抛著玩儿，一边在白鹿寺门前来回走过，干等不见人出来。</p>
+        <p>这是住里面了吗？！</p>
+        <p>宿业回到宿舍，看见镜子里的自己，才知道是鼻青脸肿，灰头土脸地回来。难怪车上乘客要么嫌弃的看他，要么防备的远离他，小孩子更是瞪著惊恐的眼睛盯了他一路。</p>
+        <p>瞎折腾大半天，钱没整到，还挨了一顿揍。他一边暗自咒骂，一边对著镜子处理脸上的伤口。</p>
+        <p>「孩儿们！我回来了！」沈泽一脚踹开门，摆出个天神降临的架势。</p>
+        <p>宿业转头白了他一眼，继续检视自己的伤。</p>
+        <p>沈泽一个箭步冲上来，托著他的下颌，仔细瞅瞅，惊叫道：「我的天！你不是去面试吗？难道和面试官干起来了？！」</p>
+        <p>「中医，你那儿有药吗？」宿业扒著脸上的伤，「我会不会就此毁容？」</p>
+        <p>「你等等。我给你找找。」沈泽丢了书包，爬上自己床铺，一通翻箱倒柜，拿著些瓶瓶罐罐，全部放在宿业的桌上。随手开启一个，闻一闻，盖上，又换一瓶。</p>
+        <p>「放混了，我忘了是哪瓶。你容我找找。」他扒拉了好几瓶，「就它了！来吧。」</p>
+        <p>宿业凑过去闻闻，药味刺鼻，一手挥挥：「庸医，你行不行？」</p>
+        <p>「祖传手艺，包您满意。」沈泽看看宿业，「从哪儿开始？」</p>
+        <p>对方伸出一只胳膊，上面几处淤青。他点点头，手掌往瓶口一扣，把瓶子迅速倒悬回正，将手心儿里的药涂在淤青处。</p>
+        <p>「你应该不怕疼吧？」</p>
+        <p>「废话！我当然……啊！」宿业痛呼一声，挣扎起来。</p>
+        <p>沈泽一手紧紧抓著他的胳膊，另一手大力在淤青处反复揉搓。</p>
+        <p>「你叫得也太夸张了！」</p>
+        <p>「疼啊！换你试试！」</p>
+        <p>「疼你就忍忍！大佬爷们儿的，狼哇乱叫！不知道的，还以为上刑呢！」</p>
+        <p>宿业疼得呲牙咧嘴，说话声音都变了调：「中医，你是想趁机整死我吗？」</p>
+        <p>「对对对。我想整死你，然后继承你的十万高利贷。」沈泽一脸无奈，「如果现在不把瘀血推散，等到明早，就需要用针放血，说不定要开刀。」</p>
+        <p>宿业被这话吓到，忘了叫喊，抬头看一眼沈泽，颤抖著声音说：「那你使劲儿，辛苦你了，神医。」</p>
+        <p>方宏凑上前：「大佬，这是又跟放高利贷的玩儿命去了？」</p>
+        <p>宿业抬头瞧他一眼：「昂。你猜对了。对方人多，我一时慌不择路，没跑掉。」说著，一拳砸在床沿。动作太大，打翻了药瓶。</p>
+        <p>「呀！」他惊呼一声，立马抽出桌上一张证书，「这可是我未来的金饭碗。」</p>
+        <p>沈泽瞥了一眼，仔细收拾著药罐：「一张废纸，你还当宝了。」</p>
+        <p>「你瞎啊！」宿业把证书在沈泽面前晃晃，「看清楚，这可是我花了八万八的毕业证！你知道这是哪个学府吗？有了它，我很快就能翻身了！」</p>
+        <p>沈泽拿过证书，看一看，摸一摸，张大眼睛望著他：「你真的为它花了八万八？！」</p>
+        <p>「废话！」他夺回证书，「要不是为了它，我能被高利贷逼成这样？」</p>
+        <p>沈泽咬著嘴角：「有句话，不知当讲不当讲？」</p>
+        <p>「曰！」宿业擦拭著他的宝贵证书。</p>
+        <p>「我虽然不是这所学府毕业，但我家有人是这所学府毕业的。」沈泽顿了顿，「你这张，无效。」</p>
+        <p>宿业一把抓著沈泽的衣领，瞪著对方：「你说真的？！」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./003.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./005.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 043 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 043 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 043 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：12 Feb 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,006 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>两人绕过正门，有涯一手始终在院墙上滑来滑去，慢慢向前走。无为在旁跟著，瞥过一眼，云淡风轻地言道：「别说我没提醒你，这可是府衙，守卫森严。倘若真就这样大白天翻进去，保你瞬间被射成刺猬。」</p>
+        <p>「我也知道啊！」有涯说罢，竟是飞起一脚，踹向旁边参天大树，枝叶一阵胡乱摇晃。</p>
+        <p>「有人闯入！」里面一声吆喝，就见噼里叭啦数不清的离弦之箭，齐刷刷奔著树身去。</p>
+        <p>与此同时，有涯一手抓著无为肩头，「趁现在，走！」</p>
+        <p>待到无为反应过来，发现正处于一个极为狭窄的地方，后背紧紧挨著墙，胸前贴著的还是胸。两人几乎脸对著脸，一时诡异地寂静，他能清晰感受到彼此的心跳，都有那么点儿不正常。不由得想要避开，可卡在缝隙里，根本动弹不得。他瞪著对方，质问道：「这就是你选的路？！」</p>
+        <p>「嘘！」有涯示意无为噤声，侧耳听著四周动静，低声言道：「你身后是咱们刚才见到的院墙，我身后是一扇窗，你猜通向哪里？」</p>
+        <p>不消说，无为也能想到是停尸房的窗。可藏在这种占一个人都挤的地方，硬生生塞进两人，动一下都困难，他不禁埋怨道：「就不能找个宽敞点儿的地方吗？」</p>
+        <p>「我摸了一圈儿，才找到这么个死角。您大少爷将就一下吧。」有涯说著，反手指指自己身后，「而且，停尸房只有这么一个通气窗。来！劳烦无为少爷动动玉手，把窗卸下来，咱们才好进去。」</p>
+        <p>无为正待发火，忽闻一阵窸窣声响，知道是守门衙役回来了，只好做罢。他犹豫著抬起双手，越过有涯肩头，没摸到窗棂，却不经意瞥见对方没来及收敛的笑容。他毫不客气地砸个白眼上去，「窗户被你完全堵死，我够不著框子。」</p>
+        <p>「嗯？」有涯思忖一瞬，用膝盖顶了无为一下，「把腿岔开点儿。」</p>
+        <p>无为霎时一脸惊愕，面上白了三分，支支吾吾地问道：「你做……做什么？」</p>
+        <p>「借个位，下个腰。」有涯说著，又撞无为一下。后者双腿被迫挪个位置，脸上红一阵白一阵。有涯故作不甚在意，略微沉腰，双足抵在对面墙上。两人之间错开一点儿空间，还没等无为松口气，衣襟被有涯一把抓住，他猝不及防地扑在对方身上，还好双手及时撑在窗棂。</p>
+        <p>「嗯，这样就可以了。」有涯一副料事如神的模样，又出言提醒道：「你轻点儿，如果不小心引起衙役注意，咱们可跑都没处跑，只能在这儿等著被乱矛戳死。」说罢，突然感受到无为胸膛异常的起伏，抬首迎上一道意义不明的目光，以及他看不见的，窗棂上十指无声无息扣入方木中。</p>
+        <p>无为不言不语，面无表情地凝视有涯片刻，逐渐平复情绪，双手摸索著依次卸掉窗户暗扣。</p>
+        <p>有涯心里偷乐，面上一本正经地解释：「其实我也没想到地方这么小。不过，」他故作惊疑，「无为，你脸色泛红，是不是体内浊火复燃了？」说著，一手摸上无为胸口，另一手抚过对方脸颊。</p>
+        <p>无为大感惊讶，面上憋得更红了。他猛一转头躲闪，差点儿失手掰断窗棂，没好气地对有涯言道：「把手拿开！蹲下去点儿，挡著我了！」后者偷偷觑过一眼，乖乖照做。无为双手向前一伸，只手提著窗扇，「好了，你先进去！」</p>
+        <p>有涯稍稍向后一仰，翻进停尸房，一手接下窗扇，瞥见上头的指印，心下一惊，「玩笑开大了，好像把他惹怒了？！」</p>
+        <p>无为沉著脸，径自走到尸体旁，仔仔细细察看一番。梅南都尸身果然毫无伤痕，面上表情安详，如睡著一般。但这只是表面现象，须知妖力杀人，手法可有千奇百怪。既然从外看不到伤痕，那么只能是在内。他只手结印，剑指投向梅南都，一缕淡淡白光由尸身头部缓缓向下移动，所过之处，骨肉清晰可见。</p>
+        <p>可就在白光游弋至胸膛的时候，却突然变为赤色，房内红光一闪。</p>
+        <p>「糟糕！」有涯立即出手拽无为一把，同时另一手施印，罩住尸体。</p>
+        <p>「里面有情况！」两名衙役猛地推开门，首先注意到正对面，空空如也，「窗户怎么掉下来了？」</p>
+        <p>「啊！你看！」另一人大叫一声，指著梅南都的尸身，「怎么……怎么结冰了？！快！快去告诉仇大人！」</p>
+        <p>停尸房中恢复寂静，一阵阴风过堂，掀动架子围布，正是有涯压著无为躲在里面。无为反应过来自身处境，他推拒一把，瞪著有涯，「有个肉垫是不是很舒服？！」后者迟疑一瞬，连连点头，继而又摇摇头，「情况紧急。」</p>
+        <p>「那你怎么不垫在下……」无为话还没说完，就见有涯狡黠一笑，双手抱著他顺势打个滚儿，两人姿势上下调转，一脸天真地言道：「让你压回来，满意不？」</p>
+        <p>无为脸上倏然憋得通红，挣扎一番，低声喝道：「放开我！」后者紧紧箍著他，坚定拒绝，「我不！」</p>
+        <p>「把你的手拿开！放我起来！」无为一字一顿地说道。</p>
+        <p>有涯犹豫著沉吟一句，「我不想放……」</p>
+        <p>「别一再挑战我对你的容忍，修行不易，是为你好。」无为说罢，感觉到身上禁锢的双手松开。他起身再次去察看尸身变化，自言自语道：「好歹毒的妖物。梅南都乍看上去没有任何伤痕，实际上五脏六腑被掏空，并且塞满枯枝烂叶。」</p>
+        <p>无为撤掉法印，一手在尸身胸膛轻轻按压几下，头也不抬地言道：「若非你刚才及时出手，我的流光定会被引燃，尸体将化为灰烬。」他看向犹自立在一旁发呆的有涯，踌躇片刻，缓和了语气，还没等开口，忽闻外面噪杂声响，「来人了，快走！」</p>
+        <p>两人刚迈出停尸房，有涯拦住无为，「等下，我先去引一波，你把握时机！」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./042.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./044.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

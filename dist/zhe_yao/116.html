@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 116 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 116 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 116 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：26 Apr 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,090 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「谁让你不带个兵器在身上？」无为顿了顿，「要不到街边上买把长剑给你？」</p>
+        <p>「不好不好。」有涯连忙拒绝，「剑刃过于锋利，眨眼取命，太造孽了。」</p>
+        <p>无为想起很久以前，有涯在少师府练武场，盯著兵器架看得出神，而那上面是三样长兵。他还记得，有涯当时对三支兵器，皆有自己独到的见解。</p>
+        <p>「如果是戟呢？」无为状似不经意地问道。</p>
+        <p>有涯闻言，眼中闪过一瞬异样，他笑嘻嘻地反问无为，「你就这么想送我一件趁手的兵器？」</p>
+        <p>无为摇摇头，正色问道：「我想知道你以前用什么做武器？又为何不再使用？」</p>
+        <p>「修行者不以杀戮为道，又何须一定要有兵器在身？」</p>
+        <p>「说得好。」无为赞同地点点头，一手拍在有涯肩头，「希望下次你身处死地之时，还能说出这番话。」</p>
+        <p>「只要有你在，我就不会死。」</p>
+        <p>惊闻有涯说得极为自信，无为却是心虚地敷衍过去。我连自己的生死都不敢保证，又如何能够护你远离死亡？</p>
+        <p>无为不爱计较，尤其不爱于凡人计较。但剑玉宸不知从哪儿学来的野路子，竟然敢化做他的样貌，对有涯投怀送抱。那么，这件事情，就必须要说道说道。剑玉宸的这番行为，是为了捉弄有涯？还是捉弄他？又或者是有什么别的目的？</p>
+        <p>当晚，无为故意把有涯支出去。将房门半掩，瞧著外面来来回回，形形色色的人。等了半晌，几近昏昏欲睡的时候，终于看到剑玉宸路过。他立即起身冲到门口，一把将剑玉宸拉进房，顺手带上门。</p>
+        <p>剑玉宸被这举动吓一跳，「无为？你……你拉我进来有什么事情？」</p>
+        <p>无为缓缓点点头，「有。」说著指了指凳子，「你先坐，坐下说。」</p>
+        <p>「哦。」剑玉宸木讷地应一声，心中惴惴不安，小心翼翼地挨近凳子，迟迟不敢坐下。</p>
+        <p>「坐下啊！」无为这一吼，吓得剑玉宸猛地坐在凳子上，惊魂未定地看著他。</p>
+        <p>「咳咳……」无为干咳两声，拖著凳子坐到剑玉宸身边，递上一杯茶，「日前你杀掉悟谌，我还没好好谢谢你呢。眼下条件有限，我就以茶代酒，敬你一杯。」</p>
+        <p>茶盏送到眼前，剑玉宸也不得不接。暗自品了品，和他屋里的隔夜茶并没两样。</p>
+        <p>无为觑一眼，见剑玉宸面上放松下来，佩剑也搁置桌旁。他突然抓著对方的手，「宸宸啊……」才喊一句，明显感觉到剑玉宸打个激灵。他故作几分柔情，「数月不见。可知道我无时无刻不在想你，在你离开的这段时间，我终于想清楚了。我要与你携手江湖，浪迹天涯。」</p>
+        <p>一番话说得，从温柔细语，到豪言壮语。</p>
+        <p>剑玉宸全程一脸震惊，不敢置信。暗地里想要挣脱双，却被无为察觉，反而抓得更紧。</p>
+        <p>「宸宸，不要逃避了。」无为继续言道：「我知道你一定也是这么想得，咱们择日不如撞日，今晚就把事儿办了吧。」他说完，一把拉起剑玉宸，使劲儿往床上一推。</p>
+        <p>「无为！无为……」剑玉宸惊慌地喊道，「你怎么了？你冷静点儿。」</p>
+        <p>「不！」无为一脸坚定，「宸宸，你今晚一定要慰籍我这么久的相思之苦。」</p>
+        <p>剑玉宸一边挣扎，一边出言警告道：「无为！你再不住手，别怪我不客气了！」</p>
+        <p>明明已经察觉剑玉宸真得怒了，无为依旧不肯罢休，抓著对方手腕，「来嘛，大家都是成年人，别那么害羞。」说著，手上稍稍用力，剑玉宸将要起身，又被他拽倒。</p>
+        <p>可这一次，剑玉宸突然不再挣扎，直接倒向无为。</p>
+        <p>无为不假思索地抬手就是一掌，结结实实打在剑玉宸身上。对方向后倒去，撞翻了桌子。待到他惊觉自己似乎下手过重的时候，剑玉宸已经爬起来，头也不回的离开房间。</p>
+        <p>有涯提著跑断腿才弄来的一坛酒，正准备推开房门，就见一个人影由无为房内杀出来，跌跌撞撞地远去。他瞅一眼，进房对无为问道：「剑玉宸怎么了？走路摇摇晃晃，像喝醉了似地。」</p>
+        <p>「大概是见到鬼。」无为回过神儿来，随口调侃道。</p>
+        <p>「我看是被你吓的吧？」</p>
+        <p>良久，无为言道：「是被我打的。」</p>
+        <p>有涯瞪大眼睛，「你？为什么打他？」</p>
+        <p>「别说了，回头把那瓶跌打药给他送去。」无为摆摆手，面上明显的不耐烦。</p>
+        <p>有涯回想剑玉宸方才的样子，不由得嘀咕一句：「你那一掌，寻常跌打药能管事儿吗？」</p>
+        <p>「你说什么呢？」无为皱著眉头追问道。</p>
+        <p>有涯摇摇头，擎起一只手，「你要的酒，给你弄来了。」</p>
+        <p>无为一把夺过来，开启就往肚儿里灌。喝著喝著，眼角瞥见有涯，一副欲言又止地样子。他一言不发的把酒坛向前一送，「有酒同享。」</p>
+        <p>和有涯轮流灌了半天酒。无为谨慎听了听四周动静，低声对有涯言道：「这个剑玉宸绝对不是咱们之前认识的那个。可是……」他沉思片刻，「我刚才有意和他接触，并没察觉到任何妖异迹象。」</p>
+        <p>有涯言道：「今日席间，你有意提起旧事，他都能对答如流，身份不像有假啊。」</p>
+        <p>无为摇摇头，「不全然。当你提及去年在息丹城花钱照顾他，叫他还银子时。剑玉宸先是追问缘由，继而矢口否认。」</p>
+        <p>有涯听后不以为意，笑呵呵言道，「那傻小子和我的交情，就像你对他的交情似地，不足为奇。」</p>
+        <p>「哈？」无为仔细琢磨琢磨话中深意，「你这是说，我很薄情？」</p>
+        <p>「没有没有。」有涯听出无为语气不悦，连忙解释道：「我换个说法，那小子对你的感情，就像我对你的感情似地。」</p>
+        <p>无为扯著嘴角，干笑两声，「呵呵，承蒙有涯护法垂爱，在下真是三生有幸。」</p>
+        <p>「你知道就好。」有涯刚说完，忽地意识到什么，暗自瞄一眼无为，果然面色不对。他立即垂首，故作斟酌片刻，「要不，我再换个说法？」</p>
+        <p>「打住！」无为瞪过去一眼，「你意思我明白了，不需要再多做赘述。」他思虑良久，「我明天再想办法套套剑玉宸的话，看他到底有什么目的。」</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./115.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./117.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

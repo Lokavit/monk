@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 012 章 · 普渡寺冒险 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">普渡寺冒险</a>
+          <span class="sep">/</span>
+          <span>第 012 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 012 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：12 Oct 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,113 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>班朝辰躺在床上，吊着一只胳膊，翘着二郎腿，另一只手悠哉哉甩着绑在腰上的狗链子，时不时瞟一眼帐外。</p>
+        <p>他已经七天没出去这个小帐篷了，也没见到看守之外的任何人。</p>
+        <p>但是，他对宗静尘的情况却是知道些，全凭他那张嘴。</p>
+        <p>帐里进来个人，手里拿着铁盘。</p>
+        <p>班朝辰热络地打招呼，「小黑哥，今天什么伙食？」</p>
+        <p>小黑把饭盆丢在班朝辰面前，一屁股坐在旁边，「真不知道咱俩到底谁是俘虏。」</p>
+        <p>班朝辰笑吟吟地低头闻了闻，「这是什么肉？」</p>
+        <p>「狗肉。」小黑说，「有几条猎犬不听话，被七哥宰了。」</p>
+        <p>班朝辰摸了摸鼻子，抓起骨头，嗅了嗅，啃下一口尝了尝，狼吞虎咽吃起来。</p>
+        <p>「小黑哥，我那兄弟怎么样了？」他问。</p>
+        <p>「情况比你好多了。现在是老大的新宠儿。」</p>
+        <p>「没良心，不来看我。」班朝辰说。</p>
+        <p>「他哪有时间来看你？」小黑笑着说，「人家忙着跟三哥练搏击，跟五哥练打靶，跟七哥上山打猎。」</p>
+        <p>他指了指班朝辰手里的大骨头，「这就是扑了你兄弟的那条狗的后腿。」</p>
+        <p>班朝辰差点儿咬到舌头，看了看手里的骨头，丢在一边，扒了两口饭。</p>
+        <p>「我看，过不了多久，该叫他接触生意了。」小黑说。</p>
+        <p>「什么生意？」班朝辰追问。</p>
+        <p>小黑咳嗽两声，「关你屁事。」</p>
+        <p>两人正说着话，宗静尘在两个壮汉的簇拥下，走进来了。</p>
+        <p>班朝辰冷淡扫了一眼。</p>
+        <p>宗静尘戴着顶草帽，光着膀子，肤色明显深了，腰上别着一把刀，整个人活像个小土匪。</p>
+        <p>班朝辰拿起被丢一边骨头，「你吃了吗？狗肉。听说它扑了你，就被杀了。」</p>
+        <p>宗静尘皱着眉头，看了他好一会儿，「我吃了。」</p>
+        <p>班朝辰手里的骨头掉在地上，不可置信地盯着宗静尘，眼中透露出询问。</p>
+        <p>宗静尘似乎没动。</p>
+        <p>班朝辰却看得明白，宗静尘点头了。</p>
+        <p>以宗静尘的定性，一路上怎么都不肯吃肉，却在这土匪窝里破了戒，一定是有不得已的理由。</p>
+        <p>班朝辰转念一想，就像他被狗链栓在这里一样，宗静尘破戒又算得了什么？反正，本来就不是真和尚。既然破了戒，以后带着宗静尘去花都吃各种美味肉食。</p>
+        <p>如果，他们俩还有命离开这里的话。</p>
+        <p>「看到你现在的处境，我就放心了。」宗静尘说。</p>
+        <p>「看到你现在的模样，我却十分担心。」班朝辰说。</p>
+        <p>他接着又说：「你这是学生不做，要转行做土匪了？啧啧啧，同样是俘虏，你就被当作苗子培养，我却只能被狗链拴在这里。」</p>
+        <p>「你的手怎么样了？」宗静尘问。</p>
+        <p>班朝辰抬了抬小臂，慢慢握拳，疼得他不由得「嘶」了一声。</p>
+        <p>「就这样了。」他说。</p>
+        <p>宗静尘转身问小黑，「为什么还用链子锁着他？」</p>
+        <p>小黑笑了笑，「老大叫我看住他，不然我的小命就难保了。」</p>
+        <p>宗静尘回过身，盯着班朝辰看了好一会儿，「你在这里有吃有喝，好好休息，我先走了。」</p>
+        <p>班朝辰挥挥手，「好走，不送。」</p>
+        <p>「我的朋友爱吃肉。」宗静尘对小黑说，「肉不能断。」</p>
+        <p>小黑答应了一声，等到宗静尘走得不见人影，狠狠地呸了一嘴。</p>
+        <p>「小黑哥，你好像很不爽。」班朝辰调侃着，「当心我和他告状。他可是你们老大的亲侄子。你们老大坏事做尽，断子绝孙，也就这么一个侄子了。」</p>
+        <p>「嘘！」小黑谨慎看了看帐外，低声说，「你不要命，也别害我丢了命！」</p>
+        <p>班朝辰做了个鬼脸。</p>
+        <p>连日相处下来，他直觉小黑这个人，不是个合格的土匪，不凶，不恶，还没心眼子，被他一个初中生套话，一套一个准儿。</p>
+        <p>有时，他只是问了个开头，小黑就跟八百年没人说过话似的，打开了话闸子。</p>
+        <p>「我是想赚大钱，冒险过了怒龙江。」小黑说，「兜兜转转，好不容易混进了寨子，从一个普普通通的杂役做起。这都过去几个月了，幸亏把你抓来了，我现在是看守了。等把你解决了，我就有资格跟着他们出去了。」</p>
+        <p>「什么鬼？！」班朝辰怒道，「我谢谢你！我还不想死！」</p>
+        <p>他顿了顿，又说：「我兄弟是不会让我死的。」</p>
+        <p>说完，暗自叹气，宗静尘今天来，是为了暗示他别轻举妄动。他可不想这么被动，只是，他的胳膊太不争气，他唯一能突破的目标，就是小黑。</p>
+        <p>班朝辰睡梦中被人粗暴地拽了两下，不情愿地睁开眼睛。</p>
+        <p>「小黑呢？」来人问。</p>
+        <p>班朝辰揉揉眼睛，看向对面空落落地床铺，摇了摇头。</p>
+        <p>「他妈的，叫他看人，他人还没了。」</p>
+        <p>「七哥，你怎么来了?」小黑两手抱着肚子，脸上痛苦万分的模样，说话声音打颤。</p>
+        <p>七哥把小黑从头到脚打量一番，「你去哪儿了?我等你半天了。」</p>
+        <p>班朝辰翻了个白眼儿，他只能帮小黑到这里了。</p>
+        <p>「嘿嘿，七哥，」小黑扯出个难看的笑容，「我去了趟厕所，还不到三分钟呢。」</p>
+        <p>「七哥，你找我什么事儿？」小黑问。</p>
+        <p>「例行查岗。你把人好好看住了。」七哥说完，离开了小帐篷。</p>
+        <p>小黑松了一口气，坐回床铺。</p>
+        <p>这可没有逃过班朝辰那双眼睛，「哼哼！」</p>
+        <p>「牙疼？」小黑瞥了他一眼。</p>
+        <p>班朝辰没回嘴，注视着小黑，「嘿嘿！」</p>
+        <p>小黑瞪了他一眼，「有屁就放。」</p>
+        <p>班朝辰伸出手，指了指小黑，脸上浮现狡黠地笑，「你有问题噢。」</p>
+        <p>小黑眼神一变，先是看了看帐外，压低声音，「小崽子，别他妈的瞎说话。你想害死我啊！」</p>
+        <p>班朝辰一脸得意，「我要去找你们老大告发你！你夜里溜出去个把小时，而且不是第一次……呜……」</p>
+        <p>他的口鼻被小黑死死捂住。</p>
+        <p>「信不信我现在杀了你！」小黑恶狠狠地说。</p>
+        <p>班朝辰憋得上不来气儿，瞪大眼睛，连连点头，指了指自己的嘴。</p>
+        <p>小黑放开了手。</p>
+        <p>班朝辰大口呼吸口气，「你……你连一个孩子都想杀……」</p>
+        <p>「你学学你那个朋友，别总想着耍心眼，自讨苦吃。」</p>
+        <p>班朝辰没说话，背过身躺下，盯着链子。他想家里的沙发，想起普渡寺的床，想老和尚有没有通知他爹，两人是不是已经报警，在想方设法找他们了。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./011.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./013.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 125 章 · 强行超渡 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">强行超渡</a>
+          <span class="sep">/</span>
+          <span>第 125 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 125 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：05 May 2561 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,093 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>「渡？师兄？」他一头雾水，脱下衣服，盖在对方身上，满面愁容地望著对方。想起不久前的远处重物落海的声响，怎么回事？难道是想不开跳海自杀？转念一想，不对啊。他会游泳，不可能跳海自杀。两地距离那么远，也不太可能是被浪冲过来的。</p>
+        <p>待在二层甲板的小菁，将一切看在眼里。她下到一层甲板，调侃道：「哟，你这是钓了条美人鱼上来？！」</p>
+        <p>「璟少，人没事儿了。只是游地太久，体力透支，需要休息。」</p>
+        <p>慕璟听到救生员这样说，眉目舒展：「把他安排在我的舱里。」</p>
+        <p>小菁瞥了他一眼：「你用不用这么急不可耐？人还没醒呢？趁人之危啊！」</p>
+        <p>「机会难得！」他扬声对其他人喊道，「转舵！出海！」</p>
+        <p>「你疯了？！」小菁眼中充满震惊，「这三更半夜的，你出海？！」她冷哼一声，「我要上岸！」</p>
+        <p>「你可以游上岸。」慕璟爽朗地笑声盖过鸣笛。</p>
+        <p>夏末的黎明，天空泛起鱼肚白，海天一线，由暗转明。沙滩上，忙碌了一夜的搜寻人员，陆续上岸。大型起重机正在将一辆价格不菲的轿车，放到重型卡车后面。由于车子飞速入海，承受海底压力，车身多处扭曲变形，车的窗棂留著些碎玻璃。</p>
+        <p>负责处理事故的警员，一手提著车里收集的东西，找到礼谌，语气沉重：「还是没有找到人。根据沿途监控来看，暂时无法判断，是意外还是报复社会的恶性｜事件。在……」</p>
+        <p>「一定是车在路上出了意外！」礼谌睁大眼睛，一手抓著警员的手腕儿，著急地解释，「他是个心地善良的人，不会做出反社会的事件！」</p>
+        <p>警员一手覆在他的手背上，轻轻拍了拍：「你先别激动。我只是说出合理推测，在找到驾驶员之前，还需要把车拉回去做进一步检查。不过，」他叹了口气，「车在海里泡了挺长时间，很难找到蛛丝马迹。」</p>
+        <p>警员示意旁边同事做记录，看一眼礼谌，低头翻开在海里泡了许久的机动车行驶证，上面的资讯和眼前的人对上号。他又拿出驾驶证，翻开看到资讯，动作一顿：「开你车的人是谁？为什么开你的车？」</p>
+        <p>行逸转头瞧一眼礼谌。对方正双目无神地盯著海面。他不著痕迹地拽了拽对方衣袖。</p>
+        <p>礼谌转过头来，神情呆滞、目光涣散，像丢了魂儿似的，茫然地望著行逸。</p>
+        <p>「我知道你现在心情很难受，你要提供资讯，我们才好加大力度，帮你找人。」警员继续询问，「鬼宿业是你什么人？为什么开你的车？」</p>
+        <p>得知宿业全名，行逸心中一惊，不由得看向礼谌，对方面上也是不输于他的震惊。</p>
+        <p>「他是我的……朋友。」礼谌的声音有些哑，「经常帮我开车。」</p>
+        <p>警员注意到驾驶证上的有效期限，心中更加偏向意外事故。才学会开车没多久，估计是在路上故障，一时慌了手脚吧。既然车是在海里拖出来的，应该是有意避开车流路段。但是，他一路飞驰，为什么不减速，也不刹车，而是直接冲进海里呢？</p>
+        <p>他又问了两人几个问题，让两人签了字，安慰道：「我们会尽力而为，回去等讯息吧。」</p>
+        <p>两人从警车上下来，天色大亮。重卡和警车都已经开走，沙滩上恢复如常。海浪一层又一层的拍在沙滩上，很快冲掉所有痕迹。</p>
+        <p>行逸望著礼谌的背影，盯著他的一举一动。</p>
+        <p>礼谌像个游魂一般，一步一步，极为缓慢的穿过沙滩，走向大海。当海水漫过他的双脚时，他极为迟缓地低下头，似是在注视著海面上的层层涟漪。</p>
+        <p>行逸跟在他身后，朝著大海走了几步，不敢离得太近，也不敢离得太远。即使两人很多年交情，彼此有一定了解。他此刻仍然预测不到，礼谌接下来会做出什么样的举动。</p>
+        <p>礼谌一动不动了好一会儿，忽然抬起头，脱了外套，向后一扬，用以极快地速度，朝著海里飞奔。</p>
+        <p>「礼谌！」行逸不假思索地冲过去，海水的冰凉，瞬间传遍全身。他不由得打个激灵，不知道礼谌刚才站半天，怎么做到丝毫不受影响？又或者是，已经察觉不到海水的温度了？</p>
+        <p>礼谌没跑多远，就因为海水浮力，速度不得不慢下来。</p>
+        <p>行逸赶在海水即将没过两人脖子之前，把人抓住，奋力往岸边拽：「你干什么？！」</p>
+        <p>对方就像被大海吸住了一般，不管不顾地，挣扎著朝海的深处走。</p>
+        <p>行逸一边拽著人，一边在对方耳边不断大喊：「礼谌！礼谌！」，似是要透过声音，喊醒对方。因为在水下，他拽人无法使出全力，好在礼谌也无法用尽全力挣扎。</p>
+        <p>两人在海里僵持半天，效果不大。行逸担心，万一肌肉抽筋，就更拽不上来礼谌了。他索性两手环在礼谌腰间，拖不动人，就直接一个抱摔，砸出好大一片水花。清晨的海水，淹没两人身躯。</p>
+        <p>他率先站起来，胡乱抹一把头上和脸上的海水，死命把人往岸边拉，在对方耳边大吼：「你清醒一点儿，回去等讯息！没找到人，不是也没找到尸体吗？！你想就此把自己溺死在海里吗？！」</p>
+        <p>「我会游泳！宿业教过我游泳！」礼谌手脚并用地爬起来，用力挣脱他的禁锢，大声地叫喊，「你放开我！只要沿著车的方向游，我一定能找到他！」</p>
+        <p>「你疯了？！那是海！」行逸嘶吼著，双手在对方身前锁住。</p>
+        <p>礼谌身形一僵，停止挣扎，呆呆望著被搅乱的海平面。</p>
+        <p>行逸趁机一鼓作气，把人拖到海边。他气喘吁吁地坐在水里，仍旧盯著礼谌的动作，不敢松懈。</p>
+        <p>礼谌怔了有一会儿，慢慢爬起来，双膝重重砸在沙石上。四周溅起无数浪花，扬了两人满头满脸。水中，一道道暗红，很快被消融。</p>
+        <p>「你说的对。那是海……他会游泳，又能游多远呢……」</p>
+        <p>行逸听到礼谌的声音发哑，像是吞了沙滩上的细沙。他皱著眉头看过去，注意到礼谌泛红的眼眶，脸上湿漉漉，也不知道是海水还是泪水。</p>
+        <p>「啊！」礼谌面对著一望无际的大海，仰天嘶吼。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./124.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./126.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

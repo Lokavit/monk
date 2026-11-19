@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 002 章 · 致命谎言 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">致命谎言</a>
+          <span class="sep">/</span>
+          <span>第 002 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 002 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：02 Jul 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,096 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>顾文宗使劲儿点点头，一路扶着转运平车。</p>
+        <p>到达CT检查室门口，他被拦在外面。</p>
+        <p>过了一会儿，又来两个医生，看一眼顾文宗，错身而过，进入CT检查室。</p>
+        <p>顾文宗眼尖，扫到其中一个医生白大褂上的名牌，「神经外科……」</p>
+        <p>他对母亲的身体状况不了解。</p>
+        <p>这三年里，他在忙学习，母亲作为私人看护，忙着照顾老太太。</p>
+        <p>母子二人，两三个月能见上一次都是多的。</p>
+        <p>母亲每次回来也是急火火地，关心几句他的学习，给他做顿饭，看着他吃完，又在三更半夜骑着电动摩托车赶回别墅。</p>
+        <p>神经外科急诊医生出来，看了看顾文宗，「你成年了吗？」</p>
+        <p>顾文宗点点头，「这月高考，里面那是我妈，什么情况，你直说吧。」</p>
+        <p>「目前怀疑你母亲是颅内动脉瘤破裂。现在就转到神经外科监护病房持续监护、对症控压，等血管造影结果出来，进一步确诊，定制手术方案。」</p>
+        <p>顾文宗听得不明不白，耳朵嗡嗡响。</p>
+        <p>他毫不犹豫给自己一巴掌，混乱地思绪才勉强清醒几分，「你刚才说？」</p>
+        <p>神经外科的医生又给他解释一遍。</p>
+        <p>顾文宗用力点点头。</p>
+        <p>神经外科监护室的护士带着转运急救设备前来交接，医护协同，推着平车离开急诊。</p>
+        <p>顾文宗小步跟上，凑近平车，一手握着母亲的手，一边跟着车走，一边低声呼唤，「妈……妈……」</p>
+        <p>到了神经外科监护病区，护士又一次将他拦下，叮嘱他留在监护室外等候，后续会同步告知CTA最终结果与治疗方案。</p>
+        <p>顾文宗靠着墙，缓缓蹲下。</p>
+        <p>几名护士进进出出，有时拿着医药，有时推着仪器，每一次都是步履匆匆。</p>
+        <p>每走过一次，顾文宗都站起来，盯着护士，追问母亲的状况，希望能听到点好消息。</p>
+        <p>护士则是看都没看他一眼，低头忙活，说的全是官方空话。</p>
+        <p>「家属请耐心等待，出现任何状况会第一时间通知。」</p>
+        <p>「你先平复一下自己，医生正在评估方案。」</p>
+        <p>不知过了多久，顾文宗被叫到一间屋子。</p>
+        <p>对方向顾文宗做介绍：「你是患者的儿子吧？我是你母亲的主治医生。」</p>
+        <p>顾文宗点点头，「你好，我妈怎么样了？」</p>
+        <p>主治医生拿着几张影像片，抽出一张，投在荧幕，指着其中的黑白灰交叠的影子，「你母亲确诊是颅内前动脉瘤破裂出血，出血量比较凶险，且位置特殊，建议立刻手术。否则，一旦未来二次破裂，则会危及你母亲的生命。」</p>
+        <p>「好！」顾文宗没有丝毫犹豫。</p>
+        <p>他看不懂影像片，也听不懂医生的大堆医学术语。</p>
+        <p>但他听到话里的重点，那句「一旦未来二次破裂，则会危及母亲的生命……」。</p>
+        <p>母亲尚未过五十岁生日，半生操劳，没有一天享福。</p>
+        <p>他还想努力赚钱，让母亲安享晚年。</p>
+        <p>「我说一下手术方案。」主治医生拿过一沓文件，递给顾文宗一份。</p>
+        <p>「我们首选血管内介入栓塞微创手术，不用开颅，从右侧大腿根部的股动脉穿刺置管，通过微导管顺着血管直达颅内动脉瘤，再用弹簧圈……」</p>
+        <p>顾文宗一边听着医生说，一边快速浏览文件。</p>
+        <p>手术知情同意书、介入手术风险告知书、麻醉知情书、紧急手术免责协议、输血备用同意书……</p>
+        <p>一堆白纸黑字的文件，每一字都是冰冷的风险条文，每一个文件都在提醒他，这将是一场重大手术。</p>
+        <p>顾文宗低着头，把一沓文件放在腿上，一份份签字。</p>
+        <p>又在每一个签下的名字上面按手印。</p>
+        <p>他根本不敢细看那些条文内容。</p>
+        <p>这种东西，越看越害怕，只会叫他更加心口发闷，像是有千斤巨石压下来。</p>
+        <p>全部手续办完，监护室的医护推着转运平车出来。</p>
+        <p>母亲身上连着监护仪、输液管、氧气管。</p>
+        <p>她安静躺着，双眼微阖，像是劳碌半生，终于得到一次好好睡觉的机会。</p>
+        <p>只是，整张脸苍白的没有一丝血色。</p>
+        <p>顾文宗快步上前，弯腰轻轻握住母亲的手，指尖贴着掌心，低声说：「妈，你放心，你一定能好起来……」</p>
+        <p>母亲的手没有一点肉，苍老又粗糙，不规则的细密小伤疤，手掌几处坚硬的老茧。</p>
+        <p>幼时，他放开母亲的手，独自蹒跚学着走路，便再也没握过那双手。</p>
+        <p>顾文宗跟着平车来到手术室外，目送母亲被推进去。</p>
+        <p>主治医生过来，拍拍他的肩头，「小伙子，勇敢一点儿。你在门外安心等待，有任何突发情况，护士会第一时间出来告知你。预计手术时间，三小时。」</p>
+        <p>「医生，请你一定要救一救我妈……」顾文宗哽咽地说。</p>
+        <p>手术室厚重的大门缓缓向内合拢。</p>
+        <p>「咔哒」一声，彻底隔绝了他望着母亲的目光。</p>
+        <p>「三小时……三小时……」</p>
+        <p>顾文宗反复念叨，好像只要经过三个小时，母亲就会立马好起来，恢复到健康的状态。</p>
+        <p>他心中无尽懊悔。</p>
+        <p>为什么要说那么一句谎话？！</p>
+        <p>还不如老老实实告诉母亲真相！</p>
+        <p>顾文宗在手术室外面走来走去，看八遍手机，才过去一分钟。</p>
+        <p>等待是煎熬的，他却只能等。</p>
+        <p>中途有两次护士开门出来，简短通报最新情况，都是些「成功」、「精准」、「平稳」、「控制在安全范围……」之类的词汇。</p>
+        <p>没有坏消息，是此刻顾文宗内心唯一的慰籍。</p>
+        <p>当手术室的大门又一次打开，主治医生优先出来，「小伙子，你母亲的手术非常成功。动脉瘤完全栓塞，出血彻底止住，你母亲已经脱离生命危险。」</p>
+        <p>顾文宗紧绷了一晚上的神经得到一瞬松懈，酸涩脱力席卷全身。</p>
+        <p>「但是，」主治医生稍微停顿。</p>
+        <p>顾文宗不由得站直，「怎么了？我妈怎么了？」</p>
+        <p>主治医生安抚似地拍了拍顾文宗，「小伙子，你母亲手术过程中出血较多，有脑血管痉挛，必须先到ICU观察几天，等各项指标稳定后，再转到普通病房。」</p>
+        <p>「好。」顾文宗松了一口气，盯着手术室的大门。</p>
+        <p>大门被从内拉开更大，几名护士和护工，一起把母亲推出手术室。</p>
+        <p>顾文宗跟在一边，一手扶着病床，看着静静沉睡的母亲。</p>
+        <p>无论如何，脱离危险，总是好的。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./001.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./003.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

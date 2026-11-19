@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 189 章 · 折妖 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">折妖</a>
+          <span class="sep">/</span>
+          <span>第 189 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 189 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：08 Jul 2560 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,103 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>屋子里没有点灯，全靠透入的月光分辨一切。有涯堂而皇之地坐在一把椅子上，将手中东西搁在桌上，拿起其中一个二尺多长的一物，小心仔细地擦拭著。</p>
+        <p>不多时，房外有脚步声，随之是推门又关门地声音。有涯垂首专心擦拭著手上的饰物，地上一道黑影距离自己越来越近，暗室里忽来一道银亮的寒光。</p>
+        <p>来者突然停步，一个低沉地声音，「听他们来报，阁里不缺金不少银，偏偏丢了贼都不会多看一眼的三样东西，我就料到，是你来了。」</p>
+        <p>有涯缓缓抬首，看著来者，面上露出一抹笑容，「许久不见，别来无恙。」说罢，继续垂首擦拭著手上饰物。</p>
+        <p>「死不了！」来者长袖一挥，「你曾说过，不会在人间界用到无舍,所以才丢给我帮你照看，如今怎么改了主意？」</p>
+        <p>闻言，有涯停下手上动作，将饰物搁在一旁。抬首看著来者，目光中显出几许忧愁，悠悠问道，「还记得它于我的意义吗？」</p>
+        <p>「一无所得，无不可舍。」来者说到此处，眼中露出惊疑，「能让你再次拿起无舍……」他突然双手攥成拳，厉声问道，「你找到他了？！」</p>
+        <p>有涯置若罔闻，不紧不慢地拿过一支有莲花底座的短棍，接著又拿起另一支带有龙首暗扣的短棍。双手同时用力，将两者相连。继而，拿起枪头，扣入顶端。他一手握住枪杆，从末梢划过，直至顶端。屋内莫名闪出一道金光，并伴随著一声龙吟。</p>
+        <p>「他在哪里？！」来者等得不耐烦。</p>
+        <p>「你很想知道？」有涯挑眉看著来者，倏然一抬手，无生直指对方，「我身上！」</p>
+        <p>无尽黑暗的虚空中，出现一点光芒。光芒忽明忽暗，一下一下，有节奏地闪动著，照出一座偌大莲台。莲台约莫丈余大小，由下至上，一共九层，远看好似一朵盛开的大莲花，在无边无际的虚空中，任意漂浮。</p>
+        <p>在莲台的正中心，有一颗清澈透亮的光球，这便是黑暗虚空中唯一光芒的来源。</p>
+        <p>不多时，四周开始出现金光，起先是一点点，而后越来越多。这些金光好似被吸引一般，全部附著在光球上方，汇成另一个略小一些的球形。如是，两球接连，整体看上去，像是个镀金的葫芦。</p>
+        <p>复又过了不知多久时候，那后落成的金球上突然开出两道裂缝，皆不足寸长。裂缝渐渐阔宽，内中竟是一双深褐色的眼瞳。如是，金葫芦上生出一对儿水灵灵的眼睛，正转动眼珠儿，四处望著。</p>
+        <p>看罢一片黑暗之后，这双眼眸里，终于映入了不同的事物。可那不过是一个若隐若现地虚影，每一次隐现都正好与闪动地光芒相反。眼睛盯著虚影看了许久，眼珠儿里地明亮渐渐黯淡，慢慢地阖上，仿佛睡著了。</p>
+        <p>待到这双眼睛再次睁开，内中亦充满明亮地光芒。它看到无数点点金光，由四面八方冲过来，附著在略大的光球上。如是，光球相对的两端，各自生出一支莲藕似的手臂。两只肉乎乎的小手，缓缓抬起来，伸向前方，像是要去触控那个再次出现的虚影。</p>
+        <p>然而，直至那虚影又一次消失不见，这双新生出来的小手儿，也未能成功抓到对方。它眼睛向下，勉强瞄到大圆球，伸出一个指头，小心翼翼地戳上去。看到光球随之凹陷，它霎时瞪大眼睛，好奇地不停戳来戳去。</p>
+        <p>当这双眼睛第三次睁开的时候，它看不到大光球了，取而代之的是，好像被挤压过的形状；第四次时，它看到被挤压过的下方，多出一双腿脚；第五次时，它可以听到周围有些虚无缥缈地声音，亦能听到虚影发出的声音，但它无法辨别出，那代表著什么；</p>
+        <p>在第六次睁开眼睛时，它生出一张口。于是，它学著虚影的样子，一开一合，发出它听不懂的声音。看到那个虚影的眼睛睁大了，嘴角动了，它也学著让嘴角上扬。这一次，它记得很清楚，虚影直到消失不见，都保持著那个表情。</p>
+        <p>当它第七次睁开双目的时候，却意外没有看到金光落下来，身上亦没再起任何变化。此刻，它已几近一个婴儿的形貌，一双小手对著黑漆漆的虚空胡乱抓，两只小脚也四下乱踢蹬。许久看不到那个虚影，它发出如婴儿般地啼哭。声音洪亮，穿透虚空，引动一阵电闪雷鸣。不过，没有一道敢打在它身上，似乎只为了对著哭声表示不满。</p>
+        <p>黑暗中，浮现点点金光，悠悠飘落，这一次，竟全部聚集在腰股与双腿之间。它感受到一丝冰凉，顿时止住啼哭。一双眼中还带著些雾水，紧紧盯著那虚影每每出现的地方。可是，它等了很久很久，久到双目雾水退去，久到眼中又一次盈满水气，虚影始终未出现。</p>
+        <p>如是，一声比一声响亮的啼哭，再次穿透虚空。对于一个婴儿来说，似乎只有哭，能够表达一切。它哭累就睡，醒来继续，周而复始。一连不知哭了多少个睡去和醒来，它无师自通，能够翻身，在偌大莲台上爬来爬去地绕圈儿。</p>
+        <p>后来，它手脚并用，尝试起身。在无数次摔倒之后，第一次站起来的时候，那个久违的虚影终于出现在它眼前。它睁大眼睛，口中咿咿呀呀，擎著两只小手儿想要触碰对方。</p>
+        <p>这一次，虚影游弋著向莲台靠近，停驻在边缘处，对立在中心的婴儿伸出双手。倏然，莲台四周纵横交错著无数道白光，像是有意阻隔两者接触。</p>
+        <p>它张著两只小手儿，发出清亮地笑声，缓缓抬起一条腿，小身板子立即失衡似地前仰后跌。它惊慌地放下小脚丫，虚空中传出一道堪比天塌地陷地响声。而在它落足的地方，绽开出一朵金色莲华，一闪即逝。它的身形也跟著长大一点儿，步子迈地更稳一点儿。</p>
+        <p>它一步又一步地踏出，从蹒跚到矫健。虚影始终伸著双手，停在不远处。只是在它每次跨出七步之后，便会换一个方向。它亦随之转动身形，继续迈著步子。不知不觉，走过东南西北，回到最初的起点，莲台上站立著一名浑身上下光溜溜的少年。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./188.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./190.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

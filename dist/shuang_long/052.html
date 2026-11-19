@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 052 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 052 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 052 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：21 Feb 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,087 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>再一次听到这句话，少龙暗自怀疑，杨虎有一个沉迷网路世界的姐，天天泡在不服网咖。</p>
+        <p>龙辰弹一弹烟灰：「你回教室睡觉吧？我看你第四节课都打瞌睡了。」</p>
+        <p>「嗯。昨晚……」少龙没有往下说，想起早上和龙辰的聊天有一点儿不愉快。但这似乎只是他单方面认为的不愉快，龙辰看起来完全没放在心上，还把半屉包子给他带回来。</p>
+        <p>「那什么……」龙辰咳嗽一声，「那就是个故事，你别总去寻思……呃……就是说，别总去想。小破地方，总会有几个怪力乱神的鬼故事。你啊，听过就算。」</p>
+        <p>少龙浅浅吸一口烟，正视龙辰：「你说的对，有人带我。我被转学到这儿，有一个临时接应人。是她带我过去，安排我住在那里。对于你其它的疑惑，我无法回答你，因为我也不知道，我也在寻找真相。」</p>
+        <p>良久，龙辰郑重点点头：「我记得，在我五六岁的时候，从大人们口中听来的。内容上，跟我给你讲的没有太大出入。起先，我不知道鬼屋具体在哪儿，后来长大一些，整个镇子跑熟了，知道他们口中的鬼屋。我就独自一个人，壮著胆子，进去了。」</p>
+        <p>龙辰低头抽一口烟，缓缓吐出：「老话说得好啊，‘初生牛犊不怕虎’。我当时看到剁骨刀嵌在桌子上，真就没有太害怕。或许是武艺在身的无所畏惧，或许是我听大人们说太多遍，听到耳根长茧子，对恐惧免疫了。」</p>
+        <p>少龙用脚狠狠碾灭烟蒂：「我回教室睡觉了。你呢？」</p>
+        <p>「我去不服待会儿。下午见。」</p>
+        <p>少龙回到教室，意料之中的空无一人。从睡著到被同学们的声音吵醒，他尝试著把自身放在这个班级，放在龙辰口中的「集体」中，去留心同学们的名字及特征，听一听同学们的聊天，从中更加了解各个任课老师，以及同学们对每个老师的看法。</p>
+        <p>大家的想法看法，与他基本一致。各科老师里面，最有意思，也最给面子的，是罗大爷。其中有年事已高的关系，有因为其像家里爷爷一般慈祥的一面，有因为其身为班主任，苦口婆心老妈子的一面。无论如何，让人无法对这个小老头儿产生厌烦。</p>
+        <p>下午的两节课，外带一节名义上的心理辅导，实际上是同学们和著罗大爷一起侃大山。龙辰睡满全程，直到集训的铃声响起，他像听到起床闹钟似的，与其它体育生同样，充满活力地离开教室。</p>
+        <p>教室里很快变得像个菜市场，干什么的都有。</p>
+        <p>少龙无法专注，又一次成功在罗大爷的眼皮子底下，翻窗溜出教室。</p>
+        <p>他在校园内漫无目的的蹓跶，来到操场，想看看龙辰到底是练什么的。但他走遍整个校内，没有找到龙辰的身影。当然，杨虎也不在。</p>
+        <p>不知不觉来到昨天撞见两人的地方，他依旧躲在那颗树后面，点燃一支大中华，另一手刷著手机。</p>
+        <p>张扬的头像从一号就是灰的，最早亮起来的时间，也要到周五晚上。今天周三，他在这个学校体验三天，对这个学校产生的糟心情绪，在今天的英语课后，疏解一部分。</p>
+        <p>比起人人像个独行侠，皆自顾不暇的学习环境，这里有更多人性化的地方，同学之间不是竞争者，只是简单的同学、朋友，上进的与不上进的，都能找到属于自己的位置。</p>
+        <p>在你被老师盯上时，不报以看戏心态，想尽办法帮你逃过刁难。</p>
+        <p>不尽如人意，才能鞭策人前进。</p>
+        <p>少龙是一个喜欢处在竞争环境中的人，因为只有在竞争中，他才能有成绩，有成果，有父亲家里的一席之地。</p>
+        <p>而今被赶出来，他的竞争结果，也只能拿去烧了。</p>
+        <p>听到有人蹬墙的声音，少龙略微抬头，望著墙头，与探出半个身的龙辰对视一眼。</p>
+        <p>龙辰先是一怔，跳进院墙，送上个被抓包后的嘻笑。</p>
+        <p>杨虎跟著翻进来，惊叫：「我艹！」他朝著少龙匆匆一瞥，把注意力放在龙辰身上，「你又要抽根烟？」</p>
+        <p>龙辰点点头：「你先回。」</p>
+        <p>「你是在这儿堵我？」龙辰有意顿了顿，「还是在这儿等我？」</p>
+        <p>少龙递出烟盒，一本正经地说：「等著给龙大侠递烟。龙大侠练习翻学校院墙辛苦了。」</p>
+        <p>「哈？！」龙辰莞尔一笑，「这怎么好意思呢，龙少爷。」</p>
+        <p>暮色苍茫，两人并肩靠著同一颗树杆，各自手上夹著一根大中华，默默地抽烟，不约而同地享受寂静。远处，操场上的人越来越少。</p>
+        <p>「你目前自己住在那儿吧？」龙辰斟酌著说，「如果不敢住的话，可以……」</p>
+        <p>「谁不敢住了？！」少龙打断龙辰的话，「我住得挺好。」</p>
+        <p>「也是。就你那身手，啥玩意儿都能让你三拳两脚打废了。」龙辰扔了烟蒂，「走吧。回教室，正好打铃。一天，又是这样过去咯～」</p>
+        <p>是啊。又过去一天。少龙后知后觉，开学至今，他没有一天是好好在教室里自习到下课。</p>
+        <p>「同桌，明天见。」龙辰翻出窗户，一手撑著窗台，「同桌，我每天早晚都和你打招呼，你是不是从来没有回我？」</p>
+        <p>少龙停下抄写动作，转头望向窗外的龙辰：「再见。」</p>
+        <p>龙辰满脸嫌弃：「真生硬！跟给你上刑似的。明天见！」</p>
+        <p>少龙不再像前两天那么一团乱。他先在玄武广场附近吃了顿晚饭，然后逛逛超市，买几瓶饮用水，赶在天黑之前，回到鬼屋。</p>
+        <p>大门仍是完全敞开，正厅里，还残留著食物变质的味道。正对大门，剁骨刀稳稳嵌在桌板里。</p>
+        <p>他不由得去想象，龙辰第一次孤身过来，开启门看到这样的场景，花多少时间冷静下来？想到龙辰敢三更半夜闯进来，他觉得自己没必要输于对方。</p>
+        <p>按照龙辰的说法推论，一切问题真相，要从生命投资人身上找起，那个行踪鬼鬼祟祟的女人，那个见光如见鬼的女人。</p>
+        <p>少龙起得很早，拎著滑板出门，有意换一家早餐店，匆匆吃完，直奔学校。</p>
+        <p>教室里同学不多，几个热火朝天忙著抄作业的，有的看到他，热情地打招呼。</p>
+        <p>他努力做出友善的表情，应和一声。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./051.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./053.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

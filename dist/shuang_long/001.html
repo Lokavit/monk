@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 001 章 · 龙行龙道 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">龙行龙道</a>
+          <span class="sep">/</span>
+          <span>第 001 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 001 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：01 Jan 2562 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,056 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>少龙坐在路边的石墩，视线落在对面车站。</p>
+        <p>暮色苍茫，站前正上演著一出戏——</p>
+        <p>一个三四十岁的女人，向一个小姑娘的揹包伸手，被后者抓个现形。女人恼羞成怒，动手打人，又被小姑娘的男同伴打回去。女人登时躺在地上哭嚎，拽著两人要赔偿。</p>
+        <p>看戏的少龙，脑子里有一瞬恍惚。没摸准女人到底是行窃不成改碰瓷儿，还是本来的目的就为讹人。无论如何，整出戏可谓是精采绝伦，令人大开眼界。</p>
+        <p>叼在嘴角的烟，安静燃烧。他伸出食指和中指，轻轻夹住烟蒂，浅浅吸一口，慢慢吐出。透过眼前缓缓散开地烟雾，他长久地，专注地凝视著恢复如常的车站，和站前广场来往的人。这些人的穿著打扮，就像新闻里的待扶贫物件，充满乡土气。</p>
+        <p>「铛～！」大钟发出沉闷声响，一声接著一声。时针与分针连成一线，将透著白色背光的表盘竖劈两半。</p>
+        <p>少龙点开手机讯息列表。</p>
+        <p>生命投资人：『到车站给我发讯息，我去接你。』</p>
+        <p>讯息发来的时间是早晨，那会儿少龙在路上，困得迷迷糊糊；现在是傍晚六点多，他在车站对面坐一个多小时。</p>
+        <p>这个年代，还有人放著免费的即时通讯软体不用，非要一毛一条的发简讯。</p>
+        <p>他不能理解，但不得不用简讯方式回复：『到了。』</p>
+        <p>讯息刚刚发出去，手机响铃一声，萤幕上浮著一条来自聊天软体的资讯。</p>
+        <p>张扬：『怎么样？走到哪儿了？』</p>
+        <p>少龙的唇边勾出一抹舒心的微笑。熟悉的人，熟悉的沟通方式，以及熟悉的关切。</p>
+        <p>他弹一弹烟灰，点开聊天框：『目的地。』</p>
+        <p>下一瞬，张扬的影片邀请发过来。</p>
+        <p>少龙略微一愣，脸上笑容消失。在按下接受的同时，用最快速度把摄像头调到后置，朝向腿边蹲坐的金毛，狗脸填充整个小视窗。</p>
+        <p>漫长的网路连线，他的萤幕里出现一个平头，接著是浓眉大眼，最后展现全貌——国字脸的男生，满眼期待地盯著萤幕。</p>
+        <p>「嚯！这两天下来，笑笑都蔫儿了啊！」张扬亮著嗓子，「我看看你，把摄像头转过去！」</p>
+        <p>「不用看。我现在和它一个姿势。」少龙一手抚过金毛的头顶，「笑笑，来！跟你哥打招呼。」</p>
+        <p>笑笑盯著手机背面，一爪子拍在摄像头上。手机抖一抖，摄像头位置偏移。</p>
+        <p>「拿开你的爪。」少龙低声呵斥，瞪一眼笑笑，调回视角。笑笑发出两声哼唧，一脸委屈相。</p>
+        <p>「还是笑笑懂。不给看？很差？」</p>
+        <p>少龙没有回答。张扬的观察入微，从不让人失望。</p>
+        <p>他把摄像头对准车站：「你自己看。」</p>
+        <p>「还行，挺有年代感的建筑。大厅里真亮堂，还有那个大钟，时间真准。」</p>
+        <p>少龙被张扬逗笑：「没什么可夸，可以不夸。」</p>
+        <p>张扬哈哈大笑：「看看其它地方。」</p>
+        <p>「那你可要坐稳了，看好了。」少龙叼著烟，擎著手机，绕著坐过的石墩走一圈儿。这是他来此地一下午，第一次去看车站以外的地方。并将此时此景，透过手机镜头，分享给遥远的好兄弟。</p>
+        <p>这里，是他人生的第一个意外折点——苍泉镇，一处贫困凋敝如战后遗迹的僻壤。</p>
+        <p>张扬摇摇头，唉声叹气：「你现在的状态，加上这环境，特别像去参加荒野求生节目。」</p>
+        <p>少龙盯著手机萤幕皱眉：「你说话就说话，别乱动。这里讯号差，你的脸都卡成关键帧……」话还没说完，萤幕卡顿几秒，显示两人聊天介面。</p>
+        <p>他猛地握紧手机，嗖地举过头顶，咬咬牙，狠狠甩下手臂。</p>
+        <p>张扬：『我妈杀进来了，晚上再聊。』</p>
+        <p>少龙松了一口气，还好不是讯号被强制中断，不然就真要上演荒野求生的剧情了。手上的烟，忽明忽暗。生命投资人没再发来资讯。车站大厅出来寥寥几人，走向四面八方。周围破旧的矮楼，先后有人家亮灯。远处一枝独秀的商业楼群，楼顶白色的背光照亮四个大字——玄武广场。</p>
+        <p>天空一道闪电，紧接著是连番闷雷，滚滚而来。</p>
+        <p>少龙在手机地图上搜索玄武广场，大资料给出的结果遍布全国，再定位到他所在的地方。地图规划好一会儿，给他推荐两条路线——步行路线。他反复切换出行方式，路线越变越复杂。</p>
+        <p>破地方！</p>
+        <p>先后点开两条路线，与实际路况做对比，少龙放弃三公里，选择五公里的路。远是远，但只需走过不到一公里的小路，就能拐上主干道。上了主干道，就可以打车。</p>
+        <p>「笑笑，找酒店去。」少龙扔掉手里的烟蒂，狠狠碾上一脚，拉著行李箱，跟著地图走。小路没有路灯，完全靠两边居民楼人家的灯光照亮。主干道是双车道，路灯虽然不是每一盏都在工作，但整体照明效果比小路好太多。</p>
+        <p>他站在主干道路边，等上十分钟，得出一个难以置信的事实——</p>
+        <p>计程车？没见！</p>
+        <p>公交车？没见！</p>
+        <p>主干道上，只有少得可怜的社会车，呼啸而过，开车的仿佛全是退役赛车手。从少龙看到车的身影，到他犹犹豫豫抬起手臂，连车尾灯都看不到了，更别说找一辆靠谱的拦下来。</p>
+        <p>什么鬼地方！这里不限速吗？！</p>
+        <p>少龙重重沉下一口气，抽出横在行李箱的滑板，拨动轮子，仔细检查。</p>
+        <p>「还好带著你这张玩具，先借我用用。」他低头摸著笑笑的狗头，站在滑板上，一手拉著行李箱。</p>
+        <p>「走！」他拽一拽手里的绳子。笑笑仰头看著他，不肯动弹。</p>
+        <p>少龙从揹包侧兜拿出袋小零食，在狗鼻子前晃一晃：「来，闻闻！到地方就是你的。」</p>
+        <p>笑笑哼唧一声，慢慢悠悠地往前走。</p>
+        <p>手里的绳子逐渐绷紧，带动滑板向前。滑板一路歪歪斜斜，好在少龙的技术过硬，能够控制平衡。就是这条路太破，震得他两腿发麻。</p>
+        <p>没等滑出半程，冰凉的雨水淋在身上，迫使他收起滑板改为竞走。笑笑因此得以解放，围著他，摇著尾巴转悠，时不时发出两声哼唧，得到鸡肉干才肯罢休。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <span class="nav-btn disabled">
+          <span class="arrow">←</span> 上一章
+        </span>
+        <a href="./002.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

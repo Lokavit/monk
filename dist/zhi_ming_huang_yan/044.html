@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 044 章 · 致命谎言 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">致命谎言</a>
+          <span class="sep">/</span>
+          <span>第 044 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 044 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：13 Aug 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,093 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>苏老太太声音哽咽，「慧莉，是不是不在了啊。」</p>
+        <p>顾文宗咬着嘴角，点点头。</p>
+        <p>想起来苏老太太完全看不见，他说：「苏太奶奶，我妈过世了。」</p>
+        <p>苏老太太握着顾文宗的手叹气，「唉。是我拖累了她啊，她还走我前面了。你说说，我活着有什么用？只会拖累人啊。」</p>
+        <p>说到后面，老泪纵横。</p>
+        <p>顾文宗用湿巾给苏老太太擦眼泪，咬着嘴唇，一句话也不说，生怕自己一开口，就忍不住跟着哭起来。</p>
+        <p>「你妈妈是好人呐。常常跟我念叨你，说你学习刻苦，能自己照顾自己，不用她操心。我就和她说啊，把你接过来，咱三个一起住。」</p>
+        <p>苏老太太顿了顿，叹一口气，「你妈妈不肯。说那不是她家，她只是一个看护，不能带着人来住。有时候想儿子，就一个人躲起来，默默地掉眼泪，还怕我看见多心。」</p>
+        <p>顾文宗低着头，紧紧握着苏老太太的手。</p>
+        <p>苏老太太什么都想起来了，脑子非常清楚。</p>
+        <p>可是顾文宗高兴不起来。</p>
+        <p>苏老太太拍了拍顾文宗的手背，「唉，那么大房子，多一个人怕什么。你妈妈就是太有原则了。」</p>
+        <p>顾文宗陪着苏老太太聊了好一会儿，聊到苏老太太睡下。</p>
+        <p>他找到医生，「怎么会这样？才住进来没几天，苏老太太怎么就……」</p>
+        <p>「你别激动。从医学角度看，这是好现象，老人家记忆恢复，身体无病无痛，走的时候也会无牵无挂。」</p>
+        <p>「你的意思是……」</p>
+        <p>医生一脸无奈地摇头，「也就这几天了。我听说你要走，眼下这个情况。我建议你继续留下来，每天赔她说说话。她只有看到你，才会说很多话，精神也好很多。我相信，你的内心里是把老太太当亲人对待的，也是衷心希望老太太开开心心，了无牵挂地闭上眼。」</p>
+        <p>顾文宗点点头，应下来。</p>
+        <p>接下来的日子里，他每天都去陪着苏老太太，聊着那些他以为苏老太太不记得，事实上完全清楚的过往。</p>
+        <p>两人聊得最多的，还是母亲。</p>
+        <p>顾文宗十分欣慰，在苏老太太人生最后的旅程，母亲占据一席之地。</p>
+        <p>一场大雪连下三天三夜，疗养院的院子里，众人合力清雪，堆起一个硕大的雪人。</p>
+        <p>顾文宗快步往走廊里走，苏老太太的房间能够看到院子。</p>
+        <p>当他到了门口，忽然停住脚步。</p>
+        <p>即使再大的雪人，苏老太太也看不见了。</p>
+        <p>推开房门，屋里特别热闹，医生、护士、看护，全都在。</p>
+        <p>顾文宗听了几句。</p>
+        <p>原来，苏老太太从早上醒来就在闹着要找一个铁盒子，拒绝吃饭，拒绝喝水，甚至拒绝看护触碰她。</p>
+        <p>一群人正束手无策。</p>
+        <p>医生看到顾文宗，松了一口气，挥一挥手，「我正准备打电话找你。」</p>
+        <p>顾文宗暗自叹气。</p>
+        <p>苏老太太显然忘了。</p>
+        <p>第一场雪那晚，两人在院子的鱼池里生火，把所有东西都烧了。</p>
+        <p>顾文宗庆幸偷偷留着那些照片。</p>
+        <p>他只需要回到别墅，找出来铁盒子，把收藏的那些相片和那张极具份量的旧文件，放回盒子里。</p>
+        <p>然而，当他打车回到别墅，看到落锁的大铁门，他才想起来。</p>
+        <p>傅英华送苏老太太到疗养院的那天，就把别墅钥匙收回。</p>
+        <p>当着他顾文宗的面，交给了马代理。</p>
+        <p>大门的两侧石柱，各贴着一张出售，联系人位置写着马代理。</p>
+        <p>顾文宗蹬着铁门横栏，翻进院子，从入户门绕到佣人房的窗户。</p>
+        <p>这间屋子，原本是苏老太太的大女儿一家，用来关苏老太太的。</p>
+        <p>为了防止苏老太太顺着窗户爬出来，当初是直接在外面把窗户封住的。</p>
+        <p>顾文宗找到两块石头，把钉子撬起来，拉开窗户，成功翻入。</p>
+        <p>可是，屋子里面彻底空了！</p>
+        <p>顾文宗的脑子也跟着空了。</p>
+        <p>那些没有来得及带走的母亲的遗物，那些没有来得及放好的苏老太太的旧相片和旧文件，那些本应该在床单里，他打包一半的东西，全都没了！</p>
+        <p>只剩下纯白色的床单。</p>
+        <p>他从佣人房里走出来，客厅里、沙发上、二楼、三楼……</p>
+        <p>整栋别墅，被彻底大清理，干干净净，连露台小菜园都被整个儿起底。</p>
+        <p>没了，什么都没了，没有苏老太太在此生活三十年的痕迹，没有母亲在此做五年看护的痕迹，更没有他顾文宗那短暂的停留痕迹。</p>
+        <p>顾文宗的脑子里，比别墅还空。</p>
+        <p>他按照原路离开别墅，站在大门口，按照纸上的电话打过去。</p>
+        <p>电话几秒内接通。</p>
+        <p>马代理率先开口，态度非常客气，语气里尽是热情。</p>
+        <p>顾文宗听了几句话，打断马代理，「你把别墅的东西搬哪儿去了？」</p>
+        <p>电话那端沉默两秒，挂断了。</p>
+        <p>顾文宗攥紧拳头。</p>
+        <p>眼下，苏老太太的状况最重要。</p>
+        <p>他想起附近有一家卖老旧玩意儿的。</p>
+        <p>「老板，我需要一个旧铁盒子，差不多以前的饭盒那么大，越旧越好。」</p>
+        <p>店老板是个五六十岁的小老头儿，扫了顾文宗两眼，从货架后面，费力拉出来一个半人高的大纸箱子，里面叮零当啷响。</p>
+        <p>「你看看，有没有你要的。」</p>
+        <p>顾文宗伸手进去，拿出一个，仔细观察，放手里掂量掂量，感觉不太对，又换了一个。</p>
+        <p>他挑挑拣拣好一会儿，选出一个从外观手感到重量都差不多的破旧铁盒子，「多少钱？」</p>
+        <p>「三百。」</p>
+        <p>顾文宗以为自己听错了，「你说这盒子多少钱？」</p>
+        <p>「三百块。」老板提高音量，一副爱买不买的模样。</p>
+        <p>顾文宗倒吸一口凉气，咬牙付了三百块。</p>
+        <p>他把盒子清理干净，打车直奔疗养院。</p>
+        <p>他想着，等到了疗养院，可以找点类似相纸材质的东西放进盒子里，反正苏老太太看不见，只要摸着差不多，就不会怀疑。</p>
+        <p>当他赶回疗养院，刚下车，就看到傅英华那辆黑色商务车，停在非常显眼的位置。</p>
+        <p>与此同时，一辆黑色灵车开进疗养院的侧门，一点点向后倒。</p>
+        <p>顾文宗心中一惊，直奔苏老太太的房间。</p>
+        <p>走廊上围着一群人。</p>
+        <p>几个眼熟的老人，一边朝内张望，一边讨论。</p>
+        <p>「这是谁又走了？」</p>
+        <p>「前几天住进来的那个。」</p>
+        <p>「喔，那个苏大姐啊。」</p>
+        <p>苏老太太被推出来，然后是傅英华、司机、壮汉、医生、护士、看护……</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./043.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./045.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

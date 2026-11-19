@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第 042 章 · 知遇不知恩 · Lokavit&#x27;s Personal Site</title>
+    <link rel="stylesheet" href="../../assets/main.css" />
+    <style>
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      .header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .chapter-head {
+        margin-top: 8px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.25s ease;
+      }
+
+      .breadcrumb a:hover { color: var(--accent-hover); }
+      .breadcrumb .sep { opacity: 0.4; }
+
+      .chapter-title {
+        margin: 0 0 14px;
+        color: var(--accent);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: 1px;
+      }
+
+      .chapter-title .chapter-num { color: var(--accent); }
+      .chapter-title .chapter-name { color: var(--text); }
+
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 18px;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-meta .dot { opacity: 0.35; }
+
+      .chapter-summary {
+        position: relative;
+        margin-top: 28px;
+        padding: 18px 20px 18px 22px;
+        border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.09),
+          rgba(var(--accent-rgb), 0.02) 70%,
+          transparent
+        );
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .chapter-summary:hover {
+        border-left-color: var(--accent);
+        background: linear-gradient(
+          90deg,
+          rgba(var(--accent-rgb), 0.14),
+          rgba(var(--accent-rgb), 0.04) 70%,
+          transparent
+        );
+        transform: translateX(2px);
+      }
+
+      .chapter-summary .summary-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        opacity: 0.65;
+      }
+
+      .chapter-summary p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 0.82rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      .chapter-content {
+        margin-top: 36px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 2;
+        letter-spacing: 0.3px;
+      }
+
+      .chapter-content p {
+        margin: 0 0 1.3em;
+        text-indent: 2em;
+      }
+
+      .chapter-content p:last-child { margin-bottom: 0; }
+
+      .chapter-content .quote {
+        margin: 1.6em 0;
+        padding: 12px 18px;
+        border-left: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: rgba(255, 255, 255, 0.6);
+        text-indent: 0;
+        font-size: 0.92rem;
+        line-height: 1.9;
+        background: rgba(var(--accent-rgb), 0.04);
+      }
+
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 760px;
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 150px;
+        padding: 12px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--foreground);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: background 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .nav-btn.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+        border-color: rgba(var(--accent-rgb), 0.2);
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-btn .arrow {
+        font-family: "Courier New", Courier, monospace;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+        .chapter-title { font-size: 1.5rem; }
+        .chapter-content { font-size: 0.95rem; line-height: 1.95; }
+        .chapter-summary { padding: 16px 16px 16px 18px; }
+        .chapter-nav { flex-direction: column; margin-top: 40px; }
+        .nav-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="../../index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="../../index.html">首页</a>
+            <a href="../../index.html#library">书库</a>
+            <a href="../../index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="chapter-head">
+        <div class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="sep">/</span>
+          <a href="./index.html">知遇不知恩</a>
+          <span class="sep">/</span>
+          <span>第 042 章</span>
+        </div>
+
+        <h1 class="chapter-title">
+          <span class="chapter-num">第 042 章</span>
+        </h1>
+
+        <div class="chapter-meta">
+          <span>发布日期：11 Jun 2569 BE</span>
+          <span class="dot">｜</span>
+          <span>字数：约 2,096 字</span>
+          <span class="dot">｜</span>
+          <span>阅读时长：约 6 分钟</span>
+        </div>
+      </div>
+
+      <div class="chapter-summary">
+        <span class="summary-label">内容提要</span>
+        <p></p>
+      </div>
+
+      <article class="chapter-content">
+        <p>日子过得松弛又麻木，她偶尔刷到全网刷屏的望果节现场，短视频、摄影作品、游客随拍铺满首页，满屏都是高原盛夏的明媚、经幡飞舞、藏歌嘹亮、人海热闹。</p>
+        <p>她自认这些离她越来越远了，只有她自己知道，这样盛大的节庆，别人能出这么多好作品，她却是连一笔都没有画下去。</p>
+        <p>没有灵感，就要寻找灵感。</p>
+        <p>她翻着节庆相关的视频作品、摄影作品、随拍作品、图文作品，搜索结果无限长，根本划不到底。</p>
+        <p>忽然，她在一个游客视角拍摄的视频画面边角里看到一只狗。</p>
+        <p>她第一遍没看清楚，倒回去反复看那几秒，确实是一只狗，一只边牧！</p>
+        <p>体态、毛色，很像饭团。</p>
+        <p>她特地截图，并找出手机里饭团的照片，详细对比。</p>
+        <p>视频里的边牧，除了瞎掉一只眼睛，动起来有点跛脚，其它特征与饭团几乎一模一样。</p>
+        <p>按理说，藏民是不会选择养这种来自平原的牧羊犬，无论是看家、放牧、驱狼，通通做不到，比起藏区本土几千年的高原犬种，天差地别。</p>
+        <p>她怀疑是画面里，或者画面外，某个人带来的边牧。</p>
+        <p>隔着屏幕看了好一会儿，她心中隐隐有一种感觉，这就是饭团！</p>
+        <p>是邵骏邕养的那只饭团，是陪她半年的饭团，是她用心照顾过的饭团。</p>
+        <p>一瞬间，先前所有的麻木、淡漠、自我安抚尽数碎裂。</p>
+        <p>沈知遇的指尖骤然发凉，反复点开那张模糊的路人随拍，放大、再放大。</p>
+        <p>她想起，邵骏杰提到，邵骏邕是自驾。那么很大概率带上了饭团。</p>
+        <p>巨大的慌乱猛地攥住她的心脏，她再也无法保持平静。</p>
+        <p>如果这是饭团，那么，她当初没有听完邵骏杰的后话，将会有答案。</p>
+        <p>她翻遍所有望果节相关的图集、视频、游客分享，逐条筛查评论区、定位动态，疯了一样顺着零碎的网络线索追溯、打听，在无数陌生网民的留言里翻找蛛丝马迹。</p>
+        <p>她四处私信拍摄者，反复询问照片拍摄的具体村落、时间、场景，起初大多石沉大海，偶尔有人回复，也只说是沿途偶遇的村落节庆，不清楚狗狗的来历。</p>
+        <p>整整五天，她不眠不休，梳理线索，顺着节庆举办地、游客打卡轨迹、村落位置层层缩小范围，最终，却无法做进一步定位。</p>
+        <p>她不得不求助唐杰，「你知道这一片大约离我们这多远吗？」</p>
+        <p>「我看看。」唐杰接过沈知遇的手机，一张张截图看，「这个地方是……」</p>
+        <p>就在这是，手机横幅弹出一条消息。</p>
+        <p>文创部：「这波望果节直接把我们项目炒起……」</p>
+        <p>沈知遇故作镇静，偏头看着唐杰，「是哪儿？你倒是说啊。」</p>
+        <p>「这地方是河谷深处的小村，海拔比这边高几百米，位置非常偏僻。那里不通主路，不接村道，甚至没有通讯信号，就连资深进藏领队都极少知道这里。」</p>
+        <p>「对对对！」沈知遇激动地抓着唐杰的手，「那个人就是望果节来的，误打误撞进去的。」</p>
+        <p>她松开手，改为两手紧紧抓着手机，「我想去这里，怎么才能去？路过我们村落的那辆车，能到吗？」</p>
+        <p>唐杰摇摇头，「只能自驾。」</p>
+        <p>沈知遇一顿，别说是没车，她连驾照都没有考过。</p>
+        <p>她就没想过这辈子还会卡上需要自驾，眼下，只好……</p>
+        <p>「望果节结束了哈？你能不能陪我去一趟？」</p>
+        <p>「哪一天去？我提前安排。」</p>
+        <p>沈知遇划拉几下手机，「后天吧。」</p>
+        <p>唐杰答应一声，又去忙了。</p>
+        <p>沈知遇重新打开文创部的群。</p>
+        <p>后天，正是动工的日子。</p>
+        <p>约定的日期很快来到，唐杰开着一辆二手四驱皮卡，副驾驶坐着沈知遇。</p>
+        <p>车辆晃悠上了主路，沿着国道开了二十多公里，然后拐进河谷。</p>
+        <p>往河谷深处开，沈知遇才体会到村落与村落之间的差距，车子在这条砂石土路颠簸了五六十公里，颠到她全身骨头胡乱打架。</p>
+        <p>到达的时候，已经是晌午。</p>
+        <p>虽然地处极为偏僻，但有人的地方，就有望果节。</p>
+        <p>此处的节庆余温未散，村里依旧热闹，经幡依旧随风翻涌，只是热闹之外，多了几分寻常日子的安静。</p>
+        <p>这个时间，是一个尴尬的时间，大部分人家院门虚掩，村口、晒场、草甸都没有人，只有零星藏区土犬卧在墙根纳凉。</p>
+        <p>整个小村落一片安静。</p>
+        <p>沈知遇有一瞬恍惚，她原本可以这样每日宁静度日，她原本就找到了最适合她生活的地方。</p>
+        <p>却是她亲自开门，迎资本家进门。</p>
+        <p>这个时间，项目施工队应该已经进村了，那群分秒必争的人可能早已开始动工。</p>
+        <p>沈知遇心中清楚，村落的那些藏民不会阻止，只会热情的招呼。</p>
+        <p>只因，在女高管的努力下，就连那些原本反对的人，也在收到一沓沓钞票后，在授权同意书上签下自己，以及全家人的名字。</p>
+        <p>她一边怕唐杰知道，故意选在今天出来；一边又觉得，这么大动静，唐杰应该早就知道了。</p>
+        <p>只是，他应该不知道，她就是那个开门迎资本家的人。</p>
+        <p>午后，村民陆续走出房屋，有的向着晒场，有的向着巷口，还有得朝着河边走去。</p>
+        <p>沈知遇下车，顺着院落，一户一户走，遇见坐在院子外面做活的阿妈就会拿着截图上前，用磕巴的藏语交流，询问。</p>
+        <p>遇到实在听不明白的，唐杰也会热心的帮她翻译，帮她询问。</p>
+        <p>小村落有小村落的好处，一路问了七八家，就得知，这确实是某户牧民家养着的边牧。</p>
+        <p>「他说，那孩子到远处河谷的草场放牧去了。」</p>
+        <p>沈知遇闻言，心头猛地一紧，来不及歇息，转身便朝着村民指引的河谷草场方向走去。</p>
+        <p>唐杰先是和对方多问了几句，然后跟在她身后，不远不近，保持着几米的距离。</p>
+        <p>从村落走到外围草场，是一段平缓的上坡草路。</p>
+        <p>六月正午的高原日光烈得刺眼，风吹过草浪沙沙作响，空旷的河谷里只有风声与两人轻浅的脚步声。</p>
+        <p>足足找了三个多小时，村落的炊烟与屋舍彻底落在身后，视野骤然开阔。</p>
+        <p>远处的坡地上，一大片羊群散落吃草，零零散散缀在青绿草甸间。</p>
+        <p>视野尽头，一个瘦小的藏族少年握着牧鞭站在坡顶。</p>
+      </article>
+
+      <nav class="chapter-nav">
+        <a href="./041.html" class="nav-btn">
+          <span class="arrow">←</span> 上一章
+        </a>
+        <a href="./043.html" class="nav-btn">
+          下一章 <span class="arrow">→</span>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>
