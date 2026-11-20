@@ -3,10 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>爱上新邻居 · 书库 · Lokavit's Personal Site</title>
+    <title>爱上新邻居 · 书库 · Lokavit&#x27;s Personal Site</title>
     <link rel="stylesheet" href="../../assets/main.css" />
     <style>
-      /* ==================== 基础变量（与首页一致） ==================== */
       :root {
         --background: #121212;
         --foreground: #4eee85;
@@ -20,7 +19,6 @@
         --radius: 8px;
       }
 
-      /* ==================== 重置 ==================== */
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
 
@@ -41,7 +39,6 @@
         text-align: left;
       }
 
-      /* ==================== 顶部固定栏 ==================== */
       .site-header {
         position: sticky;
         top: 0;
@@ -108,7 +105,12 @@
         background: var(--accent-bg);
       }
 
-      /* ==================== 区块标题 ==================== */
+      @media (max-width: 720px) {
+        .container { padding: 24px 16px 60px; }
+        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+        .header-inner { flex-wrap: wrap; justify-content: center; }
+      }
+      /* ==================== 书籍页 ==================== */
       .section-head {
         display: flex;
         align-items: baseline;
@@ -150,7 +152,6 @@
         border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
       }
 
-      /* ==================== 书籍详情卡片 ==================== */
       .book-detail {
         display: block;
         margin-top: 20px;
@@ -238,7 +239,6 @@
         letter-spacing: 0.5px;
       }
 
-      /* ==================== 章节目录 ==================== */
       .chapter-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -280,11 +280,7 @@
         opacity: 1;
       }
 
-      /* ==================== 响应式 ==================== */
       @media (max-width: 720px) {
-        .container { padding: 24px 16px 60px; }
-        .site-header .container { padding-top: 12px; padding-bottom: 12px; }
-        .header-inner { flex-wrap: wrap; justify-content: center; }
         .book-detail { padding: 18px; }
         .book-title { font-size: 1.35rem; }
         .chapter-grid { grid-template-columns: 1fr; }
@@ -293,7 +289,6 @@
     </style>
   </head>
   <body>
-    <!-- ==================== 顶部固定栏 ==================== -->
     <header class="site-header">
       <div class="container">
         <div class="header-inner">
@@ -311,9 +306,7 @@
       </div>
     </header>
 
-    <!-- ==================== 主内容 ==================== -->
     <div class="container">
-      <!-- ==================== 书籍信息 + 作品简介 ==================== -->
       <section class="book-detail">
         <h1 class="book-title">爱上新邻居</h1>
 
@@ -345,7 +338,6 @@
         </div>
       </section>
 
-      <!-- ==================== 章节目录 ==================== -->
       <div class="section-head" id="chapters">
         <h2 class="title">章节目录</h2>
         <span class="count">共 4 章</span>
