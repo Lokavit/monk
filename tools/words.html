@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文本工具 · Monk</title>
+    <style>
+      /* ==================== 基础变量 ==================== */
+      :root {
+        --background: #121212;
+        --foreground: #4eee85;
+        --accent: #4eee85;
+        --accent-hover: #8dffb4;
+        --accent-rgb: 78, 238, 133;
+        --accent-bg: rgba(78, 238, 133, 0.1);
+        --accent-bg-hover: rgba(78, 238, 133, 0.16);
+        --danger: #ff6b6b;
+        --danger-rgb: 255, 107, 107;
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --radius: 8px;
+      }
+
+      /* ==================== 重置 ==================== */
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        text-align: left;
+      }
+
+      /* ==================== 顶部固定栏 ==================== */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+      }
+
+      .site-header .container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        color: var(--text);
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+
+      .header-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .header-nav a {
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: color 0.25s ease, background 0.25s ease;
+      }
+
+      .header-nav a:hover {
+        color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      .search {
+        padding: 6px 14px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .search:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-bg);
+      }
+
+      /* ==================== 区块标题 ==================== */
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 3em;
+        scroll-margin-top: 100px;
+      }
+
+      .section-head:first-of-type {
+        margin-top: 1.5em;
+      }
+
+      .section-head .title {
+        margin: 0;
+        color: var(--accent);
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+
+      .section-head .count,
+      .section-head .more {
+        color: var(--foreground);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        opacity: 0.45;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: color 0.25s ease, opacity 0.25s ease;
+      }
+
+      .section-head .count:hover,
+      .section-head .more:hover {
+        color: var(--accent-hover);
+        opacity: 1;
+      }
+
+      .line-dashed {
+        margin: 12px 0 0;
+        border: none;
+        border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+      }
+
+      /* ==================== 编辑器 ==================== */
+      .editor-wrap {
+        margin-top: 20px;
+      }
+
+      #editor {
+        display: block;
+        width: 100%;
+        min-height: 320px;
+        padding: 18px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text);
+        font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+          system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+        resize: vertical;
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease,
+          background 0.3s ease;
+      }
+
+      #editor::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      #editor:hover {
+        border-color: rgba(var(--accent-rgb), 0.7);
+      }
+
+      #editor:focus {
+        border-color: var(--accent);
+        background: var(--accent-bg);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      /* ==================== 按钮区 ==================== */
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .btn {
+        padding: 9px 20px;
+        border: 1px solid rgba(var(--accent-rgb), 0.45);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--accent);
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: color 0.25s ease, background 0.25s ease,
+          border-color 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .btn:hover {
+        color: var(--accent-hover);
+        border-color: var(--accent);
+        background: var(--accent-bg-hover);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .btn.danger {
+        color: rgba(var(--danger-rgb), 0.85);
+        border-color: rgba(var(--danger-rgb), 0.4);
+      }
+
+      .btn.danger:hover {
+        color: #ffffff;
+        border-color: var(--danger);
+        background: rgba(var(--danger-rgb), 0.18);
+        box-shadow: 0 0 8px rgba(var(--danger-rgb), 0.25);
+      }
+
+      .hint {
+        margin: 14px 0 0;
+        color: rgba(255, 255, 255, 0.45);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        line-height: 1.9;
+        letter-spacing: 0.5px;
+      }
+
+      /* ==================== 统计卡片 ==================== */
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .stat {
+        padding: 14px 16px;
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.3);
+        transition: border-color 0.3s ease, background 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .stat:hover {
+        border-color: var(--accent);
+        background: var(--accent-bg);
+        box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
+      }
+
+      .stat-label {
+        color: rgba(255, 255, 255, 0.55);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+      }
+
+      .stat-value {
+        margin-top: 8px;
+        color: var(--accent);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 1px;
+        word-break: break-all;
+      }
+
+      /* 平台字数高亮 */
+      .stat.highlight {
+        border-color: rgba(var(--accent-rgb), 0.7);
+        background: var(--accent-bg);
+      }
+
+      .stat.highlight .stat-value {
+        color: var(--accent-hover);
+      }
+
+      /* ==================== 提示条 ==================== */
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 32px;
+        z-index: 999;
+        padding: 10px 24px;
+        border: 1px solid var(--accent);
+        border-radius: var(--radius);
+        background: rgba(18, 18, 18, 0.96);
+        color: var(--accent);
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, 16px);
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      /* ==================== 响应式 ==================== */
+      @media (max-width: 720px) {
+        .container {
+          padding: 24px 16px 60px;
+        }
+
+        .site-header .container {
+          padding-top: 12px;
+          padding-bottom: 12px;
+        }
+
+        .header-inner {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        #editor {
+          min-height: 240px;
+        }
+
+        .btn {
+          flex: 1 1 calc(50% - 10px);
+          padding: 10px 12px;
+        }
+
+        .stat-grid {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .stat-value {
+          font-size: 1.15rem;
+        }
+
+        .section-head {
+          margin-top: 2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ==================== 顶部固定栏 ==================== -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <div class="brand">Monk</div>
+          <nav class="header-nav">
+            <a href="#">首页</a>
+            <a href="#">书库</a>
+            <a href="#">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== 主内容 ==================== -->
+    <div class="container">
+      <!-- ==================== 文本编辑 ==================== -->
+      <div class="section-head" id="editor-section">
+        <h2 class="title">文本工具</h2>
+        <a class="more" href="../index.html">[返回工具]</a>
+      </div>
+      <hr class="line-dashed" />
+
+      <div class="editor-wrap">
+        <textarea
+          id="editor"
+          spellcheck="false"
+          placeholder="在此粘贴或输入文本……"
+        ></textarea>
+
+        <div class="btn-row">
+          <button type="button" class="btn" id="btn-count">字数统计</button>
+          <button type="button" class="btn" id="btn-indent">段首缩进</button>
+          <button type="button" class="btn" id="btn-quote">标点替换</button>
+          <button type="button" class="btn" id="btn-blank">段落空行</button>
+          <button type="button" class="btn" id="btn-copy">复制</button>
+          <button type="button" class="btn danger" id="btn-clear">清空</button>
+        </div>
+
+        <p class="hint">
+          段首缩进：段首补齐两个全角空格「　　」（已有则跳过）<br />
+          标点替换： “ ” → 「 」， ‘ ’ → 『 』<br />
+          段落空行：为文本在段落之间添加一个空行
+        </p>
+      </div>
+
+      <!-- ==================== 统计结果 ==================== -->
+      <div class="section-head">
+        <h2 class="title">统计结果</h2>
+        <span class="count" id="stat-summary">—</span>
+      </div>
+      <hr class="line-dashed" />
+
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-label">总字数</div>
+          <div class="stat-value" data-key="total">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">行数</div>
+          <div class="stat-value" data-key="lines">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">段落数</div>
+          <div class="stat-value" data-key="paragraphs">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">空格数</div>
+          <div class="stat-value" data-key="spaces">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">数字个数</div>
+          <div class="stat-value" data-key="digits">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">中文字数</div>
+          <div class="stat-value" data-key="chinese">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">中文标点</div>
+          <div class="stat-value" data-key="cnPunct">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">字母个数</div>
+          <div class="stat-value" data-key="letters">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">单词个数</div>
+          <div class="stat-value" data-key="words">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">英文标点</div>
+          <div class="stat-value" data-key="enPunct">0</div>
+        </div>
+        <div class="stat highlight">
+          <div class="stat-label">平台字数</div>
+          <div class="stat-value" data-key="platform">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 提示条 ==================== -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var editor = document.getElementById("editor");
+        var toastEl = document.getElementById("toast");
+        var statSummary = document.getElementById("stat-summary");
+        var statNodes = document.querySelectorAll(".stat-value[data-key]");
+
+        /* ==================== 正则 ==================== */
+        // 中文汉字（含扩展 A、兼容区、々、〇）
+        var CN_CHAR_RE = /[\u3005\u3007\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/g;
+        // 中文标点（不含全角空格 \u3000）
+        var CN_PUNCT_RE =
+          /[\u2014\u2018\u2019\u201C\u201D\u2026\u3001-\u303F\uFF01-\uFF0F\uFF1A-\uFF20\uFF3B-\uFF40\uFF5B-\uFF65]/g;
+        // 英文标点（ASCII 可见符号）
+        var EN_PUNCT_RE = /[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/g;
+        // 英文单词
+        var WORD_RE = /[A-Za-z]+(?:['’\-][A-Za-z]+)*/g;
+
+        /* ==================== 提示条 ==================== */
+        var toastTimer = null;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.add("show");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            toastEl.classList.remove("show");
+          }, 1600);
+        }
+
+        /* ==================== 统计 ==================== */
+        function countMatches(text, re) {
+          var m = text.match(re);
+          return m ? m.length : 0;
+        }
+
+        function analyze(text) {
+          var total = text.replace(/\s/g, "").length;
+
+          var lines = text.length
+            ? text.split(/\r\n|\r|\n/).length
+            : 0;
+
+          var paragraphs = text
+            .split(/\r?\n[ \t\u3000]*\r?\n/)
+            .filter(function (p) {
+              return p.trim() !== "";
+            }).length;
+
+          var spaces = countMatches(text, /[ \u3000\t]/g);
+          var digits = countMatches(text, /[0-9]/g);
+          var chinese = countMatches(text, CN_CHAR_RE);
+          var cnPunct = countMatches(text, CN_PUNCT_RE);
+          var letters = countMatches(text, /[A-Za-z]/g);
+          var words = countMatches(text, WORD_RE);
+          var enPunct = countMatches(text, EN_PUNCT_RE);
+
+          return {
+            total: total,
+            lines: lines,
+            paragraphs: paragraphs,
+            spaces: spaces,
+            digits: digits,
+            chinese: chinese,
+            cnPunct: cnPunct,
+            letters: letters,
+            words: words,
+            enPunct: enPunct,
+            platform: chinese + cnPunct
+          };
+        }
+
+        function formatNumber(n) {
+          return n.toLocaleString("en-US");
+        }
+
+        function render() {
+          var result = analyze(editor.value);
+
+          statNodes.forEach(function (node) {
+            var key = node.getAttribute("data-key");
+            node.textContent = formatNumber(result[key] || 0);
+          });
+
+          if (!editor.value.length) {
+            statSummary.textContent = "—";
+          } else {
+            statSummary.textContent =
+              "共 " + formatNumber(result.total) + " 字 · " +
+              formatNumber(result.lines) + " 行";
+          }
+
+          return result;
+        }
+
+        /* ==================== 功能：段首缩进 ==================== */
+        function indentParagraphs() {
+          var text = editor.value;
+          if (!text) {
+            toast("文本为空，无需处理");
+            return;
+          }
+
+          var FULL = "\u3000\u3000";
+          var changed = 0;
+
+          var out = text
+            .split(/\r\n|\r|\n/)
+            .map(function (line) {
+              // 空行跳过
+              if (line.trim() === "") return line;
+              // 已有两个全角空格则跳过
+              if (line.indexOf(FULL) === 0) return line;
+              changed++;
+              return FULL + line;
+            })
+            .join("\n");
+
+          editor.value = out;
+          render();
+          toast("已缩进 " + changed + " 段");
+        }
+
+        /* ==================== 功能：标点符号替换 ==================== */
+        function replaceQuotes() {
+          var text = editor.value;
+          if (!text) {
+            toast("文本为空，无需处理");
+            return;
+          }
+
+          var map = {
+            "\u201C": "\u300C", // “ → 「
+            "\u201D": "\u300D", // ” → 」
+            "\u2018": "\u300E", // ‘ → 『
+            "\u2019": "\u300F"  // ’ → 』
+          };
+
+          var changed = 0;
+          var out = text.replace(/[\u201C\u201D\u2018\u2019]/g, function (ch) {
+            changed++;
+            return map[ch];
+          });
+
+          if (changed === 0) {
+            toast("未找到需要替换的引号");
+            return;
+          }
+
+          editor.value = out;
+          render();
+          toast("已替换 " + changed + " 处标点");
+        }
+
+        /* ==================== 功能：段落之间添加空行 ==================== */
+        function addBlankLines() {
+          var text = editor.value.replace(/\r\n?/g, "\n");
+
+          // 先把已有的连续空行合并成一个换行
+          text = text.replace(/\n[ \t\u3000]*\n+/g, "\n");
+          // 去掉首尾空白行
+          text = text.replace(/^[ \t\u3000]*\n+/, "").replace(/\n+[ \t\u3000]*$/, "");
+
+          if (!text.trim()) {
+            toast("文本为空，无需处理");
+            return;
+          }
+
+          var out = text
+            .split("\n")
+            .map(function (line) {
+              return line.replace(/[ \t\u3000]+$/, "");
+            })
+            .join("\n\n");
+
+          editor.value = out;
+          render();
+          toast("已在段落之间添加空行");
+        }
+
+        /* ==================== 功能：复制 ==================== */
+        function copyText() {
+          var text = editor.value;
+          if (!text) {
+            toast("没有可复制的内容");
+            return;
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+              .writeText(text)
+              .then(function () {
+                toast("已复制到剪贴板");
+              })
+              .catch(function () {
+                fallbackCopy(text);
+              });
+          } else {
+            fallbackCopy(text);
+          }
+        }
+
+        function fallbackCopy(text) {
+          var temp = document.createElement("textarea");
+          temp.value = text;
+          temp.setAttribute("readonly", "");
+          temp.style.position = "fixed";
+          temp.style.top = "-9999px";
+          document.body.appendChild(temp);
+          temp.select();
+
+          try {
+            document.execCommand("copy");
+            toast("已复制到剪贴板");
+          } catch (err) {
+            toast("复制失败，请手动选择复制");
+          }
+
+          document.body.removeChild(temp);
+          editor.focus();
+        }
+
+        /* ==================== 功能：清空 ==================== */
+        function clearAll() {
+          if (editor.value && !window.confirm("确定清空全部文本？")) return;
+          editor.value = "";
+          render();
+          editor.focus();
+          toast("已清空");
+        }
+
+        /* ==================== 事件绑定 ==================== */
+        document
+          .getElementById("btn-count")
+          .addEventListener("click", function () {
+            var r = render();
+            toast(
+              "总字数 " + formatNumber(r.total) +
+              " ｜ 平台字数 " + formatNumber(r.platform)
+            );
+          });
+
+        document
+          .getElementById("btn-indent")
+          .addEventListener("click", indentParagraphs);
+
+        document
+          .getElementById("btn-quote")
+          .addEventListener("click", replaceQuotes);
+
+        document
+          .getElementById("btn-blank")
+          .addEventListener("click", addBlankLines);
+
+        document
+          .getElementById("btn-copy")
+          .addEventListener("click", copyText);
+
+        document
+          .getElementById("btn-clear")
+          .addEventListener("click", clearAll);
+
+        // 实时统计
+        editor.addEventListener("input", render);
+
+        /* ==================== 初始化 ==================== */
+        render();
+      })();
+    </script>
+  </body>
+</html>
