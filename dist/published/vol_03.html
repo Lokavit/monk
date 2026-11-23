@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跨国追爱 · 卷三 重逢 · Lokavit's Personal Site</title>
+    <style>
+
+/* ==================== 基础变量（与首页一致） ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container { padding-top: 16px; padding-bottom: 16px; }
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover { color: var(--accent); background: var(--accent-bg); }
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main { color: var(--foreground); opacity: 0.85; }
+.meta-line .label { color: rgba(255, 255, 255, 0.4); }
+
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表（书籍信息下方） ==================== */
+.vol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+.vol-link {
+  display: block;
+  padding: 10px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, box-shadow 0.25s ease;
+}
+.vol-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
+}
+.vol-link .vol-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.vol-link:hover .vol-num { color: var(--accent-hover); opacity: 1; }
+.vol-link.active {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+}
+.vol-link.active .vol-num { color: var(--accent-hover); opacity: 1; }
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num { color: var(--accent-hover); opacity: 1; }
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num { color: var(--accent-hover); opacity: 1; }
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child { margin-bottom: 0; border-bottom: none; }
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 卷分页（上一卷 / 下一卷） ==================== */
+.vol-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+}
+.pager-link {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, box-shadow 0.25s ease;
+}
+.pager-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
+}
+.pager-link.disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar { position: static; max-height: none; }
+}
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading { font-size: 1.15rem; scroll-margin-top: 140px; }
+  .chapter-body { font-size: 0.95rem; line-height: 1.95; }
+  .vol-pager { margin-top: 32px; }
+  .pager-link { padding: 8px 12px; font-size: 0.75rem; }
+  .vol-grid { grid-template-columns: 1fr 1fr; }
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- ==================== 顶部固定栏 ==================== -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="./index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="./index.html">首页</a>
+            <a href="./index.html#library">书库</a>
+            <a href="./index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== 主内容 ==================== -->
+    <div class="container">
+      <!-- ==================== 书籍信息 ==================== -->
+      <section class="book-detail">
+        <h1 class="book-title">跨国追爱</h1>
+
+        <div class="book-meta">
+          <div class="meta-line main">4章 ｜ 4552字 ｜ 连载</div>
+          <div class="meta-line">
+            <span class="label">创建日期：</span>11 Nov 2569 BE
+          </div>
+          <div class="meta-line">
+            <span class="label">最近更新：</span>21 Nov 2569 BE
+          </div>
+          <div class="meta-line">
+            <span class="label">最新章节：</span>第 4 章
+          </div>
+          <div class="meta-line">
+            <span class="label">主要角色：</span>
+            <span class="chip">付弋阳</span><span class="chip">尹奕君</span>
+          </div>
+          <div class="meta-line">
+            <span class="label">世界观：</span>
+            <span class="chip">鹿垣市</span>
+          </div>
+          <div class="meta-line">
+            <span class="label">标签：</span>
+            <span class="chip">重逢</span><span class="chip">追爱</span>
+          </div>
+        </div>
+
+        <div class="book-intro">
+          <div class="book-intro-title">作品简介</div>
+          <p></p>
+        </div>
+
+        <div class="book-intro">
+          <div class="book-intro-title">分卷</div>
+          <div class="vol-grid">
+<a href="./vol_01.html" class="vol-link"><span class="vol-num">卷一</span> 初遇</a>
+<a href="./vol_02.html" class="vol-link"><span class="vol-num">卷二</span> 再遇</a>
+<a href="./vol_03.html" class="vol-link active"><span class="vol-num">卷三</span> 重逢</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 左右两栏：目录 + 正文 ==================== -->
+      <div class="reader-layout">
+        <aside class="chapter-sidebar">
+          <div class="sidebar-head">
+            <span>卷三 重逢</span>
+            <span class="count">共 1 章</span>
+          </div>
+          <nav class="chapter-list">
+<a href="#ch-4" class="chapter-link active"><span class="chapter-num">第 4 章</span></a>
+          </nav>
+        </aside>
+
+        <main class="chapter-content-wrap">
+<article class="chapter" id="ch-4"><h2 class="chapter-heading">第 4 章</h2><div class="chapter-body"><p>　　一国之架空世界奥里萨，大啊萨。</p></div></article>
+          <div class="vol-pager"><a href="./vol_02.html" class="pager-link">← 上一卷</a><span class="pager-link disabled">下一卷 →</span></div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+
+(function () {
+  var links = Array.prototype.slice.call(
+    document.querySelectorAll(".chapter-link")
+  );
+  var chapters = Array.prototype.slice.call(
+    document.querySelectorAll(".chapter")
+  );
+
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle(
+        "active",
+        link.getAttribute("href") === "#" + id
+      );
+    });
+  }
+
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-96px 0px -65% 0px", threshold: 0 }
+    );
+    chapters.forEach(function (chapter) {
+      observer.observe(chapter);
+    });
+  }
+})();
+
+    </script>
+  </body>
+</html>

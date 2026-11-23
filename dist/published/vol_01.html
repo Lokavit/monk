@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跨国追爱 · 卷一 初遇 · Lokavit's Personal Site</title>
+    <style>
+
+/* ==================== 基础变量（与首页一致） ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container { padding-top: 16px; padding-bottom: 16px; }
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover { color: var(--accent); background: var(--accent-bg); }
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main { color: var(--foreground); opacity: 0.85; }
+.meta-line .label { color: rgba(255, 255, 255, 0.4); }
+
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表（书籍信息下方） ==================== */
+.vol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+.vol-link {
+  display: block;
+  padding: 10px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, box-shadow 0.25s ease;
+}
+.vol-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
+}
+.vol-link .vol-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.vol-link:hover .vol-num { color: var(--accent-hover); opacity: 1; }
+.vol-link.active {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+}
+.vol-link.active .vol-num { color: var(--accent-hover); opacity: 1; }
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num { color: var(--accent-hover); opacity: 1; }
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num { color: var(--accent-hover); opacity: 1; }
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child { margin-bottom: 0; border-bottom: none; }
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 卷分页（上一卷 / 下一卷） ==================== */
+.vol-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+}
+.pager-link {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, box-shadow 0.25s ease;
+}
+.pager-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  color: var(--accent-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
+}
+.pager-link.disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar { position: static; max-height: none; }
+}
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container { padding-top: 12px; padding-bottom: 12px; }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading { font-size: 1.15rem; scroll-margin-top: 140px; }
+  .chapter-body { font-size: 0.95rem; line-height: 1.95; }
+  .vol-pager { margin-top: 32px; }
+  .pager-link { padding: 8px 12px; font-size: 0.75rem; }
+  .vol-grid { grid-template-columns: 1fr 1fr; }
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- ==================== 顶部固定栏 ==================== -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="brand" href="./index.html">Monk</a>
+          <nav class="header-nav">
+            <a href="./index.html">首页</a>
+            <a href="./index.html#library">书库</a>
+            <a href="./index.html#tools">工具</a>
+            <a href="#">游戏</a>
+            <a href="#">布施</a>
+            <a href="#">写作</a>
+          </nav>
+          <div class="search">搜索</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== 主内容 ==================== -->
+    <div class="container">
+      <!-- ==================== 书籍信息 ==================== -->
+      <section class="book-detail">
+        <h1 class="book-title">跨国追爱</h1>
+
+        <div class="book-meta">
+          <div class="meta-line main">4章 ｜ 4552字 ｜ 连载</div>
+          <div class="meta-line">
+            <span class="label">创建日期：</span>11 Nov 2569 BE
+          </div>
+          <div class="meta-line">
+            <span class="label">最近更新：</span>21 Nov 2569 BE
+          </div>
+          <div class="meta-line">
+            <span class="label">最新章节：</span>第 4 章
+          </div>
+          <div class="meta-line">
+            <span class="label">主要角色：</span>
+            <span class="chip">付弋阳</span><span class="chip">尹奕君</span>
+          </div>
+          <div class="meta-line">
+            <span class="label">世界观：</span>
+            <span class="chip">鹿垣市</span>
+          </div>
+          <div class="meta-line">
+            <span class="label">标签：</span>
+            <span class="chip">重逢</span><span class="chip">追爱</span>
+          </div>
+        </div>
+
+        <div class="book-intro">
+          <div class="book-intro-title">作品简介</div>
+          <p></p>
+        </div>
+
+        <div class="book-intro">
+          <div class="book-intro-title">分卷</div>
+          <div class="vol-grid">
+<a href="./vol_01.html" class="vol-link active"><span class="vol-num">卷一</span> 初遇</a>
+<a href="./vol_02.html" class="vol-link"><span class="vol-num">卷二</span> 再遇</a>
+<a href="./vol_03.html" class="vol-link"><span class="vol-num">卷三</span> 重逢</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 左右两栏：目录 + 正文 ==================== -->
+      <div class="reader-layout">
+        <aside class="chapter-sidebar">
+          <div class="sidebar-head">
+            <span>卷一 初遇</span>
+            <span class="count">共 2 章</span>
+          </div>
+          <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">第 1 章</span> 一夜情</a>
+<a href="#ch-2" class="chapter-link"><span class="chapter-num">第 2 章</span></a>
+          </nav>
+        </aside>
+
+        <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1"><h2 class="chapter-heading">第 1 章 一夜情</h2><div class="chapter-body"><p>　　付弋阳正在家里收拾行李，被堂哥付振宇拽到酒店包厢，给他践行。</p>
+<p>　　他们家世代人丁兴旺，固守着这座具有百年历史的酒店。</p>
+<p>　　「弋阳，这就要出国了。你女朋友怎么办？」</p>
+<p>　　「大哥，弋阳还没有女朋友呢？」</p>
+<p>　　大哥脸上一愣，哈哈大笑，「弋阳，你不会还没……嗯？」</p>
+<p>　　付弋阳的脸腾一下子热了起来，端起杯子把酒喝了。</p>
+<p>　　酒是冰镇的，却丝毫没有降下脸上的热度。</p>
+<p>　　「大哥，」付振宇含糊着说，「马上！弋阳马上就不是处了。」</p>
+<p>　　「弋阳，原来你憋着准备找洋妞儿呢？」</p>
+<p>　　「没，没有。」付弋阳说话都不利索了。</p>
+<p>　　叔伯兄弟，一番哈哈大笑，一人一杯，给付弋阳道祝福，嘱咐他对待洋妞儿要小心，还有托他给大姐带礼物……</p>
+<p>　　付弋阳很快头晕脑胀，摆手要走。</p>
+<p>　　付振宇给他发来了个房间号，冲他挤眉弄眼，凑到他的耳边，用那充满酒气的嘴，低声说：「别说堂哥不照顾你，都给你安排好了，你只管上去。」</p>
+<p>　　付弋阳一脸茫然，「什么？」</p>
+<p>　　「什么什么？你那点儿小心思，还……还能瞒过我？」</p>
+<p>　　付弋阳心里一沉，酒醒了三分，「你……」</p>
+<p>　　「嘘——！」付振宇看了看左右，说话嘴瓢，「你上……上去……就……就知道……了……」</p>
+<p>　　付弋阳对着几个哥哥姐姐道别，嘱咐他们别喝太多。</p>
+<p>　　他走出来，先去洗手间洗了把脸，看到镜子里泛红的脸，下意识想起来哥哥们刚才拿他闲侃。</p>
+<p>　　他坚定要出国念大学，并求着在英的大姐帮忙打配合，为的就是不想家族里的人知道他的性取向。他演了十八年乖宝宝，太累了，不想再演下去了。</p>
+<p>　　可是，付振宇刚才的话，到底什么意思？是喝多了胡言乱语，还是真的发现了什么？</p>
+<p>　　走廊里，不知道是哪个包厢的客人在唱生日歌，几十号人合唱，非常热闹。</p>
+<p>　　尹奕君的十八岁生日，父母给他按成人礼的标准办。他请来了所有的朋友和同学，包下了酒店的大包厢，摆了六桌。</p>
+<p>　　切了蛋糕之后，基本到了后半场。大伙儿三五个凑在一起，继续喝酒的，唱歌的，打游戏的，聊天的，还有在角落里接吻的……</p>
+<p>　　尹奕君身边没有人，只有酒和蛋糕。</p>
+<p>　　他吃了一块上面的水果，推到一旁。</p>
+<p>　　分明是热闹的需要扯着嗓子喊，他的心里却是万分宁静，甚至是孤独。</p>
+<p>　　朋友端着酒杯过来，「太子尹，怎么撂单了？」</p>
+<p>　　尹奕君淡淡笑了笑。</p>
+<p>　　朋友一手搭在尹奕君肩头，「太子尹，既然你给我们面子，我们也给你准备了一份特殊惊喜。」</p>
+<p>　　尹奕君微微皱眉，发出一声疑惑，「哦？」</p>
+<p>　　朋友看了一眼手机，「来了。走走走。」说着，把太子尹拉起来，朝外走。</p>
+<p>　　有人问了一句：「你带太子尹干什么去？」</p>
+<p>　　「惊喜来了，我送太子尹过去，马上回来。」</p>
+<p>　　「太子尹自己去就行了！这种事情，哪有叫人帮忙的？」</p>
+<p>　　「我怕他走错门儿。」朋友嘿嘿一笑。</p>
+<p>　　尹奕君听出来是怎么回事儿了，却仍旧假装不知道。他可不想这群酒肉朋友日后拿着他的性取向当谈资。</p>
+<p>　　付弋阳来到电梯口，靠着墙壁，一手扶着墙，一手揉按太阳穴。</p>
+<p>　　电梯下去又上来，在这一层停住，打开了门。</p>
+<p>　　付弋阳走进去，刚一回身，就见一个人被推了进来，撞在他身上。他本能的挡了一下，又不假思索地伸手扶了一把。</p>
+<p>　　「不好意思。」外面的人说着，按下数字键，退了出去。</p>
+<p>　　电梯缓缓向上。</p>
+<p>　　两个人各自靠着一侧，各自撑着扶手。</p>
+<p>　　箱里安静得出奇，只听到升降机发出的声音。</p>
+<p>　　电梯到达，付弋阳扶着电梯门出去，三步一晃，忽地发现，身边多了个影子。</p>
+<p>　　他觑一眼对方。</p>
+<p>　　不巧，对方也在偷偷瞟他。</p>
+<p>　　想起堂哥话里的「安排」，付弋阳又看了看离他一步之遥的人。</p>
+<p>　　他动了动嘴唇，没找到合适的措辞，把话憋回去，走到了房间门前。</p>
+<p>　　尾巴也跟了上来。</p>
+<p>　　付弋阳这下压不住了，问道：「八零八？」</p>
+<p>　　尹奕君翻看手机，抬头问：「是你？」</p>
+<p>　　付弋阳看了看走廊两边，赶忙打开门，「先进来再说。」</p>
+<p>　　进屋之后，他就愣住了。</p>
+<p>　　好好的豪华客房，被人精心布置过，比酒店里的情侣套房还超过。大灯不亮，壁灯昏黄，配上这些花里胡哨的点缀，连空气里都透着一股暧昧。</p>
+<p>　　付弋阳的酒意醒了个七七八八，偏头看了看身边的人，「那个……我先去洗个澡。」说完，一头扎进了洗手间。</p>
+<p>　　洗手间除了门就是玻璃墙，虽然玻璃贴了一层膜，但依旧可以清晰的透出内中人的身体轮廓。</p>
+<p>　　尹奕君堂而皇之地盯着看。</p>
+<p>　　本以为那群酒肉朋友没有一个懂他的，只知道蹭他吃喝。没想到，还真给他准备了称心的惊喜。</p>
+<p>　　他坐在沙发上，翘着二郎腿，手臂搭在两侧扶手，从看变成了欣赏，眼神中带着玩味。</p>
+<p>　　这个人的身材，显然刻意练过，身上的肌肉紧实，线条优美，尤其是那一对饱满的胸肌，像是一副天然的护甲，配上左右宽厚的三角肌群，以及清晰可见的腹肌。</p>
+<p>　　而那张脸，他早在被推进电梯的一瞬间，就看得清清楚楚。单从五官来看，似乎和他差不多大，一双迷蒙醉眼，一张泛红的脸，还有那诱人的嘴唇。</p>
+<p>　　尹奕君舔了一下嘴唇，移开目光，换了个姿势。</p>
+<p>　　付弋阳的腰上围着浴巾，从洗手间里出来，看到对方仿佛王者降临的坐姿，暗自嘀咕，「堂哥从哪儿找来的这个人？真拿自己当个少爷了？」</p>
+<p>　　趁着对方去洗澡的功夫，付弋阳拉开抽屉。</p>
+<p>　　果然，一应俱全。</p>
+<p>　　他转头看了一眼洗手间。</p>
+<p>　　现在，轮到他欣赏了。</p>
+<p>　　这是他们家祖传的酒店，他比任何人都了解，这道玻璃墙形同虚设，要的就是这个若隐若现的效果。</p>
+<p>　　他也知道，这个人全程盯着他洗澡。</p>
+<p>　　不过，无所谓。</p>
+<p>　　反正，他马上就会连本带利找回来。</p>
+<p>　　只是，他还没有看清楚对方长什么样子，一会儿要好好看看。</p>
+<p>　　「啪——！」屋里顿时陷入一片黑暗，只剩下安全照明灯亮着。</p>
+<p>　　付弋阳起身，从猫眼看向走廊，外面灯火通明。</p>
+<p>　　就在此时，他被人从身后抱住，将他带到了床边。</p>
+<p>　　「你倒是很懂，关灯时间刚刚好。」</p>
+<p>　　蛊惑的声音飘入耳中，付弋阳的耳朵有点儿痒，不由得蹭了蹭。</p>
+<p>　　「你第一次？」</p>
+<p>　　付弋阳的脸瞬间热了，暗自庆幸，黑灯瞎火，对方看不出来。</p>
+<p>　　「你脸红的样子真可爱。」</p>
+<p>　　付弋阳惊愕地看着这张近在咫尺的脸，对方一双清澈的眼眸，像是能够在黑夜里洞察一切。</p>
+<p>　　他抬了抬手，搂住对方，吻了上去。</p></div></article>
+<article class="chapter" id="ch-2"><h2 class="chapter-heading">第 2 章</h2><div class="chapter-body"><p>　　付弋阳翻了个身，发觉全身酸痛，仿佛刚从战场下来。</p>
+<p>　　他揉了揉眼睛，勉强睁开，润了润干涩的嘴唇，余光扫到旁边躺着的人。</p>
+<p>　　对方趴在床上，被子盖到肩头，一只胳膊弯着，把脸埋了进去。</p>
+<p>　　房间里昏暗一片，只有玄关顶上的安全指示灯亮着。</p>
+<p>　　他摸到手机，三个未接，群里一堆消息，问他人在哪儿。看起来，已经发动全酒店找人了。</p>
+<p>　　付弋阳立马下床，穿好衣服，对着那张没能看清的脸，沉思一秒钟。</p>
+<p>　　他打开钱包，把所有现金留在床头柜，蹑手蹑脚地离开。</p>
+<p>　　刚走出房门，就看到大哥从电梯里走出来，一眼看到了他。</p>
+<p>　　「弋阳！你怎么在这儿？找你找疯了，群里也不回消息！」</p>
+<p>　　付弋阳挠了挠头，没说话，迎上大哥。</p>
+<p>　　「你从哪个房间出来的？」大哥问。</p>
+<p>　　「那个。」付弋阳虚空一指，却有意避开了八零八。</p>
+<p>　　他洗了把脸，跟着大哥上了车，系上安全带。</p>
+<p>　　「你昨晚把振宇害惨了。」大哥说。</p>
+<p>　　「嗯？」付弋阳发出一声疑问，声音带着一点儿哑。</p>
+<p>　　「你嗓子怎么了？」大哥问。</p>
+<p>　　付弋阳摇摇头，哑着声音说：「喝酒导致的。」</p>
+<p>　　他怕大哥追问，连忙拉回话题：「振宇哥怎么了？」</p>
+<p>　　大哥哈哈笑了起来，「也不能算把他害惨了。应该说是给他找到理由了。他昨晚给你找了个妞儿，房间都安排好了。你小子也不知道尿遁哪儿去了。振宇喝得五迷三道，亲身上阵。不然，也不会叫我送你去机场。」</p>
+<p>　　付弋阳的脑子里嗡的一声，像是信息过载，大脑宕机了。</p>
+<p>　　堂哥，给他安排了个女的，而且安排了房间……</p>
+<p>　　付弋阳点开和堂哥的私聊，最后一句还停留在堂哥给他发的房间号。</p>
+<p>　　确实是八零八。他没进错房。</p>
+<p>　　「哦，对了！昨晚振宇手滑，给你的房号是错的。」大哥说，「不过，反正你人都跑了，也无所谓。弋阳，你小子距离男人还有很长的路要走。到了英国，让大姐好好教教你，那边比咱们这儿开放。你……」</p>
+<p>　　付弋阳没有心思听大哥后面说了什么。</p>
+<p>　　房号错了！意味着他昨晚进错房了！</p>
+<p>　　那么，和他睡了一夜的那个人，是谁？</p>
+<p>　　而此时，被单独留在了八零八的尹奕君，坐在床上，眉头紧锁，盯着压在手机下的一沓现金。</p>
+<p>　　他猛地抓起来，狠狠攥成团，随着手上发力，小臂青筋清晰可见，面容也变得狰狞。</p>
+<p>　　他把钱团子丢在地上，点开手机，找昨晚准备惊喜的朋友质问，这个反向给他留钱的离谱男模是谁！</p>
+<p>　　消息编辑完，他的手指悬停在发送键上，继而把内容清空了。</p>
+<p>　　有些事情，过去了就过去了，只能心照不宣。</p>
+<p>　　他走到窗前，拉开了窗帘，阳光照亮房间，晃得他一阵眼晕。</p>
+<p>　　他退了几步，仰卧在床上，两只胳膊展开成一个「一」字。</p>
+<p>　　手臂被什么东西硌了一下，他胡乱摸了摸，举到眼前。</p>
+<p>　　是一块黑色的运动手表，表盘亮起，暗色的背景，配上一组组亮绿色的数值，说明它的主人是一个极其热爱运动的人。</p>
+<p>　　这块手表上除了数值之外什么信息都没有，但在一条墨绿色的尼龙表带尾端，有一个精致的雕刻图案，下面印有一行小字：「百年庆」。</p>
+<p>　　尹奕君盯着图案看了好一会儿，霎时想起来，是这家酒店的Logo。</p>
+<p>　　能够得到酒店百年庆赠送的定制品，昨晚那个男模，一定是这里的常客。</p>
+<p>　　尹奕君的脑子里闪过一个疑问，「他总是带客人来吗？」</p>
+<p>　　他想起昨晚，对方的表现，可不像是个老练的男模。虽然他没点过男模，但多少还是了解一点儿的。</p>
+<p>　　他捡起地上的钱团子，一张一张展开，整整齐齐地塞进钱包里，把手表戴在了手腕上。</p>
+<p>　　来到一楼接待台，他询问一个女生，「这手表，是你们百年庆送的吗？」</p>
+<p>　　女生的视线落在他的手腕，笑着回答：「先生，我们酒店百年庆，会给一些高消费客人送定制的表带。」她指着尹奕君的手腕，「这上面是我们酒店的标志。」</p>
+<p>　　尹奕君垂首看了看手表，离开了酒店。</p>
+<p>　　车子在机场高速路上，龟速移动。</p>
+<p>　　「堵死了。幸亏出来的早，过了这段路就好了。」</p>
+<p>　　「嗯。」付弋阳抬腕，愣住了。</p>
+<p>　　手表！手表呢？!</p>
+<p>　　他努力回想，只能是落在了八零八。</p>
+<p>　　不知会被打扫的阿姨捡到，还是被那个人捡到。</p>
+<p>　　一想到昨晚的阴差阳错，付弋阳就头疼。他把那个人当堂哥准备的「礼物」也就算了，对方不声不响，是把他当什么了？</p>
+<p>　　付弋阳脑子浮现一个词汇，「男模。」</p>
+<p>　　他还给那个男模留了现金，不知道对方醒来看到，会是什么反应。</p>
+<p>　　「到了。」大哥率先下车，帮着他把行李箱拿下来。</p>
+<p>　　付弋阳紧了紧背包，一手扶着推车，没走。</p>
+<p>　　「进去吧。」大哥说。</p>
+<p>　　「哥，你先走吧。我看着你走。」</p>
+<p>　　「切！」大哥一副嫌弃地模样，抬起胳膊，把付弋阳搂在怀里，拍了拍他，「到那边，照顾好自己。你这性子软，我真怕你吃亏。」</p>
+<p>　　「嗯。」付弋阳闷闷地应一声，「你们平时少喝点儿，我会带你们照顾大姐的，放心吧。」</p>
+<p>　　「小样儿。」大哥咧嘴笑了，露出一口白牙，「你别给大姐惹麻烦就行了。快走吧，还要办托运呢。」</p>
+<p>　　付弋阳三步一回头，进了大厅，再回头的时候，大哥冲他挥挥手，开着车子消失在他的视线里。</p>
+<p>　　即将远离祖国，远离这些陪伴了他十八年的亲人们。</p>
+<p>　　他的心里，一下子空了。</p>
+<p>　　办完流程，还剩下一点儿时间，他逛着免税店，打发时间，心里却十分忐忑。</p>
+<p>　　酒店里的员工都是经过专业培训，从未听说，哪个员工捡到客人物品私自藏起来。无论是钻戒金饰，还是零碎小物件，皆会妥善保管，留待客人来认领。</p>
+<p>　　付弋阳担心客房阿姨捡到手表，会交到前台，他那身为经理的哥哥，一定会调监控，查昨晚是谁住在八零八，就会看到他进了八零八，而且还拽了个尾巴进去，尾巴还是个男的。</p>
+<p>　　他不敢想下去，两手揪着头发，只盼快点儿检票登机。</p>
+<p>　　只要上了飞机，他们就抓不到他了。</p>
+<p>　　再落地之后，他就可以和叔伯兄弟玩儿失踪，推大姐出来挡了。</p>
+<p>　　忽然，手机显示堂哥的视频通话邀请。</p>
+<p>　　付弋阳犹犹豫豫地按下接收。</p>
+<p>　　视频里面一堆人，叔伯兄弟们争先恐后和他道别，给他送祝福。</p>
+<p>　　他的眼眶湿润了，却不敢出声，怕自己哽咽沙哑的声音一出来，会忍不住哭。</p></div></article>
+          <div class="vol-pager"><span class="pager-link disabled">← 上一卷</span><a href="./vol_02.html" class="pager-link">下一卷 →</a></div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+
+(function () {
+  var links = Array.prototype.slice.call(
+    document.querySelectorAll(".chapter-link")
+  );
+  var chapters = Array.prototype.slice.call(
+    document.querySelectorAll(".chapter")
+  );
+
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle(
+        "active",
+        link.getAttribute("href") === "#" + id
+      );
+    });
+  }
+
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-96px 0px -65% 0px", threshold: 0 }
+    );
+    chapters.forEach(function (chapter) {
+      observer.observe(chapter);
+    });
+  }
+})();
+
+    </script>
+  </body>
+</html>
