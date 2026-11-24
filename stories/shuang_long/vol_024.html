@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>龙行龙道 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">龙行龙道</h1>
+    <div class="book-meta">
+      <div class="meta-line main">24卷 ｜ 233章 ｜ 48.5万字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>01 Jan 2562 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>21 Aug 2562 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">少龙</span> <span class="chip">龙辰</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">苍泉镇</span> <span class="chip">鹿垣市</span> <span class="chip">鹿垣第一学府</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">现代</span> <span class="chip">校园</span> <span class="chip">少年</span> <span class="chip">成长</span> <span class="chip">救赎</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>暂无简介</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link"><span class="chip">卷 001 </span></a>
+<a href="./vol_002.html" class="vol-link"><span class="chip">卷 002 </span></a>
+<a href="./vol_003.html" class="vol-link"><span class="chip">卷 003 </span></a>
+<a href="./vol_004.html" class="vol-link"><span class="chip">卷 004 </span></a>
+<a href="./vol_005.html" class="vol-link"><span class="chip">卷 005 </span></a>
+<a href="./vol_006.html" class="vol-link"><span class="chip">卷 006 </span></a>
+<a href="./vol_007.html" class="vol-link"><span class="chip">卷 007 </span></a>
+<a href="./vol_008.html" class="vol-link"><span class="chip">卷 008 </span></a>
+<a href="./vol_009.html" class="vol-link"><span class="chip">卷 009 </span></a>
+<a href="./vol_010.html" class="vol-link"><span class="chip">卷 010 </span></a>
+<a href="./vol_011.html" class="vol-link"><span class="chip">卷 011 </span></a>
+<a href="./vol_012.html" class="vol-link"><span class="chip">卷 012 </span></a>
+<a href="./vol_013.html" class="vol-link"><span class="chip">卷 013 </span></a>
+<a href="./vol_014.html" class="vol-link"><span class="chip">卷 014 </span></a>
+<a href="./vol_015.html" class="vol-link"><span class="chip">卷 015 </span></a>
+<a href="./vol_016.html" class="vol-link"><span class="chip">卷 016 </span></a>
+<a href="./vol_017.html" class="vol-link"><span class="chip">卷 017 </span></a>
+<a href="./vol_018.html" class="vol-link"><span class="chip">卷 018 </span></a>
+<a href="./vol_019.html" class="vol-link"><span class="chip">卷 019 </span></a>
+<a href="./vol_020.html" class="vol-link"><span class="chip">卷 020 </span></a>
+<a href="./vol_021.html" class="vol-link"><span class="chip">卷 021 </span></a>
+<a href="./vol_022.html" class="vol-link"><span class="chip">卷 022 </span></a>
+<a href="./vol_023.html" class="vol-link"><span class="chip">卷 023 </span></a>
+<a href="./vol_024.html" class="vol-link active"><span class="chip">卷 024 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 024 </span>
+        <span class="count">共 3 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-231" class="chapter-link active"><span class="chapter-num">章 231</span> </a>
+<a href="#ch-232" class="chapter-link"><span class="chapter-num">章 232</span> </a>
+<a href="#ch-233" class="chapter-link"><span class="chapter-num">章 233</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-231">
+  <h2 class="chapter-heading">第 231 章 </h2>
+  <div class="chapter-body">
+    <p>　　「她是回来接他儿子的。」龙辰说，「明天上来，先和二狗子见个面，看看二狗子的反应。如果不太抗拒，最晚后天就带走了。」</p>
+<p>　　少龙等了一会儿，龙辰没再说话。他想起二狗子之前的种种反应，对龙辰说：「你明早试着和二狗子说一下。」</p>
+<p>　　「没什么好说的。他们母子之间的事情，他们自己解决。我就想看看，母子见面之后，二狗子会不会发疯。」</p>
+<p>　　「那我明天早点出去。」</p>
+<p>　　「你不用刻意回避。除非你怕尴尬。」</p>
+<p>　　龙辰后面又说了很多话，关于家，关于父母，关于二狗子。他的语气一直很平静，像是在给少龙转述别人家的八卦。</p>
+<p>　　天光越来越亮。少龙不知不觉听睡着了。</p>
+<p>　　再醒来，听到外面客厅几个人的说话声。他看一眼关闭的卧室门，换成仰卧姿势，怔怔地望向天花板。</p>
+<p>　　二狗子说：「跟你走，我就不是野孩子了？我能上学吗？学校里会有人骂我『杂种』吗？」</p>
+<p>　　「不会。妈妈来接你走，再也不会有人欺负你了。妈妈会一直陪着你。你不是野孩子。」</p>
+<p>　　女人说话的声音有些哽咽。</p>
+<p>　　少龙看得是卧室房门。但他仿佛看清楚了客厅里母子重逢，母亲掩面哭泣，小儿子好奇追问，以及大儿子冷漠站在一旁。</p>
+<p>　　「那我跟你走。」二狗子没想多久，「我们什么时候走？明天就走行不行？」</p>
+<p>　　「好。好好。」女人的声音哽咽，「明天就走。明天就走。」</p>
+<p>　　「那你能现在就跟我出去吗？」</p>
+<p>　　「干什么去？」</p>
+<p>　　「去玄武广场，去不服。干什么都行。我要告诉别人，我有妈。我不是野孩子，更不是『杂种』」</p>
+<p>　　「这…」女人犹豫了几秒钟，「走。妈带你出去。你去穿件外套。」</p>
+<p>　　「好！你等等！」二狗子兴奋的跑回房。</p>
+<p>　　「大龙啊。」</p>
+<p>　　少龙不由自主地攥紧被角。她要和龙辰说什么？</p>
+<p>　　「你姐说你开学就上高三了。好好学习，考个好大学，离开这里。我和你爸之间的事情，不是那时候的你能懂的。现在你长大了，有自己的是非判断，比你爹强多了。过去那些事情我也不想再提，你永远是我儿子，以后有什么困难，尽管和我开口。」</p>
+<p>　　龙辰没有说话。</p>
+<p>　　少龙在心里读秒，过去差不多五分钟。</p>
+<p>　　「我们走吧。」二狗子打破客厅的沉默。</p>
+<p>　　大门一开一关。客厅里再次陷入长时间安静。</p>
+<p>　　少龙起身，轻轻拉开卧室房门。</p>
+<p>　　龙辰独自坐在沙发上，嘴角叼着烟，没点。</p>
+<p>　　少龙坐在龙辰旁边。</p>
+<p>　　桌上一张名片，浅色卡纸，烫花金边。第一行是公司名字，中间是人名，职位是副总经理，底下的小字是电话和邮箱。</p>
+<p>　　龙辰拿起打火机，打着火，一手拾起名片，斜着一角点着。</p>
+<p>　　「二狗子认娘倒是认得痛快。看不到他们母子吵架，真令人失望。」</p>
+<p>　　名片不易燃，几秒钟才烧出明火。龙辰举起来点着烟，吸一口，手一偏，朝向少龙。</p>
+<p>　　少龙立马掏出烟，也跟着点着。</p>
+<p>　　龙辰把烧剩下的名片丢进烟灰缸。</p>
+<p>　　两人看着它一点点燃尽，成为小小一块油性物。</p>
+<p>　　直到第二天清早，二狗子才回来。只有一个人。专程来叫醒少龙，说再见。</p>
+<p>　　二狗子从怀里掏出一个厚厚的牛皮纸袋，放在桌上，「我妈给的。龙辰肯定不会收，你帮他保管吧。他听你的。」</p>
+<p>　　少龙转身回到卧室，拿出滑板，交给二狗子，「没什么可以送你的，只有这个。虽然我现在说你可能听不懂，祝福你从此刻起有自己的人生。」</p>
+<p>　　「我听得懂。」二狗子露出笑脸，「我哥有你，我就放心了。」</p>
+<p>　　少龙也忍不住笑起来。他第一次看到二狗子纯粹的、真诚的笑容，第一次听到二狗子承认龙辰的兄长身份。</p>
+<p>　　二狗子抱着滑板走了。</p>
+<p>　　少龙对着桌子上的牛皮纸袋犯难。纸袋撑得鼓鼓囊囊，若是一张一百，至少有三十万元。对龙辰来说，如果没有外债，这一笔钱完全可以支持整个大学期间。不过——</p>
+<p>　　他看一眼烟灰缸。那块油污粘在玻璃上，抠不下来。</p>
+<p>　　龙辰晚上回来，拿起牛皮纸袋，在手上垫一垫，扔回桌子上。</p>
+<p>　　「当年她把家里的钱全卷走了，导致酒厂资金周转不过来。我老子不得不去给人家赌拳，连命都赌没了。现在留下一沓钱，不知道是想买她自己的愧疚，还是买她在二狗子心中的母亲形象。」</p>
+<p>　　龙辰一脚踹开二狗子的房间。</p>
+<p>　　「上天真是不开眼。」龙辰语气平静，「我放任他做任何事情，就是想看他再毁掉她的家。可是，他懂事了，她回来把他接走了。我所做的一切，就像是场笑话。」</p>
+<p>　　少龙靠墙站立，看着乱七八糟的房间，「现在，你想做什么？」</p>
+<p>　　「自然是把这屋的东西全拆了，全扔了。如果可以，我甚至想把墙重新刷一遍。不过，」龙辰停顿一瞬，「算了。懒得折腾，当仓库，帮我把姐的东西全搬过来放着吧。」</p>
+<p>　　次日，两人睡到中午才起床。</p>
+<p>　　少龙拿出速写本，放在龙辰面前，「你先看一遍这里的内容。」</p>
+<p>　　龙辰接过去翻开，第一页赫然几个大字——</p>
+<p>　　「高考备战计划？!」</p>
+<p>　　少龙对龙辰的反应毫不意外，淡淡地说：「往下翻。」</p>
+<p>　　龙辰翻一页，是大目录，划分了暑假期间的补习内容、高三上学期的课外安排，以及……</p>
+<p>　　「等等！这里怎么会有单招？！你之前不是说不招了？」</p>
+<p>　　「我前几天得到小道消息，学府明年大概率会重新开放招收武术套路，而且，你那张证书可以免学费。」少龙顿了顿，看一眼桌子上的牛皮纸袋，「虽然，你现在有学费了。」</p>
+<p>　　龙辰张了张嘴，低头继续翻，指着纸上的内容，「那这又是什么情况？怎么还有个备选方案？这个备选方案内容看起来更多。」</p>
+<p>　　「以防明年招生政策有变动。一旦没有单招策略，你必须和我一起参加高考。我做两手准备，保证有一条路你能够走通，能够走出去。」</p>
+<p>　　「你……你这是……」龙辰合上速写本，「你对我的这份爱还真是沉重。」</p>
+<p>　　少龙拿回计划本，「你没问题是吧？那我要告诉你我的下一个决定。」</p>
+<p>　　「还有下一个？」</p>
+  </div>
+</article>
+<article class="chapter" id="ch-232">
+  <h2 class="chapter-heading">第 232 章 </h2>
+  <div class="chapter-body">
+    <p>　　少龙点点头，「我今晚去不服，和你姐谈一谈。」</p>
+<p>　　龙辰一愣，使劲儿摇摇头，「别了吧。过阵子吧。姐她……她……」</p>
+<p>　　「她还是无法原谅我。」少龙接上龙辰不愿意说出口的话。</p>
+<p>　　龙辰微微点了点头，欲言又止。</p>
+<p>　　「大龙，她是你姐姐，是你最亲的亲人。不管她怎么看待我，我都欣然接受。问题是，暑假结束就是高三，我没有时间等她理解我。」少龙一手拍在速写本上，「我相信，姐比我更想你能够离开这里。不然，她当初也不会叫我帮你补习。我做这个计划，不仅是为了未来执行，也是为了给姐一个保证。」</p>
+<p>　　「但是……」</p>
+<p>　　事情没有想象中的复杂。当少龙把「高考备战计划」放在龙菲面前，用最诚恳的态度说出自己的想法与计划，并为龙菲最为担心的事情做下保证。</p>
+<p>　　龙菲做出了令少龙和龙辰更为惊讶的决定——</p>
+<p>　　「抛开其他不谈。我相信你。将我弟弟的未来交给你。」</p>
+<p>　　她又对龙辰说：「从现在开始，网吧的事情不需要你管，你一切听少龙安排，把你的成绩给我提上去。」</p>
+<p>　　龙辰郑重点头。</p>
+<p>　　高二的暑假，在题海与单词中一闪而过。</p>
+<p>　　少龙把龙辰按在书桌前，一张卷子接着一张卷子。龙辰从最初的哀嚎连连，到后来认命般地埋头演算，偶尔抬起头，对上少龙监督的目光，狡黠一笑，又乖乖低下头去。</p>
+<p>　　窗外的蝉鸣聒噪，屋内的风扇吱呀作响。屋子里到处是卷子，桌子上堆满了复习资料。两人各占书桌一半，偶尔笔尖相碰，便不约而同地停顿一瞬，然后若无其事地继续。</p>
+<p>　　「这道题，你前天错过一次了。」少龙皱眉指着龙辰的演算纸。</p>
+<p>　　「我知道，这次是粗心。」龙辰讨饶地笑，「大学神饶命。」</p>
+<p>　　「粗心也是错。」少龙板着脸，却没有真的追究，只是把题圈出来，在旁边写下正确步骤。</p>
+<p>　　这样的日子，重复了一整个暑假。</p>
+<p>　　高三开学，气氛骤然紧张起来。</p>
+<p>　　少龙给自己制定了严格的学习计划，精确到每一分钟。龙辰看着他桌上的倒计时日历——数字已经从三位数变成了两位数——心里也跟着紧了起来。</p>
+<p>　　「你不用管我，专心你的。」龙辰说。</p>
+<p>　　「你也是我的计划之一。」少龙头也不抬。</p>
+<p>　　龙辰张了张嘴，最终没有反驳，只是默默地拿起单词本。</p>
+<p>　　武馆的兼职能推的都推了，笼斗更是彻底断了。秦昊那边来过两次电话，龙辰都以备战高考为由拒绝。秦昊倒也没有强求，毕竟龙辰帮他赚的钱早就超出了当初的约定。</p>
+<p>　　杨虎也常来，三个人挤在吧檯里，一个讲题，两个听。龙菲偶尔送些吃的过来，目光在少龙身上停留片刻，什么也没说，转身离开。</p>
+<p>　　少龙知道，龙菲的态度在慢慢软化。他没有刻意讨好，只是用行动证明，他对龙辰的督促，不是为了毁掉他，而是想带他飞出去。</p>
+<p>　　期末考试成绩出来的那天，龙辰破天荒地主动跑到红榜前。</p>
+<p>　　少龙站在他身后，看着他从后往前找，目光一格一格地向上移，脸上的表情从紧张到惊喜，再到不敢置信。</p>
+<p>　　「一百零二。」龙辰转头看少龙，「我考了一百零二。」</p>
+<p>　　少龙嘴角微微上扬，点点头。</p>
+<p>　　「我进步了四十多名！」龙辰的声音有些发颤。</p>
+<p>　　「我说过，你可以的。」少龙语气平淡，眼底却藏着掩不住的笑意。</p>
+<p>　　龙辰一把将少龙搂进怀里，不顾周围同学的目光。少龙僵了一瞬，最终没有推开，只是轻轻拍了拍龙辰的背。</p>
+<p>　　「还有半年。」少龙低声说。</p>
+<p>　　「嗯。」龙辰的声音闷闷的，「还有半年。」</p>
+<p>　　除夕夜，万家灯火。</p>
+<p>　　两人从不服吃完年夜饭出来，踩着厚厚的积雪，朝那条小巷子走去。</p>
+<p>　　巷子一如既往，两边的墙被积雪覆盖，月光照在上面，泛着清冷的光。两人并排走有些勉强，肩膀时不时碰在一起。</p>
+<p>　　「还记得去年今天吗？」少龙问。</p>
+<p>　　「记得。」龙辰的声音很轻，「你问我能不能拉着你一起走。」</p>
+<p>　　「你当时没回答。」</p>
+<p>　　「我当时不敢回答。」</p>
+<p>　　少龙侧目看他。龙辰也正好转过头来，四目相对，呼吸在冷空气中凝成白雾。</p>
+<p>　　巷子越走越深，快到尽头时，两人不约而同地停下脚步，转身面向对方。墙上积雪反射的月光，将彼此的脸照得清晰。</p>
+<p>　　少龙微微向前倾身，龙辰也动了。</p>
+<p>　　就在两人即将贴上的瞬间——</p>
+<p>　　「有蛇！」</p>
+<p>　　龙辰突然喊了一声。</p>
+<p>　　少龙脑子里「嗡」地一声，什么也来不及想，直接扑进龙辰怀里，双手紧紧抓着对方的衣服。</p>
+<p>　　龙辰得逞般地笑了，顺势将人按在怀中，一手揽着少龙的腰，一手抚上他的后脑勺。</p>
+<p>　　「骗你的。」龙辰的声音从头顶传来，带着笑意和温柔。</p>
+<p>　　少龙愣了片刻，意识到自己被耍了，却没有挣扎，只是闷声说：「幼稚。」</p>
+<p>　　「你怕蛇又不是一天两天了。」龙辰收紧了手臂，「就像我怕狗一样。我们都有弱点，但我们在一起，就什么都不怕。」</p>
+<p>　　少龙从他怀里抬起头，看着他的眼睛。</p>
+<p>　　月光下，龙辰的眉眼格外清晰，眼底映着细碎的星光。</p>
+<p>　　「龙辰。」少龙轻声说。</p>
+<p>　　「嗯？」</p>
+<p>　　「你还没有回答我，去年那个问题。」</p>
+<p>　　龙辰沉默了片刻，嘴角缓缓上扬：「星河不是每年都有的，但是，我想送你一条星光之路。」</p>
+<p>　　他松开少龙，从口袋里摸出一个小巧的遥控器，按下开关。</p>
+<p>　　霎时间，两边墙上的积雪中，亮起了灯。</p>
+<p>　　五彩斑斓的光芒从雪中透出来，红的、绿的、蓝的、黄的，明明灭灭，像是散落在人间的星辰。灯光在雪面上折射、交织，将整条小巷照得如同梦境。</p>
+<p>　　少龙睁大眼睛，一眨不眨地看着这一切。</p>
+<p>　　「这……」他有些说不出话来。</p>
+<p>　　龙辰伸出手，掌心朝上：「这一次，请让我拉着你一起。」</p>
+<p>　　少龙看着那只手，骨节分明，指腹有薄薄的茧，是练武留下的痕迹。他缓缓抬起手，搭在龙辰的手掌心。</p>
+<p>　　龙辰握住他的手，指尖收紧，掌心相贴，温度透过皮肤传递。</p>
+<p>　　「跑！」</p>
+<p>　　龙辰拉着他朝来时的方向跑去。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-233">
+  <h2 class="chapter-heading">第 233 章 </h2>
+  <div class="chapter-body">
+    <p>　　逼仄的小巷，一前一后，脚步声在雪地上发出细碎的声响。两边的灯光随着他们的跑动而闪烁，像是流动的星河。</p>
+<p>　　「为什么要跑？」少龙问，呼吸有些急促。</p>
+<p>　　「你很快就知道了。」</p>
+<p>　　龙辰没有回头，握着他的手却很紧，像是怕一松手人就会消失。</p>
+<p>　　他们跑过的地方，灯泡开始噼里啪啦地炸裂，一声接一声，像是新年的鞭炮。</p>
+<p>　　少龙回头看了一眼，那些刚刚还亮着的灯，在他们身后逐一熄灭，碎裂的玻璃渣落在雪地上，反射着最后的微光。</p>
+<p>　　跑出巷子，灯光全部熄灭，四周陷入一片昏黑。只有天上的月亮，冷冷地照着。</p>
+<p>　　龙辰突然停下，转身。</p>
+<p>　　少龙来不及刹车，直接撞进他怀里。</p>
+<p>　　两人都没有动。</p>
+<p>　　「温度太低，都炸了。」少龙的声音有些闷，「全是灯泡碎渣，我们下次怎么走？」</p>
+<p>　　龙辰没有回答，只是把头埋在少龙的脖颈处，温热的呼吸打在皮肤上，带着一丝不易察觉的颤抖。</p>
+<p>　　过了很久，他才低声说：「没有下次了。再过半年，你就考出去了。」</p>
+<p>　　少龙伸手揽住龙辰的背。</p>
+<p>　　「我还要带走你这条龙。」他说，声音很轻，却异常坚定。</p>
+<p>　　龙辰没有说话，只是把头埋得更深了些。过了许久，才闷闷地应了一声：</p>
+<p>　　「好。」</p>
+<p>　　高三下学期，倒计时日历上的数字一天天减少。</p>
+<p>　　少龙的压力越来越大，有时会整晚整晚地失眠，躺在床上盯着天花板，脑子里全是公式和单词。龙辰察觉到他的异样，不再缠着他讲题，而是默默地给他倒水、按摩，在他伏案太久时，强行拉他起来活动。</p>
+<p>　　「你不能把自己逼太紧。」龙辰说。</p>
+<p>　　「我没事。」少龙揉了揉太阳穴，「你今天的卷子做完了吗？」</p>
+<p>　　「做完了。」龙辰把卷子递给他，「你先休息，明天再看。」</p>
+<p>　　少龙接过卷子，扫了一眼，嘴角微微上扬：「有进步。」</p>
+<p>　　「那是，也不看谁教的。」龙辰笑了笑，更为敬业的帮少龙舒缓肌肉，「舒服了吗？今晚早点睡。」</p>
+<p>　　少龙没有拒绝，难得地在十二点前躺上了床。</p>
+<p>　　龙辰关灯，在黑暗中躺到他身边，伸手揽住他的腰，将人往自己怀里带了带。</p>
+<p>　　「还有三个月。」龙辰的声音很轻。</p>
+<p>　　「嗯。」</p>
+<p>　　「你会考上的。」</p>
+<p>　　「我知道。」</p>
+<p>　　「我也会。」</p>
+<p>　　少龙在黑暗中睁开眼，侧头看向身边的人。月光从窗帘的缝隙透进来，在龙辰脸上投下一道细细的光线。</p>
+<p>　　「我帮你报了单招。」少龙说。</p>
+<p>　　龙辰愣了一下：「什么时候？」</p>
+<p>　　「报名截止前最后一天。我怕你犹豫，就自作主张了。」</p>
+<p>　　龙辰沉默了片刻，轻轻笑了一声：「大学神就是爱替人做主。」</p>
+<p>　　「你不愿意？」</p>
+<p>　　「愿意。」龙辰收紧了手臂，「你替我做的决定，从来没有错过。」</p>
+<p>　　三月初，单招考试。</p>
+<p>　　少龙跟着龙辰坐上了去市里的火车。</p>
+<p>　　考试的两天，少龙全程陪着。龙辰进考场时，少龙就坐在看台，手里拿着书，却一个字也看不进去。</p>
+<p>　　龙辰穿着一身干净的练功服，在考场上打了一套拳。少龙站在观众席，看着台上那个矫若游龙的身影，恍惚间想起两年前，在玄武广场上，第一次看到龙辰带学员训练的样子。</p>
+<p>　　那时候的龙辰，眉目间有化不开的愁绪，像一条被困在浅滩的龙。</p>
+<p>　　而此刻台上的他，每一招每一式都充满了力量与自信，眼中有了光。</p>
+<p>　　考试结束，龙辰从考场出来，额头还挂着汗珠。</p>
+<p>　　「怎么样？」少龙问。</p>
+<p>　　龙辰看着他，嘴角慢慢上扬，然后一把将他抱住。</p>
+<p>　　「套路满分。」龙辰的声音有些发颤，「面试应该也没问题。」</p>
+<p>　　少龙拍了拍他的背：「我说过，你可以的。」</p>
+<p>　　四月中旬，单招成绩公布。</p>
+<p>　　少龙比龙辰还紧张，一早起来就守在电脑前，一遍遍地刷新页面。龙辰倒是在床上赖着不肯起来，把被子蒙在头上。</p>
+<p>　　「起来了。」少龙去拽他的被子。</p>
+<p>　　「你帮我查。」龙辰闷声说。</p>
+<p>　　「你自己查。」</p>
+<p>　　「我不敢。」</p>
+<p>　　少龙叹了口气，坐到床边，输入龙辰的准考证号。</p>
+<p>　　页面加载的那几秒，他觉得自己的心跳比任何时候都快。</p>
+<p>　　屏幕上跳出成绩。</p>
+<p>　　专项分：97。文化分：399。综合分：87.85。</p>
+<p>　　少龙盯着屏幕看了好几秒，然后转头看向把自己裹成蚕蛹的龙辰。</p>
+<p>　　「过了。」他说。</p>
+<p>　　龙辰猛地掀开被子：「多少？」</p>
+<p>　　「综合分87.85，去年第一志愿的录取线是85。」</p>
+<p>　　龙辰愣了一瞬，然后从床上弹起来，一把将少龙扑倒在床上。</p>
+<p>　　「我过了！我真的过了！」</p>
+<p>　　少龙被他压得喘不过气，却没有推开他，只是伸手拍了拍他的后脑勺。</p>
+<p>　　「我说过，你可以的。」</p>
+<p>　　五月中旬，录取通知书寄到的那天，龙辰正在网咖帮龙菲修电脑。</p>
+<p>　　少龙拿着信封跑进网咖时，龙辰正蹲在主机箱前，手上全是灰。</p>
+<p>　　「你的。」少龙把信封递给他。</p>
+<p>　　龙辰看了看信封，又看了看少龙，然后在裤子上擦了擦手，接过去。</p>
+<p>　　拆信封的时候，他的手在抖。</p>
+<p>　　录取通知书上印着鹿垣体育学院的公章，还有龙辰的名字。</p>
+<p>　　龙菲从吧檯里走出来，看了一眼通知书，眼眶就红了。</p>
+<p>　　「好，好……」她连说了两个好字，声音有些哽咽，「我们家里，终于出大学生了。」</p>
+<p>　　杨虎不知道什么时候也来了，一把搂住龙辰的肩：「我就知道，我就知道你小子能行！」</p>
+<p>　　龙辰被他们围着，脸上的笑容怎么也收不住。但他的目光，始终落在少龙身上。</p>
+<p>　　少龙冲他微微点头，嘴角带着笑意。</p>
+<p>　　六月初，高考。</p>
+<p>　　龙辰陪着少龙去考场。</p>
+<p>　　考场外挤满了家长和老师，有人神色焦虑，有人互相安慰。龙辰和少龙找了个安静的角落，并肩坐在花坛边。</p>
+<p>　　「紧张吗？」龙辰问。</p>
+<p>　　「有一点。」少龙难得没有嘴硬。</p>
+<p>　　龙辰笑了笑，伸手握住少龙的手，十指相扣。</p>
+<p>　　「我在外面等你。」</p>
+<p>　　少龙看了他一眼，轻轻「嗯」了一声。</p>
+<p>　　铃声响起，少龙起身，走向考场。</p>
+<p>　　龙辰站在人群里，看着他的背影消失在考场门口，然后找了个阴凉的地方坐下。</p>
+<p>　　他不像其他家长那样焦虑地走来走去，只是安静地坐着，偶尔看看手机，偶尔抬头看看天。</p>
+<p>　　两天的考试，他都在。</p>
+<p>　　少龙每考完一科出来，都能在人群里第一眼看到他。</p>
+<p>　　最后一场考完，少龙走出考场。龙辰站在树荫下，手里拿着一瓶水，朝他挥了挥手。</p>
+<p>　　少龙走过去，接过水，仰头灌了半瓶。</p>
+<p>　　「怎么样？」龙辰问。</p>
+<p>　　「正常发挥。」少龙说，「第一志愿应该没问题。」</p>
+<p>　　龙辰笑了，伸手揽住他的肩：「那当然，你可是大学神。」</p>
+<p>　　少龙没有反驳，只是偏头看了他一眼。</p>
+<p>　　阳光正好，树影斑驳。</p>
+<p>　　一切都在朝着最好的方向前进。</p>
+<p>　　所有事情解决，少龙彻底放松下来。从他来到苍泉镇第一天，直到此刻，他终于可以什么都不想，什么都不做，睡到自然醒，偶尔在不服打游戏到后半夜。他给自己的玩物丧志找到一个最合理的解释——陪龙辰在不服守夜。</p>
+<p>　　录取通知书寄到不服。</p>
+<p>　　少龙如愿以偿，被鹿垣第一学府软件工程学院录取。</p>
+<p>　　龙辰拿出自己那张通知书，翻来覆去地看了好几遍，然后把它们并排放在桌上，拍了张照片。</p>
+<p>　　「干什么？」少龙问。</p>
+<p>　　「留念。」龙辰低头看着手机屏幕，「这是我们两个人的。」</p>
+<p>　　少龙没说话，只是把照片要了过来，存进自己的手机里。</p>
+<p>　　八月末，两人收拾行李，准备出发。</p>
+<p>　　龙菲做了一大桌子菜，算是饯行。杨虎也在，四个人围坐在桌前，气氛难得地轻松。</p>
+<p>　　「到了那边，好好照顾自己。」龙菲给两人夹菜，「有什么事打电话。」</p>
+<p>　　「姐，你也考虑考虑，把网咖关了，出去看看。」龙辰说。</p>
+<p>　　龙菲笑了笑：「再说吧。等你们安顿好了，我去看你们。」</p>
+<p>　　杨虎在旁插嘴：「我陪你一起去。」</p>
+<p>　　龙辰瞥了他一眼：「哟，这口气，想提前做我姐夫？」</p>
+<p>　　杨虎嘿嘿一笑：「迟早的事。」</p>
+<p>　　龙菲在桌下踢了杨虎一脚。</p>
+<p>　　杨虎立马闭嘴。</p>
+<p>　　「啧。看来还有很长一段路要走啊，未来姐夫。」</p>
+<p>　　杨虎抬头，白了龙辰一眼。</p>
+<p>　　少龙低下头，掩饰笑意。</p>
+<p>　　出发那天，龙菲和杨虎把他们送到车站。</p>
+<p>　　火车缓缓驶入站台，龙辰拎着行李箱，回头看了一眼苍泉镇的方向。</p>
+<p>　　玄武广场的楼群在晨光中显得格外安静，不服网咖的招牌还亮着灯。</p>
+<p>　　「走吧。」少龙说。</p>
+<p>　　龙辰点点头，转身走上火车。</p>
+<p>　　车厢里很空，两人找到了靠窗的位置。龙辰坐在窗边，把行李箱放好，然后靠在椅背上，望着窗外。</p>
+<p>　　火车开动了。</p>
+<p>　　站台上，龙菲和杨虎的身影越来越小，最终消失不见。窗外的景物从破旧的居民楼变成了田野，从田野变成了山林，从山林变成了远方。</p>
+<p>　　少龙没有打扰龙辰，只是安静地坐在旁边，闭上眼睛。</p>
+<p>　　他知道，龙辰需要时间，和这个地方告别。</p>
+<p>　　火车一路向南，穿过晨雾，穿过阳光，穿过黄昏。</p>
+<p>　　窗外的风景一直在变，唯一不变的，是坐在窗边那个少年的侧脸。</p>
+<p>　　少龙偶尔睁开眼，看看他，又闭上。</p>
+<p>　　夕阳西下时，龙辰终于转过头来。</p>
+<p>　　「少龙。」</p>
+<p>　　「嗯？」</p>
+<p>　　「这一路，辛苦你了。」</p>
+<p>　　少龙睁开眼，看着他，嘴角微微上扬。</p>
+<p>　　「放心。我知道你在想什么。」他说，「我们下次回来，把姐接走。」</p>
+<p>　　龙辰点点头，重新望向窗外。</p>
+<p>　　夕阳的余晖洒进车厢，将两人的影子拉得很长很长。</p>
+<p>　　火车继续向前。</p>
+<p>　　前方，是他们的未来。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

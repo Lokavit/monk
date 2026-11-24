@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>千亿总裁独宠 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">千亿总裁独宠</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 4章 ｜ 9824字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>01 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>04 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">吴瑾萱</span> <span class="chip">江昊天</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">鹿垣市</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">霸总</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>暂无简介</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 4 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> </a>
+<a href="#ch-2" class="chapter-link"><span class="chapter-num">章 002</span> </a>
+<a href="#ch-3" class="chapter-link"><span class="chapter-num">章 003</span> </a>
+<a href="#ch-4" class="chapter-link"><span class="chapter-num">章 004</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 </h2>
+  <div class="chapter-body">
+    <p>　　暴雨倾盆，车流拥堵。</p>
+<p>　　在东海区的一条十字路口，刚刚发生一起事故——一辆草绿色小电动撞上了一辆黑色商务车。</p>
+<p>　　主驾驶位下来一个男人，俯身检查车头状况，抬头瞪着小电驴的女主人，「大姐，你会不会骑车？看不见是绿灯吗？你抢什么？！找死吗？！」</p>
+<p>　　他这样一叫嚷，周围立刻聚集了不少的人，本就因暴雨拥堵的路段，更是堵到寸步难移。</p>
+<p>　　吴瑾萱费力地扶起小电驴，跨坐上去，「根本没撞上，你别讹人。」</p>
+<p>　　司机伸手拽住小电驴的车尾梁，「撞了我的车，你还想跑？你给我下来！」</p>
+<p>　　吴瑾萱看了看围观人群，回头对司机说：「大兄弟，我这儿有急事儿。」</p>
+<p>　　「你就算是去赶着投胎，也得在这儿把事儿解决了。」</p>
+<p>　　「大兄弟，我真有急事儿。要不然，你记我一个电话吧。」</p>
+<p>　　「电话有什么用？等交警来了，定你全责，你不接电话，我上哪儿找你去？」</p>
+<p>　　两人你一言我一语，互不相让。</p>
+<p>　　有车辆等得不耐烦了，一阵阵鸣笛，从驾驶位伸出头，冲着两人喊：「妈的！赶紧挪开！堵成什么逼样了？」</p>
+<p>　　吴瑾萱拧了一下车把，冷不丁被司机拽了一下，摔倒在地。</p>
+<p>　　司机似乎没想到，双手做投降状，后退了两步，「我没碰你啊！我可没碰你！大家都看着呢，是你自己摔倒的……」</p>
+<p>　　吴瑾萱从雨里奋力爬起来，再一次扶起小电驴。她的手掌磨破了皮，血液混着雨水，渗入了车把的塑胶管套缝隙里。她的膝盖也擦破了皮，血水沿着膝盖骨流淌到小腿骨。</p>
+<p>　　商务车的中排窗户轻轻下放了一指节宽，里面的人说道：「小周，记她一个电话，我们把路让开。」</p>
+<p>　　司机立马点头答应，走到吴瑾萱身边，「你的手机号是多少？」</p>
+<p>　　吴瑾萱报出手机号，口袋里的手机响了。</p>
+<p>　　司机收起手机，「你记住我的电话。叫你的时候，你必须要来。」</p>
+<p>　　吴瑾萱瞥了一眼商务车，骑上小电驴，赶往三六九医院。</p>
+<p>　　她顾不上自身的伤痛，直奔儿科，抓到一个医生就问：「大夫，我儿子怎么样了？」</p>
+<p>　　「只是流感，打完点滴，就可以回家了。」</p>
+<p>　　吴瑾萱松了一口气，走进病房。</p>
+<p>　　儿子江昊天正和病房里的几个小朋友聊天，看到她进来，挥着胳膊，「妈！妈！」</p>
+<p>　　吴瑾萱走到病床前，「乖乖躺着。生病也不老实。」</p>
+<p>　　「嘿嘿！」江昊天拉着吴瑾萱的手，惊呼「妈！你的手怎么了？」</p>
+<p>　　吴瑾萱这才发现，手掌根磨破了皮，想是路上意外摔倒时候伤的。</p>
+<p>　　江昊天按了呼叫铃，「护士姐姐，我想要创可贴。我妈妈的手受伤了。」</p>
+<p>　　不一会儿，小护士拿着酒精和两块创可贴进来，「小家伙，还挺懂事。」</p>
+<p>　　「就会卖乖。」吴瑾萱嘴上这样说着，心中十分得意儿子的表现。</p>
+<p>　　手机响铃，是陌生号码来电，她给挂断了。</p>
+<p>　　「妈，你今天的面试怎么样？」江昊天问。</p>
+<p>　　吴瑾萱摸着儿子的头，「挺好的。你就别操心这些事儿了。」</p>
+<p>　　手机又响了，还是那个号码。</p>
+<p>　　吴瑾萱推测，八成是那个鼻孔朝天的司机。</p>
+<p>　　她走出病房，找了个僻静角落，按下接听，「你好。」</p>
+<p>　　「你好。请问是吴瑾萱，吴女士吗?」</p>
+<p>　　对面是一个女声，听起来年纪轻轻，声音里充满活力。</p>
+<p>　　吴瑾萱没有急着回答，反问：「你是？」</p>
+<p>　　「我是顾冠霖的妹妹。我哥想知道，你有男朋友吗？」</p>
+<p>　　吴瑾萱一脑子问号，顾冠霖是谁？怎么上来就问有没有男朋友？</p>
+<p>　　「喂？！喂！你在听吗？」</p>
+<p>　　「我在。」吴瑾萱说，「你是不是打错电话了？我不认识顾冠霖。」</p>
+<p>　　电话那边一个男声，「小妹，你拿着我的手机给谁打电话呢？」</p>
+<p>　　吴瑾萱有一瞬慌神儿，这个声音，好像在哪儿听过。</p>
+<p>　　电话那边一阵杂音，而后挂断了。</p>
+<p>　　吴瑾萱朝着病房走，脑子里还在想，顾冠霖是谁？</p>
+<p>　　当晚，她在一则推荐短视频里看到了自己，内容是她今天抢红绿灯发生的小事故。</p>
+<p>　　视频作者对她的行为好一顿痛批，骂她抢红灯，骂她阻碍交通，骂她刮了车就跑了……</p>
+<p>　　吴瑾萱越看越气，当即点开视频主的主页，编辑了一连串的文字，却在发送之前，猛然清醒。</p>
+<p>　　她清空了内容，关掉了手机。</p>
+<p>　　次日上午，吴瑾萱的手机响了。她看了一眼，又是那个电话号码，顾冠霖的电话号码。</p>
+<p>　　她没接，按下了静音。</p>
+<p>　　「天天，你的感冒还没好，穿上外套再出去。」</p>
+<p>　　「妈，快点快点，我去收拾背包。」江昊天抓过衣服套上。</p>
+<p>　　吴瑾萱拿上钥匙，顺手打开门。</p>
+<p>　　门外站着个人。</p>
+<p>　　二十来岁的年轻小伙子，一身休闲西装，单手抄兜，作势要敲门。</p>
+<p>　　「你找谁？」吴瑾萱问。</p>
+<p>　　「吴瑾萱？」小伙子问。</p>
+<p>　　吴瑾萱点点头。</p>
+<p>　　小伙子伸出手，「你好，我叫顾冠霖。」</p>
+<p>　　「顾冠霖？！」吴瑾萱一脸防备，「顾先生，你……」</p>
+<p>　　「妈，我们走……欸？」江昊天偏着脑袋，「你是谁？」</p>
+<p>　　顾冠霖半蹲下，对江昊天伸出手，「我叫顾冠霖。你呢？」</p>
+<p>　　「我叫江昊天。」</p>
+<p>　　两人大手包小手，握在一起。</p>
+<p>　　「你是我妈妈的朋友？」江昊天问。</p>
+<p>　　「对。」顾冠霖问，「你们要去哪儿？」</p>
+<p>　　吴瑾萱正要出声，她那宝贝儿子的嘴更快。</p>
+<p>　　「我们去体育场打网球。你也一起来吗？」</p>
+<p>　　吴瑾萱赶紧出声，「天天，顾……」</p>
+<p>　　「对。我们一起去。」顾冠霖说完，抬头看向吴瑾萱。</p>
+<p>　　还是那辆商务车，还是那个开车的司机。不同的是，司机对吴瑾萱的态度，低眉顺眼，殷勤开车门，脸上挂着仿佛中了三千万彩票的喜色。</p>
+<p>　　「哇哦！这车好酷啊！」江昊天那双手，摸摸这里，按按那里，拿起一副耳机，「顾叔叔，我能听吗？」</p>
+<p>　　「当然可以。」顾冠霖操作面板，放了一首曲子，亲自给江昊天戴好耳机。</p>
+<p>　　江昊天一脸得瑟的小模样，翘着脚，身体随着音乐晃动。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-2">
+  <h2 class="chapter-heading">第 2 章 </h2>
+  <div class="chapter-body">
+    <p>　　相比儿子的自在，吴瑾萱则是十分局促。被她刮了车的车主，现在跑来拉着她和她儿子去体育场，怎么看都怪。</p>
+<p>　　「顾先生，昨天刮到你的车，实在是抱歉。需要多少钱，我赔给你。」</p>
+<p>　　顾冠霖抬了一下手，「不用在意。我知道你为了什么抢红灯。网上的信息已经撤了，希望没有给你的生活造成不良影响。」</p>
+<p>　　吴瑾萱张了张口，轻轻摇头。她对顾冠霖的话半信半疑，打开手机的应用，从历史记录里找到昨天发视频那个账号，显示账号已注销。</p>
+<p>　　她悄悄看了看坐在旁边的顾冠霖。</p>
+<p>　　忽然想起来，昨天那个女孩儿没头没脑的问题。</p>
+<p>　　三人来到网球馆，占了一个位置，轮流上阵，打了一个多小时。</p>
+<p>　　江昊天蹦蹦哒哒跑过来，「妈！有女孩子约我双打，你陪顾叔叔玩吧。」</p>
+<p>　　说着，从桌上拿了水和零食，屁颠儿屁颠儿走了。</p>
+<p>　　吴瑾萱尴尬地笑了笑，「顾先生，你今天找我是为了？」</p>
+<p>　　顾冠霖擦了擦脸上的汗，「我妹昨晚跟你说什么了吗？」</p>
+<p>　　吴瑾萱脑子里瞬间想起来，却摇了摇头，没有说话。</p>
+<p>　　「哦。那我今天来就是亲自来问你。」顾冠霖顿了顿，「你有男朋友吗？」</p>
+<p>　　吴瑾萱腾地坐直，瞪大眼睛盯着顾冠霖，动了动嘴唇，「你……你……」</p>
+<p>　　「我认真的。」顾冠霖坐得比她还直，一脸真诚，「我想追你。」</p>
+<p>　　吴瑾萱嗖地从椅子上站起来，拿上自己的东西，「神经病！」</p>
+<p>　　才走出去一步，手就被顾冠霖拉住了。</p>
+<p>　　「放手！」她说。</p>
+<p>　　顾冠霖没有放。</p>
+<p>　　吴瑾萱用力甩了两下，没甩开，「放手！我喊人了啊！」</p>
+<p>　　「你喊！」顾冠霖说。</p>
+<p>　　吴瑾萱看了看四周，扫到那些好事者的目光，她没喊，她不想再一次被人拍了，发到网上评头论足。</p>
+<p>　　她重新坐下，沉下一口气，「顾先生，你……」</p>
+<p>　　「叫我顾冠霖。」</p>
+<p>　　「顾冠霖，先生。」吴瑾萱沉下声说，「我不知道你在拿我开心还是怎样。」</p>
+<p>　　她指着江昊天的方向，「我儿子，我怀胎十月，亲自生的儿子，今年十一岁，开学念初一。」</p>
+<p>　　「我知道。」顾冠霖说，「我还知道，你正和你的前夫打离婚官司，争夺孩子抚养权。而你当前没有工作，你必须在一个月内找到稳定的工作，并且月薪要在一万以上。否则，你会彻底失去资格。」</p>
+<p>　　吴瑾萱看了顾冠霖好一会儿，拧开手边的瓶装水，喝了几口。</p>
+<p>　　「我不知道你是什么身份，有什么手眼通天的本事，把我调查的这么清楚……」</p>
+<p>　　「我再一次自我介绍。」顾冠霖说，「我叫顾冠霖，今年二十一岁，是一名职业律师，正在组建自己的律师团队。」</p>
+<p>　　顾冠霖说完，向吴瑾萱伸出手。</p>
+<p>　　吴瑾萱迟疑了几秒钟，缓缓伸出手，轻轻碰了碰，立马收回来。</p>
+<p>　　她没有再说话。</p>
+<p>　　顾冠霖也没说话。</p>
+<p>　　网球场里，人们的谈笑声音，网球撞击球拍的声音，运动鞋在地上摩擦的刺耳声音……</p>
+<p>　　「妈！」江昊天挥着球拍大喊，「妈！我们缺人。你和顾叔叔过来呀！」</p>
+<p>　　「好！」顾冠霖先一步说，拿起两只球拍，递给吴瑾萱一只。</p>
+<p>　　吴瑾萱伸了伸手，接过去。</p>
+<p>　　两个大人，配合着儿子和儿子新交的朋友。</p>
+<p>　　散场前，江昊天还加了小女孩儿的联系方式，约着下次在一起玩。</p>
+<p>　　吴瑾萱听得一脸无奈。</p>
+<p>　　顾冠霖倒是乐呵呵的，还热情邀请她们母子吃了一顿西餐。</p>
+<p>　　下午，三个人又去看了电影。</p>
+<p>　　江昊天挽留顾冠霖在家吃饭。</p>
+<p>　　吴瑾萱想着，这一天都是顾冠霖在花钱，合该留人吃顿饭。</p>
+<p>　　她在厨房忙碌，看着儿子和顾冠霖坐在客厅沙发打游戏。</p>
+<p>　　江昊天开朗懂事，从不在她面前提父亲，也知道她与江志滨的离婚官司和抚养权之争。</p>
+<p>　　吴瑾萱心里清楚，儿子嘴上不说，只是怕她担心。</p>
+<p>　　顾冠霖忽然转头看向厨房，冲她笑了笑，低声和江昊天说着什么。</p>
+<p>　　吴瑾萱愣了一下，没有避开目光。</p>
+<p>　　二十一岁的顾冠霖，昨天才第一次见面，今天就说要追她。别说她现在离异带娃，就说两人年纪差了一轮，也不可能成。</p>
+<p>　　晚饭后，天色很晚了。</p>
+<p>　　江昊天依依不舍，「顾叔叔，你什么时候再来找我玩？」</p>
+<p>　　顾冠霖抬头看了看吴瑾萱，「明天好不好？」</p>
+<p>　　江昊天脸上阴转晴，「好耶！我叫我妈做拿手的可乐鸡翅给你吃。我妈做得可好吃了。」</p>
+<p>　　吴瑾萱没去在意两人的话，注意力全在周围，生怕有人注意到，大晚上的，她家里走出来个男人。</p>
+<p>　　送走了顾冠霖，她坐在沙发上发呆，听到儿子在对着手表讲电话。</p>
+<p>　　她听了两耳朵，差点儿晕过去，电话那边，顾冠霖的声音！</p>
+<p>　　两人处的那叫一个好，天南海北的聊。</p>
+<p>　　吴瑾萱在旁听着，不由得笑了。</p>
+<p>　　没有想到，顾冠霖倒是很会和孩子相处。</p>
+<p>　　之后的几天里，顾冠霖仿佛她们家的常客，三天两头的来，从不空手。要么给江昊天带玩具，要么给江昊天带书，要么给吴瑾萱带点小礼物。但是，再也没有提过要追她的事情。</p>
+<p>　　虽是没提，身为过来人的吴瑾萱却能感觉得到，顾冠霖的坚持，就冲她家里多了这么一堆顾冠霖送来的东西，还有每天清早花店送来的一捧花。</p>
+<p>　　卡里这些祝福暖心的话语，没有署名。</p>
+<p>　　吴瑾萱把卡片收起来，攒了一小沓。</p>
+<p>　　「瑾萱，我的律师团队缺一个文秘。」顾冠霖说，「你有兴趣吗？」</p>
+<p>　　「我不行吧。」吴瑾萱避开顾冠霖的目光，「我不懂法律。」</p>
+<p>　　「那没事，我教你。主要都是重要档案，找外人，我不放心。」</p>
+<p>　　吴瑾萱想着如何组织语言，婉言谢绝。</p>
+<p>　　「给你开月薪两万。」顾冠霖说，「税后。」</p>
+<p>　　吴瑾萱心动了。与江志滨的抚养权官司即将开庭，她迫切需要一份高薪且稳定的工作。而她最近一边照顾儿子，一边招呼顾冠霖，连面试都很少去，更别提会有工作了。</p>
+<p>　　事实上，她很清楚，如果拒绝了顾冠霖，失去的将会是儿子的抚养权。</p>
+<p>　　「好。」吴瑾萱说，「你告诉我，都需要做什么。我提前准备。另外，我需要哪天入职？」</p>
+<p>　　顾冠霖脸上带着笑意，「不急。我自有安排。」</p>
+<p>　　他像是极为高兴，一把搂过去江昊天，「小子，你妈妈有工作了。你开不开心？」</p>
+<p>　　江昊天睁大眼睛，「真的？」又转头看向吴瑾萱，「妈，真的吗？」</p>
+<p>　　吴瑾萱点点头，「嗯。妈有工作了。」</p>
+<p>　　「什么工作？辛不辛苦？几天上班？几点下班？……」江昊天连珠炮似的发问。</p>
+<p>　　顾冠霖说：「你妈妈跟我合伙，我会欺负她吗？」</p>
+<p>　　江昊天笑了，「那我就放心了。顾叔叔，你一定要把我妈妈照顾好。」</p>
+<p>　　「放心吧。」</p>
+<p>　　两个男人，在吴瑾萱面前，击掌承诺。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-3">
+  <h2 class="chapter-heading">第 3 章 </h2>
+  <div class="chapter-body">
+    <p>　　吴瑾萱来到顾冠霖的公司，认识了团队里的其他成员，并收到了第一笔工资入账。</p>
+<p>　　她连忙找顾冠霖，「是不是财务搞错了？」</p>
+<p>　　「是我叫财务给你先打。」顾冠霖说，「你过两天的官司需要用到，收入证明、在职证明，和一些其他的资料，我都给你准备好了。」</p>
+<p>　　吴瑾萱从顾冠霖手里接过一个档案袋。</p>
+<p>　　她没有打开，她无需打开。</p>
+<p>　　只是短短入职几天，她已经见识到了顾冠霖在她面前不同的一面。</p>
+<p>　　她原以为顾冠霖是个不知道从哪儿冒出来的二世祖，任性妄为。</p>
+<p>　　事实上，顾冠霖面对公事，谈到案件的时候，尽显其成熟稳重，反而不似外表的二十出头。</p>
+<p>　　「对了。」顾冠霖说，「那天正好是天天参加机器人大赛。你尽管放心，我陪他去。」</p>
+<p>　　「啊？」吴瑾萱一头雾水，完全不知道儿子要参加机器人大赛。</p>
+<p>　　顾冠霖笑了笑，「他有兴趣，我带他去听了几堂课，导师说他有天赋。」</p>
+<p>　　吴瑾萱只知道江昊天动不动就和顾冠霖出去，却不知道原来是去学机器人编程去了。</p>
+<p>　　而她自身，则忙着啃一本又一本的法律书籍。抽空儿，她也会研究研究婚姻法、离婚法案，以及抚养权相关的法律法规。</p>
+<p>　　临开庭的前一天，江昊天非要拉着她出门，把她推进了一家看起来颇为高端的私人定制。</p>
+<p>　　在儿子的再三要求下，她换了一个新造型，往镜子面前一站，她愣住了。</p>
+<p>　　镜子里的她，从发型到穿着，从气色到体态，宛如精明干练的女强人。</p>
+<p>　　要在以前，就算儿子死拖硬拽，她也不会来这种地方，也懒得拾掇自己。</p>
+<p>　　她早被江志滨卷跑了所有的资金，又迟迟找不到工作，母子俩的生活异常拮据。</p>
+<p>　　眼下虽然有了工作，钱也不敢乱花。她看了看吊牌上的价格，正要换回去。</p>
+<p>　　江昊天大气的把钱付了。</p>
+<p>　　吴瑾萱惊愕看着他，一把抓到旁边，低声问：「你哪儿来的钱？」</p>
+<p>　　「顾叔叔给我的。」江昊天说。</p>
+<p>　　「你这孩子，怎么能要人家的钱？你怎么没告诉我？」</p>
+<p>　　江昊天一脸委屈，「顾叔叔说，你明天就要开庭，叫我带你换个形象。钱是他转给我的。」</p>
+<p>　　「人家给你，你就要？」吴瑾萱沉着脸，「我平时怎么教你的？你这孩子，手怎么这么软？越来越像你那没用的爹。」</p>
+<p>　　「别拿我跟江志滨比？！」江昊天气呼呼地喊，又说，「顾叔叔早晚是我新爸。」</p>
+<p>　　吴瑾萱倒吸一口气，一巴掌拍在江昊天后背，「瞎说什么？！什么新爸旧爸！」</p>
+<p>　　「你！」江昊天甩来吴瑾萱的手，「反正我已经付钱了，你爱要不要！」说完，推门跑了出去。</p>
+<p>　　吴瑾萱哪里还顾得上的换下来，抓起东西，急忙忙出了店门。</p>
+<p>　　路上，早已没有了江昊天的人影。</p>
+<p>　　她拿出手机，给儿子的手表打电话，却被挂断了。</p>
+<p>　　她翻到顾冠霖的电话，犹豫了几秒钟，按下拨打。</p>
+<p>　　电话响了好一会儿，这个时间，公司里一定在开会，因为她明天开庭，顾冠霖才给她多放了一天假。</p>
+<p>　　吴瑾萱挂断电话，打车回家。</p>
+<p>　　家里没人，江昊天没有回来，手表打不通了。</p>
+<p>　　吴瑾萱急得团团转，问了江昊天的同学、相熟的邻居。</p>
+<p>　　就在这时，她收到顾冠霖的消息：「天天在我这儿。」</p>
+<p>　　几秒后，又来一条，「晚上我送他回去。」</p>
+<p>　　吴瑾萱松了一口气，「好。麻烦你了。」</p>
+<p>　　顾冠霖：「你不用挂心，好好准备明天开庭。」</p>
+<p>　　吴瑾萱没再回消息。</p>
+<p>　　到了晚上十点多，她没有等到江昊天回来，倒是等来了顾冠霖的电话。</p>
+<p>　　「天天在我这儿睡了。」顾冠霖说，「正好明天我带他去参赛。」</p>
+<p>　　吴瑾萱轻轻应了一声，「谢谢。」</p>
+<p>　　「瑾萱，咱俩之间，说什么谢不谢的？」</p>
+<p>　　吴瑾萱没有接话，她怕一旦接话，顾冠霖后面会说出什么。</p>
+<p>　　然而，顾冠霖还是说了。</p>
+<p>　　「天天都告诉我了。」顾冠霖说，「你跟一个孩子生气干什么。他的心里是完全向着你的，不想你失去抚养权，更不想去他爸那边。」</p>
+<p>　　吴瑾萱沉默听着。</p>
+<p>　　「天天这个年纪，该懂得都懂了，不该懂的，也明白个七七八八。有些事情他宁可憋在心里，也不会和你说的。好在，他可以跟我说。」</p>
+<p>　　开庭日早上，吴瑾萱穿着被江昊天称之为「战袍」的衣服，再三检查所有资料，走出家门。</p>
+<p>　　顾冠霖的车停在楼下，司机正靠着车身抽烟，见她来了，立刻掐了烟，打开后车门。</p>
+<p>　　第一次开庭，江志滨没有出现，而是派了个律师来。</p>
+<p>　　吴瑾萱把资料递交上去，靠着这段时间啃的法律知识，为自己争取合法利益。</p>
+<p>　　经过一番评估，眼看能够拿下抚养权，江志滨的律师却突然提出来一个新的问题。</p>
+<p>　　打得吴瑾萱措手不及。</p>
+<p>　　好在，她争取到了时间，还有机会。</p>
+<p>　　从法院出来的时候，顾冠霖的车停在大门口，江昊天冲着她挥手。</p>
+<p>　　吴瑾萱换了一副笑脸，坐上车。</p>
+<p>　　「妈！你看，我拿奖了！」江昊天举着手里的奖品。</p>
+<p>　　「是呀！」吴瑾萱把玩着江昊天的奖品，「我儿子真厉害。」</p>
+<p>　　车子很快开到家楼下，吴瑾萱领着江昊天，对顾冠霖道一声再见。</p>
+<p>　　顾冠霖目送两人上楼，拿出手机，打了个电话。</p>
+<p>　　回到公司，他把小张叫到办公室里。</p>
+<p>　　「庭上出什么意外状况了？」顾冠霖问。</p>
+<p>　　小张说：「原本很顺，但在最后环节，对方律师提出了一点，吴姐目前在租房，说明无法给孩子稳定的生活保障。不过，吴姐凭着法律知识，争取到了一周时间。」</p>
+<p>　　顾冠霖点点头，「辛苦你了。」</p>
+<p>　　身为律师，他倒是不意外对方律师的角度。</p>
+<p>　　只是，只有一周时间，如何让瑾萱的名下有房子？</p>
+<p>　　他想了一个晚上，拿出自己的房本，来到吴瑾萱家。</p>
+<p>　　「你这是干什么？」吴瑾萱问。</p>
+<p>　　「事情我都知道了。」顾冠霖朝吴瑾萱面前推了推房本，「把我的房子过到你的名下。」</p>
+<p>　　吴瑾萱猛地坐直了，「疯了吧你？我拒绝。」</p>
+<p>　　「好！第二个方案。」顾冠霖拿出一张银行卡，「我们现在去买房子，买到你名下。」</p>
+<p>　　说完，他站起身，伸手去拉吴瑾萱的手腕。</p>
+<p>　　吴瑾萱被拉起来，走了几步，突然回过神，甩开了顾冠霖的手，「顾冠霖，你真的疯了。不行！这不行！」</p>
+<p>　　「这也不行，那也不行。瑾萱，你只有一周时间了。去掉周六日，只剩五天。现在不是你坚持的时候，你想一想天天，想一想抚养权。难道你想天天跟着江志滨吗？」</p>
+<p>　　吴瑾萱后退两步，颓然坐回沙发，没有说话。</p>
+<p>　　「瑾萱。」顾冠霖坐在她的身边，「别坚持了。让我帮你。看你这样，我心疼。我们把这些糟心的尽早事情解决，让我来照顾你和天天。」</p>
+<p>　　吴瑾萱看了看落在肩头的手，第一次没有推开，朝着顾冠霖的怀里靠了靠。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-4">
+  <h2 class="chapter-heading">第 4 章 </h2>
+  <div class="chapter-body">
+    <p>　　第二次开庭日，吴瑾萱一边往法院走，一边和顾冠霖发信息，面前忽然站了一个人。</p>
+<p>　　江志滨满脸怒火，「妈的！你干的好事！」</p>
+<p>　　周围无数只眼睛看过来。</p>
+<p>　　吴瑾萱低下头，正想迅速离开，手臂被江志滨粗暴地拽住。</p>
+<p>　　「他妈的，你别想跑！你他妈的干了什么？！」</p>
+<p>　　「你放手！」吴瑾萱用力挣扎，却无法挣脱。</p>
+<p>　　「放开她！」</p>
+<p>　　吴瑾萱听到熟悉的声音，下意识抬头。</p>
+<p>　　顾冠霖抓着江志滨的手腕，向外一掰。</p>
+<p>　　吴瑾萱得以挣脱，觑了一眼顾冠霖，趁机快步走向法院大门。</p>
+<p>　　「他妈的，」江志滨骂骂咧咧，「你又是哪根葱？」</p>
+<p>　　顾冠霖双手抄兜，径自走进法院。</p>
+<p>　　他没有去看吴瑾萱，找了个僻静的位置坐下，偶尔抬腕看一眼时间，拿出手机查看。</p>
+<p>　　吴瑾萱：「你怎么在这里？」</p>
+<p>　　顾冠霖回：「我一直都在你身边。」</p>
+<p>　　他又发过去一句：「快到时间了。别受影响，我安排小张做你的律师。」</p>
+<p>　　吴瑾萱看到这句话，抬头四处张望，看到不远处的小张。</p>
+<p>　　她没有再拒绝顾冠霖，上一场，她就因为没有律师吃了亏。</p>
+<p>　　开庭后，小张作为吴瑾萱的律师，稳定发挥，提交了最新资料。</p>
+<p>　　「这是我当事人的财产证明、收入证明，以及……」小张看向江志滨方向，「我当事人名下拥有东海区滨海大道五十五号的别墅一所。」</p>
+<p>　　吴瑾萱惊愕地抬起头，听到了庭内明显的抽气声。</p>
+<p>　　她立马翻看手里的文件。</p>
+<p>　　前几天，她和顾冠霖商量如何解决房子问题。离婚裁决还没有下来，一旦她名下有什么，就会变成夫妻共有财产。</p>
+<p>　　因此，顾冠霖做主，以朋友名义，赠予她房子。</p>
+<p>　　两人匆匆忙忙办理手续，吴瑾萱没抽出时间去看。现在，她才知道，顾冠霖送了她什么样的房子。</p>
+<p>　　「咳咳……」法官像是才反应过来，对江志滨一方问道，「你们这边呢？」</p>
+<p>　　江志滨怒视着吴瑾萱，一拳砸在桌子上。</p>
+<p>　　律师站起身，「我当事人因为某些原因，暂时无法提供固定住所证明。」</p>
+<p>　　吴瑾萱疑惑地扫了一眼江志滨。</p>
+<p>　　结果很快下来，她终于彻底断开了与江志滨的关系，并且拿到了江昊天的抚养权。</p>
+<p>　　离开法院后，她不想多等一分钟，上了顾冠霖的车，第一时间拿到了离婚证。</p>
+<p>　　吴瑾萱攥紧离婚证，长舒一口气，吐出心头的郁结。</p>
+<p>　　顾冠霖坐在她旁边，默默地陪着她。</p>
+<p>　　「谢谢。」吴瑾萱说。</p>
+<p>　　顾冠霖把她往怀里揽了揽，依旧没说话。</p>
+<p>　　吴瑾萱把家里彻彻底底收拾一番，凡是能够引起她不好回忆的，一切与江志滨有关的东西，通通扔掉。</p>
+<p>　　她看着儿子江昊天，微微皱眉。</p>
+<p>　　「妈，你不会想把我也扔出去吧？」江昊天问。</p>
+<p>　　吴瑾萱搂着儿子，「你永远是妈的好儿子。」</p>
+<p>　　「妈，你什么时候嫁给顾叔叔？我就有新爸了。」</p>
+<p>　　吴瑾萱的手高高举起，轻轻在儿子身后拍了一下，「别乱说话。」</p>
+<p>　　「我替顾叔叔问的。」江昊天说，「顾叔叔人多好，又那么喜欢你，反正你现在也是单身了……」</p>
+<p>　　吴瑾萱越听眉头拧得越紧，狐疑盯着江昊天，「你就不怕后爸虐待你？」</p>
+<p>　　江昊天一副嘚瑟的小模样，「顾叔叔不是那种人，他可疼我了。」</p>
+<p>　　吴瑾萱没再说什么，搂着儿子，盯着桌上的文件发愣。</p>
+<p>　　文件是东海区滨海大道五十五号别墅的房本。</p>
+<p>　　一个下午，她约了顾冠霖见面，把房本推到顾冠霖面前，「尘埃落地，这别墅该还给你了，谢谢你帮我这么大的忙。」</p>
+<p>　　顾冠霖朝着吴瑾萱的方向推了推，「送出去怎么能收回来。」</p>
+<p>　　吴瑾萱暗自叹气，她最怕顾冠霖这样说。</p>
+<p>　　「不过，」顾冠霖开口，「我无家可归了，你能收留我吗？」</p>
+<p>　　说着，他拿出了红色的小盒子，缓缓打开。</p>
+<p>　　吴瑾萱看清楚里面是一枚戒指，腾地站起来，左右看看，转身就跑。</p>
+<p>　　顾冠霖在她身后追，几步就赶上她了，绕到她面前。</p>
+<p>　　「你……」吴瑾萱刚说了一个字，差点儿咬到舌头。</p>
+<p>　　人头攒动，车水马龙的大街上，顾冠霖在大庭广众，众目睽睽之下，单膝跪在了她的面前，举起手里的红盒子，「给我一个机会，让我照顾你和天天，我们组成一个幸福的家庭。嫁给我吧。」</p>
+<p>　　吴瑾萱呆立当场，脑子里一片空白，只听到如擂鼓般的心跳声，人群中的掌声，此起彼伏的口哨声……</p>
+<p>　　她看着面前的顾冠霖，对方眼中满是真诚与期待。</p>
+<p>　　心跳速率逐渐缓了下来，她微微点头，伸出了手。</p>
+<p>　　直至回到车里，吴瑾萱摸了摸还在发烫的脸颊，低下了头。</p>
+<p>　　目光触及手指的戒指，她没去看顾冠霖，但身体略微一斜，靠在了顾冠霖身上。</p>
+<p>　　一觉醒来，吴瑾萱的手机消息爆了，全都来自一个应用。</p>
+<p>　　她打开软件，直接在热门上看到了自己。</p>
+<p>　　昨天的鼎盛广场，顾冠霖当众求婚，周围不知有多少人悄悄打开了摄像头。</p>
+<p>　　视频一个接一个，不同的角度，不同的距离，以及评论区不同的声音。</p>
+<p>　　吴瑾萱后悔点开评论区了。</p>
+<p>　　她没有想到，会有那么多恶意充斥在前排。那些恶意，塞爆了她的私信。</p>
+<p>　　她退出软件，将手机扔在一旁，去洗了个澡。</p>
+<p>　　从洗手间出来，她的心情也好了不少。</p>
+<p>　　她重新进入软件，热门里的视频还是她被顾冠霖求婚，但下面的评论区风向变了，那些恶言恶语不见了，取而代之的是，清一色的祝福、恭喜等话语。</p>
+<p>　　而她的私信箱，也突然就空了。</p>
+<p>　　她想起初遇顾冠霖的次日，她被人在网上恶意攻击，不知顾冠霖用了什么方式，迅速解决了问题。</p>
+<p>　　这一次，想来也是顾冠霖先一步处理了。</p>
+<p>　　她在顾冠霖的公司工作有一阵子，对法律有了更深的了解，甚至能够迅速的做出判断，被人在网络上恶意攻击，可以采取什么有效的法律手段。</p>
+<p>　　八月下旬，江昊天凭着假期的机器人大赛获奖，被全市最好的初中选中。</p>
+<p>　　学校就在别墅附近，吴瑾萱提前退了租房，带着江昊天，搬进了顾冠霖家的别墅。</p>
+<p>　　第一次走进这所挂在她名下的高级别墅，她拘谨地攥着拳头。</p>
+<p>　　顾冠霖领着她和江昊天到处转悠，江昊天转到游戏房，进去就不出来了。</p>
+<p>　　「随他去吧。」顾冠霖牵起吴瑾萱的手，「我带你到别处看看。」</p>
+<p>　　两人来到了一间书房，里面宽敞明亮，一整面墙的律法。</p>
+<p>　　吴瑾萱往里走了走，边走边看，停步在一幅画前。</p>
+<p>　　画里是一个年轻的女孩子，留着披肩长发，上身穿着一件白色衬衫，下装是一条休闲裤，脚上一双运动鞋，身后还有一对翅膀。</p>
+<p>　　这幅画笔法稚嫩，像是小孩的涂鸦之作。</p>
+<p>　　「这是你画的？」吴瑾萱问。</p>
+<p>　　「嗯。」顾冠霖小心翼翼拿下来，抚摸着画，「我心中的天使。」</p>
+<p>　　吴瑾萱觉得有点儿酸，「那你怎么不去追求你的天使？」</p>
+<p>　　「我追了。」顾冠霖说。</p>
+<p>　　「哦？没追到手？」</p>
+<p>　　「追到了。」顾冠霖说。</p>
+<p>　　吴瑾萱倒吸一口气，「顾冠霖！你……」</p>
+<p>　　她转身就走。</p>
+<p>　　顾冠霖抓着她的手，「我还没说完。」</p>
+<p>　　「我不想听了。」</p>
+<p>　　「瑾萱，你在好好看看这幅画。」顾冠霖把画朝着吴瑾萱眼前一展，「你不觉得眼熟吗？」</p>
+<p>　　吴瑾萱冷淡扫一眼，「不觉得。」</p>
+<p>　　「这幅画是九岁时候画的。」顾冠霖把画挂回去，「那天，爷爷在商场突发心脏病，我吓得不知道怎么办。幸好，有一个读医学专业的大姐姐，为我爷爷紧急抢救……」</p>
+<p>　　吴瑾萱的目光从顾冠霖脸上，移到了画上。</p>
+<p>　　那一天，她听到有人呼救，她看到一个小男孩儿站在一个老人身边，手足无措，老人躺在地上，情况万分危急。</p>
+<p>　　周围聚集着不少人，有议论的、有拍视频的、有抱着胳膊看热闹的……</p>
+<p>　　她毫不犹豫冲进去，亮出医学生的身份，为老人进行施救。</p>
+<p>　　老人苏醒，被抬上救护车，小男孩儿拉着她的衣袖，哽咽地说：「谢谢你，天使姐姐。」</p>
+<p>　　「谢谢你，天使姐姐。」顾冠霖抱着吴瑾萱，低声说。</p>
+<p>　　吴瑾萱的眼眶湿润了，把头埋在顾冠霖的胸膛。</p>
+<p>　　一晃眼开学了，江昊天第一天晚上就戴了个同学回来。</p>
+<p>　　「妈！我交到新朋友了。」江昊天说。</p>
+<p>　　眼前的男孩子约莫八九岁的模样，一脸得讨乖卖萌，「阿姨好，叔叔好。」</p>
+<p>　　「哎，好……好。」吴瑾萱用眼神询问顾冠霖，「这什么情况？」</p>
+<p>　　「你俩玩吧。」顾冠霖说完，拉着吴瑾萱离开客厅。</p>
+<p>　　「这孩子是天天比赛时候认识的。」顾冠霖说，「压了天天一头，是第一名。」</p>
+<p>　　「这孩子几岁？」吴瑾萱问。</p>
+<p>　　「好像是九岁，跟天天一样，念初一。」</p>
+<p>　　吴瑾萱不由得咂舌，转头看向客厅。</p>
+<p>　　男孩像是察觉了什么，看着吴瑾萱，扶了扶眼镜，一副比江昊天还臭屁的模样。</p>
+<p>　　吴瑾萱放下了百叶帘，「那我就放心了，俩孩子都上进。」</p>
+<p>　　「瑾萱。」顾冠霖两手搂着吴瑾萱的腰，「我们再生一个，给天天作伴。」</p>
+<p>　　「嗯？！」吴瑾萱扭头看了顾冠霖一眼。</p>
+<p>　　「嗯。」</p>
+<p>　　客厅里，一个小男孩儿天真的发问：「昊天哥，为什么你姓江，你爸姓顾？」</p>
+<p>　　江昊天一副小大人的口气，「小孩子不要问这种超出你认知的问题。走，我带你上楼打游戏。」</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

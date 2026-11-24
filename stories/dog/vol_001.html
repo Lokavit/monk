@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>狗缘 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">狗缘</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 1章 ｜ 1715字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>11 Sep 2554 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>30 Oct 2569 BE9</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">我</span> <span class="chip">狗</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">鹿垣市</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">现代</span> <span class="chip">狗</span> <span class="chip">狗缘</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>暂无简介</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 1 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 </h2>
+  <div class="chapter-body">
+    <p>　　自打我能听懂人话，长辈们耳提面命，说最多的一句：「没事儿别往第十户人家跑，当心他家狗把你吃了！」</p>
+<p>　　我家距离十户隔着七户人家，但我总会被突来地一声狗吠吓得一激灵。</p>
+<p>　　那些叫声，分明很远，却仿佛就在耳边。</p>
+<p>　　我曾经竖着耳朵听，在心里默数，可从未数清楚，十户的院子里，到底养了几只狗。</p>
+<p>　　有时，我们几个淘小子把长辈们惹急眼了。</p>
+<p>　　长辈们咒骂：「小龞犊子！再不听话，把你们一个一个全丢给十户喂狗。」</p>
+<p>　　是以，我对狗的印象是凶恶、巨大、吃小孩。</p>
+<p>　　但凡出门，我手里总是要拎着根棍子。</p>
+<p>　　用于打狗。</p>
+<p>　　但从未撞见狗。</p>
+<p>　　某日下午，我们一群脏孩子从淘金场野回来。</p>
+<p>　　刚一进巷口，听到巷子深处传来狗吠。不知是谁的哪句话挑起，大家讨论着，谁敢去十户家推开门缝叫狗，谁最勇敢，就拥他做老大。</p>
+<p>　　决定一出，大家互相怂恿、推搡、嘲笑，从一户门口向着第十户人家挪动，谁都不想背上「胆小」的标签。</p>
+<p>　　我在孩子堆里，算不上大，算不上小，天天跟着瞎跑，刚在淘金场被打得浑身青一块紫一块。此刻，脑子被「老大」拱出一腔热血，慢慢往前挤，与另外几个大孩子走在第一排。</p>
+<p>　　很快，来到第五户人家，距离十户只剩半程。</p>
+<p>　　狗吠清晰入耳，浑厚的吠声、低沉的吠声、如狼的吠声，还有几只奶狗的呜呜嘤嘤声。</p>
+<p>　　几个大孩子忽然停下，其中一人推了我一把，嘲笑道：「就你？敢去吗？我可是看到，你每次都要大人陪着才敢从他家门前路过。你凑什么热闹？」他说完，其他几个孩子放声嘲笑。</p>
+<p>　　我被勾起犟种本性，不耐烦地挥开对方的手，一口气跑出十几米，转身冲他们挥舞手里的木棍：「来啊！你们过来啊！有种你们过来啊！」</p>
+<p>　　所有人停在七户家门口，有起哄催我的，有担心喊我别去的。</p>
+<p>　　「一群胆小鬼！」</p>
+<p>　　我冷哼一声，才发现，已然站在第九户人家门口，狗爪挠门地声音从未如此清晰。</p>
+<p>　　我壮着胆子，咬牙一点点往第十户人家门口挪，脑子里电光石火、胡思乱想。</p>
+<p>　　狗叫这么久没被吓阻，是不是家里没人？</p>
+<p>　　黑漆木门被由内向外撞得呼呼啦啦响，一定是很大很大的狗吧？</p>
+<p>　　它会不会破门而出？</p>
+<p>　　我应该跑，还是趴在地上装死？</p>
+<p>　　我爸说下次回来给我带枪，万一被狗咬死，就摸不到枪了。</p>
+<p>　　如果我现在退缩，一定会被他们嘲笑一辈子。</p>
+<p>　　待我被嘲笑声、催促声拉回思绪，已经能够看到呼扇呼扇的木门后，一只巨大的黑狗，一边透过门缝盯着我，一边用两只前爪扒门。</p>
+<p>　　它每跳起来扒拉一下，木门就呼扇一次，固定门柱的土渣哗哗往下掉，砖头也被撞松动了。</p>
+<p>　　我头皮发麻，不由得倒退一步。</p>
+<p>　　那一双双等着看好戏的眼睛，距离我几十米远。</p>
+<p>　　我深吸一口气，故作轻松，缓缓抬起手里的武器，小心翼翼地抵住木门，用力向前推。</p>
+<p>　　两扇木门之间的缝隙越来越大，我顺着看上去，原来是被撞得频繁了，门环上的链锁展开一截，幸亏底下有门槛抵着。</p>
+<p>　　门里，在大黑狗的旁边，一只只眼神凶恶的大狗，统一冲着门外的我狂吠。它们有的缺少一只眼睛，有的脸上几道结痂的伤痕，有的缺少一只耳朵，有的瘸着一条腿，腿上缠着渗血的纱布。</p>
+<p>　　我用力抵着木棍，仰头观察黑狗，一身黑亮的短毛，一双黑色的大眼珠，一条黑色的长舌头，两排锋利的牙齿，以及似乎是看到生肉馋到流着口水。</p>
+<p>　　我的心突突乱蹦。</p>
+<p>　　这么多大狗，随便一只就能把我吃了，如果它们一起上来，一口一口把我撕碎，我岂不是就像动物世界里，狮子老虎嘴里的食物，只能剩下点残渣尸骸。</p>
+<p>　　我忽然想起做老大的事情，连忙转头对他们说：「怎么样？你们过来啊！瞧你们一个个胆子小的，像一群耗子！来啊，来啊，你们过来啊！」</p>
+<p>　　「咔——!」</p>
+<p>　　手里原本抵著门的劲儿猛地一空。</p>
+<p>　　木棍，断了。</p>
+<p>　　我猝不及防地向前一个趔趄，一手撑在门板上才站稳，眼前一道黑影闪过，我攥着手里的一截木棍，正要挥出去打狗，赫然发现，大黑狗不叫了，院子里其他狗的吠声也越来越小。</p>
+<p>　　断掉的木棍卡住了门脚，我就这样近距离与一群狗对视、对峙。</p>
+<p>　　我这才意识到，除了嘤嘤叫的小狗崽，这些大狗即使四脚着地，也比我高出许多。而这只大黑狗并不是狗群里最大的一只，却似乎是狗王，其他的狗全部在他身后聚集。</p>
+<p>　　我赶紧后退几步，定了定心神，准备叉腰享受其他人的崇拜。</p>
+<p>　　那些提议的、赞同的、拱火的、嘲笑的、劝阻的……</p>
+<p>　　早已悄然四散而去。</p>
+<p>　　空荡荡的巷子，只有我孤零零面对一门之隔的狗群，僵在原地。</p>
+<p>　　我不记得我是如何回家的，只是对于能够感受到心脏跳动有极深的印象。</p>
+<p>　　原来，心脏跳动得太狠，会连带太阳穴跟着跳动。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

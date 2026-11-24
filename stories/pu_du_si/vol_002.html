@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>普渡寺冒险 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">普渡寺冒险</h1>
+    <div class="book-meta">
+      <div class="meta-line main">2卷 ｜ 14章 ｜ 3.2万字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>01 Oct 2569 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>14 Oct 2569 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">班朝辰</span> <span class="chip">宗静尘</span> <span class="chip">班永康</span> <span class="chip">老和尚</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">花都市</span> <span class="chip">沧龙关</span> <span class="chip">怒龙江</span> <span class="chip">普渡寺</span> <span class="chip">沧云古镇</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">现代</span> <span class="chip">冒险</span> <span class="chip">少年</span> <span class="chip">成长</span> <span class="chip">悬疑</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>少年冒险故事</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link"><span class="chip">卷 001 </span></a>
+<a href="./vol_002.html" class="vol-link active"><span class="chip">卷 002 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 002 </span>
+        <span class="count">共 4 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-11" class="chapter-link active"><span class="chapter-num">章 011</span> </a>
+<a href="#ch-12" class="chapter-link"><span class="chapter-num">章 012</span> </a>
+<a href="#ch-13" class="chapter-link"><span class="chapter-num">章 013</span> </a>
+<a href="#ch-14" class="chapter-link"><span class="chapter-num">章 014</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-11">
+  <h2 class="chapter-heading">第 11 章 </h2>
+  <div class="chapter-body">
+    <p>　　班朝辰踩着宗静尘的肩头，爬到了木桩顶端，奋力把链子往上推，反复试了几次，始终是差了那么几公分。</p>
+<p>　　他憋得满脸通红，低头想叫宗静尘托他一下，意外看到看守不知什么时候回来了，正双手抱臂，笑看他俩。</p>
+<p>　　「你属猴儿的？给我下来！」</p>
+<p>　　班朝辰抱着木桩。</p>
+<p>　　看守呵斥他，「快下拉！你在那儿当靶子吗？」</p>
+<p>　　班朝辰下意识看向周围，发现远处人影攒动，仔细看去，皆是端着枪巡视的。</p>
+<p>　　这个寨子根本不止他们见到的这几十号人！</p>
+<p>　　班朝辰暗自庆幸自己的小命还在，灰溜溜地爬下来。</p>
+<p>　　看守一边给两人解开铁链，一边警告，「别想跑，从江边到这山头，全都我们的人。想活命，就乖乖呆着。」</p>
+<p>　　班朝辰松了松手腕，斜着眼睛盯着看守。</p>
+<p>　　「老大叫我带你们过去。」看守说完，像拽两只狗似的，把他俩一路拉到了大帐门口，给两人解开绳索。</p>
+<p>　　门口四个端着枪的壮汉，比寺里的四大金刚还要凶神恶煞。</p>
+<p>　　「老大，人带来了。」</p>
+<p>　　两人被推进了大帐里，周围七八个壮汉，或坐或站，各个瞅着两人，仿佛盯上了猎物的狼群。</p>
+<p>　　老大斜靠在虎头宝座，一只脚蹬着宝座扶手，「小孩儿，你俩在对岸村里打听谁呢？」</p>
+<p>　　两人低着头，一声不吭。</p>
+<p>　　「喂！老大问你俩话呢！」有人上前，粗暴地抬起两人的下巴，一巴掌打掉了宗静尘的鸭舌帽。</p>
+<p>　　老大扫了一眼两人，嗖地摘下墨镜，直起了腰，放下了脚，身体略微前倾，一手撑在大腿上。先盯着班朝辰看了几秒钟，目光落在宗静尘身上。</p>
+<p>　　他看着宗静尘，一手指着班朝辰，说了一句：「把他拎出去。」</p>
+<p>　　宗静尘立马抬手，做出护着班朝辰的架势，却被人推了一把，整个人向前一个趔趄，摔在了老大的宝座跟前。</p>
+<p>　　下一瞬，脑袋被老大一脚踩住。</p>
+<p>　　「喂！」班朝辰一步上前，「有什么冲我来！你别对他……」</p>
+<p>　　话没喊完，被人拎出了大帐。</p>
+<p>　　继而，拳打脚踢的声音，和班朝辰不断地惨叫声，传入帐内。</p>
+<p>　　宗静尘两手使劲儿撑住地，用力往上抬头，「你们别打他！别打他！你们一群大人，怎么能……啊！」</p>
+<p>　　他的脖子被老大掐住，整个人被拎起来，双脚离地，胡乱挣扎，两只手死命去掰老大的手，用力挤出声音，「你把他放了……你是老大，怎么能欺负一个……」</p>
+<p>　　帐外安静了，几个壮汉先后进来。</p>
+<p>　　「妈的，小崽子骨头真硬。」</p>
+<p>　　「艹！咬了我好几口。要不是七哥拦着，给他牙全打碎。」</p>
+<p>　　最后进来的人，一巴掌扇在看守的后脑勺，「小黑，去看看那小子死了没。死了喂狗，没死拴回去。」</p>
+<p>　　宗静尘听闻，顾不上快要窒息的自己，伸出一只手，在空中乱抓，「别……别……」</p>
+<p>　　老大轻笑一声，松开手。</p>
+<p>　　宗静尘摔落在地上，大口呼吸空气，眼睛盯着帐外。</p>
+<p>　　「小黑！」老大喊了一声，「死了吗？」</p>
+<p>　　小黑跑了进来，「没有。晕过去了。我看伤得不轻。」</p>
+<p>　　「救……救他……」宗静尘挤出最后一丝力气，两眼一黑。</p>
+<p>　　老大立刻俯身，在宗静尘脖颈探了探，指着跟前的手下，「你俩，把他抬到床上去。」</p>
+<p>　　又对小黑说：「你把那个整走，给我看住了。」</p>
+<p>　　小黑答应一声，抱起地上的班朝辰，走进一个小帐篷。</p>
+<p>　　他把人放在床板上，拿着毛巾清理班朝辰脸上的伤口。擦完了脸上，又拎起一只胳膊。</p>
+<p>　　「啊！」班朝辰惨叫一声，抽搐了几下。</p>
+<p>　　小黑反射性松手，叫来了一个五十多岁的老头儿。</p>
+<p>　　老头儿听完小黑的陈述，握着班朝辰的手，顺着手腕，一点一点向上摸，摸到了肘关节时，听到一声惨叫。</p>
+<p>　　「骨头错位了。」老头儿说，「你把他按住了，我给他正回去。」</p>
+<p>　　小黑手脚并用，死死禁锢着班朝辰的四肢。</p>
+<p>　　老头一手托着班朝辰的手，一手沾了药膏，顺着向上摸，上上下下来回揉捏，嘴上也不闲着，「这群家伙，对一个孩子下手这么重。」</p>
+<p>　　说着，他用力一扭，又一推。</p>
+<p>　　「啊——！」</p>
+<p>　　一声如同被断骨的惨叫声，引来帐外几双看好戏的目光。</p>
+<p>　　就连远在大帐里的宗静尘，也像是被这一声惨叫惊醒，猛地坐起来。</p>
+<p>　　眼前，还是困住他们的地方，还是差点儿掐死他的人。</p>
+<p>　　不同的是，老大脸上少了几分威严，多了一些和善，注视着他的眼睛里，仿佛带着希冀。</p>
+<p>　　「你醒了。」老大说。</p>
+<p>　　宗静尘迟疑着点点头，忽然急切问道：「班朝辰呢？！他怎么样了？！你们把他怎么样了？！」</p>
+<p>　　「他叫班朝辰。」老大不紧不慢的语气，「你叫什么？」</p>
+<p>　　「宗静尘。」</p>
+<p>　　老大的眉头抖了抖，「你姓宗？你怎么会姓宗？」</p>
+<p>　　宗静尘没接话，狐疑地看了看老大。</p>
+<p>　　「你今年十三岁？」</p>
+<p>　　宗静尘点点头。</p>
+<p>　　「我想想……」老大在床前走了两个来回，「我想起来了，是腊月生日。腊月生日，对不对？」</p>
+<p>　　宗静尘又点点头，暗自揣测，这个人能说出年龄和生日，莫非和我有什么关系？</p>
+<p>　　老大在宗静尘面前站定，眼睛直勾勾盯着他，看了足足十秒钟，放声大笑，「绝对错不了！一定是了！」</p>
+<p>　　他的两只大手按在宗静尘的肩头，眼中难以掩饰激动，「我就说第一眼看你小子就眼熟。你小子他妈的是我侄子！」</p>
+<p>　　宗静尘全身一僵。他现在身处的地方，显然是个土匪窝。若是与这个人沾了亲，岂不是变成了小土匪？</p>
+<p>　　他忽然想起来，不管是老警员还是师父，明知道他的父母是谁，却从来不肯告诉他。难道说，这就是他们不肯说的真正原因？</p>
+<p>　　「哈！差点儿被一个姓给我整迷糊了。」老大笑着说，「姓宗，是你妈妈的姓。你妈没告诉你吗？你怎么跑到那村子里去瞎打听？」</p>
+<p>　　宗静尘想了想，「我自幼被送养了，仅凭着一个姓氏打听，想找到我的亲生父母。」</p>
+<p>　　老大叹气，「幸亏老五几个发现你，连夜把你整过来了。要是你在村里暴露了身份，那些愚民能活剥了你。」</p>
+<p>　　宗静尘瞪大眼睛，耳边回响起一连串的声音：</p>
+<p>　　「叛徒」、「人贩子」、「怒龙江对岸」、「间谍」……</p>
+<p>　　老大拍了拍宗静尘的肩头，「唉，原本你们一家在村里幸福生活，也不知是哪个断子绝孙的，把你老子举报了。你知道那些人怎么对他的吗？」</p>
+<p>　　宗静尘盯着老大，动了动嘴唇，没有发出声音。</p>
+<p>　　老大抚摸着宗静尘的后脑勺，「他被村里那些人活活打死了！我带人赶到的时候，他全身没有一块好肉。」</p>
+<p>　　宗静尘全身一颤，紧紧抿住嘴唇，握紧了拳头。</p>
+<p>　　「后来，我想起你和你妈，就派人去找，怎么都没有找到。还以为你们也遭了毒手，没想到……」</p>
+<p>　　老大没有说下去，问了句：「你妈把你送哪儿去了？」</p>
+<p>　　「花都。」宗静尘说。</p>
+<p>　　「哟，那可是大城市。你养父母知道你出来吗？」</p>
+<p>　　「知道。」宗静尘答。</p>
+<p>　　老大点点头，「那就好。你在这儿玩几天，我亲自送你回花都。」</p>
+<p>　　宗静尘犹豫了片刻，「你能入境吗？」</p>
+<p>　　老大面上一愣，随之爽朗大笑，「一条小江，阻挡不了你大伯。」</p>
+<p>　　他站在门口高声喊道：「你们几个都进来！」</p>
+<p>　　话音刚落，几十号人挤进了大帐，规规矩矩站好。</p>
+<p>　　老大坐上宝座，看一眼身边站着宗静尘，对底下人说：「我问清楚了。这小子确实是老二的儿子。弟兄们，都照顾着点儿。」</p>
+<p>　　一群人的目光落在宗静尘身上。</p>
+<p>　　「二哥的儿子？真给找回来了？」</p>
+<p>　　「嘿！那这小子，以后跟咱们混了！」</p>
+<p>　　老五拍着身上的枪，「二小子，摸过枪吗？五叔带你玩儿枪。」</p>
+<p>　　宗静尘脑子里还没有完全梳理清楚，只觉得自己好像就要沦为土匪了。</p>
+<p>　　老大压了压手，「行了。你们别吓到他。这孩子在大城市长大的，没见过这些。」</p>
+<p>　　宗静尘想起被打了一顿，不知现在如何的班朝辰，低声问老大，「大伯，我的朋友……」</p>
+  </div>
+</article>
+<article class="chapter" id="ch-12">
+  <h2 class="chapter-heading">第 12 章 </h2>
+  <div class="chapter-body">
+    <p>　　班朝辰躺在床上，吊着一只胳膊，翘着二郎腿，另一只手悠哉哉甩着绑在腰上的狗链子，时不时瞟一眼帐外。</p>
+<p>　　他已经七天没出去这个小帐篷了，也没见到看守之外的任何人。</p>
+<p>　　但是，他对宗静尘的情况却是知道些，全凭他那张嘴。</p>
+<p>　　帐里进来个人，手里拿着铁盘。</p>
+<p>　　班朝辰热络地打招呼，「小黑哥，今天什么伙食？」</p>
+<p>　　小黑把饭盆丢在班朝辰面前，一屁股坐在旁边，「真不知道咱俩到底谁是俘虏。」</p>
+<p>　　班朝辰笑吟吟地低头闻了闻，「这是什么肉？」</p>
+<p>　　「狗肉。」小黑说，「有几条猎犬不听话，被七哥宰了。」</p>
+<p>　　班朝辰摸了摸鼻子，抓起骨头，嗅了嗅，啃下一口尝了尝，狼吞虎咽吃起来。</p>
+<p>　　「小黑哥，我那兄弟怎么样了？」他问。</p>
+<p>　　「情况比你好多了。现在是老大的新宠儿。」</p>
+<p>　　「没良心，不来看我。」班朝辰说。</p>
+<p>　　「他哪有时间来看你？」小黑笑着说，「人家忙着跟三哥练搏击，跟五哥练打靶，跟七哥上山打猎。」</p>
+<p>　　他指了指班朝辰手里的大骨头，「这就是扑了你兄弟的那条狗的后腿。」</p>
+<p>　　班朝辰差点儿咬到舌头，看了看手里的骨头，丢在一边，扒了两口饭。</p>
+<p>　　「我看，过不了多久，该叫他接触生意了。」小黑说。</p>
+<p>　　「什么生意？」班朝辰追问。</p>
+<p>　　小黑咳嗽两声，「关你屁事。」</p>
+<p>　　两人正说着话，宗静尘在两个壮汉的簇拥下，走进来了。</p>
+<p>　　班朝辰冷淡扫了一眼。</p>
+<p>　　宗静尘戴着顶草帽，光着膀子，肤色明显深了，腰上别着一把刀，整个人活像个小土匪。</p>
+<p>　　班朝辰拿起被丢一边骨头，「你吃了吗？狗肉。听说它扑了你，就被杀了。」</p>
+<p>　　宗静尘皱着眉头，看了他好一会儿，「我吃了。」</p>
+<p>　　班朝辰手里的骨头掉在地上，不可置信地盯着宗静尘，眼中透露出询问。</p>
+<p>　　宗静尘似乎没动。</p>
+<p>　　班朝辰却看得明白，宗静尘点头了。</p>
+<p>　　以宗静尘的定性，一路上怎么都不肯吃肉，却在这土匪窝里破了戒，一定是有不得已的理由。</p>
+<p>　　班朝辰转念一想，就像他被狗链栓在这里一样，宗静尘破戒又算得了什么？反正，本来就不是真和尚。既然破了戒，以后带着宗静尘去花都吃各种美味肉食。</p>
+<p>　　如果，他们俩还有命离开这里的话。</p>
+<p>　　「看到你现在的处境，我就放心了。」宗静尘说。</p>
+<p>　　「看到你现在的模样，我却十分担心。」班朝辰说。</p>
+<p>　　他接着又说：「你这是学生不做，要转行做土匪了？啧啧啧，同样是俘虏，你就被当作苗子培养，我却只能被狗链拴在这里。」</p>
+<p>　　「你的手怎么样了？」宗静尘问。</p>
+<p>　　班朝辰抬了抬小臂，慢慢握拳，疼得他不由得「嘶」了一声。</p>
+<p>　　「就这样了。」他说。</p>
+<p>　　宗静尘转身问小黑，「为什么还用链子锁着他？」</p>
+<p>　　小黑笑了笑，「老大叫我看住他，不然我的小命就难保了。」</p>
+<p>　　宗静尘回过身，盯着班朝辰看了好一会儿，「你在这里有吃有喝，好好休息，我先走了。」</p>
+<p>　　班朝辰挥挥手，「好走，不送。」</p>
+<p>　　「我的朋友爱吃肉。」宗静尘对小黑说，「肉不能断。」</p>
+<p>　　小黑答应了一声，等到宗静尘走得不见人影，狠狠地呸了一嘴。</p>
+<p>　　「小黑哥，你好像很不爽。」班朝辰调侃着，「当心我和他告状。他可是你们老大的亲侄子。你们老大坏事做尽，断子绝孙，也就这么一个侄子了。」</p>
+<p>　　「嘘！」小黑谨慎看了看帐外，低声说，「你不要命，也别害我丢了命！」</p>
+<p>　　班朝辰做了个鬼脸。</p>
+<p>　　连日相处下来，他直觉小黑这个人，不是个合格的土匪，不凶，不恶，还没心眼子，被他一个初中生套话，一套一个准儿。</p>
+<p>　　有时，他只是问了个开头，小黑就跟八百年没人说过话似的，打开了话闸子。</p>
+<p>　　「我是想赚大钱，冒险过了怒龙江。」小黑说，「兜兜转转，好不容易混进了寨子，从一个普普通通的杂役做起。这都过去几个月了，幸亏把你抓来了，我现在是看守了。等把你解决了，我就有资格跟着他们出去了。」</p>
+<p>　　「什么鬼？！」班朝辰怒道，「我谢谢你！我还不想死！」</p>
+<p>　　他顿了顿，又说：「我兄弟是不会让我死的。」</p>
+<p>　　说完，暗自叹气，宗静尘今天来，是为了暗示他别轻举妄动。他可不想这么被动，只是，他的胳膊太不争气，他唯一能突破的目标，就是小黑。</p>
+<p>　　班朝辰睡梦中被人粗暴地拽了两下，不情愿地睁开眼睛。</p>
+<p>　　「小黑呢？」来人问。</p>
+<p>　　班朝辰揉揉眼睛，看向对面空落落地床铺，摇了摇头。</p>
+<p>　　「他妈的，叫他看人，他人还没了。」</p>
+<p>　　「七哥，你怎么来了?」小黑两手抱着肚子，脸上痛苦万分的模样，说话声音打颤。</p>
+<p>　　七哥把小黑从头到脚打量一番，「你去哪儿了?我等你半天了。」</p>
+<p>　　班朝辰翻了个白眼儿，他只能帮小黑到这里了。</p>
+<p>　　「嘿嘿，七哥，」小黑扯出个难看的笑容，「我去了趟厕所，还不到三分钟呢。」</p>
+<p>　　「七哥，你找我什么事儿？」小黑问。</p>
+<p>　　「例行查岗。你把人好好看住了。」七哥说完，离开了小帐篷。</p>
+<p>　　小黑松了一口气，坐回床铺。</p>
+<p>　　这可没有逃过班朝辰那双眼睛，「哼哼！」</p>
+<p>　　「牙疼？」小黑瞥了他一眼。</p>
+<p>　　班朝辰没回嘴，注视着小黑，「嘿嘿！」</p>
+<p>　　小黑瞪了他一眼，「有屁就放。」</p>
+<p>　　班朝辰伸出手，指了指小黑，脸上浮现狡黠地笑，「你有问题噢。」</p>
+<p>　　小黑眼神一变，先是看了看帐外，压低声音，「小崽子，别他妈的瞎说话。你想害死我啊！」</p>
+<p>　　班朝辰一脸得意，「我要去找你们老大告发你！你夜里溜出去个把小时，而且不是第一次……呜……」</p>
+<p>　　他的口鼻被小黑死死捂住。</p>
+<p>　　「信不信我现在杀了你！」小黑恶狠狠地说。</p>
+<p>　　班朝辰憋得上不来气儿，瞪大眼睛，连连点头，指了指自己的嘴。</p>
+<p>　　小黑放开了手。</p>
+<p>　　班朝辰大口呼吸口气，「你……你连一个孩子都想杀……」</p>
+<p>　　「你学学你那个朋友，别总想着耍心眼，自讨苦吃。」</p>
+<p>　　班朝辰没说话，背过身躺下，盯着链子。他想家里的沙发，想起普渡寺的床，想老和尚有没有通知他爹，两人是不是已经报警，在想方设法找他们了。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-13">
+  <h2 class="chapter-heading">第 13 章 </h2>
+  <div class="chapter-body">
+    <p>　　小黑倒是没跟班朝辰记仇，该给他端饭就端饭，该给他喂水就喂水。</p>
+<p>　　「好吃吧？」小黑问。</p>
+<p>　　班朝辰啃了一嘴的油，笑了笑，「好吃。这又是什么肉？」</p>
+<p>　　自从来到这里做俘虏，普通牛羊肉都是小儿科，他不但吃了狗肉，还有野猪肉、野鹿肉、蛇肉……</p>
+<p>　　「你兄弟昨天上山，猎到的野兔。」</p>
+<p>　　「噢。有进步。」班朝辰语气平淡，随口问了句，「枪打的？」</p>
+<p>　　「对。」小黑问，「你怎么没什么反应？」</p>
+<p>　　班朝辰用力撕下一块兔腿肉，「我吃这么香，不就是最好的反应？他现在能猎兔，早晚能杀人。我等着他转正当一名合格土匪的那天。」</p>
+<p>　　他顿了顿，「小黑哥，你帮我转达我兄弟，我想吃熊掌，叫他给我猎一只熊。」</p>
+<p>　　小黑冷哼一声。</p>
+<p>　　「对了。」班朝辰抹了抹嘴，压低声音，「小黑哥，你最近出去的越来越频繁。七哥来几次，你都不在，可能已经被盯上了噢。」</p>
+<p>　　小黑腾地站起来，看了看帐外，凑近班朝辰，「你说什么？七哥抓到我不在了?」</p>
+<p>　　班朝辰耸耸肩，「不止一次。」</p>
+<p>　　「你怎么不告诉我！」</p>
+<p>　　「他又没问我。」班朝辰说，「他每次来，只是在帐外偷窥。而我在装睡。」</p>
+<p>　　小黑脸色阴沉，起身走来走去，一副惴惴不安地模样。</p>
+<p>　　班朝辰暗自轻笑，察觉小黑猛地回头看他，他立刻换上一脸认真。</p>
+<p>　　「真的？」小黑问。</p>
+<p>　　班朝辰坚定地点点头，「我可是好心提醒你。」</p>
+<p>　　小黑坐到班朝辰身边，狐疑地端量着他，「小崽子，你是不是诈我呢？」</p>
+<p>　　就在这时，帐门口出现个人，对小黑说：「小黑，叫你呢。」</p>
+<p>　　小黑脸色一变，对来人笑着问：「谁叫我？我这儿要看着这小鬼。」</p>
+<p>　　「七哥叫你。我替你看一会儿。」这人说着，掀了门帘，走了进来。</p>
+<p>　　班朝辰看了一眼这人，吓得打了个哆嗦，冲小黑摇了摇头。</p>
+<p>　　「老大交代，好好善待他。这是二哥他儿子的兄弟。」小黑说完，走出帐篷。</p>
+<p>　　这个人停在班朝辰的床前，低头看着他。</p>
+<p>　　班朝辰朝着床里缩了缩，不去看对方，只盼小黑能活着回来。</p>
+<p>　　这人的长相他没什么印象，但是这人手上的牙印他可太熟悉了。</p>
+<p>　　就是他那天挨揍时候，胡乱咬的，当时根本不知道咬的是谁。</p>
+<p>　　这都十多天过去了，牙印依然那么深，班朝辰只希望对方心里的仇恨不会比牙印深。</p>
+<p>　　然而，老天没有听到他的乞求。</p>
+<p>　　壮汉冲上来，伸手抓班朝辰。</p>
+<p>　　班朝辰眼疾手快，闪电般地躲开，奈何上身有链子，被壮汉一下子拽了回去。</p>
+<p>　　「啊！救……」</p>
+<p>　　才喊出来一个字，脸上就挨了一巴掌，打得他眼冒金星，脑子发晕。</p>
+<p>　　壮汉可没跟他客气，一手掐着他的脖子，啪啪扇了好几个耳刮子。</p>
+<p>　　「妈的！敢咬老子，看我不把你这一嘴牙全打掉！艹！」</p>
+<p>　　班朝辰头晕耳鸣，眼前天旋地转，连挣扎的力气都没有，嘴里满是血腥味。</p>
+<p>　　渐渐地，他彻底失去意识。</p>
+<p>　　班朝辰不知道自己晕了多久，也不知道壮汉什么时候停手的。</p>
+<p>　　他眯起眼睛，观察四周。</p>
+<p>　　帐篷里只有他一个人。</p>
+<p>　　即使如此，他依然不敢动，假装自己晕着。</p>
+<p>　　整张脸火辣辣疼，不需要刻意低头，就能看到肿起来的腮帮子。</p>
+<p>　　鼻子和嘴上还有血，干涸了，他不敢舔，一动不动地装死。</p>
+<p>　　小黑半夜才回来，是被人抬回来的，扔在了床上。</p>
+<p>　　班朝辰眯着眼睛，见小黑满脸是血，身上数不清的鞭痕。</p>
+<p>　　他费力张开嘴，扯破了嘴皮子，「喂！你怎么样了？」</p>
+<p>　　这一出声，才惊觉无法好好控制脸部神经。</p>
+<p>　　过了好一会儿，他看到小黑抬了抬手，朝他轻轻挥了两下。</p>
+<p>　　班朝辰还想追问，小黑的手落下了。也不知道是耗尽力气了，还是晕过去了。</p>
+<p>　　他直觉小黑是被拉去审问了。他虽然是第一次真正落入土匪窝，但电视电影没少看。以小黑的奇怪举动来说，要么是个二五仔，要么是……</p>
+<p>　　小黑第二天下午才醒来，爬下床，晃晃悠悠地走出去，端了一个铁盘子回来，放在班朝辰床边，人也跟着坐下了。</p>
+<p>　　「你这脸上……」小黑叹了一口气，「到底还是被打了。」</p>
+<p>　　「怪我点背，偏偏是被我咬了一口的那个人。」班朝辰恶狠狠地一拳砸在床上，「妈的，早晚我要找回来。」</p>
+<p>　　小黑摸了摸班朝辰的头，「别耍狠了。吃饭吧。」</p>
+<p>　　「你扛住了？」班朝辰问。</p>
+<p>　　小黑愣了一下，点点头。</p>
+<p>　　「他们信了？」班朝辰继续问。</p>
+<p>　　小黑没回答，缓缓摇头。</p>
+<p>　　「你能活着回来，他们应该是信了。」班朝辰自顾自地说。</p>
+<p>　　「我昨天晚上想了一夜，你……」他停顿了几秒钟，把声音压到最低，「是卧底？」</p>
+<p>　　小黑抬头扫了他一眼，一巴掌拍在班朝辰的后脑勺，「电影看太多。快吃你的饭吧。」</p>
+<p>　　「审你的时候，宗静尘在场吗?」班朝辰问。</p>
+<p>　　「在。」</p>
+<p>　　「他什么反应？」</p>
+<p>　　「什么反应？」小黑直了直腰，「我被打个半死，还有心思去看他什么反应？」</p>
+<p>　　班朝辰草草吃了几口，把盘子丢在一边。</p>
+<p>　　「就吃这么点？」小黑问。</p>
+<p>　　「疼，吃不下。」</p>
+<p>　　小黑没拿走盘子，给他倒了一杯水，「下午慢慢吃。你除了坐在这里，哪儿都去不了。」</p>
+<p>　　「不想吃。」班朝辰说。</p>
+<p>　　「吃饱了，才有力气。」小黑说，「要是我下次不在，你怎么办？」</p>
+<p>　　班朝辰没压住火气，「如果不是你锁着我，我至于被他抓着扇耳刮子吗？！」</p>
+<p>　　「我去叫老头来给你看看，这脸肿得跟猪头似的。」</p>
+<p>　　几天后的一个暴风雨夜里，班朝辰还在睡梦中，突然被一声枪响惊醒。</p>
+<p>　　枪声之后，外面是前所未有的大动乱，一群人持枪跑来跑去。</p>
+<p>　　「那边！快去那边！」</p>
+<p>　　「把你那边给我守住了！」</p>
+<p>　　「看准咯，别无伤了咱们的人……」</p>
+<p>　　小黑急匆匆进入帐篷，灭了照明设备，给班朝辰把链子解开。</p>
+<p>　　班朝辰大气不敢出，被小黑领着，从帐篷的另一侧掀开一块布，爬了出去。</p>
+<p>　　整个寨子陷入一片黑暗，火光四射。</p>
+<p>　　他被小黑藏了起来，而宗静尘，似乎是先一步在这里了。</p>
+<p>　　两人看了对方一眼，谁都没说话。</p>
+<p>　　班朝辰坐在地上，听着外面噼里啪啦地枪声，忍不住好奇，找了个缝隙向外看。</p>
+<p>　　雨势越来越大，又是完全失去照明环境，只能看到近处依稀人影晃动，手里像是拿着枪。</p>
+<p>　　班朝辰努力地看，这是他第一次置身于比电影还刺激的场面，早就忘了害怕，忘了自己可能被流弹扫到。</p>
+<p>　　他更好奇，是什么人来袭击这个寨子？这么大的火力交射，是黑吃黑，还是被全方面围剿？</p>
+<p>　　枪声逐渐淡下去，代表着有一方在逐渐失去战力。</p>
+<p>　　此时，暴雨转为小雨，仿佛再为这场火拼清理痕迹。</p>
+<p>　　班朝辰能够看得更远了，看到了几名武装人员，围住了老大。</p>
+<p>　　将老大带走了。</p>
+<p>　　班朝辰转头看向宗静尘。</p>
+<p>　　宗静尘坐得像尊佛，毫无反应。</p>
+<p>　　外面彻底平息，小黑把两人带出来，「我送你们俩过江。」</p>
+<p>　　班朝辰看了看周围持枪的，跟着小黑上了一艘快艇。</p>
+<p>　　小黑换上了一身干净板正的警服，出现在两人面前。</p>
+<p>　　班朝辰愣了好一会儿，笑着说：「我猜对了吧？你果然是卧底！」</p>
+<p>　　「人小鬼大。」小黑坐在两人旁边，「以后还敢乱跑吗？」</p>
+<p>　　班朝辰使劲儿摇摇头，「不敢了，差点儿丢了命。」</p>
+<p>　　他转身望向怒龙江对岸，看到越来越清晰的一座建筑物，那是村里的标志性建筑，是他们被捉走的起点。</p>
+<p>　　在江边，站着老和尚和班永康。</p>
+<p>　　两人似乎已等候多时，皆是翘首以盼。</p>
+<p>　　班朝辰作势要喊，又憋回去了。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-14">
+  <h2 class="chapter-heading">第 14 章 </h2>
+  <div class="chapter-body">
+    <p>　　清晨，普渡寺响起钟声。</p>
+<p>　　班朝辰缓缓睁开眼睛，看着熟悉的寮房，有一瞬恍惚。</p>
+<p>　　回来了！从未感觉普渡寺是如此的舒适。</p>
+<p>　　对面床铺空着，宗静尘不在。</p>
+<p>　　但这钟声，一定是宗静尘敲的。</p>
+<p>　　自从两人在小黑的掩护下见面，直到现在，没有说过一句话。</p>
+<p>　　宗静尘对他的态度，就像是他第一天来普渡寺。</p>
+<p>　　他走出寮房，穿过回廊，停在转轮堂门前。</p>
+<p>　　转轮堂的门开着，窗户上没有任何遮蔽物。</p>
+<p>　　班朝辰犹豫了几秒钟，走了进去。</p>
+<p>　　他绕到一个不起眼的角落，随手选了一个无名牌位，找到一块贝叶。</p>
+<p>　　正如宗静尘所说，贝叶上刻着一组一组的点。</p>
+<p>　　班朝辰一连翻了几个，点阵形状确实不同。</p>
+<p>　　他直觉这应该是一份份资料，记录了死者的信息。</p>
+<p>　　「师父，这是这次出任务牺牲人员的信息。麻烦你了。」</p>
+<p>　　班朝辰听出是老爸，立马躲了起来，暗自思忖，师父？我爸怎么管老和尚叫师父？</p>
+<p>　　他偷偷看过去。</p>
+<p>　　班永康把一张纸交给老和尚。</p>
+<p>　　老和尚接过去，扫了一眼，「唉。转轮堂里又添五名英魂。」</p>
+<p>　　「师父，他俩在那里那么久，静尘已经知道自己的身世了。」班永康的语气里充满担忧。</p>
+<p>　　「都怪我家那个小兔崽子，我就不该带他来。」班永康说。</p>
+<p>　　老和尚摆摆手，「怪不得你儿子。」</p>
+<p>　　班永康说：「我原本想着，叫我家那小子上来，免得静尘没有同龄人，太孤独。这小子……真能给我找麻烦。」</p>
+<p>　　「也算是解了静尘的心事。」老和尚说，「放心吧。静尘自己能想明白。」</p>
+<p>　　两人又是一阵沉默。</p>
+<p>　　「师父，我上次的提议，你看怎么样？」班永康问。</p>
+<p>　　「你是说，叫静尘下山去上学？」</p>
+<p>　　「对。跟我家那小子一起，也有个照应。」班永康说，「你也看到了。我家那小子太皮了，有静尘盯着，我能放心一些。」</p>
+<p>　　「原本我是不赞成的。」老和尚说，「现在，我倒认为，是个好主意。就是不知道，静尘愿意不愿意。」</p>
+<p>　　「我问问他。师父，如果他乐意，我可今天就带他走了。」</p>
+<p>　　「嗯。」</p>
+<p>　　两人说着，离开了转轮堂。</p>
+<p>　　班朝辰松了一口气，悄悄向外张望，直起了腰。走出转轮堂时，他想起父亲交给老和尚的纸条，蹑手蹑脚地过去翻出来，展开纸条。</p>
+<p>　　上面是五个人名，和一个日期，是昨天。</p>
+<p>　　班朝辰笃定自己地揣测，这转轮堂里，全是牺牲地无名者。</p>
+<p>　　跑船，原来是这么危险的工作。</p>
+<p>　　该叫老爸换个工作，太危险了。</p>
+<p>　　当班永康向宗静尘提起，一同下山上学的时候，宗静尘拒绝了，理由是不能放任师父一个人在山上。</p>
+<p>　　班朝辰偷偷瞟一眼宗静尘，没有说话。</p>
+<p>　　他其实也希望宗静尘下山，跟他一起去上学。</p>
+<p>　　他有伴，他也有伴。</p>
+<p>　　他更想盯着宗静尘，以免宗静尘沾了太多土匪气，未来真的去当土匪。</p>
+<p>　　吃过斋饭后，班永康决定回去。</p>
+<p>　　班朝辰来时一个露营大背包，在寨子的时候全被烧了，他身上现在还穿着宗静尘的僧袍。</p>
+<p>　　他不等班永康寒暄完，率先走出去，打开副驾驶的车门，坐了进去。</p>
+<p>　　这辆车贴了防偷窥，他在里面能看到宗静尘正朝着这边看过来，也知道宗静尘看不见他在看他。</p>
+<p>　　班永康坐进了主驾驶，慢慢把车调整方向。</p>
+<p>　　班朝辰看着站在门口的一老一小两个和尚，仰头注视着普渡寺三个字。</p>
+<p>　　车子缓缓驶离，眼中的一切越来越小，越来越模糊。</p>
+<p>　　「没有别的办法吗？」班朝辰问。</p>
+<p>　　「什么？」班永康看了他一眼。</p>
+<p>　　「那堆牌位，在哪儿供不是供？非要在这破普渡寺吗？」班朝辰说，「每次来人，老和尚还要像见不得光似的，把整个转轮堂全罩上，把门锁上。」</p>
+<p>　　「你知道什么。」班永康说。</p>
+<p>　　「我知道啊。我听到你和你师父的话了。」</p>
+<p>　　班永康猛地刹车，转头问：「你听到什么了？」</p>
+<p>　　「我比你俩进去的早，比你俩出来的晚。」</p>
+<p>　　班朝辰顿了顿，「爸，你没有跟我说过，跑船的工作那么危险，转轮堂里少说几十副牌位了。你别做了，换个工作吧。我没妈了，可不能再没爹。」</p>
+<p>　　班永康像是松了一口气，重新发动车子，「现在什么都不好干，有工作就不错了，哪里还有挑三拣四的空间。你好好学习，以后找个好工作。」</p>
+<p>　　班朝辰吹了一声口哨，一副吊儿郎当的样子。</p>
+<p>　　回到花都的家里，已经是夜里十一点了。父子俩难得一起，去逛了夜市，买回一堆吃的。</p>
+<p>　　班朝辰叹气，「要是宗静尘在这里就更好了。这些他能吃，他都没吃过。」</p>
+<p>　　他想了想，「哦。肉他也能吃。我们在寨子里的时候，他破戒吃肉了。不过，他也不是真和尚，没……」</p>
+<p>　　「别再提你们闯祸的事儿了。」班永康打断班朝辰的话。</p>
+<p>　　班朝辰闭嘴了。</p>
+<p>　　次日一早，家里没有了班永康的影子，只有一张字条在茶几，上面放着一个新手机。</p>
+<p>　　「我去工作了。在家好好照顾自己。」</p>
+<p>　　班朝辰拿起新手机，忍不住想起来原来那部，在寨子里被踩碎的手机。</p>
+<p>　　他连忙登录账号，同步数据。</p>
+<p>　　经过数个小时的等待，找回了一些照片和视频。</p>
+<p>　　宗静尘在提水，宗静尘在做饭，宗静尘在念经，宗静尘在打坐……</p>
+<p>　　班朝辰点开一个视频，是他和宗静尘一起去抬水，两人大声唱着：</p>
+<p>　　「一个呀和尚挑呀么挑水喝</p>
+<p>　　「嘿嘿 挑呀么挑水喝</p>
+<p>　　「咿咿 挑呀么挑水喝</p>
+<p>　　「两个呀和尚抬呀么抬水喝</p>
+<p>　　「嘿嘿 抬呀么抬水喝</p>
+<p>　　「咿咿 抬呀么抬水喝……」</p>
+<p>　　高考结束，班朝辰立即报了驾考，用最短的时间考到驾照，拿出自己多年攒下的积蓄，买了一辆车。</p>
+<p>　　车一般，但是能满足他上山下海的需求。</p>
+<p>　　他按照导航，一路开到了沧龙关，接着开到沧云古镇，买了几样小吃，全都是他和宗静尘爱吃的。</p>
+<p>　　五年过去，通往普渡寺的山路依旧那么崎岖。</p>
+<p>　　他凭着记忆，小心翼翼地开上山，眼前的一景一物越来越熟悉。</p>
+<p>　　直到，他看见一座被烧毁的古寺。</p>
+<p>　　普渡寺三个大字被烧得难以辨认，两侧大门被熏成了黑色。</p>
+<p>　　班朝辰下车，站在古寺门口，里面的杂草有半人高，房屋全部坍塌。</p>
+<p>　　他抬起脚，正准备迈进去，又缩了回来。</p>
+<p>　　这里，显然已经多年无人打理。</p>
+<p>　　老和尚和宗静尘哪去了?</p>
+<p>　　班朝辰找了根长一点的棍子，一边打草惊蛇，一边往里走。</p>
+<p>　　他走到大雄宝殿，屋顶塌了，里面佛像几乎全烧完。</p>
+<p>　　他走到转轮堂的位置，除了地上没有烧干净的一块匾，什么都没有了。</p>
+<p>　　他走到曾经住过的寮房，从灰烬里扒拉出来两块砚台，这是他唯一能找到的东西。</p>
+<p>　　班朝辰回到车上，坐了好一会儿，开车下山。</p>
+<p>　　到了山下，他四处找人打听，想着那些曾经上山的香客，怎么也该知道原因吧。</p>
+<p>　　然而，没人知道原因，只知道是某个夜里，山上起火了，甚至不知道老和尚和小和尚是不是还活着。</p>
+<p>　　班朝辰在沧云古镇住了一晚，带着满肚子的疑问，回到家里。</p>
+<p>　　他没有问班永康，仿佛什么都没发生。</p>
+<p>　　因为，五年来，班永康每年都会去普渡寺。最起码，每当班朝辰叫老爸给宗静尘捎带东西、书籍的时候，班永康永远是满口答应下来。</p>
+<p>　　他已不是当初那个楞头楞脑的少年，有些事情，他自己就能够推出真相，无需求证。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

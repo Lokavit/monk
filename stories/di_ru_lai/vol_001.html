@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>天下苍生－帝如来 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">天下苍生－帝如来</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 1章 ｜ 1478字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>01 Nov 2556 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>01 Nov 2556 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">帝如来</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">云谷雷锋</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>|-</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 1 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 </h2>
+  <div class="chapter-body">
+    <p>　　天下苍生，这个标题放在别处或许大了点，但放在一个僧者身上，应该是不为过。</p>
+<p>　　一个角色，编剧怎样执笔是一回事儿，看客有怎样的感悟又是另一回事儿。</p>
+<p>　　第一次写人物评价，其实并不知道要怎样著手，帝如来又是个人非常喜欢的角色之一。</p>
+<p>　　翻了翻各方资料，发现能写的基本已经被挖空，这边也只能尽量发挥著来了。</p>
+<p>　　当你越重视一件事情的时候，就会发现这件事情很难；越喜欢一个角色时候，滤镜估计有大气层那么厚……</p>
+<p>　　帝如来这个角色从《霹雳经武纪之枭皇论战》到《霹雳战元史之动机风云》，跨越了五部剧，作为一个出场就昭示著必死的佛门角色，其存活集数，大出意料之外。</p>
+<p>　　在这期间经历了数次生死，显现诸种法相，回看剧情，终其究竟，无非一个“执”。</p>
+<p>　　僧者修行路上的一大障碍便是有了“我执”的念，有了“我”的许多烦恼，也就是入了魔。</p>
+<p>　　只有透过不断地修行戒定慧三学来破除“我执”，方能具有般若心，证得菩提道。</p>
+<p>　　然而，帝如来在各种因缘之下，最终没能除“我执”。</p>
+<p>　　“烦恼障品类众多，我执为根，生诸烦恼，若不执我，无烦恼故。”－《唯识述记》</p>
+<p>　　久远以前，帝如来还是一名普通的僧者，遵循著大觉者的菩提之道，以悲悯众生之心，度脱世间种种罪恶。</p>
+<p>　　这其中不乏受其教化，弃恶从善之人，玉横雪便是其一。</p>
+<p>　　然，僧者对“恶”的执，被有心者加以利用，一柄来自天阎魔城的“涤罪犀角”，蛊惑僧者意志，放大善恶两极化。</p>
+<p>　　致使僧者在冥冥之中因“执恶”过重，逐渐偏离佛道，转为“以杀证道”行至极端，修成鬼如来之相。</p>
+<p>　　僧者虽具足般若心，但在“我执”蒙蔽之下，又岂能堪破实相？此时，过往种下的因缘，玉横雪以命相殉，破除了鬼如来的魔障。</p>
+<p>　　到此，僧者的因果已了，同时开启了鬼如来的因缘。从善之血祭刀，罪恶之都最后一人免于劫难，为鬼如来，亦或是帝如来埋下了不稳定的因子。</p>
+<p>　　当鬼如来茫然无措的时候，一名自称招提的僧者，给予他一把拥有充沛灵力，足以抗衡涤罪犀角的空刀，怎样的选择，全在他一念之间。</p>
+<p>　　僧者将一柄空刀修成“佛刑禅那”，自身亦修成帝如来法相。由昔日的佛愆，到四境佛宗三大源流之中的佛首，创立下佛宗组织所有“法”为代表的云鼓雷峰。</p>
+<p>　　“欲知前世因，今生受者是；欲知来世果，今生作者是。”－《三世因果经》</p>
+<p>　　才扫又落叶，扫禅堪得机。山门迎清客，深钟三十年。</p>
+<p>　　招提者，四方也；招提僧，四方僧也。</p>
+<p>　　帝如来化身招提僧，是为了赎罪业，亦是为了回向当初指点他的那名僧伽。</p>
+<p>　　从剧中不难看出，无论是僧者，是鬼如来，亦或是帝如来，“我执”从来都未能破除。</p>
+<p>　　身为帝如来，执著于赎过去佛愆所造的罪业，所以在扫禅山门外，负业修行；执著于点化过自己的那名僧者，所以曾委派弟子寻找；执著于好友梵天入魔，这也是帝如来带著云鼓雷峰入世的主因；更执著于天下苍生，以至于帝如来不惜牺牲自我，在罪身鬼如来的法相之中，锁入佛脉，为圣方卧底找到魔皇陵，黑手了他化阐提。</p>
+<p>　　知晓了所有真相之后，鬼如来后续的路，就如他化阐提所言，“一个悲哀的人，一条艰难的路。”</p>
+<p>　　在经过了鬼如来的两生两死，到逆转识中佛脉，显现帝如来法相，一战厉族，再到佛剑分说的斩业，涤罪犀角与佛刑禅那的齐断。</p>
+<p>　　以及血刹如来的半边法相，到最后与天之佛在如来之巅的决战中，鬼如来的法相形散，回归到帝如来的法相。</p>
+<p>　　佛道七旬安心，最终，仍是帝相鬼相尽此身，不曾分别，此生徒劳。</p>
+<p>　　人生最大的敌人就是自己，一个“我执”，几次的因缘亦未能走出。帝如来是一名僧者，一个终其一生没有破除“我执”的僧者。</p>
+<p>　　在这种情况下，还要坚持著自己的初心，就难免会被有心人利用。</p>
+<p>　　无论是帝如来，鬼如来，或是血刹如来，若是能够舍弃“执”，便得自在。</p>
+<p>　　“三身果报自凡根，六界因缘无了痕；善逝从来非本相，枯荣生灭尽空门。” －帝如来</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

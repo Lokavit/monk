@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>孟家包子铺 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">孟家包子铺</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 1章 ｜ 2419字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>13 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>13 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">孟靖远</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">鹿垣市</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">乡村</span> <span class="chip">现实</span> <span class="chip">人性</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>|-</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 1 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 </h2>
+  <div class="chapter-body">
+    <p>　　清晨五点，广安镇的空气中飘着阵阵包子香。</p>
+<p>　　孟家包子铺的门口站着七八个排队的人。</p>
+<p>　　「小孟啊！还没好吗？」站在第一位的大叔，做了个吞咽动作，「我都闻到了，熟了，熟了！赶紧起锅。」</p>
+<p>　　厨房里探出一个脑袋，看起来二十来岁，穿着一身白色的行头，头发完全别进卫生帽里。</p>
+<p>　　孟靖远咧嘴笑着，「张叔，急不得，早一秒起锅，味道都不对。」</p>
+<p>　　「小孟啊，还有多久？我这儿快馋死了。」</p>
+<p>　　孟靖远转头看一眼墙上的挂钟，「再有半分钟就好。」</p>
+<p>　　说话这会儿功夫，门口陆陆续续又来了七八个人排队，有的自带容器，翘首以盼。</p>
+<p>　　孟靖远掐准了时间，起锅端到窗口，招呼每一位客人。</p>
+<p>　　一通忙活下来，笼屉里还剩下三个，刚刚好够他的早饭。</p>
+<p>　　「小孟呀！」刘阿姨领着个小孩儿，站在门口，「你忙吗？」</p>
+<p>　　「您说！」孟靖远擦了擦手，走出来。</p>
+<p>　　「帮我看一天虎子行吗？我今天有个散活儿。」</p>
+<p>　　「没问题！交给我吧。」</p>
+<p>　　虎子一进门，就盯上了桌上的包子，馋地咽口水。</p>
+<p>　　孟靖远拿出小碗，放进去一个包子，搁到虎子面前，「吃吧。」</p>
+<p>　　虎子嘿嘿一笑，两只小手抓着包子啃起来，「小孟哥，你做的包子真好吃。我长大了，跟你学做包子吧。」</p>
+<p>　　「可别。做包子没出息，你妈还指望你好好读书，赚大钱呢。」</p>
+<p>　　孟靖远收拾完厨房，点了点今天地收入，仔细记下来。</p>
+<p>　　父母意外离世，留给他的唯一东西就是这间包子铺，养了他们家三代人的包子铺。他也立志要把包子铺做到百年老店。</p>
+<p>　　然而……</p>
+<p>　　孟靖远面前放着一份文件——关于门市改建同意书。</p>
+<p>　　开发商要将这一片门市房推倒，改建为商场，已经给所有店主发去了这份文件。</p>
+<p>　　有些店主早在拿到文件的第一天，就私下里去找开发商谈了价格，签了字。</p>
+<p>　　他没有签字，也没有找开发商。</p>
+<p>　　他查过相关法律，只要有人不签字，开发商就不能拆。</p>
+<p>　　他不是唯一一个，除了他家的包子铺，还有几家老营生，也没签字。</p>
+<p>　　几个人聚集在孟靖远家的包子铺，吃着刚出锅的包子，对着桌上的几份文件讨论。</p>
+<p>　　先是说谁谁家谈到了多少赔偿，谁谁家拿到了多少补贴，谁谁家拿到了商场开店资格……</p>
+<p>　　然后说到，担忧开发商是否真的会给钱，既然是分期付款，后续不给了怎么办？最后盖了一座商场，他们这些人要去哪里开门店？又要付多大的成本出来……</p>
+<p>　　孟靖远告诉他们，只要坚定不签字，没人敢动。</p>
+<p>　　事情传开，几个没有签字的店主，成为阻挡其他人暴富的绊脚石。</p>
+<p>　　原本天天早上排长队的包子铺，无人光顾。</p>
+<p>　　有些人来找孟靖远，做思想工作，「小孟啊，听说你没签字，为啥不签呢？你们家这个包子铺，应该能拿不少钱。」</p>
+<p>　　孟靖远说：「张叔，咱们这个镇子，平时连个外人都没有，盖商场也没人，现在就挺好。」</p>
+<p>　　「我听开发商说，先盖商场，然后就改建楼房。把咱们镇上的房子全改成楼房，像大城市那种高楼。到时候，咱都能住大高楼了。」</p>
+<p>　　孟靖远暗自叹气，「我想想。」</p>
+<p>　　他不知道该如何向这些人解释。在这个时期，还能够选择小镇来做开发的开发商，要么是钱多烧的，要么是有账目上的……</p>
+<p>　　一旦他签了字，开发商拿到地皮，推土机一铲子下去，便是无穷无尽的工期。他们这些失去店铺的店主，除了等，还是等，除了等，别无他法。</p>
+<p>　　他早就在网上看到多例类似事件，那些因为一时利益而陷入窘境的苦主，在失去门店和资金后，一次一次试图从法院寻求正义。</p>
+<p>　　寻到了，法院给足了这些人正义。</p>
+<p>　　但，正义只是一纸文件，没有钱，更没有赔偿，只有等。</p>
+<p>　　那些一辈子开店的店主，没有了门店，失去了收入来源，不得不寻找工作。而介于半生奉献给自家生意，绝大多数的人，只能从事最底层的工作，生活质量，一落千丈。</p>
+<p>　　又是没有生意的一个早上。</p>
+<p>　　孟靖远只蒸了一笼屉包子，他自己吃了几个，剩下的打包带回家。</p>
+<p>　　他沿着街道走，除了他家，其余的每一家店铺都空了，屋内满地狼藉，像是被洗劫过。</p>
+<p>　　路上，偶尔遇到个人，他照旧打招呼，却收不到任何回应。</p>
+<p>　　男女老幼，视他为仇敌一般。</p>
+<p>　　孟靖远给自己打气，不要紧，这些人一时不理解，只要再坚持几天，开发商攻不下来他，就会换一个地方去坑害。</p>
+<p>　　他们家世代在这个镇子，他喝着这里的水长大，不求被人理解，只愿那些店主不会成为下一批拿着正义纸张苦等的受害人。</p>
+<p>　　夜里，孟靖远忽然接到一个电话。</p>
+<p>　　「小孟，你家铺子着火了！」</p>
+<p>　　孟靖远脑子里嗡的一声，一边回忆自己今天做了什么，一边骑着自行车赶到门店。</p>
+<p>　　商铺围了很多看热闹的人，见他来了，自动让出一条路。</p>
+<p>　　消防还没来，他家的包子铺里浓烟滚滚，火舌四窜。</p>
+<p>　　「哎呀！小孟啊！你干了什么啊？我家铺子跟着遭殃了！」</p>
+<p>　　说话的是隔壁铺子的李大叔，是这片商铺里第一个拿着文件去找开发商谈的。</p>
+<p>　　由于他是第一个吃螃蟹的人，便最先收到了第一笔钱，买了一辆轿车。每天开着车子，在镇上的破路四处逛，专门停在显眼的地方，逢人就说，日子好了。</p>
+<p>　　开发商的说服进度推得那么快，李大叔功不可没。</p>
+<p>　　也正因为他是第一个，后来的人一个比一个谈到的利益高。</p>
+<p>　　李大叔为此郁闷了很多天，崭新的轿车半个月没动，落满了枯叶和鸟屎。</p>
+<p>　　孟靖远无话可说，站在原地，眼睁睁地看着包子铺被火势吞噬。</p>
+<p>　　远处，消防车的鸣笛声越来越响，冲散了人群，在消防人员的工作下，一场甘霖普降。</p>
+<p>　　火势扑灭了。</p>
+<p>　　「这个镇子太偏了，不然来得及救。」</p>
+<p>　　孟靖远循声望去，消防人员忙着收拾东西，分辨不出来是谁说的。</p>
+<p>　　广安镇太偏了，偏到消防车延时。</p>
+<p>　　这样一处偏僻的小地方，却有开发商千里迢迢跑来，收地盖商场，还要盖高楼。</p>
+<p>　　人群散去，孟靖远向着烧毁的包子铺走了几步，一脚踩在了门匾上。他连忙收回脚，弯下腰，扶起孟家包子铺这块匾，斜着靠在门边。</p>
+<p>　　屋子里被烧得不成样子，平时铮亮的案板，被火熏成了黑色，所有竹制笼屉全烧成了灰。</p>
+<p>　　自从父母过世，他经营这家店十年了。每一天的开店到关店，每一个动作，深刻烙印在他的行为里，形成肌肉记忆。</p>
+<p>　　他是不会留下明火的，更不可能是漏电。</p>
+<p>　　可是，孟家包子铺烧毁了，是事实。</p>
+<p>　　孟靖远走出包子铺，把孟家包子铺的门匾扛在肩上，转头看了一眼隔壁。</p>
+<p>　　李大叔家的铺子烧毁了大半，李大叔却早已随着看热闹的人走了。</p>
+<p>　　回到家里，孟靖远把门匾仔仔细细擦干净，用防撞膜包得严严实实。</p>
+<p>　　他拉出行李箱，收拾了所有重要的东西。</p>
+<p>　　次日一早，他叫了一辆搬家公司的车，在一群人的注视下，离开了广安镇。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>善恶归源－楼至韦驮 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">善恶归源－楼至韦驮</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 1章 ｜ 1286字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>01 Jan 2557 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>01 Jan 2557 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">天之佛</span> <span class="chip">楼至韦驮</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">天佛原乡</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>|-</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 1 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> </a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 </h2>
+  <div class="chapter-body">
+    <p>　　查查资料，天佛退场已经过去了好多年，而今提笔谈及楼至韦驮，早已不似当年追剧时的心情，亦不再有过分强烈，想要为其正名的冲动。</p>
+<p>　　虽如是言，仍是没有勇气再去回顾一番“天罚自戮”的退场画面。</p>
+<p>　　「楼至」，贤劫之中最后成佛。</p>
+<p>　　悲华经云：无始劫来作大医王救诸苦恼于贤劫中后当成佛名曰楼至。</p>
+<p>　　「韦驮」，佛教中的护法天尊，揹负菩提之愿，护法降魔。</p>
+<p>　　此二者是否为同一个人物，并无确切说法。但在佛经中的相关记载，同为佛教中担任护法、弘法的职责。</p>
+<p>　　天之佛的意义，代表著守护天佛原乡三千法门的责任。</p>
+<p>　　从剧中天佛原乡的场景中可以看出，楼至韦驮承接下天之佛的称号时，天佛原乡已经是末法时期的世镜，也就是佛法坏灭之相。</p>
+<p>　　本篇命题“善恶归源”，取自剧中楼至韦驮修行之地的名字。</p>
+<p>　　其自身代表“善业”；另有一代表“恶业”的师弟－渡如何。</p>
+<p>　　佛经上说：“善，最能够成就世人一切行愿。所谓有感必有应，有因必有果，深信因果，断恶修善。”</p>
+<p>　　笔者始终相信楼至韦驮的初心不曾改，由善行愿。介于最终没有勇气去复习一遍楼至韦驮的剧情，单就透过烙印于脑海中的部分剧情，来诠释一下天之佛楼至韦驮的“善业”。</p>
+<p>　　剧中借由蕴果谛魂的口中言“天之佛所代表的是责任”，是佛者应护法而肩负守护苍生的责任。</p>
+<p>　　这样一重身份，这样一份重担，对罪业有高度自觉与自主力的楼至韦驮来讲，注定其修行之路，崎岖难行。</p>
+<p>　　厉族祸世，作为天佛原乡的最初入世之机。</p>
+<p>　　楼至韦驮身为天佛原乡最高象征，在五剑缺一的情况下，将厉族王者封印。</p>
+<p>　　然而自身也受伤严重，更因身中暗招，引发了后续剧情。</p>
+<p>　　佛身诞魔，楼至韦驮自言不忍杀之，将质辛阐提送到中阴界抽魂，又言中阴界抽魂失败，导致了圣魔大战的远因。</p>
+<p>　　这里先说下佛者将魔子质辛送予中阴界进行抽魂，质辛是在“佛元”、“厉元”以及“魔晶”三方作用之下诞生的实体，楼至此举目的自然是为了抽离厉元和魔性。</p>
+<p>　　也许若中阴界抽魂成功，楼至韦驮亦会如佛陀一般，将质辛收作弟子。</p>
+<p>　　不过，从剧中质辛阐提的表现来看，反倒是楼至韦驮对魔子先起了分别心，笃定其魔根难泯。</p>
+<p>　　当然，也要感谢缎君衡对质辛阐提的教导，同为质子，缎君衡对其可说是用心良苦，竟然让小质辛背佛经。</p>
+<p>　　也正因为有缎君衡对质辛的教导，在楼至韦驮背追杀的时候，质辛伸出援手。</p>
+<p>　　十二因缘法中，由无明而起至觉受，在这一段里，环境会影响一个人，因为所有觉受来自于物质。</p>
+<p>　　剧中楼至韦驮向蕴果谛魂讲述这段往事的时候，蕴果谛魂言，“借他人之手而造杀，岂非将罪业转嫁他人之身，身为佛乡最高象征，虽有苦衷，不能完全认同。”</p>
+<p>　　先不去纠结“抽魂”怎么就成了“造杀”。</p>
+<p>　　单看此话的大意，楼至韦驮将魔子质辛交给中阴界抽魂，犯了佛门第一戒－杀生，借他人之手杀生，也就是杀生戒之一的“教杀”。</p>
+<p>　　按照佛经所言，“教杀”，教者的恶业重于杀者。</p>
+<p>　　好吧，剧情终归是剧情，不能完全卡著经律论来解读。楼至韦驮言，“若佛身诞魔为罪孽，吾当受之。”</p>
+<p>　　在笔者看来，佛身诞魔其本身非是罪孽，只是因缘和合。</p>
+<p>　　若楼至韦驮当初亲手杀死魔子质辛，虽然罪身佛不在乎多一桩罪业在己身，但也就真的初心不在了。</p>
+<p>　　回到文章标题索要表达的主题“善恶归源”，善与恶的界限从无一法能定。</p>
+<p>　　与其说善恶，倒不如咦因缘来释义更为确切一些。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>爱上新邻居 · 书库 · Monk</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
+
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
+
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ==================== 书籍详情卡片 ==================== */
+.book-detail {
+  display: block;
+  padding: 24px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.book-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.meta-line {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+.meta-line.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.meta-line .label {
+  color: rgba(255, 255, 255, 0.4);
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.book-intro-title {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 卷列表 ==================== */
+.vol-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vol-list a { text-decoration: none; }
+.vol-list a.active .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.vol-list a:hover .chip {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ==================== 左右两栏布局 ==================== */
+.reader-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+/* ---------- 左侧：章节目录 ---------- */
+.chapter-sidebar {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 112px);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.sidebar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.sidebar-head .count {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.chapter-list::-webkit-scrollbar { width: 6px; }
+.chapter-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+}
+.chapter-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease;
+}
+.chapter-link .chapter-num {
+  color: var(--foreground);
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.chapter-link:hover {
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+}
+.chapter-link:hover .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.chapter-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg-hover);
+}
+.chapter-link.active .chapter-num {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* ---------- 右侧：完整文章 ---------- */
+.chapter-content-wrap { min-width: 0; }
+.chapter {
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+  scroll-margin-top: 96px;
+}
+.chapter:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.chapter-heading {
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+.chapter-body {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+.chapter-body p { margin: 0 0 1.3em; }
+.chapter-body p:last-child { margin-bottom: 0; }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 860px) {
+  .reader-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .chapter-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 720px) {
+  .book-detail { padding: 18px; }
+  .book-title { font-size: 1.35rem; }
+  .chapter-heading {
+    font-size: 1.15rem;
+    scroll-margin-top: 140px;
+  }
+  .chapter-body {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Monk</a>
+      <nav class="header-nav">
+        <a href="../../index.html">首页</a>
+        <a href="../../index.html#library">书库</a>
+        <a href="../../index.html#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <section class="book-detail">
+    <h1 class="book-title">爱上新邻居</h1>
+    <div class="book-meta">
+      <div class="meta-line main">1卷 ｜ 4章 ｜ 8673字 ｜ 完结</div>
+      <div class="meta-line"><span class="label">发布日期：</span>15 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">最近更新：</span>18 Nov 2569 BE</div>
+      <div class="meta-line"><span class="label">主要角色：</span><span class="chip">邱榆阳</span> <span class="chip">周焕然</span></div>
+      <div class="meta-line"><span class="label">世界观：</span><span class="chip">鹿垣市</span></div>
+      <div class="meta-line"><span class="label">标签：</span><span class="chip">悬疑</span> <span class="chip">爱情</span></div>
+    </div>
+    <div class="book-intro">
+      <div class="book-intro-title">作品简介</div>
+      <p>隔壁鬼屋搬来新邻居</p>
+    </div>
+    <div class="book-intro">
+      <div class="vol-list">
+<a href="./vol_001.html" class="vol-link active"><span class="chip">卷 001 </span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="reader-layout">
+    <aside class="chapter-sidebar">
+      <div class="sidebar-head">
+        <span>卷 001 </span>
+        <span class="count">共 4 章</span>
+      </div>
+      <nav class="chapter-list">
+<a href="#ch-1" class="chapter-link active"><span class="chapter-num">章 001</span> 新邻居</a>
+<a href="#ch-2" class="chapter-link"><span class="chapter-num">章 002</span> 鬼屋直播</a>
+<a href="#ch-3" class="chapter-link"><span class="chapter-num">章 003</span> 惊吓</a>
+<a href="#ch-4" class="chapter-link"><span class="chapter-num">章 004</span> 换赛道</a>
+      </nav>
+    </aside>
+    <main class="chapter-content-wrap">
+<article class="chapter" id="ch-1">
+  <h2 class="chapter-heading">第 1 章 新邻居</h2>
+  <div class="chapter-body">
+    <p>　　邱榆阳正在被窝里睡大头觉，冷不丁听到什么东西撞在他家门上。</p>
+<p>　　他摸出手机，看了一眼。</p>
+<p>　　上午九点。</p>
+<p>　　距离他睡着不足一小时。</p>
+<p>　　他放下手机，调整了个舒服的姿势。</p>
+<p>　　「嘭！」</p>
+<p>　　邱榆阳怒而起身，打开大门。</p>
+<p>　　对门闲置了三年的鬼屋敞着门，客厅里没人，各种箱子柜子堆了一地。</p>
+<p>　　他蹑手蹑脚走过去，站在门口竖着耳朵听了听，里面没动静。</p>
+<p>　　他一手扶着门框，探着脑袋朝里张望。</p>
+<p>　　「你好？」</p>
+<p>　　邱榆阳被身后突然的人声吓一跳，猛地回头。</p>
+<p>　　一个和他差不多高的男生，手里抱着两个大箱子，在这三伏天里，一脑门子汗。</p>
+<p>　　邱榆阳连忙退后，让出了位置，尴尬地笑了笑，「你租的？」</p>
+<p>　　男生把箱子放在地上，用搭在肩头的毛巾擦了擦手，朝着邱榆阳伸出，「你好。我叫周焕然，焕然一新的焕然。」</p>
+<p>　　「邱榆阳。」邱榆阳握上周焕然的手，掌中瞬间传过来一阵热流。</p>
+<p>　　「刚才扛桌子，不小心撞到了你家的大门。」周焕然递给邱榆阳一瓶水，「不好意思哈。」</p>
+<p>　　邱榆阳被扰梦的怒气早没了，取而代之的是对周焕然的好奇。</p>
+<p>　　「你怎么租了这里？」他问。</p>
+<p>　　「租金便宜。」周焕然说，「这么大房子，一个月才五百，多合适。」</p>
+<p>　　邱榆阳欲言又止，问了句：「还有吗？我帮你搬。」</p>
+<p>　　他发誓，真的只是客气一句而已！虽然他喝着周焕然的水。</p>
+<p>　　但是，周焕然这个人，像是没有情商一样，毫不客气地使用着他这个力工。</p>
+<p>　　搬完了所有家当之后，周焕然又请他帮忙搭起电竞桌。</p>
+<p>　　桌上一套摇臂，撑着两张大显示器，一台玻璃窗机箱，里面皆是顶级配置，另外还有麦克风、移动布景、灯光音响……</p>
+<p>　　邱榆阳暗自咂舌，「你搞直播的？」</p>
+<p>　　「对。」</p>
+<p>　　「游戏直播？」他追问。</p>
+<p>　　「鬼屋挑战。」</p>
+<p>　　「嘶——！」邱榆阳不由得睁大了眼睛，「你知道这是鬼屋？」</p>
+<p>　　周焕然耸耸肩，低头打开一个箱子。</p>
+<p>　　邱榆阳扫了一眼，里面好几个摄像头。</p>
+<p>　　「你忙吧。我回去了。」</p>
+<p>　　「哎！别呀。」周焕然摆弄着一台摄像头，「帮我一起整完，我请你吃饭。」</p>
+<p>　　邱榆阳缩回了离去的脚，帮着把几个摄像头在各个房间摆好。他倒不是成心要蹭新邻居一顿饭，而是不想回屋躺下，这边又闹出奇怪的动静，影响他睡觉。</p>
+<p>　　周焕然对着显示器一番操作。</p>
+<p>　　屏幕里，六个录像窗口，覆盖一室一厅，一厨一卫，外加客厅和玄关。</p>
+<p>　　作为在这片社区长大的邱榆阳，给周焕然推荐了附近的一家小炒。</p>
+<p>　　周焕然点了四个菜，又去开冰箱，回头问他，「你喝酒吗？」</p>
+<p>　　邱榆阳摇摇头。</p>
+<p>　　周焕然拿来了两瓶冰镇饮料。</p>
+<p>　　「咕——咕……」邱榆阳连忙拿起饮料，吸了两口，掩饰尴尬。</p>
+<p>　　他的上一顿饭在昨天晚上，熬了整晚通宵，又出了不少力气，这会儿肚子十分不配合地抗议着。</p>
+<p>　　四样家常菜，很快端上桌。</p>
+<p>　　周焕然给他递了一双筷子，「吃吧。把你饿坏了，可是我的罪过。」</p>
+<p>　　邱榆阳夹了一筷子，送进嘴里，肚子跟着消停了。</p>
+<p>　　周焕然吃了几口，举起饮料，在邱榆阳的饮料瓶上碰出一声脆响，「你住在鬼屋对面，不怕吗？」</p>
+<p>　　邱榆阳喝了口饮料，「你一个住进去的都不怕，我怕什么？」</p>
+<p>　　他顿了顿，又说：「我上个月才回来，这是我奶奶的房子。」</p>
+<p>　　周焕然了然似地点点头，「晚上来看我直播吗？」</p>
+<p>　　「行啊。」</p>
+<p>　　收到周焕然的好友邀请，他关注这个名叫「焕然一新」的主播。</p>
+<p>　　周焕然的粉丝量是邱榆阳未想到的少，少到只有他一个。</p>
+<p>　　「你用小号加的我？」邱榆阳问。</p>
+<p>　　「我就这么一个号。」周焕然说。</p>
+<p>　　「那你的直播……」邱榆阳没有说下去。</p>
+<p>　　「今晚开始。」周焕然语气轻松，好像已万事俱备。</p>
+<p>　　邱榆阳沉默地吃着菜，考虑晚上要不要给周焕然捧场。</p>
+<p>　　「你居家办公？」周焕然问，「什么工作？」</p>
+<p>　　「我全职宅家，研究人生真谛。」</p>
+<p>　　说完，两人不约而同地笑了。</p>
+<p>　　饭后，周焕然提议在附近转转，熟悉熟悉环境。</p>
+<p>　　邱榆阳失业宅家数月，终于有了一个能说话的活人，这可比回家睡觉重要多了。</p>
+<p>　　他一个无所事事的人，觉什么时候都能睡。</p>
+<p>　　周焕然这个人很健谈，天南海北的闲砍，全程没有冷场。对即将开始的鬼屋直播，更是信心十足，斗志满满。</p>
+<p>　　日头越来越毒辣，地表的热度向上反，邱榆阳被晒得发晕。</p>
+<p>　　自此失业，他极少出门，在家里避暑，肤色都捂白了好几度。</p>
+<p>　　回到家里，他脱掉上衣，站在镜子面前，眼前一黑。</p>
+<p>　　从后脖颈子到两只手臂，黑了！</p>
+<p>　　他洗了个澡，拉紧窗帘，播放助眠音乐，把自己摔在床上，几秒钟就睡过去了。</p>
+<p>　　一觉睡到晚上九点，邱榆阳被饿醒了 。</p>
+<p>　　屋子里一片漆黑，他摸索着爬起来，拉开了窗帘。</p>
+<p>　　外面月亮高挂，他拉开落地窗，走到阳台，注意到隔壁卧室的灯光。</p>
+<p>　　光线昏暗，似乎是有人在灯上罩了什么东西。 </p>
+<p>　　邱榆阳转身回到房里，经过客厅时随手拎起一袋儿速食面，走进了厨房，开灶烧水。</p>
+<p>　　他一边盯着小煮锅发呆，一边揉着空落落的肚子，暗自嘀咕：「中午吃了那么多菜，怎么这会儿就饿了呢，也不知道隔壁那小子怎么样。」</p>
+<p>　　想起隔壁新搬来的周焕然，邱榆阳又在客厅里拿了一袋速食面，他没有着急进厨房，而是来到了阳台，冲着隔壁喊：「周焕然！」</p>
+<p>　　等了几秒钟，隔壁没见动静。</p>
+<p>　　他加大了音量，高声喊道：「周焕然！你在不在家里？」</p>
+<p>　　隔壁依然没有动静。隔壁白色的窗帘被风吹起，毫无章法地飘荡，邱榆阳忽然想起，这是一间鬼屋啊。</p>
+<p>　　他想起刚从城市回来的时候，小区的老大妈拉着他的手，神神秘秘的和他说：「阳阳，你刚从外面回来，不知道这小区的情况。你们家隔壁的房子，这几年一直闹鬼。楼上楼下基本都搬走了，你倒是胆子大，敢在这个时候回来住。」</p>
+<p>　　邱榆阳对老大妈的话一笑置之，他从不相信这世上有鬼，更不会相信隔壁空置的房子会是一间「鬼屋」。</p>
+<p>　　然而此刻，他盯着隔壁鬼屋的阳台，在这三伏天的夜里，不由得搓了搓两只胳膊，压下竖起的汗毛。</p>
+  </div>
+</article>
+<article class="chapter" id="ch-2">
+  <h2 class="chapter-heading">第 2 章 鬼屋直播</h2>
+  <div class="chapter-body">
+    <p>　　「吱——！」突然一声尖锐的声响，邱榆阳猛地回身，原来是小煮锅发出的报警声。</p>
+<p>　　他拉上阳台的落地窗，顺手落了锁，把手里的泡面扔回了茶几上，进入厨房，为自己煮了一袋速食面。</p>
+<p>　　他端着速食面坐在了客厅的沙发上，面上卧了两个鸡蛋，几颗油麦菜，还有三片大火腿。</p>
+<p>　　邱榆阳搓了搓手，拿起了筷子，刚刚夹住了一颗油麦菜，大门忽然被人敲响。</p>
+<p>　　他微微皱眉，放下了筷子，一边嘀咕着：「什么人在别人吃饭的时候来敲门？」一边走到玄关，顺着猫眼向外看。</p>
+<p>　　周焕然的一张脸被放大扭曲，手里似乎还提着东西，眼睛盯着猫眼，像是能看到他一般，开口说道：「你看什么呢？快开门！」</p>
+<p>　　邱榆阳打开了门，一阵烧烤的味道直冲脑门。</p>
+<p>　　周焕然抬了抬两只手，一手拎着三个外卖袋子，一手拎了两连啤酒，「你做什么呢？这么香。」</p>
+<p>　　说着，把东西全部放在了茶几上，视线也自然的落在了茶几的那碗煮面。</p>
+<p>　　「嚯！你这泡面煮的还挺营养健康，荤素搭配，正好再配上我带来的烧烤炒菜和啤酒。」</p>
+<p>　　邱榆阳发觉周焕然这个人，特别外向，两人满打满算认识不足一天，中午已经请过一顿饭，现在竟然又拎着烧烤和啤酒来到了他家。</p>
+<p>　　「我拿几个盘子。」他有些不好意思。</p>
+<p>　　可他一个不是外卖，就是煮面的懒人，家里除了速食面和这些简单的食材之外，没有别的东西了。</p>
+<p>　　两人把东西全部拿出来，把茶几上摆满了。</p>
+<p>　　周焕然开了一罐啤酒递给他，「来一罐吧，助眠。」</p>
+<p>　　邱榆阳接了过去，放在茶几上，「有点干巴，我放个电影吧。」</p>
+<p>　　他打开了投影仪，关上客厅的大灯，只留下一排昏黄的小壁灯。</p>
+<p>　　「喜欢看什么类型的电影？」他问，「惊悚灵异，还是鬼片？」</p>
+<p>　　周焕然抬起头看向投影幕布，「那多沉闷？我们找个逗乐子的电影。」</p>
+<p>　　邱榆阳选了一个喜剧电影，坐回沙发上。</p>
+<p>　　「据说这片儿不错，我还没来得及看。」周焕然说。</p>
+<p>　　邱榆阳应了一声，「我也是听说不错，买了一直没看。」</p>
+<p>　　「你一个全职宅家的人，有什么好忙的？」周焕然的语气里带着调侃意味。</p>
+<p>　　邱榆阳从鼻子里哼了一声，偏头瞥了周焕然一眼，「真会说话，以后别说了。」</p>
+<p>　　两人吃着烧烤，喝着啤酒，看看着幕布里放的喜剧电影，时而哈哈大笑，时而交流几句对电影的看法。</p>
+<p>　　不知不觉就过去了两个多小时了，两人喝完了一连啤酒，桌上的东西吃得七七八八，唯有那一碗早就煮好的面，泡到了发胀，还是满满的一碗。</p>
+<p>　　「肚子有点饿。」周焕然说。</p>
+<p>　　邱榆阳惊讶地看了看他，「吃了两个多小时你还饿？那你这两个小时在干什么？」</p>
+<p>　　「没有吃主食嘛，就会感觉肚子里空落落的。」</p>
+<p>　　邱榆阳注意到周焕然的目光落在了那碗面上，「那我给你煮一碗速食面，几分钟就好。」</p>
+<p>　　「这不是搁着一碗的吗？」周焕然说。</p>
+<p>　　「这都坨成啥样了？不能吃了。」</p>
+<p>　　周焕然啧啧咂舌，「全职宅家的人，这么浪费，你存款很多噢。」</p>
+<p>　　邱榆阳没有接话，在零食架上拿了一袋速食面。</p>
+<p>　　周焕然开口叫住他，「欸！别煮了。咱俩把这一碗分了，都垫吧一点。」</p>
+<p>　　邱榆阳坐回沙发上，把面分成两份，分给周焕然一个鸡蛋，两片火腿，和两颗油麦菜。</p>
+<p>　　「你今晚直播吗？」他问。</p>
+<p>　　周焕然点点头，拿起手机看了一眼时间，「一会儿回去就差不多开始了。你来给我捧场吗？」</p>
+<p>　　「去。」邱榆阳说，「不然你的直播间里连个鬼影都没有，别人看到你的直播间，比看到鬼屋还可怕。」</p>
+<p>　　周焕然明显一愣神儿，继而笑了起来，「你也很会说话，以后多说一点儿。」</p>
+<p>　　两人相视而笑。</p>
+<p>　　客厅里莫名陷入一种异样的宁静，以及一种淡淡的，说不明的气氛。</p>
+<p>　　送走了周焕然之后，邱榆阳把客厅打扫干净，回到了卧室，唤醒电脑，打开周焕然的主页，等着直播间开始直播。</p>
+<p>　　他转头看向阳台，卧室的阳台距离隔壁更近，几乎是一步就可以跨过去。</p>
+<p>　　同样，他能够看到隔壁透出来的昏暗的，泛黄的灯光。</p>
+<p>　　他站起身，走到落地窗前，一只手抓着窗帘，忽然停住了。</p>
+<p>　　今天之前，哪怕是今夜之前，他也会毫不犹豫的拉上窗帘，但是此刻，他犹豫了。</p>
+<p>　　是想看有没有鬼？是想看周焕然被鬼吓得跑上阳台？又或者是想看……</p>
+<p>　　他放下了手，回到电脑桌前坐下。</p>
+<p>　　周焕然的头像是一个非常符合直播内容的图片，看起来阴森又恐怖。</p>
+<p>　　就在这时，周焕然的头像下面，出现了一个最新的状态，显显示此人正在直播中。</p>
+<p>　　与此同时，邱榆阳收到了好友的直播间开播提醒。</p>
+<p>　　他点击直播间，画面里是熟悉的监控显示器投屏，通过客厅的摄像头画面，能够看到周焕然正坐在电脑前，一只手摆弄着鼠标。</p>
+<p>　　直播间里安静的出奇，只有偶尔点击鼠标的咔嚓声。</p>
+<p>　　忽然，周焕然站起身，把屋子里的所有灯全部关了，却打开了下午两人装置的几盏小灯，整个直播间的画面顿时陷入一种诡异的气氛。</p>
+<p>　　邱榆阳转头看向阳台，外面连月亮都没有，完全的一片昏黑，唯一的光亮，来自于他这间卧室，以及他的电脑显示器。</p>
+<p>　　手机的屏幕亮了一下，是周焕然发来消息。</p>
+<p>　　他在电脑上点开了消息。</p>
+<p>　　周焕然：「你家的灯太亮，鬼都不敢来了。」</p>
+<p>　　邱榆阳不由得笑出声，关掉了卧室的灯，但还有显示器亮着。</p>
+<p>　　他给周焕然发了个消息，「显示器的光影响吗？大主播。」</p>
+<p>　　周焕然的直播间突然出声，「你拉上窗帘应该就能完全遮住了。」</p>
+<p>　　邱榆阳吓了一跳，拉上窗帘回来，看了一眼直播间的访客记录，只有偶尔一个半个用户路过，没有一个留存下来，开播了这么久，还是他一个人挂在了榜一。</p>
+<p>　　周焕然大概觉得无聊了，开麦和邱榆阳闲砍。</p>
+<p>　　邱榆阳打字回复了几句，也觉得无聊。</p>
+<p>　　如果是这样沉闷的直播，是不会有人来的，甚至有可能由于过于沉闷，被平台直接关闭。</p>
+<p>　　他想不明白，周焕然明明是一个直播小白，连一个粉丝都没有，这不就大张旗鼓的备齐了设备，租下隔壁，搬了进去。</p>
+<p>　　邱榆阳把直播间拖到了副屏，在主屏上打开了一个游戏，很快忘记了副屏上还有一个直播。</p>
+<p>　　等他游戏打到尽兴的时候，天都快亮了。</p>
+<p>　　他看了一眼副屏，周焕然就那么坐在椅子上睡着了。</p>
+<p>　　邱榆阳笃定，周焕然不适合做直播。  </p>
+  </div>
+</article>
+<article class="chapter" id="ch-3">
+  <h2 class="chapter-heading">第 3 章 惊吓</h2>
+  <div class="chapter-body">
+    <p>　　这栋楼因为陷入闹鬼风波，全楼只住了他们两个人。</p>
+<p>　　两人成为了互帮互助的好邻居，他给他顺路扔垃圾，他帮他顺利采购，他去他家开灶，他去他家闲聊……</p>
+<p>　　邱榆阳发觉，日子一点儿也不无聊了，反而充实了很多，话也说的多了。</p>
+<p>　　对于周焕然的直播事业，发表了自己的看法。</p>
+<p>　　周焕然看似听进去了，却问了一句：「你知道这里为什么是鬼屋吗？」</p>
+<p>　　邱榆阳抬头扫视一圈儿，「这家以前住着一个老太太，神神叨叨的，没有儿女。听说，老太太死家里一个多月，才被发现。有的说看到屋里有鬼影，有的又说听见鬼挠门、鬼打墙。说什么的都有，传来传去，就都搬走了。」</p>
+<p>　　两人吃过晚饭，一同出门。</p>
+<p>　　夜晚的小河边，柳叶随风飘荡，暗影重重，伴随着阵阵的沙沙声响。</p>
+<p>　　月光将两人的身影拉长，投射在石子路。</p>
+<p>　　邱榆阳遥望家里的阳台，只有他们这一层的两户人家有灯光。</p>
+<p>　　突然，他看到一个黑影闪过，下意识拽了周焕然一下，「哎，你看！」说着指向了家的方向。</p>
+<p>　　「看什么？」周焕然问。</p>
+<p>　　「你刚才没看到吗？」邱榆阳反问，「有个什么东西从你家的阳台一闪而过。」</p>
+<p>　　「真的假的？」</p>
+<p>　　两人正在说着，又是一道黑影闪过。</p>
+<p>　　这一次他们看得真真切切，相视一眼，同时从对方的眼中，读到了惊疑的神色。</p>
+<p>　　「这下你看见了吧？」邱榆阳问。</p>
+<p>　　「嗯。」周焕然低声应和。</p>
+<p>　　「会是什么东西？」邱榆阳问。</p>
+<p>　　「鬼吧。」周焕然说。</p>
+<p>　　两人又同时看向家里的阳台方向，并且不约而同的往回走。</p>
+<p>　　走到家门口的时候，邱榆阳拿出钥匙打开了自己家的房门，周焕然也跟着进来了。</p>
+<p>　　邱榆阳从冰箱里拿了两瓶水，递给周焕然一瓶。</p>
+<p>　　「你家里的摄像头开着吗？」他问。</p>
+<p>　　「全都开着。」周焕然说。</p>
+<p>　　邱榆阳提议，「我们开个回放，看一下刚才那两个是什么东西。」</p>
+<p>　　「好。」</p>
+<p>　　周焕然喝光瓶里的水，站起身，走向门口。</p>
+<p>　　「别从门进。」邱榆阳说，「万一是鬼，你一开门就吓跑了。从我家阳台过去。」</p>
+<p>　　他领着周焕然进了卧室，轻手轻脚地推开落地窗，慢慢探出头，看向隔壁的阳台。</p>
+<p>　　周焕然爬上去，扶着侧面窗户的防盗网，一跃而过，又朝着邱榆阳伸出手，把人来过来。</p>
+<p>　　两人蹲下身，隔着白色纱帘，观察客厅里面的状况。</p>
+<p>　　就在两人全神贯注之际，屋子里面忽然发出「啪嗒」一声，像是什么东西掉地上了。</p>
+<p>　　邱榆阳被吓了一跳，一手按着心口，看了看身边的周焕然。</p>
+<p>　　周焕然看起来比他还要害怕，抓着他的手脖子，一动不动。</p>
+<p>　　邱榆阳掀开纱帘，往客厅里走。</p>
+<p>　　周焕然在身后跟着。</p>
+<p>　　两人走到了客厅，邱榆阳没有看出任何异样，回头用眼神询问周焕然。</p>
+<p>　　周焕然轻轻摇头。</p>
+<p>　　「哗啦！」</p>
+<p>　　两人霎时警觉起来，一同望向声音来源，蹑手蹑脚往餐厅挪动。</p>
+<p>　　走着走着，邱榆阳发现身后人没了，再一看，周焕然站在显示器前，指着其中一个窗口。</p>
+<p>　　邱榆阳走过去。</p>
+<p>　　画面里，地上一个外卖盒子，残渣剩饭被扣了一地，不知从哪儿来的两只小猫崽子，正旁若无人，大吃特吃。</p>
+<p>　　两人皆是松了一口气，相视而笑。</p>
+<p>　　两只小猫崽听到动静，警觉的退后几步，呲着牙，发出警告似的声音。</p>
+<p>　　两人不以为意。</p>
+<p>　　「原来是这么两个小东西。」邱榆阳说。</p>
+<p>　　周焕然拿了个容器，倒入半瓶矿泉水，放在了食物旁边。</p>
+<p>　　两只小花猫崽子不肯再吃了，瑟缩在角落里，全身炸毛，倒像是要吃人。</p>
+<p>　　两人找来了纸箱子，费劲巴拉地把两只小猫哄进去。</p>
+<p>　　「放阳台吧。明天我们带去宠物医院，检查检查。」邱榆阳说。</p>
+<p>　　「看着挺干净地，搁在屋里吧。」</p>
+<p>　　周焕然说完之后，把纸箱子端到了客厅的监控器下。</p>
+<p>　　这一夜的鬼屋冒险直播间里，多了两名客串嘉宾。</p>
+<p>　　邱榆阳躺在自家的床上，看一会儿猫，看一会儿人。</p>
+<p>　　直播间里，除了他之外，竟然有人停留，有人发出弹幕，全部围绕着两只小猫，播间的主人反而成了配角。</p>
+<p>　　邱榆阳给周焕然发消息：「不如改为直播小猫。」</p>
+<p>　　发完，他看着屏幕。</p>
+<p>　　周焕然在逗猫，似乎忘了直播主题。</p>
+<p>　　过了好一会儿，走回电脑桌，拿起手机。</p>
+<p>　　下一秒，邱榆阳收到了回复：「有道理哦。」</p>
+<p>　　不知不觉，直播间里蹲了十几号人，围绕着两只猫作为话题，聊得留言区都滚动了起来。</p>
+<p>　　邱榆阳也加入其中。</p>
+<p>　　相比之下，周焕然则表现的有些冷淡。</p>
+<p>　　邱榆阳连游戏都没有开，一直陪到了凌晨三点，比主播更像主播。</p>
+<p>　　他给周焕然发消息：「早点睡觉，起来了喊我，咱俩去给猫做检查。」</p>
+<p>　　周焕然对着客厅的摄像头，比出来一个收到的手势。</p>
+<p>　　随即，直播间的画面一黑，留下一排冰冷的文字：「主播暂时不在」</p>
+<p>　　邱榆阳洗了个澡，躺在床上，举着手机，翻看与周焕然的聊天。他忽然反应过来，似乎没有问过周焕然，对养猫是否有兴趣，自顾自的决定把那两只猫崽子养起来，而且养在了周焕然家里。</p>
+<p>　　不过，周焕然也没有表示反对。</p>
+<p>　　邱榆阳提着午饭和饮料，敲开了周焕然家的大门。</p>
+<p>　　周焕然像是被吵醒的，头发乱糟糟，眼还没有完全睁开，光着膀子，只穿了一条短裤。</p>
+<p>　　「你随意，我洗把脸。」说完，进了洗手间。</p>
+<p>　　邱榆阳熟门熟路地拿出餐具，把买来几样炒菜倒在盘子里，见周焕然还没出来，他顿去客厅一角看猫。</p>
+<p>　　经过一夜，两只小猫的防备状态没有昨晚那么厉害，也会对着他喵喵叫了。</p>
+<p>　　「你养过吗？」</p>
+<p>　　周焕然从洗手间出来，用毛巾擦着还在滴水的头发。</p>
+<p>　　「没有。」邱榆阳说。</p>
+<p>　　「你养过什么吗？」他问。</p>
+<p>　　「以前家里养过狗。没几年就挂了。」周焕然说。</p>
+<p>　　「那你对养猫……」邱榆阳没说完。</p>
+<p>　　「噢。无所谓，反正还有你。」周焕然顿了顿，「而且，这俩小东西，还能给直播间拉点人气。」</p>
+  </div>
+</article>
+<article class="chapter" id="ch-4">
+  <h2 class="chapter-heading">第 4 章 换赛道</h2>
+  <div class="chapter-body">
+    <p>　　「说到直播间，」邱榆阳说，「我昨晚想到一个路子。」</p>
+<p>　　「什么？」周焕然问。</p>
+<p>　　「既然你的主题是鬼屋直播，进来的主要用户群体分两种，一种是想在三更半夜找刺激的，另一种是想看主播出丑社死的。我们针对这两个情绪心里，给出观众想要的结果，应该可以拉起来直播间热度。」</p>
+<p>　　「你是说，整活儿？」周焕然问。</p>
+<p>　　邱榆阳认真地点点头，「制造意外。」</p>
+<p>　　他又说：「就拿昨晚来说。当我们在河边看到阳台有黑影闪过地时候，并不知道是什么。直到我们进来，看到真相。实不相瞒，我完全没有想过会是猫，还是两只猫。你呢？」</p>
+<p>　　周焕然摇摇头，「没有料到。」</p>
+<p>　　「对。」邱榆阳打个响指，「我们可以学习那种恶搞式鬼片的方法，制造意外，再打破意外。」</p>
+<p>　　两人边吃边聊，定下了初步方案。然后，一同带着两只小猫去宠物医院做了检查，一同给小猫选了别墅套装。</p>
+<p>　　回去之后，两人着手于再鬼屋布置机关，并一遍一遍演示，力求做到真实的意外效果。</p>
+<p>　　当夜，直播间来了十几号人，主要是询问主播，两只小猫的最新状况，远程指导主播养猫。</p>
+<p>　　周焕然开麦回答，「已经做过检查，两只猫都很健康。买的猫别墅在路上。」</p>
+<p>　　邱榆阳点了一个礼物出去，并在留言区发了一句：「给猫猫的。」</p>
+<p>　　在他之后，又有用户给焕然一新送了礼物。</p>
+<p>　　其他围观的，也跟着送礼物给主播。</p>
+<p>　　邱榆阳对着屏幕笑了，嘀咕一句：「果然奏效。」</p>
+<p>　　有了礼物支持，直播间的推流随之而来，进来了更多的人。</p>
+<p>　　邱榆阳看准时机，操控机关。</p>
+<p>　　直播间画面里，顿时出现诡异的影像。</p>
+<p>　　留言区直接炸锅了。</p>
+<p>　　在大量的惊诧发言中，夹杂着几个不起眼儿的质疑。</p>
+<p>　　邱榆阳一边操作，一边混在质疑一派，又装作一副了然的样子，跳到了惊诧一派里。</p>
+<p>　　他一边逐个机关操作，一边偶尔发言，调动情绪。</p>
+<p>　　直播间里的人越来越多，从几十到几百，从几百到几千，逼近上万。</p>
+<p>　　这个增长量远超两人意料之外，更在两人计划之外。</p>
+<p>　　此时时刻，说什么也不能丢了这波流量。</p>
+<p>　　由于周焕然置身在鬼屋里，鬼屋又无死角曝露在直播间里，邱榆阳没有给周焕然打招呼，而是直接从阳台翻了过去。</p>
+<p>　　整个家里的所有照明设施，都被周焕然给关上了，只有一个制造诡异气氛的氛围小灯，泛着幽幽的冷光。以及，两台显示器的昏黄暗光。</p>
+<p>　　好在，屋子里的布置，他早已熟记在心里，躲着监控器，挪到了通往客厅的卧室门后面。</p>
+<p>　　邱榆阳看了看直播间的反应，制造出来一声响动。</p>
+<p>　　没想到，周焕然率先惊叫了起来，反倒把邱榆阳吓了一跳。</p>
+<p>　　他心里暗道：「你还真是配合。莫非从哪儿看到我了？」</p>
+<p>　　直播间如他所料，又掀起了一阵热议。</p>
+<p>　　邱榆阳从门后探头，看到周焕然站起来了，正在客厅里四处巡视，一举一动，小心谨慎。</p>
+<p>　　他捏着嗓子，发出低沉嘶哑地声音，「你找我吗？」</p>
+<p>　　邱榆阳全身一僵。</p>
+<p>　　刚才的声音，和记忆中奶奶的声音极为相似。</p>
+<p>　　邱榆阳正在疑惑着，突然感受到一阵凉意，猛地抬头。</p>
+<p>　　周焕然一双眼睛，在黑夜里格外明亮，怔怔注视着他。</p>
+<p>　　邱榆阳皱起眉头，先是低头看手机。</p>
+<p>　　发现直播间里铺天盖地的疑问。有的问刚才的声音是谁？有的在问主播人呢？有的问主播是不是被鬼抓走了……</p>
+<p>　　邱榆阳指了指手机，示意周焕然回到电脑前。</p>
+<p>　　「喵——！」</p>
+<p>　　两人同时吓了一跳，不约而同地望向纸箱。</p>
+<p>　　一只小猫咪，趴在纸箱边缘，用那双发光的眼睛，盯着两人。</p>
+<p>　　邱榆阳立马缩回身体。</p>
+<p>　　周焕然转身回到了客厅。</p>
+<p>　　几秒钟后，直播间关闭了，客厅里的灯亮起来了。</p>
+<p>　　「你怎么就关了？」邱榆阳站起来，直了直腰，「我还能再顶一会儿。」</p>
+<p>　　周焕然沉默了一会儿，「这口饭我注定吃不上，我还是直播养猫吧。」</p>
+<p>　　邱榆阳动了动嘴唇，「也好。明天猫别墅就该到了。」</p>
+<p>　　次日傍晚，邱榆阳冒着细雨去了趟快递点，把猫别墅扛回来，站在周焕然家门口敲门。</p>
+<p>　　两人把箱子拆了，席地而坐，一边研究，一边搭建。</p>
+<p>　　一米多高的木屋子，两侧是两扇透亮的玻璃门。里面分了三层，最底下的左边放着猫砂盆，右边是小楼梯；二层的角落有一个台子，三层有一个猫窝。</p>
+<p>　　周焕然把纸盒子端过来，放在猫别墅门口。</p>
+<p>　　不一会儿，其中一只胆子大的，先爬进了别墅里。另一只紧随其后，也进去了。</p>
+<p>　　两人又给猫别墅装摄像头，全方位无死角呈现在监视器画面里。</p>
+<p>　　周焕然把直播间改了，开启了猫直播。</p>
+<p>　　数据比鬼屋直播好看到多了。</p>
+<p>　　由于周焕然把直播时间定在了白天，连带每天开号进来捧场的邱榆阳也调整了生物钟。</p>
+<p>　　不开直播的时候，两人有时联机打游戏，有时凑在邱榆阳家看电影，有时也会出去逛逛。</p>
+<p>　　附近逛遍了，就越走越远，甚至跑去河边钓鱼。</p>
+<p>　　晚上回来，一家四口皆吃上了新鲜的鱼。</p>
+<p>　　两只小猫吃饱了，在邱榆阳的家里导出乱窜。</p>
+<p>　　「这么快就会跑酷了。」邱榆阳说，「我有时候睡觉，都能听到你家里唏哩哗啦的，一定是它俩干的。」</p>
+<p>　　周焕然从厨房探出头，看了看邱榆阳，又看看猫，「我习惯了。」</p>
+<p>　　两人忙完，各自抱着一只猫，坐在沙发上看电影。</p>
+<p>　　邱榆阳选了个惊悚悬疑电影，一边摸着猫，一边说：「我看了简介，说是男主不信有鬼，跑到荒山古庙开直播，结果触发了一连串的诡异。」</p>
+<p>　　「哦？」周焕然盘着腿，把猫放在腿上，靠着沙发，说道：「是不是猫闹的？」</p>
+<p>　　邱榆阳一愣，笑了起来，捏了捏怀里的猫。</p>
+<p>　　他一边看，一边发表见解，却很少听到周焕然的回应。</p>
+<p>　　邱榆阳瞟了一眼。</p>
+<p>　　周焕然闭着眼睛，像是睡着了，就连怀里的猫，也安静的出奇。</p>
+<p>　　邱榆阳轻手轻脚地起身，拿了件外套，盖在了周焕然身上。同时，临走了怀里的猫。</p>
+<p>　　他坐在旁边，把两只猫都放在腿上，看了看周焕然，将目光放在了电影上。</p>
+<p>　　他正看得昏昏欲睡，暗自嘀咕：「这电影比周焕然的鬼屋直播还无聊。」</p>
+<p>　　忽然，半边肩头一沉，是周焕然的脑袋偏了过来。</p>
+<p>　　邱榆阳没有动，甚至没有看一眼，照旧盯着电影。</p>
+  </div>
+</article>
+    </main>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".chapter-link"));
+  var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapter"));
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+  links.forEach(function (link) {
+    link.addEventListener("click", function () {
+      setActive(link.getAttribute("href").slice(1));
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-96px 0px -65% 0px", threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+  }
+})();
+</script>
+</body>
+</html>
