@@ -4,298 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Lokavit's Personal Site</title>
-<style>
-/* ==================== 基础变量 ==================== */
-:root {
-  --background: #121212;
-  --foreground: #4eee85;
-  --accent: #4eee85;
-  --accent-hover: #8dffb4;
-  --accent-rgb: 78, 238, 133;
-  --accent-bg: rgba(78, 238, 133, 0.1);
-  --accent-bg-hover: rgba(78, 238, 133, 0.16);
-  --text: #ffffff;
-  --muted: rgba(255, 255, 255, 0.65);
-  --radius: 8px;
-}
-
-/* ==================== 重置 ==================== */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--text);
-  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
-    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 40px 24px 80px;
-  text-align: left;
-}
-
-/* ==================== 顶部固定栏 ==================== */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  background: rgba(18, 18, 18, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
-}
-.site-header .container {
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.brand {
-  color: var(--text);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-decoration: none;
-}
-.header-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.header-nav a {
-  padding: 6px 14px;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  text-decoration: none;
-  transition: color 0.25s ease, background 0.25s ease;
-}
-.header-nav a:hover {
-  color: var(--accent);
-  background: var(--accent-bg);
-}
-.search {
-  padding: 6px 14px;
-  border: 1px solid rgba(var(--accent-rgb), 0.2);
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.search:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-bg);
-}
-
-/* ==================== 通用响应式 ==================== */
-@media (max-width: 720px) {
-  .container { padding: 24px 16px 60px; }
-  .site-header .container {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  .header-inner { flex-wrap: wrap; justify-content: center; }
-}
-
-/* ==================== 区块标题 ==================== */
-.section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 3em;
-  scroll-margin-top: 100px;
-}
-.section-head .title {
-  margin: 0;
-  color: var(--accent);
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-.section-head .count,
-.section-head .more {
-  color: var(--foreground);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  opacity: 0.45;
-  white-space: nowrap;
-  text-decoration: none;
-  transition: color 0.25s ease, opacity 0.25s ease;
-}
-.section-head .count:hover,
-.section-head .more:hover {
-  color: var(--accent-hover);
-  opacity: 1;
-}
-.line-dashed {
-  margin: 12px 0 0;
-  border: none;
-  border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
-}
-
-/* ==================== 书库网格 ==================== */
-.tile-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
-  align-items: stretch;
-}
-.tile {
-  display: block;
-  padding: 20px;
-  border: 1px solid rgba(var(--accent-rgb), 0.45);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-  overflow: hidden;
-  transition: background 0.3s ease, border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-.tile:hover {
-  border-color: var(--accent);
-  background: var(--accent-bg-hover);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
-}
-.book {
-  display: flex;
-  flex-direction: column;
-}
-.book-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-.book-intro {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 16px;
-  padding-top: 16px;
-  min-width: 0;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
-}
-.tile-title {
-  color: var(--accent);
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
-}
-.tile-desc {
-  color: rgba(255, 255, 255, 0.55);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.75rem;
-  line-height: 1.7;
-  letter-spacing: 0.5px;
-  transition: color 0.3s ease;
-}
-.tile-desc.main {
-  color: var(--foreground);
-  opacity: 0.85;
-}
-.book-intro-title { font-size: 0.95rem; }
-.book-intro p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.8rem;
-  line-height: 1.9;
-  letter-spacing: 0.5px;
-  transition: color 0.3s ease;
-}
-.chip {
-  display: inline-block;
-  margin: 2px 6px 2px 0;
-  padding: 1px 8px;
-  border: 1px solid rgba(var(--accent-rgb), 0.25);
-  border-radius: 999px;
-  font-size: 0.7rem;
-  color: var(--foreground);
-  opacity: 0.7;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.chip:hover {
-  opacity: 1;
-  color: var(--accent-hover);
-  border-color: var(--accent);
-  background: var(--accent-bg);
-}
-.tile:hover .tile-title { color: var(--accent-hover); }
-.tile:hover .tile-desc { color: rgba(255, 255, 255, 0.8); }
-.tile:hover .tile-desc.main {
-  color: var(--accent-hover);
-  opacity: 1;
-}
-.tile:hover .book-intro p { color: rgba(255, 255, 255, 0.85); }
-
-/* ==================== 工具区 ==================== */
-.tool-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
-}
-.tool {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 16px;
-  border: 1px solid rgba(var(--accent-rgb), 0.45);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-  transition: background 0.3s ease, border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-.tool:hover {
-  border-color: var(--accent);
-  background: var(--accent-bg-hover);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
-}
-.tool-name {
-  color: var(--accent);
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
-}
-.tool-desc {
-  color: rgba(255, 255, 255, 0.55);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.7rem;
-  line-height: 1.4;
-  letter-spacing: 0.5px;
-  transition: color 0.3s ease;
-}
-.tool:hover .tool-name { color: var(--accent-hover); }
-.tool:hover .tool-desc { color: rgba(255, 255, 255, 0.8); }
-
-@media (max-width: 720px) {
-  .tile-grid { grid-template-columns: 1fr; }
-  .section-head { margin-top: 2em; }
-}
-</style>
+<link rel="stylesheet" href="./index.css" >
 </head>
 <body>
 <header class="site-header">
@@ -346,7 +55,8 @@ body {
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>|-</p>
+      <p>孟靖远继承了家族事业，兢兢业业。
+直到，喜从天降……</p>
     </div>
   </div>
 </a>
@@ -397,7 +107,8 @@ body {
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>|-</p>
+      <p>三身果报自凡根，六界因缘无了痕；
+善逝从来非本相，枯荣生灭尽空门。</p>
     </div>
   </div>
 </a>
@@ -533,7 +244,8 @@ body {
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>|-</p>
+      <p>「楼至」，贤劫之中最后成佛。
+悲华经云：无始劫来作大医王救诸苦恼于贤劫中后当成佛名曰「楼至」</p>
     </div>
   </div>
 </a>
