@@ -1,769 +1,730 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>
-			Lokavit's Personal Site
-		</title>
-		<link rel="stylesheet" href="./assets/main.css" />
-		<style>
-			/* ==================== 基础变量 ==================== */
-			:root {
-			  --background: #121212;
-			  --foreground: #4eee85;
-			  --accent: #4eee85;
-			  --accent-hover: #8dffb4;
-			  --accent-rgb: 78, 238, 133;
-			  --accent-bg: rgba(78, 238, 133, 0.1);
-			  --accent-bg-hover: rgba(78, 238, 133, 0.16);
-			  --text: #ffffff;
-			  --muted: rgba(255, 255, 255, 0.65);
-			  --radius: 8px;
-			}
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lokavit's Personal Site</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --background: #121212;
+  --foreground: #4eee85;
+  --accent: #4eee85;
+  --accent-hover: #8dffb4;
+  --accent-rgb: 78, 238, 133;
+  --accent-bg: rgba(78, 238, 133, 0.1);
+  --accent-bg-hover: rgba(78, 238, 133, 0.16);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --radius: 8px;
+}
 
-			/* ==================== 重置 ==================== */
-			* { box-sizing: border-box; }
-			html, body { margin: 0; padding: 0; }
-			body {
-			  min-height: 100vh;
-			  background: var(--background);
-			  color: var(--text);
-			  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
-			    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-			  -webkit-font-smoothing: antialiased;
-			}
-			.container {
-			  width: 100%;
-			  max-width: 1280px;
-			  margin: 0 auto;
-			  padding: 40px 24px 80px;
-			  text-align: left;
-			}
+/* ==================== 重置 ==================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: left;
+}
 
-			/* ==================== 顶部固定栏 ==================== */
-			.site-header {
-			  position: sticky;
-			  top: 0;
-			  z-index: 100;
-			  width: 100%;
-			  background: rgba(18, 18, 18, 0.85);
-			  backdrop-filter: blur(10px);
-			  -webkit-backdrop-filter: blur(10px);
-			  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
-			}
-			.site-header .container { padding-top: 16px; padding-bottom: 16px; }
-			.header-inner {
-			  display: flex;
-			  align-items: center;
-			  justify-content: space-between;
-			  gap: 24px;
-			}
-			.brand {
-			  color: var(--text);
-			  font-size: 0.95rem;
-			  font-weight: 700;
-			  letter-spacing: 2px;
-			}
-			.header-nav { display: flex; flex-wrap: wrap; gap: 6px; }
-			.header-nav a {
-			  padding: 6px 14px;
-			  border-radius: 6px;
-			  color: var(--muted);
-			  font-size: 0.85rem;
-			  letter-spacing: 1px;
-			  text-decoration: none;
-			  transition: color 0.25s ease, background 0.25s ease;
-			}
-			.header-nav a:hover { color: var(--accent); background: var(--accent-bg); }
-			.search {
-			  padding: 6px 14px;
-			  border: 1px solid rgba(var(--accent-rgb), 0.2);
-			  border-radius: 6px;
-			  color: var(--muted);
-			  font-size: 0.85rem;
-			  letter-spacing: 1px;
-			  white-space: nowrap;
-			  cursor: pointer;
-			  transition: all 0.25s ease;
-			}
-			.search:hover {
-			  color: var(--accent);
-			  border-color: var(--accent);
-			  background: var(--accent-bg);
-			}
+/* ==================== 顶部固定栏 ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px dashed rgba(var(--accent-rgb), 0.15);
+}
+.site-header .container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.header-nav a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.header-nav a:hover {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.search {
+  padding: 6px 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
 
-			/* ==================== 区块标题 ==================== */
-			.section-head {
-			  display: flex;
-			  align-items: baseline;
-			  justify-content: space-between;
-			  gap: 16px;
-			  margin-top: 3em;
-			  scroll-margin-top: 100px;
-			}
-			.section-head .title {
-			  margin: 0;
-			  color: var(--accent);
-			  font-size: 1.2rem;
-			  font-weight: 700;
-			  letter-spacing: 2px;
-			}
-			.section-head .count,
-			.section-head .more {
-			  color: var(--foreground);
-			  font-family: "Courier New", Courier, monospace;
-			  font-size: 0.7rem;
-			  letter-spacing: 1px;
-			  opacity: 0.45;
-			  white-space: nowrap;
-			  text-decoration: none;
-			  transition: color 0.25s ease, opacity 0.25s ease;
-			}
-			.section-head .count:hover,
-			.section-head .more:hover { color: var(--accent-hover); opacity: 1; }
-			.line-dashed {
-			  margin: 12px 0 0;
-			  border: none;
-			  border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
-			}
+/* ==================== 通用响应式 ==================== */
+@media (max-width: 720px) {
+  .container { padding: 24px 16px 60px; }
+  .site-header .container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .header-inner { flex-wrap: wrap; justify-content: center; }
+}
 
-			/* ==================== 书库网格 ==================== */
-			.tile-grid {
-			  display: grid;
-			  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-			  gap: 15px;
-			  margin-top: 20px;
-			  align-items: stretch;
-			}
-			.tile {
-			  display: block;
-			  padding: 20px;
-			  border: 1px solid rgba(var(--accent-rgb), 0.45);
-			  border-radius: var(--radius);
-			  background: rgba(0, 0, 0, 0.3);
-			  text-decoration: none;
-			  overflow: hidden;
-			  transition: background 0.3s ease, border-color 0.3s ease,
-			    box-shadow 0.3s ease;
-			}
-			.tile:hover {
-			  border-color: var(--accent);
-			  background: var(--accent-bg-hover);
-			  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
-			}
-			.book { display: flex; flex-direction: column; }
-			.book-meta {
-			  display: flex;
-			  flex-direction: column;
-			  gap: 8px;
-			  min-width: 0;
-			}
-			.book-intro {
-			  display: flex;
-			  flex-direction: column;
-			  gap: 10px;
-			  margin-top: 16px;
-			  padding-top: 16px;
-			  min-width: 0;
-			  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
-			}
-			.tile-title {
-			  color: var(--accent);
-			  font-size: 1.15rem;
-			  font-weight: 700;
-			  line-height: 1.4;
-			  letter-spacing: 1px;
-			  transition: color 0.3s ease;
-			}
-			.tile-desc {
-			  color: rgba(255, 255, 255, 0.55);
-			  font-family: "Courier New", Courier, monospace;
-			  font-size: 0.75rem;
-			  line-height: 1.7;
-			  letter-spacing: 0.5px;
-			  transition: color 0.3s ease;
-			}
-			.tile-desc.main { color: var(--foreground); opacity: 0.85; }
-			.book-intro-title { font-size: 0.95rem; }
-			.book-intro p {
-			  margin: 0;
-			  color: rgba(255, 255, 255, 0.6);
-			  font-size: 0.8rem;
-			  line-height: 1.9;
-			  letter-spacing: 0.5px;
-			  transition: color 0.3s ease;
-			}
-			.chip {
-			  display: inline-block;
-			  margin: 2px 6px 2px 0;
-			  padding: 1px 8px;
-			  border: 1px solid rgba(var(--accent-rgb), 0.25);
-			  border-radius: 999px;
-			  font-size: 0.7rem;
-			  color: var(--foreground);
-			  opacity: 0.7;
-			  cursor: pointer;
-			  transition: all 0.25s ease;
-			}
-			.chip:hover {
-			  opacity: 1;
-			  color: var(--accent-hover);
-			  border-color: var(--accent);
-			  background: var(--accent-bg);
-			}
-			.tile:hover .tile-title { color: var(--accent-hover); }
-			.tile:hover .tile-desc { color: rgba(255, 255, 255, 0.8); }
-			.tile:hover .tile-desc.main { color: var(--accent-hover); opacity: 1; }
-			.tile:hover .book-intro p { color: rgba(255, 255, 255, 0.85); }
+/* ==================== 区块标题 ==================== */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 3em;
+  scroll-margin-top: 100px;
+}
+.section-head .title {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.section-head .count,
+.section-head .more {
+  color: var(--foreground);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.section-head .count:hover,
+.section-head .more:hover {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.line-dashed {
+  margin: 12px 0 0;
+  border: none;
+  border-top: 1px dashed rgba(var(--accent-rgb), 0.2);
+}
 
-			/* ==================== 工具区 ==================== */
-			.tool-list {
-			  display: flex;
-			  flex-wrap: wrap;
-			  gap: 12px;
-			  margin-top: 20px;
-			}
-			.tool {
-			  display: inline-flex;
-			  flex-direction: column;
-			  gap: 4px;
-			  padding: 10px 16px;
-			  border: 1px solid rgba(var(--accent-rgb), 0.45);
-			  border-radius: var(--radius);
-			  background: rgba(0, 0, 0, 0.3);
-			  text-decoration: none;
-			  transition: background 0.3s ease, border-color 0.3s ease,
-			    box-shadow 0.3s ease;
-			}
-			.tool:hover {
-			  border-color: var(--accent);
-			  background: var(--accent-bg-hover);
-			  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
-			}
-			.tool-name {
-			  color: var(--accent);
-			  font-size: 0.95rem;
-			  font-weight: 700;
-			  line-height: 1.3;
-			  letter-spacing: 1px;
-			  transition: color 0.3s ease;
-			}
-			.tool-desc {
-			  color: rgba(255, 255, 255, 0.55);
-			  font-family: "Courier New", Courier, monospace;
-			  font-size: 0.7rem;
-			  line-height: 1.4;
-			  letter-spacing: 0.5px;
-			  transition: color 0.3s ease;
-			}
-			.tool:hover .tool-name { color: var(--accent-hover); }
-			.tool:hover .tool-desc { color: rgba(255, 255, 255, 0.8); }
+/* ==================== 书库网格 ==================== */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+  align-items: stretch;
+}
+.tile {
+  display: block;
+  padding: 20px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  overflow: hidden;
+  transition: background 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.tile:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+}
+.book {
+  display: flex;
+  flex-direction: column;
+}
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.book-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  min-width: 0;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+.tile-title {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+.tile-desc {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+.tile-desc.main {
+  color: var(--foreground);
+  opacity: 0.85;
+}
+.book-intro-title { font-size: 0.95rem; }
+.book-intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+.chip {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 1px 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.chip:hover {
+  opacity: 1;
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.tile:hover .tile-title { color: var(--accent-hover); }
+.tile:hover .tile-desc { color: rgba(255, 255, 255, 0.8); }
+.tile:hover .tile-desc.main {
+  color: var(--accent-hover);
+  opacity: 1;
+}
+.tile:hover .book-intro p { color: rgba(255, 255, 255, 0.85); }
 
-			/* ==================== 卷目录 ==================== */
-			.vol-grid {
-			  display: grid;
-			  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-			  gap: 10px;
-			  margin-top: 20px;
-			}
-			.vol-link {
-			  display: block;
-			  padding: 10px 14px;
-			  border: 1px solid rgba(var(--accent-rgb), 0.25);
-			  border-radius: var(--radius);
-			  background: rgba(0, 0, 0, 0.25);
-			  color: rgba(255, 255, 255, 0.7);
-			  font-family: "Courier New", Courier, monospace;
-			  font-size: 0.8rem;
-			  line-height: 1.5;
-			  letter-spacing: 0.5px;
-			  text-decoration: none;
-			  transition: background 0.25s ease, border-color 0.25s ease,
-			    color 0.25s ease, box-shadow 0.25s ease;
-			}
-			.vol-link:hover {
-			  border-color: var(--accent);
-			  background: var(--accent-bg-hover);
-			  color: var(--accent-hover);
-			  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.2);
-			}
-			.vol-link .vol-num {
-			  color: var(--foreground);
-			  opacity: 0.85;
-			  transition: color 0.25s ease, opacity 0.25s ease;
-			}
-			.vol-link:hover .vol-num { color: var(--accent-hover); opacity: 1; }
+/* ==================== 工具区 ==================== */
+.tool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.tool {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 16px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  transition: background 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.tool:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-hover);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.25);
+}
+.tool-name {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+.tool-desc {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+.tool:hover .tool-name { color: var(--accent-hover); }
+.tool:hover .tool-desc { color: rgba(255, 255, 255, 0.8); }
 
-			/* ==================== 响应式 ==================== */
-			@media (max-width: 720px) {
-			  .container { padding: 24px 16px 60px; }
-			  .site-header .container { padding-top: 12px; padding-bottom: 12px; }
-			  .header-inner { flex-wrap: wrap; justify-content: center; }
-			  .tile-grid { grid-template-columns: 1fr; }
-			  .section-head { margin-top: 2em; }
-			  .vol-grid { grid-template-columns: 1fr; }
-			}
-		</style>
-	</head>
-	<body>
-		<!-- ==================== 顶部固定栏 ==================== -->
-		<header class="site-header">
-			<div class="container">
-				<div class="header-inner">
-					<div class="brand">Monk</div>
-					<nav class="header-nav">
-						<a href="#">首页</a>
-						<a href="#library">书库</a>
-						<a href="#">工具</a>
-						<a href="#">游戏</a>
-						<a href="#">布施</a>
-						<a href="#">写作</a>
-					</nav>
-					<div class="search">搜索</div>
-				</div>
-			</div>
-		</header>
+@media (max-width: 720px) {
+  .tile-grid { grid-template-columns: 1fr; }
+  .section-head { margin-top: 2em; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="brand">Monk</div>
+      <nav class="header-nav">
+        <a href="#">首页</a>
+        <a href="#library">书库</a>
+        <a href="#tools">工具</a>
+        <a href="#">游戏</a>
+        <a href="#">布施</a>
+        <a href="#">写作</a>
+      </nav>
+      <div class="search">搜索</div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div class="section-head" id="tools">
+    <h2 class="title">工具</h2>
+    <a class="more" href="./dist/tools/index.html">[更多]</a>
+  </div>
+  <hr class="line-dashed" />
+  <div class="tool-list">
+    <a href="https://lokavit.github.io/roulette/" class="tool">
+      <span class="tool-name">Roulette</span>
+      <span class="tool-desc">憑天轉 · 今日任務</span>
+    </a>
+  </div>
 
-		<!-- ==================== 主内容 ==================== -->
-		<div class="container">
-			<!-- ==================== 工具 ==================== -->
-			<div class="section-head">
-				<h2 class="title">工具</h2>
-				<a class="more" href="./dist/tools/index.html">[更多]</a>
-			</div>
-			<hr class="line-dashed" />
-			<div class="tool-list">
-				<a href="https://lokavit.github.io/roulette/" class="tool">
-					<span class="tool-name">Roulette</span>
-					<span class="tool-desc">憑天轉 · 今日任務</span>
-				</a>
-			</div>
-
-			<!-- ==================== 书库 ==================== -->
-			<div class="section-head" id="library">
-				<h2 class="title">书库</h2>
-				<a class="count" href="./dist/library/index.html">
-					共 23 部 ｜ 204.3 万字
-				</a>
-			</div>
-			<hr class="line-dashed" />
-			<div class="tile-grid">
-<div class="tile">
+  <div class="section-head" id="library">
+    <h2 class="title">书库</h2>
+    <a class="count" href="./dist/library/index.html">共 23 部 ｜ 204万字</a>
+  </div>
+  <hr class="line-dashed" />
+  <div class="tile-grid">
+<a href="./stories/bao_zi_pu/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">孟家包子铺</div>
-      <div class="tile-desc main">1章 ｜ 2427 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 2419字 ｜ 完结</div>
       <div class="tile-desc">发布日期：13 Nov 2569 BE</div>
       <div class="tile-desc">最近更新：13 Nov 2569 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
       <div class="tile-desc">主要角色：<span class="chip">孟靖远</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">乡村</span><span class="chip">现实</span><span class="chip">人性</span></div>
+      <div class="tile-desc">标签：<span class="chip">乡村</span> <span class="chip">现实</span> <span class="chip">人性</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>孟靖远继承了家族事业，兢兢业业。<br>直到，喜从天降……</p>
+      <p>|-</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/cai_xiao_mei/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">菜小妹</div>
-      <div class="tile-desc main">57章 ｜ 11.9 万字 ｜ 完结</div>
+      <div class="tile-desc main">6卷 ｜ 57章 ｜ 11.9万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：23 Jan 2569 BE</div>
       <div class="tile-desc">最近更新：26 Feb 2569 BE</div>
-      <div class="tile-desc">最新章节：第 57 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">菜小妹</span><span class="chip">陆崇远</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">工业区</span><span class="chip">梧桐镇</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">成长</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">菜小妹</span> <span class="chip">陆崇远</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">工业区</span> <span class="chip">梧桐镇</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">成长</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>主角在困境中成长</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/chao_du/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">强行超渡</div>
-      <div class="tile-desc main">157章 ｜ 32.7 万字 ｜ 完结</div>
+      <div class="tile-desc main">16卷 ｜ 157章 ｜ 32.6万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jan 2561 BE</div>
       <div class="tile-desc">最近更新：06 Jun 2561 BE</div>
-      <div class="tile-desc">最新章节：第 157 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">宿业</span><span class="chip">礼谌</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">白鹿寺</span></div>
-      <div class="tile-desc">标签：<span class="chip">现代</span><span class="chip">都市</span><span class="chip">少年</span><span class="chip">救赎</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">宿业</span> <span class="chip">礼谌</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">白鹿寺</span></div>
+      <div class="tile-desc">标签：<span class="chip">现代</span> <span class="chip">都市</span> <span class="chip">少年</span> <span class="chip">救赎</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/di_ru_lai/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">天下苍生－帝如来</div>
-      <div class="tile-desc main">1章 ｜ 1486 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1478字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Nov 2556 BE</div>
       <div class="tile-desc">最近更新：01 Nov 2556 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
       <div class="tile-desc">主要角色：<span class="chip">帝如来</span></div>
       <div class="tile-desc">世界观：<span class="chip">云谷雷锋</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>三身果报自凡根，六界因缘无了痕；<br>善逝从来非本相，枯荣生灭尽空门。</p>
+      <p>|-</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/dog/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">狗缘</div>
-      <div class="tile-desc main">1章 ｜ 1723 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1715字 ｜ 完结</div>
       <div class="tile-desc">发布日期：11 Sep 2554 BE</div>
       <div class="tile-desc">最近更新：30 Oct 2569 BE9</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">我</span><span class="chip">狗</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">我</span> <span class="chip">狗</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">现代</span><span class="chip">狗</span><span class="chip">狗缘</span></div>
+      <div class="tile-desc">标签：<span class="chip">现代</span> <span class="chip">狗</span> <span class="chip">狗缘</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/fu_yi_yang/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">跨国追爱</div>
-      <div class="tile-desc main">4章 ｜ 4560 字 ｜ 连载</div>
+      <div class="tile-desc main">1卷 ｜ 3章 ｜ 7061字 ｜ 连载</div>
       <div class="tile-desc">发布日期：11 Nov 2569 BE</div>
       <div class="tile-desc">最近更新：21 Nov 2569 BE</div>
-      <div class="tile-desc">最新章节：第 4 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">付弋阳</span><span class="chip">尹奕君</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">付弋阳</span> <span class="chip">尹奕君</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">重逢</span><span class="chip">追爱</span></div>
+      <div class="tile-desc">标签：<span class="chip">重逢</span> <span class="chip">追爱</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/jiang_hu/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">一页江湖</div>
-      <div class="tile-desc main">132章 ｜ 27.4 万字 ｜ 完结</div>
+      <div class="tile-desc main">14卷 ｜ 132章 ｜ 27.3万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jan 2559 BE</div>
       <div class="tile-desc">最近更新：11 May 2559 BE</div>
-      <div class="tile-desc">最新章节：第 132 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">魔佛</span><span class="chip">妖僧</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">魔佛</span> <span class="chip">妖僧</span></div>
       <div class="tile-desc">世界观：<span class="chip">古刹</span></div>
-      <div class="tile-desc">标签：<span class="chip">古代</span><span class="chip">武侠</span><span class="chip">玄幻</span><span class="chip">怪和尚</span></div>
+      <div class="tile-desc">标签：<span class="chip">古代</span> <span class="chip">武侠</span> <span class="chip">玄幻</span> <span class="chip">怪和尚</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/pu_du_si/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">普渡寺冒险</div>
-      <div class="tile-desc main">14章 ｜ 3.2 万字 ｜ 完结</div>
+      <div class="tile-desc main">2卷 ｜ 14章 ｜ 3.2万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Oct 2569 BE</div>
       <div class="tile-desc">最近更新：14 Oct 2569 BE</div>
-      <div class="tile-desc">最新章节：第 14 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">班朝辰</span><span class="chip">宗静尘</span><span class="chip">班永康</span><span class="chip">老和尚</span></div>
-      <div class="tile-desc">世界观：<span class="chip">花都市</span><span class="chip">沧龙关</span><span class="chip">怒龙江</span><span class="chip">普渡寺</span><span class="chip">沧云古镇</span></div>
-      <div class="tile-desc">标签：<span class="chip">现代</span><span class="chip">冒险</span><span class="chip">少年</span><span class="chip">成长</span><span class="chip">悬疑</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">班朝辰</span> <span class="chip">宗静尘</span> <span class="chip">班永康</span> <span class="chip">老和尚</span></div>
+      <div class="tile-desc">世界观：<span class="chip">花都市</span> <span class="chip">沧龙关</span> <span class="chip">怒龙江</span> <span class="chip">普渡寺</span> <span class="chip">沧云古镇</span></div>
+      <div class="tile-desc">标签：<span class="chip">现代</span> <span class="chip">冒险</span> <span class="chip">少年</span> <span class="chip">成长</span> <span class="chip">悬疑</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>少年冒险故事</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/qi_ren_mi_ma/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">奇人密码——霹雳大电影</div>
-      <div class="tile-desc main">1章 ｜ 1053 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1045字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Apr 2561 BE</div>
       <div class="tile-desc">最近更新：01 Apr 2561 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">阿西</span><span class="chip">张墨</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">阿西</span> <span class="chip">张墨</span></div>
       <div class="tile-desc">世界观：<span class="chip">霹雳</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>支援官家，等待下一部。</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/shuang_long/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">龙行龙道</div>
-      <div class="tile-desc main">233章 ｜ 48.6 万字 ｜ 完结</div>
+      <div class="tile-desc main">24卷 ｜ 233章 ｜ 48.5万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jan 2562 BE</div>
       <div class="tile-desc">最近更新：21 Aug 2562 BE</div>
-      <div class="tile-desc">最新章节：第 233 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">少龙</span><span class="chip">龙辰</span></div>
-      <div class="tile-desc">世界观：<span class="chip">苍泉镇</span><span class="chip">鹿垣市</span><span class="chip">鹿垣第一学府</span></div>
-      <div class="tile-desc">标签：<span class="chip">现代</span><span class="chip">校园</span><span class="chip">少年</span><span class="chip">成长</span><span class="chip">救赎</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">少龙</span> <span class="chip">龙辰</span></div>
+      <div class="tile-desc">世界观：<span class="chip">苍泉镇</span> <span class="chip">鹿垣市</span> <span class="chip">鹿垣第一学府</span></div>
+      <div class="tile-desc">标签：<span class="chip">现代</span> <span class="chip">校园</span> <span class="chip">少年</span> <span class="chip">成长</span> <span class="chip">救赎</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/tian_di/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">拓斗提奢－天帝因缘</div>
-      <div class="tile-desc main">0章 ｜ 1419 字 ｜ 连载</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1411字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Feb 2557 BE</div>
       <div class="tile-desc">最近更新：01 Feb 2557 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">帝如来</span><span class="chip">天之佛</span></div>
-      <div class="tile-desc">世界观：<span class="chip">云谷雷锋</span><span class="chip">天佛原乡</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">帝如来</span> <span class="chip">天之佛</span></div>
+      <div class="tile-desc">世界观：<span class="chip">云谷雷锋</span> <span class="chip">天佛原乡</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>「招提」意为四方，招提僧，则是四方僧，并无实名。</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/tian_zhi_fo/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">善恶归源－楼至韦驮</div>
-      <div class="tile-desc main">1章 ｜ 1294 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1286字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jan 2557 BE</div>
       <div class="tile-desc">最近更新：01 Jan 2557 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">天之佛</span><span class="chip">楼至韦驮</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">天之佛</span> <span class="chip">楼至韦驮</span></div>
       <div class="tile-desc">世界观：<span class="chip">天佛原乡</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p>「楼至」，贤劫之中最后成佛。<br>悲华经云：无始劫来作大医王救诸苦恼于贤劫中后当成佛名曰「楼至」</p>
+      <p>|-</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/wu_jin_xuan/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">千亿总裁独宠</div>
-      <div class="tile-desc main">4章 ｜ 9847 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 4章 ｜ 9824字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Nov 2569 BE</div>
       <div class="tile-desc">最近更新：04 Nov 2569 BE</div>
-      <div class="tile-desc">最新章节：第 4 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">吴瑾萱</span><span class="chip">江昊天</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">吴瑾萱</span> <span class="chip">江昊天</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">霸总</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">霸总</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/xin_lin_ju/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">爱上新邻居</div>
-      <div class="tile-desc main">4章 ｜ 8708 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 4章 ｜ 8673字 ｜ 完结</div>
       <div class="tile-desc">发布日期：15 Nov 2569 BE</div>
       <div class="tile-desc">最近更新：18 Nov 2569 BE</div>
-      <div class="tile-desc">最新章节：第 4 章 换赛道</div>
-      <div class="tile-desc">主要角色：<span class="chip">邱榆阳</span><span class="chip">周焕然</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">邱榆阳</span> <span class="chip">周焕然</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">悬疑</span><span class="chip">爱情</span></div>
+      <div class="tile-desc">标签：<span class="chip">悬疑</span> <span class="chip">爱情</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>隔壁鬼屋搬来新邻居</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/yan_shuo_yi/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">给总裁当爹</div>
-      <div class="tile-desc main">27章 ｜ 5.7 万字 ｜ 完结</div>
+      <div class="tile-desc main">3卷 ｜ 27章 ｜ 5.7万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Sep 2569 BE</div>
       <div class="tile-desc">最近更新：27 Sep 2569 BE</div>
-      <div class="tile-desc">最新章节：第 27 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">晏朔一</span><span class="chip">狄恒炀</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">三六九医院</span><span class="chip">朔一集团</span></div>
-      <div class="tile-desc">标签：<span class="chip">耽美</span><span class="chip">强强</span><span class="chip">情有独钟</span><span class="chip">天作之合</span><span class="chip">豪门世家</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">晏朔一</span> <span class="chip">狄恒炀</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">三六九医院</span> <span class="chip">朔一集团</span></div>
+      <div class="tile-desc">标签：<span class="chip">耽美</span> <span class="chip">强强</span> <span class="chip">情有独钟</span> <span class="chip">天作之合</span> <span class="chip">豪门世家</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/yan_wu_shang/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">丘山云雨时</div>
-      <div class="tile-desc main">1章 ｜ 1276 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 3章 ｜ 1250字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Mar 2557 BE</div>
       <div class="tile-desc">最近更新：01 Mar 2557 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">焱无上</span><span class="chip">裳璎珞</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">焱无上</span> <span class="chip">裳璎珞</span></div>
       <div class="tile-desc">世界观：<span class="chip">百妖路</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>开经偈：无上甚深微妙法，百千万劫难遭遇；我今见闻得受持，愿解如来真实义。</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/yuan_huang/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">致命谎言</div>
-      <div class="tile-desc main">48章 ｜ 10.1 万字 ｜ 完结</div>
+      <div class="tile-desc main">5卷 ｜ 48章 ｜ 10.1万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jul 2569 BE</div>
       <div class="tile-desc">最近更新：17 Aug 2569 BE</div>
-      <div class="tile-desc">最新章节：第 48 章</div>
       <div class="tile-desc">主要角色：<span class="chip">顾文宗</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">鹿垣第一学府</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">成长</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">鹿垣第一学府</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">成长</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>顾文宗撒了个小谎</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zang_bu/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">香尘葬云霄</div>
-      <div class="tile-desc main">1章 ｜ 2923 字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 2915字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jun 2557 BE</div>
       <div class="tile-desc">最近更新：01 Jun 2557 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">葬云霄</span><span class="chip">步香尘</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">葬云霄</span> <span class="chip">步香尘</span></div>
       <div class="tile-desc">世界观：<span class="chip">霹雳</span></div>
-      <div class="tile-desc">标签：<span class="chip">布袋戏</span><span class="chip">霹雳</span><span class="chip">角色</span><span class="chip">随笔</span></div>
+      <div class="tile-desc">标签：<span class="chip">布袋戏</span> <span class="chip">霹雳</span> <span class="chip">角色</span> <span class="chip">随笔</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>这是一段关于香尘与云霄之间，烟灭散尽的灵魂补完。</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zhao_yu_xin/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">闲居一品</div>
-      <div class="tile-desc main">10章 ｜ 2.1 万字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 10章 ｜ 2.1万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Apr 2569 BE</div>
       <div class="tile-desc">最近更新：10 Apr 2569 BE</div>
-      <div class="tile-desc">最新章节：第 10 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">赵语歆</span><span class="chip">曹纬铭</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">工业区</span><span class="chip">小镇</span><span class="chip">闲居一品</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">成长</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">赵语歆</span> <span class="chip">曹纬铭</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">工业区</span> <span class="chip">小镇</span> <span class="chip">闲居一品</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">成长</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zhe_yao/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">折妖</div>
-      <div class="tile-desc main">224章 ｜ 46.5 万字 ｜ 完结</div>
+      <div class="tile-desc main">23卷 ｜ 224章 ｜ 46.4万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Jan 2560 BE</div>
       <div class="tile-desc">最近更新：12 Aug 2560 BE</div>
-      <div class="tile-desc">最新章节：第 224 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">无为</span><span class="chip">有涯</span><span class="chip">御龙皇</span></div>
-      <div class="tile-desc">世界观：<span class="chip">息丹城</span><span class="chip">妖界</span></div>
-      <div class="tile-desc">标签：<span class="chip">古代</span><span class="chip">武侠</span><span class="chip">玄幻</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">无为</span> <span class="chip">有涯</span> <span class="chip">御龙皇</span></div>
+      <div class="tile-desc">世界观：<span class="chip">息丹城</span> <span class="chip">妖界</span></div>
+      <div class="tile-desc">标签：<span class="chip">古代</span> <span class="chip">武侠</span> <span class="chip">玄幻</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zhi_yu/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">知遇不知恩</div>
-      <div class="tile-desc main">48章 ｜ 10.1 万字 ｜ 完结</div>
+      <div class="tile-desc main">5卷 ｜ 48章 ｜ 10.1万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 May 2569 BE</div>
       <div class="tile-desc">最近更新：17 Jun 2569 BE</div>
-      <div class="tile-desc">最新章节：第 48 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">沈知遇</span><span class="chip">邵骏邕</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">沈知遇</span> <span class="chip">邵骏邕</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">成长</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">成长</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zhou_ming_jie/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">醉后爱上竹马</div>
-      <div class="tile-desc main">1章 ｜ 1519 字 ｜ 连载</div>
+      <div class="tile-desc main">1卷 ｜ 1章 ｜ 1511字 ｜ 完结</div>
       <div class="tile-desc">发布日期：11 Nov 2569 BE</div>
       <div class="tile-desc">最近更新：11 Nov 2569 BE</div>
-      <div class="tile-desc">最新章节：第 1 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">周明杰</span><span class="chip">吴宗翰</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">周明杰</span> <span class="chip">吴宗翰</span></div>
       <div class="tile-desc">世界观：<span class="chip">鹿垣市</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">竹马</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">竹马</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
       <p>周明杰被优化了，一个电话叫来竹马吴宗翰，两人喝得五迷三道……</p>
     </div>
   </div>
-</div>
-<div class="tile">
+</a>
+<a href="./stories/zhou_tian_en/vol_001.html" class="tile">
   <div class="book">
     <div class="book-meta">
       <div class="tile-title">极致爱情</div>
-      <div class="tile-desc main">10章 ｜ 2.1 万字 ｜ 完结</div>
+      <div class="tile-desc main">1卷 ｜ 10章 ｜ 2.1万字 ｜ 完结</div>
       <div class="tile-desc">发布日期：01 Mar 2569 BE</div>
       <div class="tile-desc">最近更新：10 Mar 2569 BE</div>
-      <div class="tile-desc">最新章节：第 10 章</div>
-      <div class="tile-desc">主要角色：<span class="chip">周天恩</span><span class="chip">周天赐</span><span class="chip">李秋瑾</span></div>
-      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span><span class="chip">工业区</span><span class="chip">小镇</span></div>
-      <div class="tile-desc">标签：<span class="chip">都市</span><span class="chip">爱情</span><span class="chip">成长</span></div>
+      <div class="tile-desc">主要角色：<span class="chip">周天恩</span> <span class="chip">周天赐</span> <span class="chip">李秋瑾</span></div>
+      <div class="tile-desc">世界观：<span class="chip">鹿垣市</span> <span class="chip">工业区</span> <span class="chip">小镇</span></div>
+      <div class="tile-desc">标签：<span class="chip">都市</span> <span class="chip">爱情</span> <span class="chip">成长</span></div>
     </div>
     <div class="book-intro">
       <div class="tile-title book-intro-title">作品简介</div>
-      <p></p>
+      <p>暂无简介</p>
     </div>
   </div>
+</a>
+  </div>
 </div>
-			</div>
-		</div>
-	</body>
+</body>
 </html>
